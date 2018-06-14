@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <settings>
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+    </settings>
+    <!--<typeAliases>-->
+        <!--<typeAlias type="com.tmindtech.api.model.base.SimpleObject"-->
+                   <!--alias="SimpleObject"-->
+        <!--/>-->
+        <!--<typeAlias type="com.tmindtech.api.model.protobuf.enums.ConstantEnums$JiaDongType"-->
+                   <!--alias="com.tmindtech.api.model.protobuf.enums.ConstantEnums.JiaDongType"-->
+        <!--/>-->
+        <!--<typeAlias type="com.tmindtech.api.model.protobuf.enums.ConstantEnums$DirectionEnum"-->
+                   <!--alias="com.tmindtech.api.model.protobuf.enums.ConstantEnums.DirectionEnum"-->
+        <!--/>-->
+        <!--<typeAlias type="com.tmindtech.api.model.protobuf.enums.ConstantEnums$AltairGType"-->
+                   <!--alias="com.tmindtech.api.model.protobuf.enums.ConstantEnums.AltairGType"-->
+        <!--/>-->
+
+    <!--</typeAliases>-->
+
+    <!--<typeHandlers>-->
+        <!--<typeHandler handler="org.apache.ibatis.type.EnumOrdinalTypeHandler"-->
+                     <!--javaType="com.tmindtech.api.model.protobuf.enums.ConstantEnums.JiaDongType" />-->
+        <!--<typeHandler handler="org.apache.ibatis.type.EnumOrdinalTypeHandler"-->
+                     <!--javaType="com.tmindtech.api.model.protobuf.enums.ConstantEnums.DirectionEnum"/>-->
+        <!--<typeHandler handler="org.apache.ibatis.type.EnumOrdinalTypeHandler"-->
+                     <!--javaType="com.tmindtech.api.model.protobuf.enums.ConstantEnums.AltairGType"/>-->
+        <!--<typeHandler handler="org.apache.ibatis.type.EnumOrdinalTypeHandler"-->
+                     <!--javaType="com.tmindtech.api.altairg.model.enums.AltairGPositionStatus"/>-->
+
+    <!--</typeHandlers>-->
+
+</configuration>
