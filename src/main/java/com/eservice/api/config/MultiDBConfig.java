@@ -25,14 +25,14 @@ public class MultiDBConfig {
 
 
     //第二个数据库
-    @Bean(name = "datasource_secondary")
-    @ConfigurationProperties(prefix = "spring.datasource_secondary")
+    @Bean(name = "datasource_sinsim_process_db")
+    @ConfigurationProperties(prefix = "spring.datasource_sinsim_db")
     public DataSource SecondDatasource() {
         return  DataSourceBuilder.create().build();
     }
 
-    @Bean(name = "SecondDatasourceJdbcTemplate")
-    public JdbcTemplate SecondDatasourceJdbcTemplate(@Qualifier("datasource_secondary")
+    @Bean(name = "DataSourceSinsimProcessDbTemplate")
+    public JdbcTemplate SecondDatasourceJdbcTemplate(@Qualifier("datasource_sinsim_process_db")
                                                      DataSource dsPostgres) {
         return new JdbcTemplate(dsPostgres);
     }
