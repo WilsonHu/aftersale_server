@@ -1,5 +1,5 @@
 package com.eservice.api.service;
-import com.eservice.api.model.user.User;
+import com.eservice.api.model.issue_position_list.IssuePositionList;
 import com.eservice.api.core.Service;
 
 /**
@@ -7,6 +7,6 @@ import com.eservice.api.core.Service;
 * @author Wilson Hu
 * @date 2018/07/10.
 */
-public interface UserService extends Service<User> {
+public interface IssuePositionListService extends Service<IssuePositionList> {
 
 }

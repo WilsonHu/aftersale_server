@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.eservice.api.dao.InstallMembersMapper">
+  <resultMap id="BaseResultMap" type="com.eservice.api.model.install_members.InstallMembers">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="install_record_id" jdbcType="INTEGER" property="installRecordId" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+  </resultMap>
+</mapper>

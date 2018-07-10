@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.eservice.api.dao.RepairRequestInfoMapper">
+  <resultMap id="BaseResultMap" type="com.eservice.api.model.repair_request_info.RepairRequestInfo">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="nameplate" jdbcType="VARCHAR" property="nameplate" />
+    <result column="nameplate_picture" jdbcType="VARCHAR" property="nameplatePicture" />
+    <result column="voice" jdbcType="VARCHAR" property="voice" />
+    <result column="repair_title" jdbcType="VARCHAR" property="repairTitle" />
+    <result column="pictures" jdbcType="VARCHAR" property="pictures" />
+    <result column="contacter" jdbcType="INTEGER" property="contacter" />
+    <result column="content" jdbcType="LONGVARCHAR" property="content" />
+  </resultMap>
+</mapper>

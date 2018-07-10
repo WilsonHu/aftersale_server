@@ -1,9 +1,9 @@
 package com.eservice.api.model.user;
 
+import java.util.Date;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -14,43 +14,38 @@ public class User implements UserDetails{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    /**
-     * 账号
-     */
     private String account;
 
-    /**
-     * 用户姓名
-     */
     private String name;
 
     /**
-     * 角色ID
+     * 微信unionId，在没授权前是空的。
      */
+    @Column(name = "wechat_union_id")
+    private String wechatUnionId;
+
     @Column(name = "role_id")
     private Integer roleId;
 
     /**
-     * 密码
+     * 代理商,如果是空表示是信胜自己的员工
      */
+    private Integer agent;
+
     private String password;
 
     /**
-     * 所在安装组group ID，可以为空(其他部门人员)
+     * 是否在职 ， “1”:在职 “0”:离职
      */
-    @Column(name = "group_id")
-    private Integer groupId;
+    private String valid;
 
     /**
-     * 销售部信息（区分外贸、内贸一部、内贸二部）
+     * 电话
      */
-    @Column(name = "market_group_name")
-    private String marketGroupName;
+    private String phone;
 
-    /**
-     * 员工是否在职，“1”==>在职, “0”==>离职
-     */
-    private Byte valid;
+    @Column(name = "create_time")
+    private Date createTime;
 
     /**
      * @return id
@@ -67,118 +62,112 @@ public class User implements UserDetails{
     }
 
     /**
-     * 获取账号
-     *
-     * @return account - 账号
+     * @return account
      */
     public String getAccount() {
         return account;
     }
 
     /**
-     * 设置账号
-     *
-     * @param account 账号
+     * @param account
      */
     public void setAccount(String account) {
         this.account = account;
     }
 
     /**
-     * 获取用户姓名
-     *
-     * @return name - 用户姓名
+     * @return name
      */
     public String getName() {
         return name;
     }
 
     /**
-     * 设置用户姓名
-     *
-     * @param name 用户姓名
+     * @param name
      */
     public void setName(String name) {
         this.name = name;
     }
 
     /**
-     * 获取角色ID
+     * 获取微信unionId，在没授权前是空的。
      *
-     * @return role_id - 角色ID
+     * @return wechat_union_id - 微信unionId，在没授权前是空的。
+     */
+    public String getWechatUnionId() {
+        return wechatUnionId;
+    }
+
+    /**
+     * 设置微信unionId，在没授权前是空的。
+     *
+     * @param wechatUnionId 微信unionId，在没授权前是空的。
+     */
+    public void setWechatUnionId(String wechatUnionId) {
+        this.wechatUnionId = wechatUnionId;
+    }
+
+    /**
+     * @return role_id
      */
     public Integer getRoleId() {
         return roleId;
     }
 
     /**
-     * 设置角色ID
-     *
-     * @param roleId 角色ID
+     * @param roleId
      */
     public void setRoleId(Integer roleId) {
         this.roleId = roleId;
     }
 
     /**
-     * 获取密码
+     * 获取代理商,如果是空表示是信胜自己的员工
      *
-     * @return password - 密码
+     * @return agent - 代理商,如果是空表示是信胜自己的员工
      */
 //    public String getPassword() {
 //        return password;
 //    }
 
     /**
-     * 设置密码
+     * 设置代理商,如果是空表示是信胜自己的员工
      *
-     * @param password 密码
+     * @param agent 代理商,如果是空表示是信胜自己的员工
+     */
+    public void setAgent(Integer agent) {
+        this.agent = agent;
+    }
+
+    /**
+     * @return password
+     */
+//    public String getPassword() {
+//        return password;
+//    }
+
+    /**
+     * @param password
      */
     public void setPassword(String password) {
         this.password = password;
     }
 
     /**
-     * 获取所在安装组group ID，可以为空(其他部门人员)
+     * 获取是否在职 ， “1”:在职 “0”:离职
      *
-     * @return group_id - 所在安装组group ID，可以为空(其他部门人员)
+     * @return valid - 是否在职 ， “1”:在职 “0”:离职
      */
-    public Integer getGroupId() {
-        return groupId;
-    }
-
-    /**
-     * 设置所在安装组group ID，可以为空(其他部门人员)
-     *
-     * @param groupId 所在安装组group ID，可以为空(其他部门人员)
-     */
-    public void setGroupId(Integer groupId) {
-        this.groupId = groupId;
-    }
-
-    public String getMarketGroupName() {
-        return marketGroupName;
-    }
-
-    public void setMarketGroupName(String marketGroupName) {
-        this.marketGroupName = marketGroupName;
-    }
-
-    /**
-     * 获取员工是否在职，“1”==>在职, “0”==>离职
-     *
-     * @return valid - 员工是否在职，“1”==>在职, “0”==>离职
-     */
-    public Byte getValid() {
+    public String getValid() {
         return valid;
     }
 
     /**
-     * 设置员工是否在职，“1”==>在职, “0”==>离职
+     * 设置是否在职 ， “1”:在职 “0”:离职
      *
-     * @param valid 员工是否在职，“1”==>在职, “0”==>离职
+     * @param valid 是否在职 ， “1”:在职 “0”:离职
      */
-    public void setValid(Byte valid) {
+    public void setValid(String valid) {
         this.valid = valid;
     }
 
@@ -196,12 +185,10 @@ public class User implements UserDetails{
     public String getPassword() {
         return this.password;
     }
-
     @Override
     public String getUsername() {
         return this.account;
     }
-
     @Override
     public boolean isAccountNonExpired() {
         return true;
@@ -220,5 +207,27 @@ public class User implements UserDetails{
     @Override
     public boolean isEnabled() {
         return true;
+    }
+    /**
+     * 设置电话
+     *
+     * @param phone 电话
+     */
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    /**
+     * @return create_time
+     */
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    /**
+     * @param createTime
+     */
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 }

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.eservice.api.dao.InstallRecordMapper">
+  <resultMap id="BaseResultMap" type="com.eservice.api.model.install_record.InstallRecord">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="install_record_num" jdbcType="VARCHAR" property="installRecordNum" />
+    <result column="install_plan_date" jdbcType="DATE" property="installPlanDate" />
+    <result column="install_actual_time" jdbcType="TIMESTAMP" property="installActualTime" />
+    <result column="machine_nameplate" jdbcType="VARCHAR" property="machineNameplate" />
+    <result column="install_status" jdbcType="VARCHAR" property="installStatus" />
+    <result column="customer_feedback" jdbcType="INTEGER" property="customerFeedback" />
+    <result column="install_charge_person" jdbcType="INTEGER" property="installChargePerson" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="contacter" jdbcType="INTEGER" property="contacter" />
+    <result column="install_result" jdbcType="LONGVARCHAR" property="installResult" />
+    <result column="install_info" jdbcType="LONGVARCHAR" property="installInfo" />
+  </resultMap>
+</mapper>

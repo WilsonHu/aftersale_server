@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.eservice.api.dao.RepairActualInfoMapper">
+  <resultMap id="BaseResultMap" type="com.eservice.api.model.repair_actual_info.RepairActualInfo">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="repair_record_id" jdbcType="INTEGER" property="repairRecordId" />
+    <result column="issue_position" jdbcType="INTEGER" property="issuePosition" />
+    <result column="after_resolve_pictures" jdbcType="VARCHAR" property="afterResolvePictures" />
+    <result column="issue_description" jdbcType="LONGVARCHAR" property="issueDescription" />
+    <result column="repair_method" jdbcType="LONGVARCHAR" property="repairMethod" />
+  </resultMap>
+</mapper>

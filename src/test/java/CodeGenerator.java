@@ -18,7 +18,7 @@ import static com.eservice.api.core.ProjectConstant.*;
  */
 public class CodeGenerator {
     //JDBC配置，请修改为你项目的实际配置
-    private static final String JDBC_URL = "jdbc:mysql://localhost:3306/sinsim_db";
+    private static final String JDBC_URL = "jdbc:mysql://localhost:3306/aftersale_db";
     private static final String JDBC_USERNAME = "root";
     private static final String JDBC_PASSWORD = "hello123!";
     private static final String JDBC_DIVER_CLASS_NAME = "com.mysql.jdbc.Driver";
@@ -36,11 +36,37 @@ public class CodeGenerator {
     private static final String AUTHOR = "Wilson Hu";//@author
     private static final String DATE = new SimpleDateFormat("yyyy/MM/dd").format(new Date());//@date
     //数据库的Tables需要在这里添加，自动生成Springboot的整套逻辑（基本增删改查）
-//    private static String[] TABLES = {"abnormal","abnormal_image","abnormal_record","device", "install_group","machine","machine_type","machine_order",
-//            "order_cancel_record","order_change_record","order_detail", "order_loading_list","order_sign","order_split_record","process",
-//            "process_record", "role", "task", "task_plan","task_record","task_quality_record", "user"};
 
-    private static String[] TABLES = { "user"};
+    private static String[] TABLES = {
+            "agent",
+            "contacts",
+            "customer",
+            "experience_lib",
+            "forward_info",
+            "install_customer_feedback",
+            "install_lib",
+            "install_members",
+            "install_record",
+            "issue_position_list",
+            "knowledge_lib",
+            "knowledge_pictures",
+            "machine",
+            "maintain_abnormal_record",
+            "maintain_customer_feedback",
+            "maintain_lib",
+            "maintain_members",
+            "maintain_record",
+            "maintain_type",
+            "message_pushed",
+            "parts_info",
+            "repair_actual_info",
+            "repair_customer_feedback",
+            "repair_members",
+            "repair_record",
+            "repair_request_info",
+            "role",
+            "user"
+    };
     public static void main(String[] args) {
 //  在开发前期使用，可以使用TABLES的方式，后期可能会误操作导致自定义部分代码被flash掉
         for (int i = 0; i < TABLES.length; i++) {

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.eservice.api.dao.MessagePushedMapper">
+  <resultMap id="BaseResultMap" type="com.eservice.api.model.message_pushed.MessagePushed">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="pushed_time" jdbcType="TIMESTAMP" property="pushedTime" />
+    <result column="record_id" jdbcType="INTEGER" property="recordId" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="message_content" jdbcType="LONGVARCHAR" property="messageContent" />
+  </resultMap>
+</mapper>

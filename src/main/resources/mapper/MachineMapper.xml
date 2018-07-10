@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.eservice.api.dao.MachineMapper">
+  <resultMap id="BaseResultMap" type="com.eservice.api.model.machine.Machine">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="nameplate" jdbcType="VARCHAR" property="nameplate" />
+    <result column="order_num" jdbcType="VARCHAR" property="orderNum" />
+    <result column="contract_num" jdbcType="VARCHAR" property="contractNum" />
+    <result column="geo_location" jdbcType="VARCHAR" property="geoLocation" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="nameplate_picture" jdbcType="VARCHAR" property="nameplatePicture" />
+    <result column="machine_type" jdbcType="VARCHAR" property="machineType" />
+    <result column="needle_num" jdbcType="VARCHAR" property="needleNum" />
+    <result column="x_distance" jdbcType="VARCHAR" property="xDistance" />
+    <result column="y_distance" jdbcType="VARCHAR" property="yDistance" />
+    <result column="head_distance" jdbcType="VARCHAR" property="headDistance" />
+    <result column="head_num" jdbcType="VARCHAR" property="headNum" />
+    <result column="loadinglist" jdbcType="VARCHAR" property="loadinglist" />
+    <result column="contacter" jdbcType="VARCHAR" property="contacter" />
+    <result column="customer_in_contract" jdbcType="VARCHAR" property="customerInContract" />
+    <result column="customer" jdbcType="INTEGER" property="customer" />
+    <result column="facory_date" jdbcType="DATE" property="facoryDate" />
+    <result column="is_old_machine" jdbcType="VARCHAR" property="isOldMachine" />
+    <result column="old_machine_check" jdbcType="VARCHAR" property="oldMachineCheck" />
+  </resultMap>
+</mapper>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.eservice.api.dao.ExperienceLibMapper">
+  <resultMap id="BaseResultMap" type="com.eservice.api.model.experience_lib.ExperienceLib">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="repair_actual_info_id" jdbcType="INTEGER" property="repairActualInfoId" />
+    <result column="before_resolve_pictures" jdbcType="VARCHAR" property="beforeResolvePictures" />
+    <result column="after_resolve_pictures" jdbcType="VARCHAR" property="afterResolvePictures" />
+    <result column="author" jdbcType="VARCHAR" property="author" />
+    <result column="read_times" jdbcType="VARCHAR" property="readTimes" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="issue_description" jdbcType="LONGVARCHAR" property="issueDescription" />
+    <result column="repair_method" jdbcType="LONGVARCHAR" property="repairMethod" />
+  </resultMap>
+</mapper>

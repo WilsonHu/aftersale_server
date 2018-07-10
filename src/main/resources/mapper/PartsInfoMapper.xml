@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.eservice.api.dao.PartsInfoMapper">
+  <resultMap id="BaseResultMap" type="com.eservice.api.model.parts_info.PartsInfo">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="parts_name" jdbcType="VARCHAR" property="partsName" />
+    <result column="supplier" jdbcType="VARCHAR" property="supplier" />
+    <result column="params" jdbcType="VARCHAR" property="params" />
+    <result column="repair_actual_info_id" jdbcType="INTEGER" property="repairActualInfoId" />
+    <result column="parts_status" jdbcType="VARCHAR" property="partsStatus" />
+    <result column="sendback_tracking_number" jdbcType="VARCHAR" property="sendbackTrackingNumber" />
+    <result column="sendback_tracking_pictrue" jdbcType="VARCHAR" property="sendbackTrackingPictrue" />
+    <result column="sendback_date" jdbcType="DATE" property="sendbackDate" />
+    <result column="sendback_confirmed_time" jdbcType="TIMESTAMP" property="sendbackConfirmedTime" />
+    <result column="sendback_confirmed_person" jdbcType="INTEGER" property="sendbackConfirmedPerson" />
+  </resultMap>
+</mapper>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.eservice.api.dao.MaintainAbnormalRecordMapper">
+  <resultMap id="BaseResultMap" type="com.eservice.api.model.maintain_abnormal_record.MaintainAbnormalRecord">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="maintain_record_id" jdbcType="INTEGER" property="maintainRecordId" />
+    <result column="maintain_content" jdbcType="LONGVARCHAR" property="maintainContent" />
+    <result column="maitain_abnormal_content" jdbcType="LONGVARCHAR" property="maitainAbnormalContent" />
+    <result column="maintain_fix_result" jdbcType="LONGVARCHAR" property="maintainFixResult" />
+  </resultMap>
+</mapper>
