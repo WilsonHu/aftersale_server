@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50553
 File Encoding         : 65001
 
-Date: 2018-07-05 14:13:55
+Date: 2018-07-10 15:15:30
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -20,7 +20,7 @@ SET FOREIGN_KEY_CHECKS=0;
 -- ----------------------------
 DROP TABLE IF EXISTS `agent`;
 CREATE TABLE `agent` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(50) NOT NULL,
   `account` varchar(50) NOT NULL COMMENT '账号',
   `phone` varchar(50) NOT NULL COMMENT '电话号码',
@@ -39,7 +39,7 @@ CREATE TABLE `agent` (
 -- ----------------------------
 DROP TABLE IF EXISTS `contacts`;
 CREATE TABLE `contacts` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `account` varchar(255) NOT NULL,
   `name` varchar(255) NOT NULL,
   `wechat_union_id` varchar(255) NOT NULL COMMENT '微信unionId，在没授权前是空的。',
@@ -61,12 +61,12 @@ CREATE TABLE `contacts` (
 -- ----------------------------
 DROP TABLE IF EXISTS `customer`;
 CREATE TABLE `customer` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(50) NOT NULL,
   `account` varchar(50) NOT NULL COMMENT '账号',
   `phone` varchar(50) NOT NULL COMMENT '电话号码',
   `wechat_union_id` varchar(255) DEFAULT NULL COMMENT '微信unionId，在没授权前是空的。',
-  `agent` int(11) unsigned DEFAULT NULL COMMENT '客户的代理商，空表示sinsim的直接客户，即无代理商',
+  `agent` int(10) unsigned DEFAULT NULL COMMENT '客户的代理商，空表示sinsim的直接客户，即无代理商',
   `address` varchar(255) NOT NULL COMMENT '地址',
   `create_time` datetime NOT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`),
@@ -118,10 +118,10 @@ CREATE TABLE `forward_info` (
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for `install_customer_feekback`
+-- Table structure for `install_customer_feedback`
 -- ----------------------------
-DROP TABLE IF EXISTS `install_customer_feekback`;
-CREATE TABLE `install_customer_feekback` (
+DROP TABLE IF EXISTS `install_customer_feedback`;
+CREATE TABLE `install_customer_feedback` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `customer_mark` varchar(255) NOT NULL COMMENT '客户给的评分',
   `customer_suggestion` varchar(255) NOT NULL COMMENT '客户意见',
@@ -129,7 +129,7 @@ CREATE TABLE `install_customer_feekback` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Records of install_customer_feekback
+-- Records of install_customer_feedback
 -- ----------------------------
 
 -- ----------------------------
@@ -137,7 +137,7 @@ CREATE TABLE `install_customer_feekback` (
 -- ----------------------------
 DROP TABLE IF EXISTS `install_lib`;
 CREATE TABLE `install_lib` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `is_base_lib` varchar(255) NOT NULL COMMENT '0:非基础库，1：基础库',
   `install_lib_name` varchar(255) NOT NULL COMMENT '所属的安装库的名称， ',
   `install_content` text NOT NULL COMMENT '安装验收的内容',
@@ -185,14 +185,14 @@ CREATE TABLE `install_record` (
   `install_info` longtext NOT NULL COMMENT '全部安装信息，json格式\r\n [\r\n   {\r\n        "is_base_lib":1,\r\n        "install_lib_name":"基础库",\r\n        "install_content":"电源电压A",\r\n        "install_value":"220v"\r\n    },\r\n    {\r\n        "is_base_lib":1,\r\n        "install_lib_name":"基础库",\r\n        "install_content":"电源电压B",\r\n        "install_value":"220v"\r\n    }\r\n]',
   `create_time` datetime NOT NULL COMMENT '该记录的创建时间',
   `update_time` datetime DEFAULT NULL,
-  `contacter` int(11) unsigned DEFAULT NULL COMMENT '联系人（直接的联系人，不是客户）',
+  `contacter` int(10) unsigned DEFAULT NULL COMMENT '联系人（直接的联系人，不是客户）',
   PRIMARY KEY (`id`),
   KEY `fk_ir_machine_nameplate` (`machine_nameplate`),
   KEY `fk_ir_contacter` (`contacter`),
   KEY `fk_ir_maintain_charge_person` (`install_charge_person`),
   KEY `fk_ir_customer_feedback` (`customer_feedback`),
-  CONSTRAINT `fk_ir_customer_feedback` FOREIGN KEY (`customer_feedback`) REFERENCES `install_customer_feekback` (`id`),
   CONSTRAINT `fk_ir_contacter` FOREIGN KEY (`contacter`) REFERENCES `contacts` (`id`),
+  CONSTRAINT `fk_ir_customer_feedback` FOREIGN KEY (`customer_feedback`) REFERENCES `install_customer_feedback` (`id`),
   CONSTRAINT `fk_ir_machine_nameplate` FOREIGN KEY (`machine_nameplate`) REFERENCES `machine` (`nameplate`),
   CONSTRAINT `fk_ir_maintain_charge_person` FOREIGN KEY (`install_charge_person`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -241,7 +241,7 @@ CREATE TABLE `knowledge_pictures` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `path` varchar(255) NOT NULL COMMENT '知识库图片保存路径, 比如 "/opt/aaaa/bbb.jpg"',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of knowledge_pictures
@@ -269,7 +269,7 @@ CREATE TABLE `machine` (
   `loadinglist` varchar(255) DEFAULT NULL COMMENT '装车单路径，共用流程管理系统的装车单，老机器允许空',
   `contacter` varchar(255) DEFAULT NULL COMMENT '该机器的直接联系人，空则联系客户',
   `customer_in_contract` varchar(255) NOT NULL COMMENT '合同里的客户',
-  `customer` int(11) unsigned DEFAULT NULL COMMENT '机器和客户绑定，空则表示未绑定,。通常是和custmer_in_contact是一样的。',
+  `customer` int(10) unsigned DEFAULT NULL COMMENT '机器和客户绑定，空则表示未绑定,。通常是和custmer_in_contact是一样的。',
   `facory_date` date DEFAULT NULL COMMENT '出厂日期，老机器允许空',
   `is_old_machine` varchar(255) NOT NULL COMMENT '0表示不是老机器，1表示老机器（生产部新系统之前生产的机器，不在生产部数据库）',
   `old_machine_check` varchar(255) DEFAULT NULL COMMENT '老机器审核是否通过，空表示非老机器，0:未通过，1：通过',
@@ -305,10 +305,10 @@ CREATE TABLE `maintain_abnormal_record` (
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for `maintain_customer_feekback`
+-- Table structure for `maintain_customer_feedback`
 -- ----------------------------
-DROP TABLE IF EXISTS `maintain_customer_feekback`;
-CREATE TABLE `maintain_customer_feekback` (
+DROP TABLE IF EXISTS `maintain_customer_feedback`;
+CREATE TABLE `maintain_customer_feedback` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `customer_mark` varchar(255) NOT NULL COMMENT '客户给的评分',
   `customer_suggestion` varchar(255) NOT NULL COMMENT '客户意见',
@@ -316,7 +316,7 @@ CREATE TABLE `maintain_customer_feekback` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Records of maintain_customer_feekback
+-- Records of maintain_customer_feedback
 -- ----------------------------
 
 -- ----------------------------
@@ -349,8 +349,8 @@ CREATE TABLE `maintain_members` (
   PRIMARY KEY (`id`),
   KEY `fk_user_id` (`user_id`),
   KEY `fk_maintain_record_id` (`maintain_record_id`) USING BTREE,
-  CONSTRAINT `fk_mrh_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
-  CONSTRAINT `fk_mrh_maintain_record_id` FOREIGN KEY (`maintain_record_id`) REFERENCES `maintain_record` (`id`)
+  CONSTRAINT `fk_mrh_maintain_record_id` FOREIGN KEY (`maintain_record_id`) REFERENCES `maintain_record` (`id`),
+  CONSTRAINT `fk_mrh_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -381,7 +381,7 @@ CREATE TABLE `maintain_record` (
   KEY `fk_mr_contacter` (`contacter`),
   KEY `fk_mr_customer_feedback` (`customer_feedback`),
   CONSTRAINT `fk_mr_contacter` FOREIGN KEY (`contacter`) REFERENCES `contacts` (`id`),
-  CONSTRAINT `fk_mr_customer_feedback` FOREIGN KEY (`customer_feedback`) REFERENCES `maintain_customer_feekback` (`id`),
+  CONSTRAINT `fk_mr_customer_feedback` FOREIGN KEY (`customer_feedback`) REFERENCES `maintain_customer_feedback` (`id`),
   CONSTRAINT `fk_mr_machine_nameplate` FOREIGN KEY (`machine_nameplate`) REFERENCES `machine` (`nameplate`),
   CONSTRAINT `fk_mr_maintain_charge_person` FOREIGN KEY (`maintain_charge_person`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -395,7 +395,7 @@ CREATE TABLE `maintain_record` (
 -- ----------------------------
 DROP TABLE IF EXISTS `maintain_type`;
 CREATE TABLE `maintain_type` (
-  `id` int(4) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `maintain_type_name` varchar(255) NOT NULL COMMENT '保养类型，比如清洁清理/注油润滑/检查修理',
   PRIMARY KEY (`id`),
   KEY `type_name` (`maintain_type_name`)
@@ -457,7 +457,7 @@ CREATE TABLE `parts_info` (
 -- ----------------------------
 DROP TABLE IF EXISTS `repair_actual_info`;
 CREATE TABLE `repair_actual_info` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `repair_record_id` int(10) unsigned NOT NULL COMMENT '对应的维修记录，一次报修可以有多个实际维修',
   `issue_position` int(10) unsigned NOT NULL COMMENT '维修部位',
   `issue_description` text NOT NULL COMMENT '实际维修中的“故障描述”, 也用于“经验库”中的“问题描述”',
@@ -474,10 +474,10 @@ CREATE TABLE `repair_actual_info` (
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for `repair_customer_feekback`
+-- Table structure for `repair_customer_feedback`
 -- ----------------------------
-DROP TABLE IF EXISTS `repair_customer_feekback`;
-CREATE TABLE `repair_customer_feekback` (
+DROP TABLE IF EXISTS `repair_customer_feedback`;
+CREATE TABLE `repair_customer_feedback` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `customer_mark` varchar(255) NOT NULL COMMENT '客户给的评分',
   `customer_suggestion` varchar(255) NOT NULL COMMENT '客户意见',
@@ -486,7 +486,7 @@ CREATE TABLE `repair_customer_feekback` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Records of repair_customer_feekback
+-- Records of repair_customer_feedback
 -- ----------------------------
 
 -- ----------------------------
@@ -515,19 +515,19 @@ DROP TABLE IF EXISTS `repair_record`;
 CREATE TABLE `repair_record` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID号',
   `repair_record_num` varchar(255) DEFAULT NULL COMMENT '维修单编号，备用',
-  `contacter` int(11) unsigned DEFAULT NULL COMMENT '联系人,',
+  `contacter` int(10) unsigned DEFAULT NULL COMMENT '联系人,',
   `machine_nameplate` varchar(255) NOT NULL COMMENT '机器编号',
   `repair_request_info` int(10) unsigned NOT NULL COMMENT '用户发起报修信息，一次报修可以有多个维修记录。',
   `in_warranty_period` varchar(255) NOT NULL COMMENT '1：在保修期内，0：保修期已过， 在派单时指定。',
-  `repair_actual_info` int(11) unsigned NOT NULL COMMENT '维修内容 ',
-  `repair_charge_person` int(11) unsigned NOT NULL COMMENT '维修人员',
+  `repair_actual_info` int(10) unsigned NOT NULL COMMENT '维修内容 ',
+  `repair_charge_person` int(10) unsigned NOT NULL COMMENT '维修人员',
   `repair_start_time` datetime NOT NULL COMMENT '维修工时',
   `repair_end_time` datetime NOT NULL,
   `customer_feedback` int(10) unsigned NOT NULL COMMENT '改善建议',
-  `status` varchar(255) NOT NULL COMMENT '维修状态 0：未派单， 1：已派单（但未接单）, 2： 已接受任务， 3：维修成功(客户未确认)，4：无法维修，维修被转派（不需要客户确认），5.客户已确认（维修成功）',
+  `status` varchar(255) NOT NULL COMMENT '维修状态 0：未派单， 1：已派单（但未接单）, 2： 已接受任务， 3：维修成功(客户未确认)，4：无法维修，维修被转派（不需要客户确认），5.客户已确认（维修成功）。转派后，前面的维修记录要保留，但是客户只需要看到成功的最后那次记录。',
   `create_time` datetime NOT NULL COMMENT '该条记录的创建时间',
   `update_time` datetime DEFAULT NULL COMMENT '该条记录更新时间',
-  `forward_info` int(11) unsigned DEFAULT NULL COMMENT '转派信息，如果空表示没有转派。有则记录了来自哪个代理商的转派以及时间。在派单时可以转派给原厂信胜; 有转派则表示是信胜维修。',
+  `forward_info` int(10) unsigned DEFAULT NULL COMMENT '转派信息，如果空表示没有转派。有则记录了来自哪个代理商的转派以及时间。在派单时可以转派给原厂信胜; 有转派则表示是信胜维修。',
   PRIMARY KEY (`id`),
   KEY `fk_rr_repair_actual_info` (`repair_actual_info`),
   KEY `fk_rr_machine_nameplate` (`machine_nameplate`),
@@ -536,12 +536,12 @@ CREATE TABLE `repair_record` (
   KEY `fk_rr_repair_charge_person` (`repair_charge_person`),
   KEY `fk_rr_customer_feedback` (`customer_feedback`),
   KEY `fk_rr_repair_request_info` (`repair_request_info`),
-  CONSTRAINT `fk_rr_repair_request_info` FOREIGN KEY (`repair_request_info`) REFERENCES `repair_requst_info` (`id`),
   CONSTRAINT `fk_rr_contacter` FOREIGN KEY (`contacter`) REFERENCES `contacts` (`id`),
-  CONSTRAINT `fk_rr_customer_feedback` FOREIGN KEY (`customer_feedback`) REFERENCES `repair_customer_feekback` (`id`),
+  CONSTRAINT `fk_rr_customer_feedback` FOREIGN KEY (`customer_feedback`) REFERENCES `repair_customer_feedback` (`id`),
   CONSTRAINT `fk_rr_forward_info` FOREIGN KEY (`forward_info`) REFERENCES `forward_info` (`id`),
   CONSTRAINT `fk_rr_machine_nameplate` FOREIGN KEY (`machine_nameplate`) REFERENCES `machine` (`nameplate`),
-  CONSTRAINT `fk_rr_repair_charge_person` FOREIGN KEY (`repair_charge_person`) REFERENCES `user` (`id`)
+  CONSTRAINT `fk_rr_repair_charge_person` FOREIGN KEY (`repair_charge_person`) REFERENCES `user` (`id`),
+  CONSTRAINT `fk_rr_repair_request_info` FOREIGN KEY (`repair_request_info`) REFERENCES `repair_request_info` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
 
 -- ----------------------------
@@ -549,10 +549,10 @@ CREATE TABLE `repair_record` (
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for `repair_requst_info`
+-- Table structure for `repair_request_info`
 -- ----------------------------
-DROP TABLE IF EXISTS `repair_requst_info`;
-CREATE TABLE `repair_requst_info` (
+DROP TABLE IF EXISTS `repair_request_info`;
+CREATE TABLE `repair_request_info` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `nameplate` varchar(255) NOT NULL DEFAULT '' COMMENT '老机器报修时填写的铭牌号，非老机器自动填写',
   `nameplate_picture` varchar(255) DEFAULT NULL COMMENT '老机器报修时拍的铭牌的图片的保存路径，非老机器为空。',
@@ -560,14 +560,14 @@ CREATE TABLE `repair_requst_info` (
   `repair_title` varchar(255) NOT NULL COMMENT '报修的标题',
   `content` text NOT NULL COMMENT '报修内容',
   `pictures` varchar(1000) DEFAULT NULL COMMENT '报修图片的路径，--客户报修时上传，可以用于经验库里“解决前”的问题照片',
-  `contacter` int(11) unsigned NOT NULL COMMENT '联系人',
+  `contacter` int(10) unsigned NOT NULL COMMENT '联系人',
   PRIMARY KEY (`id`),
   KEY `fk_rri_contacter` (`contacter`),
   CONSTRAINT `fk_rri_contacter` FOREIGN KEY (`contacter`) REFERENCES `contacts` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Records of repair_requst_info
+-- Records of repair_request_info
 -- ----------------------------
 
 -- ----------------------------
@@ -575,7 +575,7 @@ CREATE TABLE `repair_requst_info` (
 -- ----------------------------
 DROP TABLE IF EXISTS `role`;
 CREATE TABLE `role` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `role_name` varchar(255) NOT NULL,
   `role_des` varchar(255) DEFAULT NULL COMMENT '角色说明',
   `role_scope` text COMMENT '角色权限列表',
@@ -594,11 +594,11 @@ INSERT INTO `role` VALUES ('3', '普通员工', '安装，保养，维修（包�
 -- ----------------------------
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `account` varchar(255) NOT NULL,
   `name` varchar(255) NOT NULL,
   `wechat_union_id` varchar(255) DEFAULT NULL COMMENT '微信unionId，在没授权前是空的。',
-  `role_id` int(11) unsigned NOT NULL,
+  `role_id` int(10) unsigned NOT NULL,
   `agent` int(10) unsigned DEFAULT NULL COMMENT '代理商,如果是空表示是信胜自己的员工',
   `password` varchar(255) NOT NULL,
   `valid` varchar(255) NOT NULL COMMENT '是否在职 ， “1”:在职 “0”:离职',
