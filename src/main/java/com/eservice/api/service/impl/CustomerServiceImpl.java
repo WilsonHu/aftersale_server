@@ -21,4 +21,7 @@ public class CustomerServiceImpl extends AbstractService<Customer> implements Cu
     @Resource
     private CustomerMapper customerMapper;
 
+    public Customer requestLogin(String account, String password,String unionid) {
+        return customerMapper.requestLogin(account, password,unionid);
+    }
 }

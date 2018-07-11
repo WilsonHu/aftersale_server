@@ -29,13 +29,11 @@ CREATE TABLE `agent` (
   `address` varchar(255) NOT NULL COMMENT '地址',
   `create_time` datetime NOT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of agent
 -- ----------------------------
-INSERT INTO `agent` VALUES ('1', '代理商1', '代理商1', '', '13566663333', null, 'XX市XX路XX号', '2018-07-11 10:46:10');
-INSERT INTO `agent` VALUES ('2', '代理商2', '代理商1', '', '13566662222', null, 'xx路XX号', '2018-07-11 10:46:42');
 
 -- ----------------------------
 -- Table structure for `contacts`
@@ -76,14 +74,11 @@ CREATE TABLE `customer` (
   PRIMARY KEY (`id`),
   KEY `fk_c_agent` (`agent`),
   CONSTRAINT `fk_c_agent` FOREIGN KEY (`agent`) REFERENCES `agent` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of customer
 -- ----------------------------
-INSERT INTO `customer` VALUES ('1', '客户A', '客户A', 'sinsim', '12388887777', '', null, '', '0000-00-00 00:00:00');
-INSERT INTO `customer` VALUES ('2', 'customer1', 'customer1', 'sinsim', '1234', 'abc', '1', '', '0000-00-00 00:00:00');
-INSERT INTO `customer` VALUES ('3', 'customer2', 'customer2', 'sinsim', '13066663333', null, null, '', '0000-00-00 00:00:00');
 
 -- ----------------------------
 -- Table structure for `experience_lib`
@@ -133,13 +128,11 @@ CREATE TABLE `install_customer_feedback` (
   `customer_mark` varchar(255) NOT NULL COMMENT '客户给的评分',
   `customer_suggestion` varchar(255) NOT NULL COMMENT '客户意见',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of install_customer_feedback
 -- ----------------------------
-INSERT INTO `install_customer_feedback` VALUES ('1', '3分', '建议balabala111');
-INSERT INTO `install_customer_feedback` VALUES ('2', '4分', '建议bbbbbb222');
 
 -- ----------------------------
 -- Table structure for `install_lib`
@@ -204,12 +197,11 @@ CREATE TABLE `install_record` (
   CONSTRAINT `fk_ir_customer_feedback` FOREIGN KEY (`customer_feedback`) REFERENCES `install_customer_feedback` (`id`),
   CONSTRAINT `fk_ir_machine_nameplate` FOREIGN KEY (`machine_nameplate`) REFERENCES `machine` (`nameplate`),
   CONSTRAINT `fk_ir_maintain_charge_person` FOREIGN KEY (`install_charge_person`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of install_record
 -- ----------------------------
-INSERT INTO `install_record` VALUES ('1', 'aaa', '2018-07-11', '2018-07-11 14:27:13', 'mph2233', 'an安装ok', '2', '1', '1', 'ins info aaaa', '0000-00-00 00:00:00', null, null);
 
 -- ----------------------------
 -- Table structure for `issue_position_list`
@@ -289,12 +281,11 @@ CREATE TABLE `machine` (
   KEY `nameplate` (`nameplate`),
   KEY `fk_m_customer` (`customer`),
   CONSTRAINT `fk_m_customer` FOREIGN KEY (`customer`) REFERENCES `customer` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of machine
 -- ----------------------------
-INSERT INTO `machine` VALUES ('1', 'mph2233', 'ddh22333', 'ht22333', null, '杭州市XX路XX号', '1', null, '绣花机', '22', '33', '44', '55', '66', null, '张三', '合同客户ABC', '1', '2018-07-10', '', null);
 
 -- ----------------------------
 -- Table structure for `maintain_abnormal_record`
@@ -625,6 +616,5 @@ CREATE TABLE `user` (
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES ('1', 'admin', 'admin', 'wechat222', '1', null, 'sinsim', '1', '13566667777', '2018-07-11 10:03:43');
 INSERT INTO `user` VALUES ('3', 'admin_in_aftersale', 'admin_in_aftersale', '', '1', null, 'sinsim', '', '', '0000-00-00 00:00:00');
 INSERT INTO `user` VALUES ('4', 'wu', 'wu', '', '1', null, 'sinsim', '', '', '0000-00-00 00:00:00');

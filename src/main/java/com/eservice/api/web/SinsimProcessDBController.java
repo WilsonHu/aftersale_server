@@ -2,6 +2,7 @@ package com.eservice.api.web;
 import com.eservice.api.core.Result;
 import com.eservice.api.core.ResultGenerator;
 import com.eservice.api.model.machine.Machine;
+import com.eservice.api.model.machine.MachineInProcessDb;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,7 @@ public class SinsimProcessDBController {
 
         PageHelper.startPage(page, size);
         String query = " select * from  machine";
-        List<Machine> list = dataSourceSinsimProcessDbTemplate.query(query, new BeanPropertyRowMapper(Machine.class));;
+        List<MachineInProcessDb> list = dataSourceSinsimProcessDbTemplate.query(query, new BeanPropertyRowMapper(MachineInProcessDb.class));;
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
 

@@ -14,4 +14,14 @@
     <result column="address" jdbcType="VARCHAR" property="address" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
   </resultMap>
+
+  <select id="requestLogin" resultMap="BaseResultMap">
+    SELECT c.*
+    FROM customer c
+    WHERE c.account = '${account}' AND c.password = '${password}'
+    <if test="unionid != null and unionid !='' " >
+     AND  c.wechat_union_id ='${unionid}'
+   </if>
+
+  </select>
 </mapper>

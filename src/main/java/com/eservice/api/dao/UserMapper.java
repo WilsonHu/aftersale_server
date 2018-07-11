@@ -7,4 +7,6 @@ import org.apache.ibatis.annotations.Param;
 public interface UserMapper extends Mapper<User> {
 
     User selectByAccount(@Param("account") String account);
+
+    User requestLogin(@Param("account")String account, @Param("password")String password, @Param("unionid")String unionid);
 }

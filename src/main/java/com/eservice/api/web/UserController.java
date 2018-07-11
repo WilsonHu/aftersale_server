@@ -1,8 +1,10 @@
 package com.eservice.api.web;
+import com.alibaba.fastjson.JSON;
 import com.eservice.api.core.Result;
 import com.eservice.api.core.ResultGenerator;
 import com.eservice.api.model.user.User;
 import com.eservice.api.service.UserService;
+import com.eservice.api.service.impl.UserServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,7 +24,7 @@ import java.util.List;
 @RequestMapping("/user")
 public class UserController {
     @Resource
-    private UserService userService;
+    private UserServiceImpl userService;
 
     @PostMapping("/add")
     public Result add(User user) {
@@ -54,5 +56,25 @@ public class UserController {
         List<User> list = userService.findAll();
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
+    }
+
+
+    @PostMapping("/requestLogin")
+    public Result requestLogin(@RequestParam String account, @RequestParam String password,
+                               @RequestParam(defaultValue = "0") String unionid) {
+        boolean result = true;
+
+        if(account == null || "".equals(account)) {
+            return ResultGenerator.genFailResult("账号不能为空！");
+        } else if(password == null || "".equals(password)) {
+            return ResultGenerator.genFailResult("密码不能为空！");
+        }else {
+            User user  = userService.requestLogin(account, password,unionid);
+            if(user == null) {
+                return ResultGenerator.genFailResult("账号/密码/unionid 不正确！");
+            }else {
+                return ResultGenerator.genSuccessResult(user);
+            }
+        }
     }
 }

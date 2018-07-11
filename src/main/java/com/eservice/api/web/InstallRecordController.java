@@ -3,6 +3,7 @@ import com.eservice.api.core.Result;
 import com.eservice.api.core.ResultGenerator;
 import com.eservice.api.model.install_record.InstallRecord;
 import com.eservice.api.service.InstallRecordService;
+import com.eservice.api.service.impl.InstallRecordServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,7 +23,7 @@ import java.util.List;
 @RequestMapping("/install/record")
 public class InstallRecordController {
     @Resource
-    private InstallRecordService installRecordService;
+    private InstallRecordServiceImpl installRecordService;
 
     @PostMapping("/add")
     public Result add(InstallRecord installRecord) {
@@ -52,6 +53,20 @@ public class InstallRecordController {
     public Result list(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size) {
         PageHelper.startPage(page, size);
         List<InstallRecord> list = installRecordService.findAll();
+        PageInfo pageInfo = new PageInfo(list);
+        return ResultGenerator.genSuccessResult(pageInfo);
+    }
+
+    /**
+     * 等待处理的安装任务
+     * @param page
+     * @param size
+     * @return
+     */
+    @PostMapping("/selectWaitForProcess")
+    public Result selectWaitForProcess(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size) {
+        PageHelper.startPage(page, size);
+        List<InstallRecord> list = installRecordService.selectWaitForProcess();
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
     }

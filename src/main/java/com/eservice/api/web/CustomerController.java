@@ -2,9 +2,12 @@ package com.eservice.api.web;
 import com.eservice.api.core.Result;
 import com.eservice.api.core.ResultGenerator;
 import com.eservice.api.model.customer.Customer;
+import com.eservice.api.model.user.User;
 import com.eservice.api.service.CustomerService;
+import com.eservice.api.service.impl.CustomerServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,7 +25,7 @@ import java.util.List;
 @RequestMapping("/customer")
 public class CustomerController {
     @Resource
-    private CustomerService customerService;
+    private CustomerServiceImpl customerService;
 
     @PostMapping("/add")
     public Result add(Customer customer) {
@@ -54,5 +57,28 @@ public class CustomerController {
         List<Customer> list = customerService.findAll();
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
+    }
+
+    /*
+    *第一次登陆时未授权，account、password、unionid三个都需要。
+    * 授权以后，不需要unionid了。
+    */
+    @PostMapping("/requestLogin")
+    public Result requestLogin(@RequestParam String account, @RequestParam String password,
+                              String unionid) {
+        boolean result = true;
+
+        if(account == null || "".equals(account)) {
+            return ResultGenerator.genFailResult("账号不能为空！");
+        } else if(password == null || "".equals(password)) {
+            return ResultGenerator.genFailResult("密码不能为空！");
+        }else {
+            Customer customer  = customerService.requestLogin(account, password,unionid);
+            if(customer == null) {
+                return ResultGenerator.genFailResult("账号/密码/unionid 不正确！");
+            }else {
+                return ResultGenerator.genSuccessResult(customer);
+            }
+        }
     }
 }

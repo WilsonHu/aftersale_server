@@ -3,6 +3,7 @@ import com.eservice.api.core.Result;
 import com.eservice.api.core.ResultGenerator;
 import com.eservice.api.model.machine.Machine;
 import com.eservice.api.service.MachineService;
+import com.eservice.api.service.impl.MachineServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,7 +23,7 @@ import java.util.List;
 @RequestMapping("/machine")
 public class MachineController {
     @Resource
-    private MachineService machineService;
+    private MachineServiceImpl machineService;
 
     @PostMapping("/add")
     public Result add(Machine machine) {
@@ -54,5 +55,12 @@ public class MachineController {
         List<Machine> list = machineService.findAll();
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
+    }
+
+    // 根据铭牌号返回机器
+    @PostMapping("/selectByNameplate")
+    public Result selectByNameplate(@RequestParam String nameplate) {
+        Machine machine = machineService.findBy("nameplate",nameplate);
+        return ResultGenerator.genSuccessResult(machine);
     }
 }

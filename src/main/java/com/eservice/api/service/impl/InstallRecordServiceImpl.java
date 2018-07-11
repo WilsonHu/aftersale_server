@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 
 /**
@@ -20,5 +21,9 @@ import javax.annotation.Resource;
 public class InstallRecordServiceImpl extends AbstractService<InstallRecord> implements InstallRecordService {
     @Resource
     private InstallRecordMapper installRecordMapper;
+
+    public List<InstallRecord> selectWaitForProcess(){
+        return installRecordMapper.selectWaitForProcess();
+    }
 
 }

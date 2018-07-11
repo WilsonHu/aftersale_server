@@ -19,4 +19,12 @@
     <result column="install_result" jdbcType="LONGVARCHAR" property="installResult" />
     <result column="install_info" jdbcType="LONGVARCHAR" property="installInfo" />
   </resultMap>
+  <select id="selectWaitForProcess" resultMap="BaseResultMap">
+    SELECT *
+    from install_record as ir
+    <!-- 安装状态，
+    0：已分配安装(但未接单）；1：已接受任务（不用驳回，如果有异议，电话沟通后可以重新派单）； 2：安装OK(客户未确认); 3：安装NG(如果用不到这个就不用）4：客户已确认
+    -->
+    where ir.install_status = 2
+  </select>
 </mapper>

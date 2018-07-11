@@ -2,7 +2,6 @@ package com.eservice.api.model.user;
 
 import java.util.Date;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -126,6 +125,10 @@ public class User implements UserDetails{
      *
      * @return agent - 代理商,如果是空表示是信胜自己的员工
      */
+    public Integer getAgent(){
+        return agent;
+    }
+
 //    public String getPassword() {
 //        return password;
 //    }
@@ -208,6 +211,11 @@ public class User implements UserDetails{
     public boolean isEnabled() {
         return true;
     }
+
+    public String getPhone() {
+        return phone;
+    }
+
     /**
      * 设置电话
      *

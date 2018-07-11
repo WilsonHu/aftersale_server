@@ -19,4 +19,15 @@
     <select id="selectByAccount" resultMap="BaseResultMap">
          select * from user  where account=#{account}
     </select>
+
+
+  <select id="requestLogin" resultMap="BaseResultMap">
+    SELECT u.*
+    FROM user u
+    WHERE u.account = '${account}' AND u.password = '${password}'
+    <if test="unionid != null and unionid !='' " >
+      AND  u.wechat_union_id ='${unionid}'
+    </if>
+
+  </select>
 </mapper>

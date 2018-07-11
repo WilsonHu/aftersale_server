@@ -1,10 +1,7 @@
 package com.eservice.api.model.machine;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import java.util.Date;
+import javax.persistence.*;
 
 public class Machine {
     @Id
@@ -12,58 +9,118 @@ public class Machine {
     private Integer id;
 
     /**
-     * 对应的order id
-     */
-    @Column(name = "order_id")
-    private Integer orderId;
-
-    /**
-     * 系统内部维护用的机器编号(年、月、类型、头数、针数、不大于台数的数字)
-     */
-    @Column(name = "machine_strid")
-    private String machineStrId;
-
-    /**
-     * 技术部填入的机器编号（铭牌）
+     * 技术部填入的机器编号（铭牌），来自于sinsim_db.machine. nameplate
      */
     private String nameplate;
 
     /**
-     * 机器的位置，一般由生产部管理员上传
+     * 对应的订单号,来自sinsim_db.machine_order.order_num
      */
-    private String location;
+    @Column(name = "order_num")
+    private String orderNum;
 
     /**
-     * 机器状态（“1”==>"初始化"，“2”==>"开始安装"，“3”==>"安装完成"，“4”==>"无效"）
+     * 对应的合同号，可能用不到，允许空
      */
-    private Byte status;
+    @Column(name = "contract_num")
+    private String contractNum;
 
+    /**
+     * 机器的地理位置，经纬度，考虑在调试完成时上传，备用地图显示
+     */
+    @Column(name = "geo_location")
+    private String geoLocation;
+
+    /**
+     * 机器地址，厂家门牌号
+     */
+    private String address;
+
+    /**
+     * 机器状态 0：未绑定，1：已绑定，2：待安装，3：正常工作状态（已安装、已保养，已维修），4：待保养，5：待修理，6： 待审核
+     */
+    private String status;
+
+    /**
+     * 老机器，客户拍的铭牌照片的保存地址；非老机器可以为空
+     */
+    @Column(name = "nameplate_picture")
+    private String nameplatePicture;
+
+    /**
+     * 机型
+     */
     @Column(name = "machine_type")
-    private Integer machineType;
+    private String machineType;
 
     /**
-     * 创建时间
+     * 针数
      */
-    @Column(name = "create_time")
-    private Date createTime;
+    @Column(name = "needle_num")
+    private String needleNum;
 
     /**
-     * 更新时间
+     * x行程
      */
-    @Column(name = "update_time")
-    private Date updateTime;
+    @Column(name = "x_distance")
+    private String xDistance;
 
     /**
-     * 安装完成时间
+     * y行程
      */
-    @Column(name = "installed_time")
-    private Date installedTime;
+    @Column(name = "y_distance")
+    private String yDistance;
 
     /**
-     * 发货时间（如果分批交付，需要用到，否则已订单交付为准）
+     * 头距
      */
-    @Column(name = "ship_time")
-    private Date shipTime;
+    @Column(name = "head_distance")
+    private String headDistance;
+
+    /**
+     * 头数
+     */
+    @Column(name = "head_num")
+    private String headNum;
+
+    /**
+     * 装车单路径，共用流程管理系统的装车单，老机器允许空
+     */
+    private String loadinglist;
+
+    /**
+     * 该机器的直接联系人，空则联系客户
+     */
+    private String contacter;
+
+    /**
+     * 合同里的客户
+     */
+    @Column(name = "customer_in_contract")
+    private String customerInContract;
+
+    /**
+     * 机器和客户绑定，空则表示未绑定,。通常是和custmer_in_contact是一样的。
+     */
+    private Integer customer;
+
+    /**
+     * 出厂日期，老机器允许空
+     */
+    @Column(name = "facory_date")
+    private Date facoryDate;
+
+    /**
+     * 0表示不是老机器，1表示老机器（生产部新系统之前生产的机器，不在生产部数据库）
+     */
+    @Column(name = "is_old_machine")
+    private String isOldMachine;
+
+    /**
+     * 老机器审核是否通过，空表示非老机器，0:未通过，1：通过
+     */
+    @Column(name = "old_machine_check")
+    private String oldMachineCheck;
 
     /**
      * @return id
@@ -80,178 +137,362 @@ public class Machine {
     }
 
     /**
-     * 获取对应的order id
+     * 获取技术部填入的机器编号（铭牌），来自于sinsim_db.machine. nameplate
      *
-     * @return order_id - 对应的order id
-     */
-    public Integer getOrderId() {
-        return orderId;
-    }
-
-    /**
-     * 设置对应的order id
-     *
-     * @param orderId 对应的order id
-     */
-    public void setOrderId(Integer orderId) {
-        this.orderId = orderId;
-    }
-
-    /**
-     * 获取系统内部维护用的机器编号(年、月、类型、头数、针数、不大于台数的数字)
-     *
-     * @return machineStrId - 系统内部维护用的机器编号(年、月、类型、头数、针数、不大于台数的数字)
-     */
-    public String getMachineStrId() {
-        return machineStrId;
-    }
-
-    /**
-     * 设置系统内部维护用的机器编号(年、月、类型、头数、针数、不大于台数的数字)
-     *
-     * @param machineStrId 系统内部维护用的机器编号(年、月、类型、头数、针数、不大于台数的数字)
-     */
-    public void setMachineStrId(String machineStrId) {
-        this.machineStrId = machineStrId;
-    }
-
-    /**
-     * 获取技术部填入的机器编号（铭牌）
-     *
-     * @return nameplate - 技术部填入的机器编号（铭牌）
+     * @return nameplate - 技术部填入的机器编号（铭牌），来自于sinsim_db.machine. nameplate
      */
     public String getNameplate() {
         return nameplate;
     }
 
     /**
-     * 设置技术部填入的机器编号（铭牌）
+     * 设置技术部填入的机器编号（铭牌），来自于sinsim_db.machine. nameplate
      *
-     * @param nameplate 技术部填入的机器编号（铭牌）
+     * @param nameplate 技术部填入的机器编号（铭牌），来自于sinsim_db.machine. nameplate
      */
     public void setNameplate(String nameplate) {
         this.nameplate = nameplate;
     }
 
     /**
-     * 获取机器的位置，一般由生产部管理员上传
+     * 获取对应的订单号,来自sinsim_db.machine_order.order_num
      *
-     * @return location - 机器的位置，一般由生产部管理员上传
+     * @return order_num - 对应的订单号,来自sinsim_db.machine_order.order_num
      */
-    public String getLocation() {
-        return location;
+    public String getOrderNum() {
+        return orderNum;
     }
 
     /**
-     * 设置机器的位置，一般由生产部管理员上传
+     * 设置对应的订单号,来自sinsim_db.machine_order.order_num
      *
-     * @param location 机器的位置，一般由生产部管理员上传
+     * @param orderNum 对应的订单号,来自sinsim_db.machine_order.order_num
      */
-    public void setLocation(String location) {
-        this.location = location;
+    public void setOrderNum(String orderNum) {
+        this.orderNum = orderNum;
     }
 
     /**
-     * 获取机器状态（“1”==>"初始化"，“2”==>"开始安装"，“3”==>"安装完成"，“4”==>"无效"）
+     * 获取对应的合同号，可能用不到，允许空
      *
-     * @return status - 机器状态（“1”==>"初始化"，“2”==>"开始安装"，“3”==>"安装完成"，“4”==>"无效"）
+     * @return contract_num - 对应的合同号，可能用不到，允许空
      */
-    public Byte getStatus() {
+    public String getContractNum() {
+        return contractNum;
+    }
+
+    /**
+     * 设置对应的合同号，可能用不到，允许空
+     *
+     * @param contractNum 对应的合同号，可能用不到，允许空
+     */
+    public void setContractNum(String contractNum) {
+        this.contractNum = contractNum;
+    }
+
+    /**
+     * 获取机器的地理位置，经纬度，考虑在调试完成时上传，备用地图显示
+     *
+     * @return geo_location - 机器的地理位置，经纬度，考虑在调试完成时上传，备用地图显示
+     */
+    public String getGeoLocation() {
+        return geoLocation;
+    }
+
+    /**
+     * 设置机器的地理位置，经纬度，考虑在调试完成时上传，备用地图显示
+     *
+     * @param geoLocation 机器的地理位置，经纬度，考虑在调试完成时上传，备用地图显示
+     */
+    public void setGeoLocation(String geoLocation) {
+        this.geoLocation = geoLocation;
+    }
+
+    /**
+     * 获取机器地址，厂家门牌号
+     *
+     * @return address - 机器地址，厂家门牌号
+     */
+    public String getAddress() {
+        return address;
+    }
+
+    /**
+     * 设置机器地址，厂家门牌号
+     *
+     * @param address 机器地址，厂家门牌号
+     */
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    /**
+     * 获取机器状态 0：未绑定，1：已绑定，2：待安装，3：正常工作状态（已安装、已保养，已维修），4：待保养，5：待修理，6： 待审核
+     *
+     * @return status - 机器状态 0：未绑定，1：已绑定，2：待安装，3：正常工作状态（已安装、已保养，已维修），4：待保养，5：待修理，6： 待审核
+     */
+    public String getStatus() {
         return status;
     }
 
     /**
-     * 设置机器状态（“1”==>"初始化"，“2”==>"开始安装"，“3”==>"安装完成"，“4”==>"无效"）
+     * 设置机器状态 0：未绑定，1：已绑定，2：待安装，3：正常工作状态（已安装、已保养，已维修），4：待保养，5：待修理，6： 待审核
      *
-     * @param status 机器状态（“1”==>"初始化"，“2”==>"开始安装"，“3”==>"安装完成"，“4”==>"无效"）
+     * @param status 机器状态 0：未绑定，1：已绑定，2：待安装，3：正常工作状态（已安装、已保养，已维修），4：待保养，5：待修理，6： 待审核
      */
-    public void setStatus(Byte status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
     /**
-     * @return machine_type
+     * 获取老机器，客户拍的铭牌照片的保存地址；非老机器可以为空
+     *
+     * @return nameplate_picture - 老机器，客户拍的铭牌照片的保存地址；非老机器可以为空
      */
-    public Integer getMachineType() {
+    public String getNameplatePicture() {
+        return nameplatePicture;
+    }
+
+    /**
+     * 设置老机器，客户拍的铭牌照片的保存地址；非老机器可以为空
+     *
+     * @param nameplatePicture 老机器，客户拍的铭牌照片的保存地址；非老机器可以为空
+     */
+    public void setNameplatePicture(String nameplatePicture) {
+        this.nameplatePicture = nameplatePicture;
+    }
+
+    /**
+     * 获取机型
+     *
+     * @return machine_type - 机型
+     */
+    public String getMachineType() {
         return machineType;
     }
 
     /**
-     * @param machineType
+     * 设置机型
+     *
+     * @param machineType 机型
      */
-    public void setMachineType(Integer machineType) {
+    public void setMachineType(String machineType) {
         this.machineType = machineType;
     }
 
     /**
-     * 获取创建时间
+     * 获取针数
      *
-     * @return create_time - 创建时间
+     * @return needle_num - 针数
      */
-    public Date getCreateTime() {
-        return createTime;
+    public String getNeedleNum() {
+        return needleNum;
     }
 
     /**
-     * 设置创建时间
+     * 设置针数
      *
-     * @param createTime 创建时间
+     * @param needleNum 针数
      */
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+    public void setNeedleNum(String needleNum) {
+        this.needleNum = needleNum;
     }
 
     /**
-     * 获取更新时间
+     * 获取x行程
      *
-     * @return update_time - 更新时间
+     * @return x_distance - x行程
      */
-    public Date getUpdateTime() {
-        return updateTime;
+    public String getxDistance() {
+        return xDistance;
     }
 
     /**
-     * 设置更新时间
+     * 设置x行程
      *
-     * @param updateTime 更新时间
+     * @param xDistance x行程
      */
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
+    public void setxDistance(String xDistance) {
+        this.xDistance = xDistance;
     }
 
     /**
-     * 获取安装完成时间
+     * 获取y行程
      *
-     * @return installed_time - 安装完成时间
+     * @return y_distance - y行程
      */
-    public Date getInstalledTime() {
-        return installedTime;
+    public String getyDistance() {
+        return yDistance;
     }
 
     /**
-     * 设置安装完成时间
+     * 设置y行程
      *
-     * @param installedTime 安装完成时间
+     * @param yDistance y行程
      */
-    public void setInstalledTime(Date installedTime) {
-        this.installedTime = installedTime;
+    public void setyDistance(String yDistance) {
+        this.yDistance = yDistance;
     }
 
     /**
-     * 获取发货时间（如果分批交付，需要用到，否则已订单交付为准）
+     * 获取头距
      *
-     * @return ship_time - 发货时间（如果分批交付，需要用到，否则已订单交付为准）
+     * @return head_distance - 头距
      */
-    public Date getShipTime() {
-        return shipTime;
+    public String getHeadDistance() {
+        return headDistance;
     }
 
     /**
-     * 设置发货时间（如果分批交付，需要用到，否则已订单交付为准）
+     * 设置头距
      *
-     * @param shipTime 发货时间（如果分批交付，需要用到，否则已订单交付为准）
+     * @param headDistance 头距
      */
-    public void setShipTime(Date shipTime) {
-        this.shipTime = shipTime;
+    public void setHeadDistance(String headDistance) {
+        this.headDistance = headDistance;
+    }
+
+    /**
+     * 获取头数
+     *
+     * @return head_num - 头数
+     */
+    public String getHeadNum() {
+        return headNum;
+    }
+
+    /**
+     * 设置头数
+     *
+     * @param headNum 头数
+     */
+    public void setHeadNum(String headNum) {
+        this.headNum = headNum;
+    }
+
+    /**
+     * 获取装车单路径，共用流程管理系统的装车单，老机器允许空
+     *
+     * @return loadinglist - 装车单路径，共用流程管理系统的装车单，老机器允许空
+     */
+    public String getLoadinglist() {
+        return loadinglist;
+    }
+
+    /**
+     * 设置装车单路径，共用流程管理系统的装车单，老机器允许空
+     *
+     * @param loadinglist 装车单路径，共用流程管理系统的装车单，老机器允许空
+     */
+    public void setLoadinglist(String loadinglist) {
+        this.loadinglist = loadinglist;
+    }
+
+    /**
+     * 获取该机器的直接联系人，空则联系客户
+     *
+     * @return contacter - 该机器的直接联系人，空则联系客户
+     */
+    public String getContacter() {
+        return contacter;
+    }
+
+    /**
+     * 设置该机器的直接联系人，空则联系客户
+     *
+     * @param contacter 该机器的直接联系人，空则联系客户
+     */
+    public void setContacter(String contacter) {
+        this.contacter = contacter;
+    }
+
+    /**
+     * 获取合同里的客户
+     *
+     * @return customer_in_contract - 合同里的客户
+     */
+    public String getCustomerInContract() {
+        return customerInContract;
+    }
+
+    /**
+     * 设置合同里的客户
+     *
+     * @param customerInContract 合同里的客户
+     */
+    public void setCustomerInContract(String customerInContract) {
+        this.customerInContract = customerInContract;
+    }
+
+    /**
+     * 获取机器和客户绑定，空则表示未绑定,。通常是和custmer_in_contact是一样的。
+     *
+     * @return customer - 机器和客户绑定，空则表示未绑定,。通常是和custmer_in_contact是一样的。
+     */
+    public Integer getCustomer() {
+        return customer;
+    }
+
+    /**
+     * 设置机器和客户绑定，空则表示未绑定,。通常是和custmer_in_contact是一样的。
+     *
+     * @param customer 机器和客户绑定，空则表示未绑定,。通常是和custmer_in_contact是一样的。
+     */
+    public void setCustomer(Integer customer) {
+        this.customer = customer;
+    }
+
+    /**
+     * 获取出厂日期，老机器允许空
+     *
+     * @return facory_date - 出厂日期，老机器允许空
+     */
+    public Date getFacoryDate() {
+        return facoryDate;
+    }
+
+    /**
+     * 设置出厂日期，老机器允许空
+     *
+     * @param facoryDate 出厂日期，老机器允许空
+     */
+    public void setFacoryDate(Date facoryDate) {
+        this.facoryDate = facoryDate;
+    }
+
+    /**
+     * 获取0表示不是老机器，1表示老机器（生产部新系统之前生产的机器，不在生产部数据库）
+     *
+     * @return is_old_machine - 0表示不是老机器，1表示老机器（生产部新系统之前生产的机器，不在生产部数据库）
+     */
+    public String getIsOldMachine() {
+        return isOldMachine;
+    }
+
+    /**
+     * 设置0表示不是老机器，1表示老机器（生产部新系统之前生产的机器，不在生产部数据库）
+     *
+     * @param isOldMachine 0表示不是老机器，1表示老机器（生产部新系统之前生产的机器，不在生产部数据库）
+     */
+    public void setIsOldMachine(String isOldMachine) {
+        this.isOldMachine = isOldMachine;
+    }
+
+    /**
+     * 获取老机器审核是否通过，空表示非老机器，0:未通过，1：通过
+     *
+     * @return old_machine_check - 老机器审核是否通过，空表示非老机器，0:未通过，1：通过
+     */
+    public String getOldMachineCheck() {
+        return oldMachineCheck;
+    }
+
+    /**
+     * 设置老机器审核是否通过，空表示非老机器，0:未通过，1：通过
+     *
+     * @param oldMachineCheck 老机器审核是否通过，空表示非老机器，0:未通过，1：通过
+     */
+    public void setOldMachineCheck(String oldMachineCheck) {
+        this.oldMachineCheck = oldMachineCheck;
     }
 }
