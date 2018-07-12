@@ -20,5 +20,8 @@ import javax.annotation.Resource;
 public class RepairRecordServiceImpl extends AbstractService<RepairRecord> implements RepairRecordService {
     @Resource
     private RepairRecordMapper repairRecordMapper;
+    public RepairRecord selectByNameplate(String nameplate){
+        return repairRecordMapper.selectByNameplate(nameplate);
+    }
 
 }

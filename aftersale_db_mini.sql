@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50553
 File Encoding         : 65001
 
-Date: 2018-07-11 14:40:25
+Date: 2018-07-12 11:39:25
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -468,6 +468,7 @@ CREATE TABLE `repair_actual_info` (
   PRIMARY KEY (`id`),
   KEY `fk_rai_repair_record_id` (`repair_record_id`),
   KEY `fk_rai_issue_position` (`issue_position`),
+  CONSTRAINT `fk_rai_repair_record_id` FOREIGN KEY (`repair_record_id`) REFERENCES `repair_record` (`id`),
   CONSTRAINT `fk_rai_issue_position` FOREIGN KEY (`issue_position`) REFERENCES `issue_position_list` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -521,7 +522,6 @@ CREATE TABLE `repair_record` (
   `machine_nameplate` varchar(255) NOT NULL COMMENT '机器编号',
   `repair_request_info` int(10) unsigned NOT NULL COMMENT '用户发起报修信息，一次报修可以有多个维修记录。',
   `in_warranty_period` varchar(255) NOT NULL COMMENT '1：在保修期内，0：保修期已过， 在派单时指定。',
-  `repair_actual_info` int(10) unsigned NOT NULL COMMENT '维修内容 ',
   `repair_charge_person` int(10) unsigned NOT NULL COMMENT '维修人员',
   `repair_start_time` datetime NOT NULL COMMENT '维修工时',
   `repair_end_time` datetime NOT NULL,
@@ -531,7 +531,6 @@ CREATE TABLE `repair_record` (
   `update_time` datetime DEFAULT NULL COMMENT '该条记录更新时间',
   `forward_info` int(10) unsigned DEFAULT NULL COMMENT '转派信息，如果空表示没有转派。有则记录了来自哪个代理商的转派以及时间。在派单时可以转派给原厂信胜; 有转派则表示是信胜维修。',
   PRIMARY KEY (`id`),
-  KEY `fk_rr_repair_actual_info` (`repair_actual_info`),
   KEY `fk_rr_machine_nameplate` (`machine_nameplate`),
   KEY `fk_rr_contacter` (`contacter`),
   KEY `fk_rr_forward_info` (`forward_info`),

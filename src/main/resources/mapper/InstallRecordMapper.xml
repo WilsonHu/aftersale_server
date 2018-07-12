@@ -27,4 +27,9 @@
     -->
     where ir.install_status = 2
   </select>
+  <select id="selectByNameplate" resultMap="BaseResultMap">
+    SELECT *
+    FROM  install_record as ir
+    where ir.machine_nameplate='${nameplate}'
+  </select>
 </mapper>

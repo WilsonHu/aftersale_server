@@ -3,6 +3,7 @@ import com.eservice.api.core.Result;
 import com.eservice.api.core.ResultGenerator;
 import com.eservice.api.model.maintain_record.MaintainRecord;
 import com.eservice.api.service.MaintainRecordService;
+import com.eservice.api.service.impl.MaintainRecordServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,7 +23,7 @@ import java.util.List;
 @RequestMapping("/maintain/record")
 public class MaintainRecordController {
     @Resource
-    private MaintainRecordService maintainRecordService;
+    private MaintainRecordServiceImpl maintainRecordService;
 
     @PostMapping("/add")
     public Result add(MaintainRecord maintainRecord) {
@@ -54,5 +55,11 @@ public class MaintainRecordController {
         List<MaintainRecord> list = maintainRecordService.findAll();
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
+    }
+
+    @PostMapping("/selectByNameplate")
+    public Result selectByNameplate(@RequestParam String nameplate) {
+        MaintainRecord installRecord = maintainRecordService.selectByNameplate(nameplate);
+        return ResultGenerator.genSuccessResult(installRecord);
     }
 }

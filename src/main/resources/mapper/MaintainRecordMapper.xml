@@ -19,4 +19,9 @@
     <result column="customer_feedback" jdbcType="INTEGER" property="customerFeedback" />
     <result column="maintain_info" jdbcType="LONGVARCHAR" property="maintainInfo" />
   </resultMap>
+  <select id="selectByNameplate" resultMap="BaseResultMap">
+    SELECT *
+    FROM  maintain_record as mr
+    where mr.machine_nameplate='${nameplate}'
+  </select>
 </mapper>

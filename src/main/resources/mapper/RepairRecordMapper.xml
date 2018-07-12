@@ -21,4 +21,10 @@
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="forward_info" jdbcType="INTEGER" property="forwardInfo" />
   </resultMap>
+
+  <select id="selectByNameplate" resultMap="BaseResultMap">
+    SELECT *
+    FROM  repair_record as rr
+    where rr.machine_nameplate='${nameplate}'
+  </select>
 </mapper>

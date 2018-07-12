@@ -3,6 +3,7 @@ import com.eservice.api.core.Result;
 import com.eservice.api.core.ResultGenerator;
 import com.eservice.api.model.repair_record.RepairRecord;
 import com.eservice.api.service.RepairRecordService;
+import com.eservice.api.service.impl.RepairRecordServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,7 +23,7 @@ import java.util.List;
 @RequestMapping("/repair/record")
 public class RepairRecordController {
     @Resource
-    private RepairRecordService repairRecordService;
+    private RepairRecordServiceImpl repairRecordService;
 
     @PostMapping("/add")
     public Result add(RepairRecord repairRecord) {
@@ -54,5 +55,11 @@ public class RepairRecordController {
         List<RepairRecord> list = repairRecordService.findAll();
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
+    }
+
+    @PostMapping("/selectByNameplate")
+    public Result selectByNameplate(@RequestParam String nameplate) {
+        RepairRecord repairRecord = repairRecordService.selectByNameplate(nameplate);
+        return ResultGenerator.genSuccessResult(repairRecord);
     }
 }

@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50553
 File Encoding         : 65001
 
-Date: 2018-07-11 14:40:25
+Date: 2018-07-12 11:39:25
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -53,11 +53,13 @@ CREATE TABLE `contacts` (
   PRIMARY KEY (`id`),
   KEY `fk_c_customer` (`customer`),
   CONSTRAINT `fk_c_customer` FOREIGN KEY (`customer`) REFERENCES `customer` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of contacts
 -- ----------------------------
+INSERT INTO `contacts` VALUES ('1', 'contact1', '张三', '', 'sinsim', '1330002221', '1', 'xxllu路11号');
+INSERT INTO `contacts` VALUES ('2', 'contact2', '李四', '', 'sinsim', '13911110000', '2', 'xxxx路222号');
 
 -- ----------------------------
 -- Table structure for `customer`
@@ -294,7 +296,7 @@ CREATE TABLE `machine` (
 -- ----------------------------
 -- Records of machine
 -- ----------------------------
-INSERT INTO `machine` VALUES ('1', 'mph2233', 'ddh22333', 'ht22333', null, '杭州市XX路XX号', '1', null, '绣花机', '22', '33', '44', '55', '66', null, '张三', '合同客户ABC', '1', '2018-07-10', '', null);
+INSERT INTO `machine` VALUES ('1', 'mph2233', 'ddh22333', 'ht22333', 'geo-11-34', '杭州市XX路XX号', '1', null, '绣花机', '22', '33', '44', '55', '66', null, '张三', '合同客户ABC', '1', '2018-07-10', '', null);
 
 -- ----------------------------
 -- Table structure for `maintain_abnormal_record`
@@ -324,11 +326,13 @@ CREATE TABLE `maintain_customer_feedback` (
   `customer_mark` varchar(255) NOT NULL COMMENT '客户给的评分',
   `customer_suggestion` varchar(255) NOT NULL COMMENT '客户意见',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of maintain_customer_feedback
 -- ----------------------------
+INSERT INTO `maintain_customer_feedback` VALUES ('1', '5', '5分很满意');
+INSERT INTO `maintain_customer_feedback` VALUES ('2', '3', '3分还不错。');
 
 -- ----------------------------
 -- Table structure for `maintain_lib`
@@ -395,11 +399,12 @@ CREATE TABLE `maintain_record` (
   CONSTRAINT `fk_mr_customer_feedback` FOREIGN KEY (`customer_feedback`) REFERENCES `maintain_customer_feedback` (`id`),
   CONSTRAINT `fk_mr_machine_nameplate` FOREIGN KEY (`machine_nameplate`) REFERENCES `machine` (`nameplate`),
   CONSTRAINT `fk_mr_maintain_charge_person` FOREIGN KEY (`maintain_charge_person`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of maintain_record
 -- ----------------------------
+INSERT INTO `maintain_record` VALUES ('1', 'mph2233', '1', '2018-07-12', '2018-07-12', '5', 'sssssgg', '1', 'info 1111', '0000-00-00 00:00:00', null, '1', '1');
 
 -- ----------------------------
 -- Table structure for `maintain_type`
@@ -477,6 +482,7 @@ CREATE TABLE `repair_actual_info` (
   PRIMARY KEY (`id`),
   KEY `fk_rai_repair_record_id` (`repair_record_id`),
   KEY `fk_rai_issue_position` (`issue_position`),
+  CONSTRAINT `fk_rai_repair_record_id` FOREIGN KEY (`repair_record_id`) REFERENCES `repair_record` (`id`),
   CONSTRAINT `fk_rai_issue_position` FOREIGN KEY (`issue_position`) REFERENCES `issue_position_list` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -494,11 +500,13 @@ CREATE TABLE `repair_customer_feedback` (
   `customer_suggestion` varchar(255) NOT NULL COMMENT '客户意见',
   `customer_repair_result` varchar(255) DEFAULT NULL COMMENT '维修结果。',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of repair_customer_feedback
 -- ----------------------------
+INSERT INTO `repair_customer_feedback` VALUES ('1', '4', '4f满意', '修理OK');
+INSERT INTO `repair_customer_feedback` VALUES ('2', '5', '5F很满意', '修理OK');
 
 -- ----------------------------
 -- Table structure for `repair_members`
@@ -530,7 +538,6 @@ CREATE TABLE `repair_record` (
   `machine_nameplate` varchar(255) NOT NULL COMMENT '机器编号',
   `repair_request_info` int(10) unsigned NOT NULL COMMENT '用户发起报修信息，一次报修可以有多个维修记录。',
   `in_warranty_period` varchar(255) NOT NULL COMMENT '1：在保修期内，0：保修期已过， 在派单时指定。',
-  `repair_actual_info` int(10) unsigned NOT NULL COMMENT '维修内容 ',
   `repair_charge_person` int(10) unsigned NOT NULL COMMENT '维修人员',
   `repair_start_time` datetime NOT NULL COMMENT '维修工时',
   `repair_end_time` datetime NOT NULL,
@@ -540,7 +547,6 @@ CREATE TABLE `repair_record` (
   `update_time` datetime DEFAULT NULL COMMENT '该条记录更新时间',
   `forward_info` int(10) unsigned DEFAULT NULL COMMENT '转派信息，如果空表示没有转派。有则记录了来自哪个代理商的转派以及时间。在派单时可以转派给原厂信胜; 有转派则表示是信胜维修。',
   PRIMARY KEY (`id`),
-  KEY `fk_rr_repair_actual_info` (`repair_actual_info`),
   KEY `fk_rr_machine_nameplate` (`machine_nameplate`),
   KEY `fk_rr_contacter` (`contacter`),
   KEY `fk_rr_forward_info` (`forward_info`),
@@ -553,11 +559,12 @@ CREATE TABLE `repair_record` (
   CONSTRAINT `fk_rr_machine_nameplate` FOREIGN KEY (`machine_nameplate`) REFERENCES `machine` (`nameplate`),
   CONSTRAINT `fk_rr_repair_charge_person` FOREIGN KEY (`repair_charge_person`) REFERENCES `user` (`id`),
   CONSTRAINT `fk_rr_repair_request_info` FOREIGN KEY (`repair_request_info`) REFERENCES `repair_request_info` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
 
 -- ----------------------------
 -- Records of repair_record
 -- ----------------------------
+INSERT INTO `repair_record` VALUES ('1', 'aaa334333', '1', 'mph2233', '1', '1', '5', '2018-07-12 11:31:17', '2018-07-12 12:31:21', '1', '3', '2018-07-12 11:32:49', null, null);
 
 -- ----------------------------
 -- Table structure for `repair_request_info`
@@ -575,11 +582,12 @@ CREATE TABLE `repair_request_info` (
   PRIMARY KEY (`id`),
   KEY `fk_rri_contacter` (`contacter`),
   CONSTRAINT `fk_rri_contacter` FOREIGN KEY (`contacter`) REFERENCES `contacts` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of repair_request_info
 -- ----------------------------
+INSERT INTO `repair_request_info` VALUES ('1', '', 'mph2233', null, '马达不转', '马达不转2222', null, '1');
 
 -- ----------------------------
 -- Table structure for `role`
@@ -620,7 +628,7 @@ CREATE TABLE `user` (
   KEY `fk_u_agent` (`agent`),
   CONSTRAINT `fk_u_agent` FOREIGN KEY (`agent`) REFERENCES `agent` (`id`),
   CONSTRAINT `fk_u_role_id` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of user
@@ -628,3 +636,4 @@ CREATE TABLE `user` (
 INSERT INTO `user` VALUES ('1', 'admin', 'admin', 'wechat222', '1', null, 'sinsim', '1', '13566667777', '2018-07-11 10:03:43');
 INSERT INTO `user` VALUES ('3', 'admin_in_aftersale', 'admin_in_aftersale', '', '1', null, 'sinsim', '', '', '0000-00-00 00:00:00');
 INSERT INTO `user` VALUES ('4', 'wu', 'wu', '', '1', null, 'sinsim', '', '', '0000-00-00 00:00:00');
+INSERT INTO `user` VALUES ('5', 'PTYG1', 'YG1', null, '3', null, 'sinsim', '', '13300002222', '0000-00-00 00:00:00');
