@@ -70,7 +70,7 @@ public class InstallRecordController {
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
     }
-    
+
     @PostMapping("/selectByNameplate")
     public Result selectByNameplate(@RequestParam String nameplate) {
         InstallRecord installRecord = installRecordService.selectByNameplate(nameplate);
