@@ -1,6 +1,7 @@
 package com.eservice.api.config;
 
 
+import com.alibaba.fastjson.JSON;
 import com.eservice.api.model.user.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 //import com.xjtushilei.domain.SysUser;
@@ -15,6 +16,7 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.Collections;
 
@@ -34,16 +36,15 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
     public Authentication attemptAuthentication(
             HttpServletRequest req, HttpServletResponse res)
             throws AuthenticationException, IOException, ServletException {
-//        SysUser creds = new ObjectMapper()
-        User creds = new ObjectMapper()
-                .readValue(req.getInputStream(), User.class);
-        return getAuthenticationManager().authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        creds.getAccount(),
-                        creds.getPassword(),
-                        Collections.emptyList()
-                )
-        );
+        req.setCharacterEncoding("UTF-8");
+        //只支持header中通过key-value的方式进行传值
+        String account  = req.getParameter("account");
+        String password  = req.getParameter("password");
+        if(account != null && password != null) {
+            return getAuthenticationManager().authenticate(new UsernamePasswordAuthenticationToken(account, password, Collections.emptyList()));
+        } else {
+            return getAuthenticationManager().authenticate(new UsernamePasswordAuthenticationToken(account, password, Collections.emptyList()));
+        }
     }
 
     ///重写，使response 具备JWT
