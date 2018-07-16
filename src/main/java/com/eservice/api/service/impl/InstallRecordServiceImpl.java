@@ -22,8 +22,8 @@ public class InstallRecordServiceImpl extends AbstractService<InstallRecord> imp
     @Resource
     private InstallRecordMapper installRecordMapper;
 
-    public List<InstallRecord> selectWaitProcessForGuest(){
-        return installRecordMapper.selectWaitProcessForGuest();
+    public List<InstallRecord> selectWaitProcessForGuest(String contacter){
+        return installRecordMapper.selectWaitProcessForGuest(contacter);
     }
     public InstallRecord selectByNameplate(String nameplate){
         return installRecordMapper.selectByNameplate(nameplate);

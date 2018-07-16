@@ -58,12 +58,13 @@ public class InstallRecordController {
     }
 
     /**
-     * 等待处理的安装任务
+     * 等待某联系人处理的安装任务
      */
     @PostMapping("/selectWaitProcessForGuest")
-    public Result selectWaitProcessForGuest(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size) {
+    public Result selectWaitProcessForGuest(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size,
+                                            @RequestParam String contacter) {
         PageHelper.startPage(page, size);
-        List<InstallRecord> list = installRecordService.selectWaitProcessForGuest();
+        List<InstallRecord> list = installRecordService.selectWaitProcessForGuest(contacter);
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
     }

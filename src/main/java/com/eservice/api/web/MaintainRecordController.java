@@ -63,12 +63,13 @@ public class MaintainRecordController {
         return ResultGenerator.genSuccessResult(installRecord);
     }
     /**
-     * 等待客户处理的保养任务
+     * 等待某个客户处理的保养任务
      */
     @PostMapping("/selectWaitProcessForGuest")
-    public Result selectWaitProcessForGuest(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size) {
+    public Result selectWaitProcessForGuest(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size,
+                                            @RequestParam String contacter) {
         PageHelper.startPage(page, size);
-        List<MaintainRecord> list = maintainRecordService.selectWaitProcessForGuest();
+        List<MaintainRecord> list = maintainRecordService.selectWaitProcessForGuest(contacter);
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
     }

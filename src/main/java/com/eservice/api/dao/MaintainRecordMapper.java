@@ -10,5 +10,5 @@ public interface MaintainRecordMapper extends Mapper<MaintainRecord> {
 
     MaintainRecord selectByNameplate(@Param("nameplate")String nameplate);
 
-    List<MaintainRecord> selectWaitProcessForGuest();
+    List<MaintainRecord> selectWaitProcessForGuest(@Param("contacter") String contacter);
 }
