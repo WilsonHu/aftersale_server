@@ -20,7 +20,7 @@ class TokenAuthenticationService {
     static final long EXPIRATIONTIME = 1000*60*60*24*30; // 30 days
     static final String SECRET = "ThisIsASecret";
     static final String TOKEN_PREFIX = "Bearer";
-    static final String HEADER_STRING = "Authorization_wxm";
+    static final String HEADER_STRING = "Authorization";
 
     /// 建立JWT，并加到response里
     static void addAuthentication(HttpServletResponse res, String username) {
