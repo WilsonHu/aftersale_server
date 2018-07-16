@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 
 /**
@@ -23,5 +24,9 @@ public class MaintainRecordServiceImpl extends AbstractService<MaintainRecord> i
 
     public MaintainRecord selectByNameplate(String nameplate){
         return maintainRecordMapper.selectByNameplate(nameplate);
+    }
+
+    public List<MaintainRecord> selectWaitProcessForGuest(){
+        return maintainRecordMapper.selectWaitProcessForGuest();
     }
 }

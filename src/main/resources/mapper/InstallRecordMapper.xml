@@ -19,7 +19,7 @@
     <result column="install_result" jdbcType="LONGVARCHAR" property="installResult" />
     <result column="install_info" jdbcType="LONGVARCHAR" property="installInfo" />
   </resultMap>
-  <select id="selectWaitForProcess" resultMap="BaseResultMap">
+  <select id="selectWaitProcessForGuest" resultMap="BaseResultMap">
     SELECT *
     from install_record as ir
     <!-- 安装状态，

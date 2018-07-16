@@ -45,9 +45,9 @@ public class RepairRequestInfoController {
     private String repaiReqImgDir;
 
     /**
-     * ������ص����ƺ�ͼƬ������Ϊ�գ�����������������Ϊ�գ�������ͼƬ������Ϊ�գ� ��
-     * �ɹ�֮�����ӱ��޼�¼.
-     * �����ļ���Ҫ������Ӧ�����ƣ�"REPAIR_REQUEST_VOICE"�ȣ����������ֲ�ͬ�ļ����ͷ��벻ͬĿ¼,���򲻻ᱣ���ļ���
+     * 保存相关的铭牌号图片（可以为空），报修语音（可以为空），报修图片（可以为空） 。
+     * 成功之后，增加报修记录.
+     * 传入文件需要包含对应的名称（"REPAIR_REQUEST_VOICE"等），用于区分不同文件类型放入不同目录,否则不会保存文件。
      * @param repairRequestInfo
      * @param files
      * @return
@@ -81,7 +81,7 @@ public class RepairRequestInfoController {
             List<String> listResultPathRequestNameplateImage = new ArrayList<>() ;
             for(int i=0; i<files.length; i++) {
                 try {
-                    //��������:
+                    //报修语音:
                     if(files[i].getOriginalFilename().contains(Constant.REPAIR_REQUEST_VOICE)){
                         fileNameWithPath = commonService.saveFile(repairReqVoiceDir, files[i], nameplate, i );
                         if(fileNameWithPath != null){
@@ -89,7 +89,7 @@ public class RepairRequestInfoController {
                         } else {
                             return ResultGenerator.genFailResult("failed to save file, no records saved" + Constant.REPAIR_REQUEST_VOICE);
                         }
-                    } //����ͼƬ:
+                    } //报修图片:
                     else if(files[i].getOriginalFilename().contains(Constant.REPAIR_REQUEST_IMAGE)){
                         fileNameWithPath = commonService.saveFile(repaiReqImgDir, files[i], nameplate, i );
                         if(fileNameWithPath != null){
@@ -97,7 +97,7 @@ public class RepairRequestInfoController {
                         } else {
                             return ResultGenerator.genFailResult("failed to save file, no records saved" + Constant.REPAIR_REQUEST_IMAGE);
                         }
-                    } //�������ƺ�ͼƬ:
+                    } //报修铭牌号图片:
                     else if(files[i].getOriginalFilename().contains(Constant.REPAIR_REQUEST_NAMEPLATE_IMAGE)){
                         fileNameWithPath = commonService.saveFile(repairReqNameplateImgDir, files[i], nameplate, i );
                         if(fileNameWithPath != null){
@@ -106,7 +106,7 @@ public class RepairRequestInfoController {
                             return ResultGenerator.genFailResult("failed to save file, no records saved" + Constant.REPAIR_REQUEST_NAMEPLATE_IMAGE);
                         }
                     } else {
-                        //ͼƬ���Ʋ��ԡ�
+                        //图片名称不对。
                         System.out.println("======== WRONG file name :  " + files[i].getOriginalFilename() );
                     }
 

@@ -62,4 +62,15 @@ public class MaintainRecordController {
         MaintainRecord installRecord = maintainRecordService.selectByNameplate(nameplate);
         return ResultGenerator.genSuccessResult(installRecord);
     }
+    /**
+     * 等待客户处理的保养任务
+     */
+    @PostMapping("/selectWaitProcessForGuest")
+    public Result selectWaitProcessForGuest(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size) {
+        PageHelper.startPage(page, size);
+        List<MaintainRecord> list = maintainRecordService.selectWaitProcessForGuest();
+        PageInfo pageInfo = new PageInfo(list);
+        return ResultGenerator.genSuccessResult(pageInfo);
+    }
+
 }

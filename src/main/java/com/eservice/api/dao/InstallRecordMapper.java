@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface InstallRecordMapper extends Mapper<InstallRecord> {
 
-    List<InstallRecord> selectWaitForProcess();
+    List<InstallRecord> selectWaitProcessForGuest();
 
     InstallRecord selectByNameplate(@Param("nameplate")String nameplate);
 }
