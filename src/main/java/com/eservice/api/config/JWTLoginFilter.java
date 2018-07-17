@@ -2,9 +2,6 @@ package com.eservice.api.config;
 
 
 import com.alibaba.fastjson.JSON;
-import com.eservice.api.model.user.User;
-import com.fasterxml.jackson.databind.ObjectMapper;
-//import com.xjtushilei.domain.SysUser;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -16,14 +13,13 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.Collections;
 
 
 /**
- * @author shilei
- * @Date 2017/6/9.
+ * @author Hu Tong
+ * @Date 2010/07/17
  */
 public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
 
@@ -43,16 +39,12 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
         if(account != null && password != null) {
             return getAuthenticationManager().authenticate(new UsernamePasswordAuthenticationToken(account, password, Collections.emptyList()));
         } else {
-            return getAuthenticationManager().authenticate(new UsernamePasswordAuthenticationToken(account, password, Collections.emptyList()));
+            return getAuthenticationManager().authenticate(null);
         }
     }
 
-    ///重写，使response 具备JWT
     @Override
-    protected void successfulAuthentication(
-            HttpServletRequest req,
-            HttpServletResponse res, FilterChain chain,
-            Authentication auth) throws IOException, ServletException {
-        TokenAuthenticationService.addAuthentication(res, auth.getName());
+    protected void successfulAuthentication(HttpServletRequest req, HttpServletResponse res, FilterChain chain, Authentication auth) throws IOException, ServletException {
+        TokenAuthenticationService.addAuthentication(res, JSON.toJSONString(auth.getPrincipal()));
     }
 }

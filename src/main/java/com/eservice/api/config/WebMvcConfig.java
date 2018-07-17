@@ -62,7 +62,9 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
     }
 
 
-    //使用阿里 FastJson 作为JSON MessageConverter
+    /**
+     * 使用阿里 FastJson 作为JSON MessageConverter
+     */
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
         FastJsonHttpMessageConverter4 converter = new FastJsonHttpMessageConverter4();
@@ -75,7 +77,9 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
     }
 
 
-    //统一异常处理
+    /**
+     *  统一异常处理
+     */
     @Override
     public void configureHandlerExceptionResolvers(List<HandlerExceptionResolver> exceptionResolvers) {
         exceptionResolvers.add(new HandlerExceptionResolver() {
