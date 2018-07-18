@@ -20,7 +20,6 @@
          select * from user  where account=#{account}
     </select>
 
-
   <select id="requestLogin" resultMap="BaseResultMap">
     SELECT u.*
     FROM user u
