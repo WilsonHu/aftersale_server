@@ -27,4 +27,10 @@
     <result column="is_old_machine" jdbcType="VARCHAR" property="isOldMachine" />
     <result column="old_machine_check" jdbcType="VARCHAR" property="oldMachineCheck" />
   </resultMap>
+
+  <select id="selectByAccount" resultMap="BaseResultMap">
+    SELECT * from machine m
+    left join user u on u.id = m.customer
+    where u.account = '${account}'
+  </select>
 </mapper>

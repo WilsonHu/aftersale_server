@@ -57,10 +57,24 @@ public class MachineController {
         return ResultGenerator.genSuccessResult(pageInfo);
     }
 
-    // 根据铭牌号返回机器
+    /*
+     *根据铭牌号返回机器
+     */
     @PostMapping("/selectByNameplate")
     public Result selectByNameplate(@RequestParam String nameplate) {
         Machine machine = machineService.findBy("nameplate",nameplate);
         return ResultGenerator.genSuccessResult(machine);
+    }
+
+    /*
+     * 根据账号返回该账号所属客户的机器列表
+     */
+    @PostMapping("/selectByAccount")
+    public Result selectByCustomer(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size,
+                                   @RequestParam String account) {
+        PageHelper.startPage(page, size);
+        List<Machine> machineList = machineService.selectByAccount(account);
+        PageInfo pageInfo = new PageInfo(machineList);
+        return ResultGenerator.genSuccessResult(pageInfo);
     }
 }
