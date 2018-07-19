@@ -3,7 +3,7 @@ package com.eservice.api.model.machine;
 import java.util.Date;
 import javax.persistence.*;
 
-public class MachineInProcessDb {
+public class MachineInfosInProcessDb {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -37,6 +37,43 @@ public class MachineInProcessDb {
 
     @Column(name = "machine_type")
     private Integer machineType;
+
+    /**
+     * 来自machine_type.name
+     */
+
+    @Column(name = "name")
+    private String name;
+
+    /**
+     * 针数
+     */
+    @Column(name = "needle_num")
+    private String needleNum;
+
+    /**
+     * 头数
+     */
+    @Column(name = "head_num")
+    private String headNum;
+
+    /**
+     * 头距(由销售预填、销售更改)
+     */
+    @Column(name = "head_distance")
+    private String headDistance;
+
+    /**
+     * X-行程
+     */
+    @Column(name = "x_distance")
+    private String xDistance;
+
+    /**
+     * Y-行程
+     */
+    @Column(name = "y_distance")
+    private String yDistance;
 
     /**
      * 创建时间
@@ -250,5 +287,53 @@ public class MachineInProcessDb {
      */
     public void setShipTime(Date shipTime) {
         this.shipTime = shipTime;
+    }
+
+    public String getNeedleNum() {
+        return this.needleNum;
+    }
+
+    public void setNeedleNum(String needleNum1) {
+        this.needleNum = needleNum1;
+    }
+
+    public String getHeadNum() {
+        return headNum;
+    }
+
+    public void setHeadNum(String headNum1) {
+        this.headNum = headNum1;
+    }
+
+    public String getHeadDistance(){
+        return this.headDistance;
+    }
+
+    public void setHeadDistance(String headDistance) {
+        this.headDistance = headDistance;
+    }
+
+    public String getxDistance() {
+        return xDistance;
+    }
+
+    public void setxDistance(String xDistance) {
+        this.xDistance = xDistance;
+    }
+
+    public String getyDistance() {
+        return yDistance;
+    }
+
+    public void setyDistance(String yDistance) {
+        this.yDistance = yDistance;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

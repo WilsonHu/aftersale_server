@@ -22,7 +22,7 @@ public class RepairRequestInfoServiceImpl extends AbstractService<RepairRequestI
     private RepairRequestInfoMapper repairRequestInfoMapper;
 
     /**
-     * ±£´æ²¢µÃµ½idºÅ
+     * ä¿å­˜å¹¶å¾—åˆ°idå·
      */
     public void saveAndGetID(RepairRequestInfo repairRequestInfo) {
         repairRequestInfoMapper.saveAndGetID(repairRequestInfo);
