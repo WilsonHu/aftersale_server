@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50553
 File Encoding         : 65001
 
-Date: 2018-07-18 14:29:47
+Date: 2018-07-19 16:04:39
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -474,13 +474,13 @@ CREATE TABLE `repair_record` (
   `customer` int(10) unsigned NOT NULL COMMENT '联系人,',
   `machine_nameplate` varchar(255) NOT NULL COMMENT '机器编号',
   `repair_request_info` int(10) unsigned NOT NULL COMMENT '用户发起报修信息，一次报修可以有多个维修记录。',
-  `in_warranty_period` varchar(255) NOT NULL COMMENT '1：在保修期内，0：保修期已过， 在派单时指定。',
-  `repair_charge_person` int(10) unsigned NOT NULL COMMENT '维修人员',
-  `repair_start_time` datetime NOT NULL COMMENT '维修工时',
-  `repair_end_time` datetime NOT NULL,
-  `customer_feedback` int(10) unsigned NOT NULL COMMENT '改善建议',
+  `in_warranty_period` varchar(255) DEFAULT NULL COMMENT '1：在保修期内，0：保修期已过， 在派单时指定。',
+  `repair_charge_person` int(10) unsigned DEFAULT NULL COMMENT '维修人员',
+  `repair_start_time` datetime DEFAULT NULL COMMENT '维修工时',
+  `repair_end_time` datetime DEFAULT NULL,
+  `customer_feedback` int(10) unsigned DEFAULT NULL COMMENT '改善建议',
   `status` varchar(255) NOT NULL COMMENT '维修状态 0：未派单， 1：已派单（但未接单）, 2： 已接受任务， 3：维修成功(客户未确认)，4：无法维修，维修被转派（不需要客户确认），5.客户已确认（维修成功）。转派后，前面的维修记录要保留，但是客户只需要看到成功的最后那次记录。',
-  `create_time` datetime NOT NULL COMMENT '该条记录的创建时间',
+  `create_time` datetime DEFAULT NULL COMMENT '该条记录的创建时间',
   `update_time` datetime DEFAULT NULL COMMENT '该条记录更新时间',
   `forward_info` int(10) unsigned DEFAULT NULL COMMENT '转派信息，如果空表示没有转派。有则记录了来自哪个代理商的转派以及时间。在派单时可以转派给原厂信胜; 有转派则表示是信胜维修。',
   PRIMARY KEY (`id`),

@@ -14,4 +14,15 @@
     <result column="customer" jdbcType="INTEGER" property="customer" />
     <result column="content" jdbcType="LONGVARCHAR" property="content" />
   </resultMap>
+
+
+  <insert id="saveAndGetID" parameterType="com.eservice.api.model.repair_request_info.RepairRequestInfo"
+          useGeneratedKeys="true" keyProperty="id">
+    insert into
+    repair_request_info(
+    nameplate, nameplate_picture, voice, repair_title, content, pictures, customer)
+    values(
+    #{ nameplate},#{ nameplatePicture},#{voice },#{repairTitle },#{content}, #{pictures}, #{customer})
+
+  </insert>
 </mapper>

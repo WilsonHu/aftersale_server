@@ -36,4 +36,38 @@ public class Constant {
             return this.value;
         }
     }
+
+    /**
+     * 维修状态
+     * 0：未派单，
+     * 1：已派单（但未接单）,
+     * 2： 已接受任务，
+     * 3：维修成功(客户未确认)，
+     * 4：无法维修，维修被转派（不需要客户确认），
+     * 5.客户已确认（维修成功）。转派后，前面的维修记录要保留，但是客户只需要看到成功的最后那次记录。
+     */
+    public static final String REPAIR_STATUS_UNSIGNED_TO_REPAIRER = "0";
+    public static final String REPAIR_STATUS_SIGNED_TO_REPAIRER = "1";
+    public static final String REPAIR_STATUS_REPAIRER_ACCEPTED = "2";
+    public static final String REPAIR_STATUS_REPAIR_OK = "3";
+    public static final String REPAIR_STATUS_REPAIR_NG = "4";
+    public static final String REPAIR_STATUS_REPAIR_CUSTOMER_CONFIRMED = "5";
+
+    /**
+     * 机器状态
+     * 0：未绑定，
+     * 1：已绑定，
+     * 2：待安装，
+     * 3：正常工作状态（已安装、已保养，已维修），
+     * 4：待保养，
+     * 5：待修理，
+     * 6：待审核
+     */
+    public static final String MACHINE_STATUS_UNBIND_TO_CUSTOMER = "0";
+    public static final String MACHINE_STATUS_BOUND_TO_CUSTOMER = "1";
+    public static final String MACHINE_STATUS_WAIT_FOR_INSTALL = "2";
+    public static final String MACHINE_STATUS_IN_NORMAL = "3";
+    public static final String MACHINE_STATUS_WAIT_FOR_MAINTAIN = "4";
+    public static final String MACHINE_STATUS_WAIT_FOR_REPAIR = "5";
+    public static final String MACHINE_STATUS_WAIT_FOR_CHECK = "6";
 }

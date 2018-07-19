@@ -21,4 +21,11 @@ public class RepairRequestInfoServiceImpl extends AbstractService<RepairRequestI
     @Resource
     private RepairRequestInfoMapper repairRequestInfoMapper;
 
+    /**
+     * 保存并得到id号
+     */
+    public void saveAndGetID(RepairRequestInfo repairRequestInfo) {
+        repairRequestInfoMapper.saveAndGetID(repairRequestInfo);
+    }
+
 }

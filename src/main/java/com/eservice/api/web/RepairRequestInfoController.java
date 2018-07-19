@@ -2,10 +2,15 @@ package com.eservice.api.web;
 import com.alibaba.fastjson.JSON;
 import com.eservice.api.core.Result;
 import com.eservice.api.core.ResultGenerator;
+import com.eservice.api.model.machine.Machine;
+import com.eservice.api.model.repair_record.RepairRecord;
 import com.eservice.api.model.repair_request_info.RepairRequestInfo;
 import com.eservice.api.service.RepairRequestInfoService;
 import com.eservice.api.service.common.CommonService;
 import com.eservice.api.service.common.Constant;
+import com.eservice.api.service.impl.MachineServiceImpl;
+import com.eservice.api.service.impl.RepairRecordServiceImpl;
+import com.eservice.api.service.impl.RepairRequestInfoServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,6 +24,7 @@ import javax.annotation.Resource;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -30,7 +36,13 @@ import java.util.List;
 @RequestMapping("/repair/request/info")
 public class RepairRequestInfoController {
     @Resource
-    private RepairRequestInfoService repairRequestInfoService;
+    private RepairRequestInfoServiceImpl repairRequestInfoService;
+
+    @Resource
+    private RepairRecordServiceImpl repairRecordService;
+
+    @Resource
+    private MachineServiceImpl machineService;
 
     @Resource
     private CommonService commonService;
@@ -115,12 +127,33 @@ public class RepairRequestInfoController {
                 }
             }
 
-            repairRequestInfo1.setVoice(listResultPathRequestVoice.toString());
-            repairRequestInfo1.setPictures(listResultPathRequestImage.toString());
-            repairRequestInfo1.setNameplatePicture(listResultPathRequestNameplateImage.toString());
-            repairRequestInfoService.save(repairRequestInfo1);
+        repairRequestInfo1.setVoice(listResultPathRequestVoice.toString());
+        repairRequestInfo1.setPictures(listResultPathRequestImage.toString());
+        repairRequestInfo1.setNameplatePicture(listResultPathRequestNameplateImage.toString());
+        repairRequestInfoService.saveAndGetID(repairRequestInfo1);
 
-            return ResultGenerator.genSuccessResult();
+        /**
+         * 添加报修记录之后，要生成最基本的维修记录
+         */
+        RepairRecord repairRecord1 = new RepairRecord();
+        repairRecord1.setCustomer(repairRequestInfo1.getCustomer());
+        repairRecord1.setMachineNameplate(repairRequestInfo1.getNameplate());
+        repairRecord1.setStatus(Constant.REPAIR_STATUS_UNSIGNED_TO_REPAIRER);
+        repairRecord1.setRepairRequestInfo(repairRequestInfo1.getId());
+        repairRecord1.setCreateTime(new Date());
+        repairRecordService.save(repairRecord1);
+
+        /**
+         * machine 状态置为待修理
+         */
+        Machine machine = machineService.findBy("nameplate",repairRequestInfo1.getNameplate());
+        if(machine != null) {
+            machine.setStatus(Constant.MACHINE_STATUS_WAIT_FOR_REPAIR);
+            machineService.update(machine);
+        } else {
+            return ResultGenerator.genFailResult("can not find machine by the nameplate: " + repairRequestInfo1.getNameplate());
+        }
+        return ResultGenerator.genSuccessResult();
     }
 
     @PostMapping("/delete")

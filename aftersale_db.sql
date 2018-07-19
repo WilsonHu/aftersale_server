@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50553
 File Encoding         : 65001
 
-Date: 2018-07-18 14:29:47
+Date: 2018-07-19 16:04:39
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -239,13 +239,14 @@ CREATE TABLE `machine` (
   KEY `nameplate` (`nameplate`),
   KEY `fk_m_customer` (`customer`),
   CONSTRAINT `fk_m_customer` FOREIGN KEY (`customer`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of machine
 -- ----------------------------
 INSERT INTO `machine` VALUES ('1', 'mph2233', 'ddh22333', 'ht22333', 'geo-11-34', '杭州市XX路XX号', '1', null, '绣花机', '22', '33', '44', '55', '66', null, '合同客户ABC', '1', '2018-07-10', '', null);
-INSERT INTO `machine` VALUES ('2', 'mph333', 'ddh444', 'thaaa223', 'geo233', '杭州市XX路XX222', '1', null, '帽子机', '33', '22', '11', '11', '11', null, '合同客户ABC22', '2', '2018-07-06', '', null);
+INSERT INTO `machine` VALUES ('2', 'mph333', 'ddh444', 'thaaa223', 'geo233', '杭州市XX路XX222', '5', null, '帽子机', '33', '22', '11', '11', '11', null, '合同客户ABC22', '2', '2018-07-06', '', null);
+INSERT INTO `machine` VALUES ('3', 'mph555', 'ddh-abc111', 'thaaa555', 'geo2555', '杭州市XX路XX555', '1', null, '帽子机', '33', '22', '11', '11', '11', null, '合同客户ABC22', '1', '2018-07-06', '', null);
 
 -- ----------------------------
 -- Table structure for `maintain_abnormal_record`
@@ -450,13 +451,16 @@ CREATE TABLE `repair_customer_feedback` (
   `customer_suggestion` varchar(255) NOT NULL COMMENT '客户意见',
   `customer_repair_result` varchar(255) DEFAULT NULL COMMENT '维修结果。',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of repair_customer_feedback
 -- ----------------------------
 INSERT INTO `repair_customer_feedback` VALUES ('1', '4', '4f满意', '修理OK');
 INSERT INTO `repair_customer_feedback` VALUES ('2', '5', '5F很满意', '修理OK');
+INSERT INTO `repair_customer_feedback` VALUES ('3', '5', '5F很满意', '修理OK');
+INSERT INTO `repair_customer_feedback` VALUES ('4', '5', '5F很满意0719', '修理OK');
+INSERT INTO `repair_customer_feedback` VALUES ('5', '5', '5F很满意0719', '修理OK');
 
 -- ----------------------------
 -- Table structure for `repair_members`
@@ -487,13 +491,13 @@ CREATE TABLE `repair_record` (
   `customer` int(10) unsigned NOT NULL COMMENT '联系人,',
   `machine_nameplate` varchar(255) NOT NULL COMMENT '机器编号',
   `repair_request_info` int(10) unsigned NOT NULL COMMENT '用户发起报修信息，一次报修可以有多个维修记录。',
-  `in_warranty_period` varchar(255) NOT NULL COMMENT '1：在保修期内，0：保修期已过， 在派单时指定。',
-  `repair_charge_person` int(10) unsigned NOT NULL COMMENT '维修人员',
-  `repair_start_time` datetime NOT NULL COMMENT '维修工时',
-  `repair_end_time` datetime NOT NULL,
-  `customer_feedback` int(10) unsigned NOT NULL COMMENT '改善建议',
+  `in_warranty_period` varchar(255) DEFAULT NULL COMMENT '1：在保修期内，0：保修期已过， 在派单时指定。',
+  `repair_charge_person` int(10) unsigned DEFAULT NULL COMMENT '维修人员',
+  `repair_start_time` datetime DEFAULT NULL COMMENT '维修工时',
+  `repair_end_time` datetime DEFAULT NULL,
+  `customer_feedback` int(10) unsigned DEFAULT NULL COMMENT '改善建议',
   `status` varchar(255) NOT NULL COMMENT '维修状态 0：未派单， 1：已派单（但未接单）, 2： 已接受任务， 3：维修成功(客户未确认)，4：无法维修，维修被转派（不需要客户确认），5.客户已确认（维修成功）。转派后，前面的维修记录要保留，但是客户只需要看到成功的最后那次记录。',
-  `create_time` datetime NOT NULL COMMENT '该条记录的创建时间',
+  `create_time` datetime DEFAULT NULL COMMENT '该条记录的创建时间',
   `update_time` datetime DEFAULT NULL COMMENT '该条记录更新时间',
   `forward_info` int(10) unsigned DEFAULT NULL COMMENT '转派信息，如果空表示没有转派。有则记录了来自哪个代理商的转派以及时间。在派单时可以转派给原厂信胜; 有转派则表示是信胜维修。',
   PRIMARY KEY (`id`),
@@ -509,12 +513,19 @@ CREATE TABLE `repair_record` (
   CONSTRAINT `fk_rr_machine_nameplate` FOREIGN KEY (`machine_nameplate`) REFERENCES `machine` (`nameplate`),
   CONSTRAINT `fk_rr_repair_charge_person` FOREIGN KEY (`repair_charge_person`) REFERENCES `user` (`id`),
   CONSTRAINT `fk_rr_repair_request_info` FOREIGN KEY (`repair_request_info`) REFERENCES `repair_request_info` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
 
 -- ----------------------------
 -- Records of repair_record
 -- ----------------------------
-INSERT INTO `repair_record` VALUES ('1', 'aaa334333', '1', 'mph2233', '1', '1', '5', '2018-07-12 11:31:17', '2018-07-12 12:31:21', '1', '3', '2018-07-12 11:32:49', null, null);
+INSERT INTO `repair_record` VALUES ('3', null, '1', 'mph333', '11', null, null, null, null, null, '0', null, null, null);
+INSERT INTO `repair_record` VALUES ('4', null, '1', 'mph333', '12', null, null, null, null, null, '0', '2018-07-19 11:09:49', null, null);
+INSERT INTO `repair_record` VALUES ('5', null, '1', 'mph333', '13', null, null, null, null, null, '0', '2018-07-19 13:41:09', null, null);
+INSERT INTO `repair_record` VALUES ('6', null, '1', 'mph333', '14', null, null, null, null, null, '0', '2018-07-19 13:44:14', null, null);
+INSERT INTO `repair_record` VALUES ('7', null, '1', 'mph333', '15', null, null, null, null, null, '0', '2018-07-19 13:45:23', null, null);
+INSERT INTO `repair_record` VALUES ('8', null, '1', 'mph333', '16', null, null, null, null, null, '0', '2018-07-19 13:46:38', null, null);
+INSERT INTO `repair_record` VALUES ('9', null, '1', 'mph333', '17', null, null, null, null, null, '0', '2018-07-19 13:50:51', null, null);
+INSERT INTO `repair_record` VALUES ('10', null, '1', 'mph333', '18', null, null, null, null, null, '0', '2018-07-19 13:55:23', null, null);
 
 -- ----------------------------
 -- Table structure for `repair_request_info`
@@ -532,7 +543,7 @@ CREATE TABLE `repair_request_info` (
   PRIMARY KEY (`id`),
   KEY `fk_rri_contacter` (`customer`),
   CONSTRAINT `fk_rri_customer` FOREIGN KEY (`customer`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of repair_request_info
