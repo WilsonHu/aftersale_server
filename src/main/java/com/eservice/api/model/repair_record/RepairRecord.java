@@ -21,7 +21,7 @@ public class RepairRecord {
     /**
      * 联系人,
      */
-    private Integer contacter;
+    private Integer customer;
 
     /**
      * 机器编号
@@ -40,12 +40,6 @@ public class RepairRecord {
      */
     @Column(name = "in_warranty_period")
     private String inWarrantyPeriod;
-
-    /**
-     * 维修内容 
-     */
-    @Column(name = "repair_actual_info")
-    private Integer repairActualInfo;
 
     /**
      * 维修人员
@@ -128,21 +122,21 @@ public class RepairRecord {
     }
 
     /**
-     * 获取联系人,
+     * 获取客户,
      *
-     * @return contacter - 联系人,
+     * @return customer - 客户,
      */
-    public Integer getContacter() {
-        return contacter;
+    public Integer getCustomer() {
+        return customer;
     }
 
     /**
-     * 设置联系人,
+     * 设置客户,
      *
-     * @param contacter 联系人,
+     * @param customer 客户,
      */
-    public void setContacter(Integer contacter) {
-        this.contacter = contacter;
+    public void setCustomer(Integer customer) {
+        this.customer = customer;
     }
 
     /**
@@ -197,24 +191,6 @@ public class RepairRecord {
      */
     public void setInWarrantyPeriod(String inWarrantyPeriod) {
         this.inWarrantyPeriod = inWarrantyPeriod;
-    }
-
-    /**
-     * 获取维修内容 
-     *
-     * @return repair_actual_info - 维修内容 
-     */
-    public Integer getRepairActualInfo() {
-        return repairActualInfo;
-    }
-
-    /**
-     * 设置维修内容 
-     *
-     * @param repairActualInfo 维修内容 
-     */
-    public void setRepairActualInfo(Integer repairActualInfo) {
-        this.repairActualInfo = repairActualInfo;
     }
 
     /**

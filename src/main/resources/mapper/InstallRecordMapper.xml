@@ -15,7 +15,7 @@
     <result column="install_charge_person" jdbcType="INTEGER" property="installChargePerson" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-    <result column="contacter" jdbcType="INTEGER" property="contacter" />
+    <result column="customer" jdbcType="INTEGER" property="customer" />
     <result column="install_result" jdbcType="LONGVARCHAR" property="installResult" />
     <result column="install_info" jdbcType="LONGVARCHAR" property="installInfo" />
   </resultMap>

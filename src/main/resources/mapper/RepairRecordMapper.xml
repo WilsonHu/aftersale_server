@@ -7,11 +7,10 @@
     -->
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="repair_record_num" jdbcType="VARCHAR" property="repairRecordNum" />
-    <result column="contacter" jdbcType="INTEGER" property="contacter" />
+    <result column="customer" jdbcType="INTEGER" property="customer" />
     <result column="machine_nameplate" jdbcType="VARCHAR" property="machineNameplate" />
     <result column="repair_request_info" jdbcType="INTEGER" property="repairRequestInfo" />
     <result column="in_warranty_period" jdbcType="VARCHAR" property="inWarrantyPeriod" />
-    <result column="repair_actual_info" jdbcType="INTEGER" property="repairActualInfo" />
     <result column="repair_charge_person" jdbcType="INTEGER" property="repairChargePerson" />
     <result column="repair_start_time" jdbcType="TIMESTAMP" property="repairStartTime" />
     <result column="repair_end_time" jdbcType="TIMESTAMP" property="repairEndTime" />

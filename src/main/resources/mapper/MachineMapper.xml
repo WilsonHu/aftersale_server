@@ -20,7 +20,6 @@
     <result column="head_distance" jdbcType="VARCHAR" property="headDistance" />
     <result column="head_num" jdbcType="VARCHAR" property="headNum" />
     <result column="loadinglist" jdbcType="VARCHAR" property="loadinglist" />
-    <result column="contacter" jdbcType="VARCHAR" property="contacter" />
     <result column="customer_in_contract" jdbcType="VARCHAR" property="customerInContract" />
     <result column="customer" jdbcType="INTEGER" property="customer" />
     <result column="facory_date" jdbcType="DATE" property="facoryDate" />

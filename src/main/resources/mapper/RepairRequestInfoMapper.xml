@@ -11,7 +11,7 @@
     <result column="voice" jdbcType="VARCHAR" property="voice" />
     <result column="repair_title" jdbcType="VARCHAR" property="repairTitle" />
     <result column="pictures" jdbcType="VARCHAR" property="pictures" />
-    <result column="contacter" jdbcType="INTEGER" property="contacter" />
+    <result column="customer" jdbcType="INTEGER" property="customer" />
     <result column="content" jdbcType="LONGVARCHAR" property="content" />
   </resultMap>
 </mapper>

@@ -64,9 +64,9 @@ public class InstallRecord {
     private Date updateTime;
 
     /**
-     * 联系人（直接的联系人，不是客户）
+     * 客户
      */
-    private Integer contacter;
+    private Integer customer;
 
     /**
      * 安装结果(安装人员建议可以写在此处)
@@ -271,21 +271,21 @@ public class InstallRecord {
     }
 
     /**
-     * 获取联系人（直接的联系人，不是客户）
+     * 获取客户
      *
-     * @return contacter - 联系人（直接的联系人，不是客户）
+     * @return customer - 客户
      */
-    public Integer getContacter() {
-        return contacter;
+    public Integer getCustomer() {
+        return customer;
     }
 
     /**
-     * 设置联系人（直接的联系人，不是客户）
+     * 设置客户
      *
-     * @param contacter 联系人（直接的联系人，不是客户）
+     * @param customer 客户
      */
-    public void setContacter(Integer contacter) {
-        this.contacter = contacter;
+    public void setCustomer(Integer customer) {
+        this.customer = customer;
     }
 
     /**

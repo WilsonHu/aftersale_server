@@ -46,9 +46,9 @@ public class MaintainRecord {
     private String maintainSuggestion;
 
     /**
-     * 联系人(用户方的联系人）
+     * 客户
      */
-    private Integer contacter;
+    private Integer customer;
 
     @Column(name = "create_time")
     private Date createTime;
@@ -218,21 +218,21 @@ public class MaintainRecord {
     }
 
     /**
-     * 获取联系人(用户方的联系人）
+     * 获取客户
      *
-     * @return contacter - 联系人(用户方的联系人）
+     * @return customer - 客户
      */
-    public Integer getContacter() {
-        return contacter;
+    public Integer getCustomer() {
+        return customer;
     }
 
     /**
-     * 设置联系人(用户方的联系人）
+     * 设置客户
      *
-     * @param contacter 联系人(用户方的联系人）
+     * @param customer 客户
      */
-    public void setContacter(Integer contacter) {
-        this.contacter = contacter;
+    public void setCustomer(Integer customer) {
+        this.customer = customer;
     }
 
     /**

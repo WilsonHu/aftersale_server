@@ -89,11 +89,6 @@ public class Machine {
     private String loadinglist;
 
     /**
-     * 该机器的直接联系人，空则联系客户
-     */
-    private String contacter;
-
-    /**
      * 合同里的客户
      */
     @Column(name = "customer_in_contract")
@@ -386,24 +381,6 @@ public class Machine {
      */
     public void setLoadinglist(String loadinglist) {
         this.loadinglist = loadinglist;
-    }
-
-    /**
-     * 获取该机器的直接联系人，空则联系客户
-     *
-     * @return contacter - 该机器的直接联系人，空则联系客户
-     */
-    public String getContacter() {
-        return contacter;
-    }
-
-    /**
-     * 设置该机器的直接联系人，空则联系客户
-     *
-     * @param contacter 该机器的直接联系人，空则联系客户
-     */
-    public void setContacter(String contacter) {
-        this.contacter = contacter;
     }
 
     /**

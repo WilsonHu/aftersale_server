@@ -12,7 +12,7 @@
     <result column="maintain_date_actual" jdbcType="DATE" property="maintainDateActual" />
     <result column="maintain_charge_person" jdbcType="INTEGER" property="maintainChargePerson" />
     <result column="maintain_suggestion" jdbcType="VARCHAR" property="maintainSuggestion" />
-    <result column="contacter" jdbcType="INTEGER" property="contacter" />
+    <result column="customer" jdbcType="INTEGER" property="customer" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="maintain_status" jdbcType="VARCHAR" property="maintainStatus" />

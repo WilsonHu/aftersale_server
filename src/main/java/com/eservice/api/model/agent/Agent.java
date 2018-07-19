@@ -11,11 +11,6 @@ public class Agent {
     private String name;
 
     /**
-     * 账号
-     */
-    private String account;
-
-    /**
      * 电话号码
      */
     private String phone;
@@ -63,24 +58,6 @@ public class Agent {
      */
     public void setName(String name) {
         this.name = name;
-    }
-
-    /**
-     * 获取账号
-     *
-     * @return account - 账号
-     */
-    public String getAccount() {
-        return account;
-    }
-
-    /**
-     * 设置账号
-     *
-     * @param account 账号
-     */
-    public void setAccount(String account) {
-        this.account = account;
     }
 
     /**
