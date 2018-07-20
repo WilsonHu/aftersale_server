@@ -37,6 +37,19 @@ public class Constant {
         }
     }
 
+    public enum IsBaseLibEnum{
+        BASE_LIB_ENUM(0), NOT_BASE_LIB_ENUM(1);
+        private Integer value;
+
+        private IsBaseLibEnum(Integer value) {
+            this.value = value;
+        }
+
+        public Integer getValue() {
+            return this.value;
+        }
+    }
+
     /**
      * 维修状态
      * 0：未派单，

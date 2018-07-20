@@ -10,4 +10,14 @@
     <result column="install_lib_name" jdbcType="VARCHAR" property="installLibName" />
     <result column="install_content" jdbcType="LONGVARCHAR" property="installContent" />
   </resultMap>
+  <select id="selectLibList" resultMap="BaseResultMap">
+    SELECT * from install_lib
+    where 1=1
+    <if test="isBaseLib != null and isBaseLib != ''">
+      and is_base_lib=#{isBaseLib}
+    </if>
+    <if test="installLibName != null and installLibName != ''">
+      and install_lib_name=#{installLibName}
+    </if>
+  </select>
 </mapper>

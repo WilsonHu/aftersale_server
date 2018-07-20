@@ -7,18 +7,25 @@ import com.eservice.api.core.AbstractService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
 
 /**
-* Class Description: xxx
-* @author Wilson Hu
-* @date 2018/07/10.
-*/
+ * Class Description: xxx
+ *
+ * @author Wilson Hu
+ * @date 2018/07/10.
+ */
 @Service
 @Transactional
 public class InstallLibServiceImpl extends AbstractService<InstallLib> implements InstallLibService {
     @Resource
     private InstallLibMapper installLibMapper;
+
+    public List<InstallLib> selectLibList(String isBaseLib, String installLibName) {
+        return installLibMapper.selectLibList(isBaseLib,installLibName);
+    }
 
 }
