@@ -15,6 +15,17 @@ public class MachineInfosInProcessDb {
     private Integer orderId;
 
     /**
+     * 来自于sinsim_db.machine_order.order_num
+     */
+//    @Column(name = "order_num")
+    private String orderNum;
+
+    /**
+     *  来自于sinsim_db.contract.contract_num
+     */
+ //   @Column(name = "contract_num")
+    private String contractNum;
+    /**
      * 系统内部维护用的机器编号(年、月、类型、头数、针数、不大于台数的数字)
      */
     @Column(name = "machine_strid")
@@ -41,9 +52,8 @@ public class MachineInfosInProcessDb {
     /**
      * 来自machine_type.name
      */
-
-    @Column(name = "name")
-    private String name;
+//    @Column(name = "name")
+    private String machineTypeName;
 
     /**
      * 针数
@@ -329,11 +339,27 @@ public class MachineInfosInProcessDb {
         this.yDistance = yDistance;
     }
 
-    public String getName() {
-        return name;
+    public String getMachineTypeName() {
+        return machineTypeName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setMachineTypeName(String machineTypeName1) {
+        this.machineTypeName = machineTypeName1;
+    }
+
+    public String getOrderNum() {
+        return orderNum;
+    }
+
+    public void setOrderNum(String orderNum) {
+        this.orderNum = orderNum;
+    }
+
+    public String getContractNum() {
+        return contractNum;
+    }
+
+    public void setContractNum(String contractNum) {
+        this.contractNum = contractNum;
     }
 }
