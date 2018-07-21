@@ -2,6 +2,7 @@ package com.eservice.api.service.impl;
 
 import com.eservice.api.dao.MachineMapper;
 import com.eservice.api.model.machine.Machine;
+import com.eservice.api.model.machine.MachineInfo;
 import com.eservice.api.service.MachineService;
 import com.eservice.api.core.AbstractService;
 import org.springframework.stereotype.Service;
@@ -26,4 +27,29 @@ public class MachineServiceImpl extends AbstractService<Machine> implements Mach
        return  machineMapper.selectByAccount(account);
     }
 
+    public List<MachineInfo> getSaledMachineInfoList(String nameplate,
+                                                     String orderNum,
+                                                     String machineType,
+                                                     String agent,
+                                                     String status,
+                                                     String customerName,
+                                                     String query_start_time_install,
+                                                     String query_finish_time_install,
+                                                     String query_start_time_maintain,
+                                                     String query_finish_time_maintain,
+                                                     String query_start_time_repair,
+                                                     String query_finish_time_repair) {
+        return machineMapper.getSaledMachineInfoList( nameplate,
+                orderNum,
+                machineType,
+                agent,
+                status,
+                customerName,
+                query_start_time_install,
+                query_finish_time_install,
+                query_start_time_maintain,
+                query_finish_time_maintain,
+                query_start_time_repair,
+                query_finish_time_repair);
+    }
 }

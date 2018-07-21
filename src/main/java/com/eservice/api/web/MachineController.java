@@ -2,6 +2,7 @@ package com.eservice.api.web;
 import com.eservice.api.core.Result;
 import com.eservice.api.core.ResultGenerator;
 import com.eservice.api.model.machine.Machine;
+import com.eservice.api.model.machine.MachineInfo;
 import com.eservice.api.service.MachineService;
 import com.eservice.api.service.impl.MachineServiceImpl;
 import com.github.pagehelper.PageHelper;
@@ -75,6 +76,55 @@ public class MachineController {
         PageHelper.startPage(page, size);
         List<Machine> machineList = machineService.selectByAccount(account);
         PageInfo pageInfo = new PageInfo(machineList);
+        return ResultGenerator.genSuccessResult(pageInfo);
+    }
+
+    /**
+     * 根据条件查询机器及其相关记录信息,时间查询待完成。
+     * @param page
+     * @param size
+     * @param nameplate
+     * @param orderNum
+     * @param machineType
+     * @param agent
+     * @param status
+     * @param customerName
+     * @param query_start_time_install
+     * @param query_finish_time_install
+     * @param query_start_time_maintain
+     * @param query_finish_time_maintain
+     * @param query_start_time_repair
+     * @param query_finish_time_repair
+     * @return
+     */
+    @PostMapping("/getSaledMachineInfoList")
+    public Result getSaledMachineInfoList(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size,
+                                          String nameplate,
+                                          String orderNum,
+                                          String machineType,
+                                          String agent,
+                                          String status,
+                                          String customerName,
+                                          String query_start_time_install,
+                                          String query_finish_time_install,
+                                          String query_start_time_maintain,
+                                          String query_finish_time_maintain,
+                                          String query_start_time_repair,
+                                          String query_finish_time_repair) {
+        PageHelper.startPage(page, size);
+        List<MachineInfo> list = machineService.getSaledMachineInfoList(nameplate,
+                orderNum,
+                machineType,
+                agent,
+                status,
+                customerName,
+                query_start_time_install,
+                query_finish_time_install,
+                query_start_time_maintain,
+                query_finish_time_maintain,
+                query_start_time_repair,
+                query_finish_time_repair);
+        PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
     }
 }
