@@ -10,4 +10,5 @@ public interface InstallLibMapper extends Mapper<InstallLib> {
 
     List<InstallLib> selectLibList(@Param("isBaseLib") String isBaseLib, @Param("installLibName") String installLibName);
 
+    Integer deleteByName(@Param("isBaseLib") String isBaseLib, @Param("installLibName") String installLibName);
 }

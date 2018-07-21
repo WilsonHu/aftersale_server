@@ -25,7 +25,11 @@ public class InstallLibServiceImpl extends AbstractService<InstallLib> implement
     private InstallLibMapper installLibMapper;
 
     public List<InstallLib> selectLibList(String isBaseLib, String installLibName) {
-        return installLibMapper.selectLibList(isBaseLib,installLibName);
+        return installLibMapper.selectLibList(isBaseLib, installLibName);
+    }
+
+    public Integer deleteByName(String isBaseLib, String installLibName) {
+        return installLibMapper.deleteByName(isBaseLib, installLibName);
     }
 
 }

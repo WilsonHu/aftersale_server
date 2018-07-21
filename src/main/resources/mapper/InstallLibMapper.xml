@@ -1,23 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.eservice.api.dao.InstallLibMapper">
-  <resultMap id="BaseResultMap" type="com.eservice.api.model.install_lib.InstallLib">
-    <!--
-      WARNING - @mbg.generated
-    -->
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="is_base_lib" jdbcType="VARCHAR" property="isBaseLib" />
-    <result column="install_lib_name" jdbcType="VARCHAR" property="installLibName" />
-    <result column="install_content" jdbcType="LONGVARCHAR" property="installContent" />
-  </resultMap>
-  <select id="selectLibList" resultMap="BaseResultMap">
-    SELECT * from install_lib
-    where 1=1
-    <if test="isBaseLib != null and isBaseLib != ''">
-      and is_base_lib=#{isBaseLib}
-    </if>
-    <if test="installLibName != null and installLibName != ''">
-      and install_lib_name=#{installLibName}
-    </if>
-  </select>
+	<resultMap id="BaseResultMap" type="com.eservice.api.model.install_lib.InstallLib">
+		<!--
+		  WARNING - @mbg.generated
+		-->
+		<id column="id" jdbcType="INTEGER" property="id"/>
+		<result column="is_base_lib" jdbcType="VARCHAR" property="isBaseLib"/>
+		<result column="install_lib_name" jdbcType="VARCHAR" property="installLibName"/>
+		<result column="install_content" jdbcType="LONGVARCHAR" property="installContent"/>
+	</resultMap>
+	<select id="selectLibList" resultMap="BaseResultMap">
+		SELECT * from install_lib
+		where 1=1
+		<if test="isBaseLib != null and isBaseLib != ''">
+			and is_base_lib=#{isBaseLib}
+		</if>
+		<if test="installLibName != null and installLibName != ''">
+			and install_lib_name=#{installLibName}
+		</if>
+	</select>
+
+	<delete id="deleteByName" parameterType="com.eservice.api.model.install_lib.InstallLib">
+		DELETE FROM install_lib where 1=1
+		<if test="isBaseLib != null and isBaseLib != ''">
+			and is_base_lib=#{isBaseLib}
+		</if>
+		<if test="installLibName != null and installLibName != ''">
+			and install_lib_name=#{installLibName}
+		</if>
+	</delete>
 </mapper>

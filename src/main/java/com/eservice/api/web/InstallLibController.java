@@ -47,6 +47,12 @@ public class InstallLibController {
         return ResultGenerator.genSuccessResult();
     }
 
+    @PostMapping("/deleteByName")
+    public Result deleteByName(@RequestParam String isBaseLib, @RequestParam String installLibName) {
+        int deleteCount = installLibService.deleteByName(isBaseLib, installLibName);
+        return ResultGenerator.genSuccessResult(deleteCount);
+    }
+
     @PostMapping("/update")
     public Result update(String installLib) {
         InstallLib model = JSON.parseObject(installLib, InstallLib.class);

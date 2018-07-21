@@ -1,16 +1,16 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : Local_sinsim
-Source Server Version : 50553
+Source Server         : localhost
+Source Server Version : 50547
 Source Host           : localhost:3306
 Source Database       : aftersale_db
 
 Target Server Type    : MYSQL
-Target Server Version : 50553
+Target Server Version : 50547
 File Encoding         : 65001
 
-Date: 2018-07-19 16:04:39
+Date: 2018-07-21 11:05:03
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -98,15 +98,21 @@ DROP TABLE IF EXISTS `install_lib`;
 CREATE TABLE `install_lib` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `is_base_lib` varchar(255) NOT NULL COMMENT '0:非基础库，1：基础库',
-  `install_lib_name` varchar(255) NOT NULL COMMENT '所属的安装库的名称， ',
-  `install_content` text NOT NULL COMMENT '安装验收的内容',
+  `install_lib_name` varchar(255) DEFAULT NULL COMMENT '所属的安装库的名称， ',
+  `install_content` text COMMENT '安装验收的内容',
   PRIMARY KEY (`id`),
   KEY `fk_ii_install_lib` (`install_lib_name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of install_lib
 -- ----------------------------
+INSERT INTO `install_lib` VALUES ('1', '0', 'aaa', null);
+INSERT INTO `install_lib` VALUES ('2', '1', 'aaa', 'dfsssssssssssssssssssssssssssssssssssfdsf');
+INSERT INTO `install_lib` VALUES ('4', '1', 'aaa', 'eetertre');
+INSERT INTO `install_lib` VALUES ('6', '1', 'aaa', 'sddfgf');
+INSERT INTO `install_lib` VALUES ('23', '0', 'bbb', null);
+INSERT INTO `install_lib` VALUES ('24', '1', 'bbb', 'sdfdsfdsa');
 
 -- ----------------------------
 -- Table structure for `install_members`
@@ -292,7 +298,7 @@ CREATE TABLE `maintain_lib` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `maintain_lib_name` varchar(255) NOT NULL COMMENT '保养库的名字， 一期，二期，三期等',
   `maintain_type` int(10) unsigned NOT NULL COMMENT '1: 清理清洁， 2：注油润滑， 3： 检查修理',
-  `maintain_content` text NOT NULL COMMENT '保养内容',
+  `maintain_content` text COMMENT '保养内容',
   PRIMARY KEY (`id`),
   KEY `fk_mi_maintain_lib` (`maintain_lib_name`) USING BTREE,
   KEY `fk_mi_maintain_type` (`maintain_type`) USING BTREE,
@@ -543,7 +549,7 @@ CREATE TABLE `repair_request_info` (
   PRIMARY KEY (`id`),
   KEY `fk_rri_contacter` (`customer`),
   CONSTRAINT `fk_rri_customer` FOREIGN KEY (`customer`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of repair_request_info
