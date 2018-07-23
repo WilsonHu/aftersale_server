@@ -1,4 +1,7 @@
 package com.eservice.api.web;
+
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.eservice.api.core.Result;
 import com.eservice.api.core.ResultGenerator;
 import com.eservice.api.model.machine.Machine;
@@ -7,6 +10,7 @@ import com.eservice.api.service.MachineService;
 import com.eservice.api.service.impl.MachineServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,10 +20,11 @@ import javax.annotation.Resource;
 import java.util.List;
 
 /**
-* Class Description: xxx
-* @author Wilson Hu
-* @date 2018/07/10.
-*/
+ * Class Description: xxx
+ *
+ * @author Wilson Hu
+ * @date 2018/07/10.
+ */
 @RestController
 @RequestMapping("/machine")
 public class MachineController {
@@ -27,8 +32,27 @@ public class MachineController {
     private MachineServiceImpl machineService;
 
     @PostMapping("/add")
-    public Result add(Machine machine) {
-        machineService.save(machine);
+    public Result add(String machine) {
+        Machine model = JSON.parseObject(machine, Machine.class);
+        machineService.save(model);
+        return ResultGenerator.genSuccessResult();
+    }
+
+    @PostMapping("/addList")
+    public Result addList(String machineList) {
+        List<Machine> modelList = JSONObject.parseArray(machineList, Machine.class);
+        if(modelList==null||modelList.size()==0)
+        {
+            return ResultGenerator.genFailResult("没有可保存的数据！");
+        }
+        for (Machine item : modelList) {
+            try {
+                machineService.save(item);
+            } catch (Exception ex) {
+                TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+                return ResultGenerator.genFailResult("数据保存出错！");
+            }
+        }
         return ResultGenerator.genSuccessResult();
     }
 
@@ -39,8 +63,9 @@ public class MachineController {
     }
 
     @PostMapping("/update")
-    public Result update(Machine machine) {
-        machineService.update(machine);
+    public Result update(String machine) {
+        Machine model = JSON.parseObject(machine, Machine.class);
+        machineService.update(model);
         return ResultGenerator.genSuccessResult();
     }
 
@@ -63,7 +88,7 @@ public class MachineController {
      */
     @PostMapping("/selectByNameplate")
     public Result selectByNameplate(@RequestParam String nameplate) {
-        Machine machine = machineService.findBy("nameplate",nameplate);
+        Machine machine = machineService.findBy("nameplate", nameplate);
         return ResultGenerator.genSuccessResult(machine);
     }
 
@@ -81,6 +106,7 @@ public class MachineController {
 
     /**
      * 根据条件查询机器及其相关记录信息,时间查询待完成。
+     *
      * @param page
      * @param size
      * @param nameplate
