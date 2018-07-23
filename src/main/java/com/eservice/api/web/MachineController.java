@@ -10,6 +10,7 @@ import com.eservice.api.service.MachineService;
 import com.eservice.api.service.impl.MachineServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,19 +40,24 @@ public class MachineController {
     }
 
     @PostMapping("/addList")
+    @Transactional(rollbackFor = Exception.class)
     public Result addList(String machineList) {
-        List<Machine> modelList = JSONObject.parseArray(machineList, Machine.class);
-        if(modelList==null||modelList.size()==0)
-        {
-            return ResultGenerator.genFailResult("没有可保存的数据！");
-        }
-        for (Machine item : modelList) {
-            try {
-                machineService.save(item);
-            } catch (Exception ex) {
-                TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-                return ResultGenerator.genFailResult("数据保存出错！");
+        try {
+            List<Machine> modelList = JSONObject.parseArray(machineList, Machine.class);
+            if (modelList == null || modelList.size() == 0) {
+                return ResultGenerator.genFailResult("没有可保存的数据！");
             }
+            for (Machine item : modelList) {
+                try {
+                    machineService.save(item);
+                } catch (Exception ex) {
+                    TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+                    return ResultGenerator.genFailResult("数据保存出错！");
+                }
+            }
+        } catch (Exception ex) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return ResultGenerator.genFailResult(ex.getMessage());
         }
         return ResultGenerator.genSuccessResult();
     }
