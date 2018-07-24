@@ -52,7 +52,7 @@
 		<result column="old_machine_check" jdbcType="VARCHAR" property="oldMachineCheck"/>
 
 		<result column="customerName" jdbcType="VARCHAR" property="customerName"/>
-		<result column="agentName" jdbcType="VARCHAR" property="agent"/>
+		<result column="agent_name" jdbcType="VARCHAR" property="agent"/>
 
 	</resultMap>
 
@@ -65,7 +65,7 @@
 	<select id="getSaledMachineInfoList" resultMap="MachineInfoMap">
 
 		SELECT u.name as customerName,
-		a.name as agentName, m.*, m.id as machineId
+		a.name as agent_name, m.*, m.id as machineId
 		FROM machine m
 		LEFT JOIN user u ON u.id=m.customer
 		LEFT JOIN agent a on a.id =u.agent
@@ -76,7 +76,7 @@
 				AND customerName like CONCAT('%','${customerName}','%' )
 			</if>
 			<if test="agent != null and agent != ''">
-				AND agentName like CONCAT('%','${agent}','%' )
+				AND agent_name like CONCAT('%','${agent}','%' )
 			</if>
 			<if test="nameplate != null and nameplate != ''">
 				and m.nameplate like CONCAT('%','${nameplate}','%' )
@@ -95,7 +95,7 @@
 				AND u.customerName ='${customerName}'
 			</if>
 			<if test="agent != null and agent != ''">
-				AND a.agentName = '${agent}'
+				AND a.agent_name = '${agent}'
 			</if>
 			<if test="nameplate != null and nameplate != ''">
 				and m.nameplate = '${nameplate}'

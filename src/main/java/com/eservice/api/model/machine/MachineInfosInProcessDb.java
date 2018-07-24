@@ -4,6 +4,7 @@ import java.util.Date;
 import javax.persistence.*;
 
 public class MachineInfosInProcessDb {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -35,6 +36,13 @@ public class MachineInfosInProcessDb {
     @Column(name = "customer_name")
     private String customerName;
 
+
+    /**
+     * 索引转换实际名字,来自 machine.customer-->user-->agent.name
+     */
+    @Column(name = "agent_name")
+    private String agent;
+
     /**
      * 技术部填入的机器编号（铭牌）
      */
@@ -48,7 +56,7 @@ public class MachineInfosInProcessDb {
     /**
      * 机器状态（“1”==>"初始化"，“2”==>"开始安装"，“3”==>"安装完成"，“4”==>"无效"）
      */
-    private Byte status;
+    private Byte status = 0;
 
     @Column(name = "machine_type")
     private Integer machineType;
@@ -112,6 +120,31 @@ public class MachineInfosInProcessDb {
      */
     @Column(name = "ship_time")
     private Date shipTime;
+
+    public Date getFacoryDate() {
+        return facoryDate;
+    }
+
+    public void setFacoryDate(Date facoryDate) {
+        this.facoryDate = facoryDate;
+    }
+
+    /**
+     * 出厂日期，老机器允许空
+     */
+    private Date facoryDate;
+
+
+
+    private boolean isHasBinding = false;
+
+    public boolean getHasBinding() {
+        return isHasBinding;
+    }
+
+    public void setHasBinding(boolean hasBinding) {
+        isHasBinding = hasBinding;
+    }
 
     /**
      * @return id
@@ -187,6 +220,14 @@ public class MachineInfosInProcessDb {
 
     public void setCustomerName(String customerName) {
         this.customerName = customerName;
+    }
+
+    public String getAgent() {
+        return agent;
+    }
+
+    public void setAgent(String agent) {
+        this.agent = agent;
     }
 
 

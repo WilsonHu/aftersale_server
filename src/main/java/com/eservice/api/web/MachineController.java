@@ -55,6 +55,7 @@ public class MachineController {
                         TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
                         return ResultGenerator.genFailResult("第" + index + "个机器已存在，不能重复绑定！");
                     }
+                    item.setStatus("1");
                     machineService.save(item);
                 } catch (Exception ex) {
                     TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
@@ -162,7 +163,7 @@ public class MachineController {
                 query_start_time_maintain,
                 query_finish_time_maintain,
                 query_start_time_repair,
-                query_finish_time_repair,isFuzzy);
+                query_finish_time_repair, isFuzzy);
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
     }

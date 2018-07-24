@@ -24,6 +24,16 @@ public class Constant {
     public static final String REPAIR_REQUEST_NAMEPLATE_IMAGE = "REPAIR_REQUEST_NAMEPLATE_IMAGE";
 
 
+    /*
+    生产部的机器状态对应
+    */
+    public static final int MACHINE_INITIAL = 0;
+    public static final int MACHINE_CONFIGURED = 1;
+    public static final int MACHINE_PLANING = 2;
+    public static final int MACHINE_INSTALLING = 3;
+    public static final int MACHINE_INSTALLED = 4;
+
+
     public enum ValidEnum {
         INVALID(0), VALID(1);
         private Integer value;

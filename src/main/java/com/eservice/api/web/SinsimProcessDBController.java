@@ -7,6 +7,7 @@ import com.eservice.api.model.machine.MachineInfo;
 import com.eservice.api.model.machine.MachineInfosInProcessDb;
 import com.eservice.api.model.machine.MachineType;
 import com.eservice.api.service.impl.MachineServiceImpl;
+import com.github.pagehelper.Constant;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 import sun.invoke.empty.Empty;
 
 import javax.annotation.Resource;
@@ -48,7 +50,8 @@ public class SinsimProcessDBController {
                 "left join machine_order mo on mo.id=m.order_id " +
                 "left join machine_type mt on mt.id=m.machine_type " +
                 "left join contract c on c.id = mo.contract_id" +
-                " where 1=1 ";
+                " where m.status='" + com.eservice.api.service.common.Constant.MACHINE_INITIAL + "' ";
+        //需要查询原生产库中完成的机器，由于数据没有，先用默认值,有数据了再改回来MACHINE_INSTALLED TODO,
         String fuzzyFormat = isFuzzy ? "%" : "";
         String fuzzyKey = isFuzzy ? " like " : "=";
         if (orderNum != null && orderNum.length() > 0) {
@@ -61,7 +64,9 @@ public class SinsimProcessDBController {
         List<MachineInfosInProcessDb> list = dataSourceSinsimProcessDbTemplate.query(query, new BeanPropertyRowMapper(MachineInfosInProcessDb.class));
         if (!isFuzzy) {//查询需要和售后的机器做拆分比较
             for (MachineInfosInProcessDb item : list) {
-                List<MachineInfo> saledMachineList = machineService.getSaledMachineInfoList(nameplate,
+                item.setStatus((byte) 0);
+                item.setFacoryDate(null);
+                List<MachineInfo> saledMachineList = machineService.getSaledMachineInfoList(item.getNameplate(),
                         "",
                         "",
                         "",
@@ -78,8 +83,12 @@ public class SinsimProcessDBController {
                     machineInfo = saledMachineList.get(0);
                 }
                 if (machineInfo != null) {
-                    item.setStatus((byte) 1);
-                    item.setCustomerName(machineInfo.getCustomer().toString());
+                    item.setStatus((byte) Integer.parseInt(machineInfo.getStatus()));
+                    item.setCustomerName(machineInfo.getCustomerName().toString());
+                    item.setAgent(machineInfo.getAgent());
+                    item.setHasBinding(true);
+                    item.setFacoryDate(machineInfo.getFacoryDate());
+
                 }
             }
         }
