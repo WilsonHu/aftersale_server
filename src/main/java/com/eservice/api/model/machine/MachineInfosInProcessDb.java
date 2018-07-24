@@ -21,15 +21,19 @@ public class MachineInfosInProcessDb {
     private String orderNum;
 
     /**
-     *  来自于sinsim_db.contract.contract_num
+     * 来自于sinsim_db.contract.contract_num
      */
- //   @Column(name = "contract_num")
+    //   @Column(name = "contract_num")
     private String contractNum;
     /**
      * 系统内部维护用的机器编号(年、月、类型、头数、针数、不大于台数的数字)
      */
     @Column(name = "machine_strid")
     private String machineStrId;
+
+
+    @Column(name = "customer_name")
+    private String customerName;
 
     /**
      * 技术部填入的机器编号（铭牌）
@@ -52,7 +56,7 @@ public class MachineInfosInProcessDb {
     /**
      * 来自machine_type.name
      */
-//    @Column(name = "name")
+    @Column(name = "machine_type_name")
     private String machineTypeName;
 
     /**
@@ -176,6 +180,15 @@ public class MachineInfosInProcessDb {
     public void setNameplate(String nameplate) {
         this.nameplate = nameplate;
     }
+
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
+    }
+
 
     /**
      * 获取机器的位置，一般由生产部管理员上传
@@ -315,7 +328,7 @@ public class MachineInfosInProcessDb {
         this.headNum = headNum1;
     }
 
-    public String getHeadDistance(){
+    public String getHeadDistance() {
         return this.headDistance;
     }
 

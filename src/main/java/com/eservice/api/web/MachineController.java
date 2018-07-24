@@ -45,14 +45,20 @@ public class MachineController {
         try {
             List<Machine> modelList = JSONObject.parseArray(machineList, Machine.class);
             if (modelList == null || modelList.size() == 0) {
-                return ResultGenerator.genFailResult("没有可保存的数据！");
+                return ResultGenerator.genFailResult("提交列表没有可保存的数据，请检查！");
             }
             for (Machine item : modelList) {
                 try {
+                    Machine machine = machineService.findBy("nameplate", item.getNameplate());
+                    if (machine != null) {
+                        int index = modelList.indexOf(item) + 1;
+                        TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+                        return ResultGenerator.genFailResult("第" + index + "个机器已存在，不能重复绑定！");
+                    }
                     machineService.save(item);
                 } catch (Exception ex) {
                     TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-                    return ResultGenerator.genFailResult("数据保存出错！");
+                    return ResultGenerator.genFailResult("数据保存出错！" + ex.getMessage());
                 }
             }
         } catch (Exception ex) {
@@ -142,7 +148,8 @@ public class MachineController {
                                           String query_start_time_maintain,
                                           String query_finish_time_maintain,
                                           String query_start_time_repair,
-                                          String query_finish_time_repair) {
+                                          String query_finish_time_repair,
+                                          boolean isFuzzy) {
         PageHelper.startPage(page, size);
         List<MachineInfo> list = machineService.getSaledMachineInfoList(nameplate,
                 orderNum,
@@ -155,7 +162,7 @@ public class MachineController {
                 query_start_time_maintain,
                 query_finish_time_maintain,
                 query_start_time_repair,
-                query_finish_time_repair);
+                query_finish_time_repair,isFuzzy);
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
     }

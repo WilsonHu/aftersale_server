@@ -21,5 +21,6 @@ public interface MachineMapper extends Mapper<Machine> {
                                               @Param("query_start_time_maintain") String query_start_time_maintain,
                                               @Param("query_finish_time_maintain") String query_finish_time_maintain,
                                               @Param("query_start_time_repair") String query_start_time_repair,
-                                              @Param("query_finish_time_repair") String query_finish_time_repair);
+                                              @Param("query_finish_time_repair") String query_finish_time_repair,
+                                              @Param("isFuzzy") boolean isFuzzy);
 }

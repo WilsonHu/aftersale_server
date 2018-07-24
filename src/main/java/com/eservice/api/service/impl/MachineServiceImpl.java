@@ -38,7 +38,8 @@ public class MachineServiceImpl extends AbstractService<Machine> implements Mach
                                                      String query_start_time_maintain,
                                                      String query_finish_time_maintain,
                                                      String query_start_time_repair,
-                                                     String query_finish_time_repair) {
+                                                     String query_finish_time_repair,
+                                                     boolean isFuzzy) {
         return machineMapper.getSaledMachineInfoList( nameplate,
                 orderNum,
                 machineType,
@@ -50,6 +51,7 @@ public class MachineServiceImpl extends AbstractService<Machine> implements Mach
                 query_start_time_maintain,
                 query_finish_time_maintain,
                 query_start_time_repair,
-                query_finish_time_repair);
+                query_finish_time_repair,
+                isFuzzy);
     }
 }
