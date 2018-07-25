@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.eservice.api.dao.MaintainTypeMapper">
-  <resultMap id="BaseResultMap" type="com.eservice.api.model.maintain_type.MaintainType">
-    <!--
-      WARNING - @mbg.generated
-    -->
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="maintain_type_name" jdbcType="VARCHAR" property="maintainTypeName" />
-  </resultMap>
+    <resultMap id="BaseResultMap" type="com.eservice.api.model.maintain_type.MaintainType">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="maintain_type_name" jdbcType="VARCHAR" property="maintainTypeName"/>
+    </resultMap>
+    <select id="getListByParam" resultMap="BaseResultMap">
+        SELECT * FROM maintain_type
+        WHERE maintain_type_name = '${name}'
+    </select>
 </mapper>
