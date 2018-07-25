@@ -52,9 +52,9 @@
     <result column="old_machine_check" jdbcType="VARCHAR" property="oldMachineCheck" />
 
     <result column="customerName" jdbcType="VARCHAR" property="customerName" />
-    <result column="agentName" jdbcType="VARCHAR" property="agent" />
+    <result column="agent_name" jdbcType="VARCHAR" property="agent" />
     <result column="install_actual_time" jdbcType="VARCHAR" property="installActualTime" />
-    <result column="install_charge_person" jdbcType="VARCHAR" property="installChargePerson" />
+    <result column="install_charge_person_name" jdbcType="VARCHAR" property="installChargePerson" />
 
 
 
@@ -70,14 +70,17 @@
 
     SELECT
     u.name as customerName,
-    a.name as agentName,
+    a.name as agent_name,
     m.*, m.id as machineId,
     ir.install_actual_time,
-    ir.install_charge_person
+    ir.install_charge_person,
+    userInInstallRecord.name as install_charge_person_name
+
     FROM machine m
     LEFT JOIN user u ON u.id=m.customer
     LEFT JOIN agent a on a.id =u.agent
     LEFT JOIN install_record ir ON ir.machine_nameplate = m.nameplate
+    LEFT JOIN user userInInstallRecord ON userInInstallRecord.id = ir.install_charge_person
 
     WHERE 1=1
     <if test="isFuzzy == true">
