@@ -68,11 +68,12 @@ CREATE TABLE `forward_info` (
   `forword_time` datetime NOT NULL COMMENT '转派时间',
   `comment` varchar(255) DEFAULT NULL COMMENT '可以附带一些信息，告知原厂',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of forward_info
 -- ----------------------------
+INSERT INTO `forward_info` VALUES ('1', '2018-07-25 10:39:31', '维修注意马达已经有异响修了一半');
 
 -- ----------------------------
 -- Table structure for `install_customer_feedback`
@@ -160,13 +161,17 @@ CREATE TABLE `install_record` (
   CONSTRAINT `fk_ir_customer_feedback` FOREIGN KEY (`customer_feedback`) REFERENCES `install_customer_feedback` (`id`),
   CONSTRAINT `fk_ir_machine_nameplate` FOREIGN KEY (`machine_nameplate`) REFERENCES `machine` (`nameplate`),
   CONSTRAINT `fk_ir_maintain_charge_person` FOREIGN KEY (`install_charge_person`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of install_record
 -- ----------------------------
 INSERT INTO `install_record` VALUES ('1', 'aaa', '2018-07-11', '2018-07-11 14:27:13', 'mph2233', 'an安装ok', '2', '1', '1', 'ins info aaaa', '0000-00-00 00:00:00', null, '0');
 INSERT INTO `install_record` VALUES ('2', 'abbb', '2018-07-16', '2018-07-16 15:03:24', 'mph333', 'okkk', '2', '2', '5', 'info4444', '0000-00-00 00:00:00', null, '0');
+INSERT INTO `install_record` VALUES ('3', 'aaa', '2018-07-11', '2018-07-11 14:27:13', 'mph555', 'an安装ok', '2', '1', '1', 'ins info aaaa', '0000-00-00 00:00:00', null, '0');
+INSERT INTO `install_record` VALUES ('4', 'abbb', '2018-07-16', '2018-07-16 15:03:24', 'mph444', 'okkk', '2', '2', '5', 'info4444', '0000-00-00 00:00:00', null, '0');
+INSERT INTO `install_record` VALUES ('5', 'aaa', '2018-07-11', '2018-07-25 14:27:13', 'mph777', 'an安装ok', '2', '1', '1', 'ins info aaaa', '0000-00-00 00:00:00', null, '0');
+INSERT INTO `install_record` VALUES ('6', 'abbb', '2018-07-16', '2018-07-26 15:03:24', 'mph--all-data', 'okkk', '2', '2', '5', 'info4444', '2018-07-25 10:30:39', '2018-07-25 11:30:43', '12');
 
 -- ----------------------------
 -- Table structure for `issue_position_list`
@@ -257,7 +262,7 @@ INSERT INTO `machine` VALUES ('4', 'mph444', 'ddh444', 'htaaa233', 'geo111', 'xx
 INSERT INTO `machine` VALUES ('5', 'mph777', 'ddh0550', 'th_agent_customer444', 'geo999', 'xxx路', '1', null, '帽子机', '31', '55', '59', '66', '100', null, '合同客户223', '11', '2018-07-11', '', null);
 INSERT INTO `machine` VALUES ('6', 'mph788', 'ddh0550', 'th_agent_customer444', 'geo999', 'xxx路', '1', null, '帽子机', '31', '55', '59', '66', '100', null, '合同客户223', '11', '2018-07-11', '', null);
 INSERT INTO `machine` VALUES ('7', 'mph789', 'ddh0550', 'th_agent_customer444', 'geo999', 'xxx路', '1', null, '帽子机', '31', '55', '59', '66', '100', null, '合同客户223', '12', '2018-07-22', '', null);
-INSERT INTO `machine` VALUES ('8', 'mph--a11', 'ddh0550', 'th_agent_customer444', 'geottt23.33', 'xxx路11h', '1', null, '帽子机', '31', '55', '59', '66', '100', null, '合同客户223', '12', '2018-07-22', '', null);
+INSERT INTO `machine` VALUES ('8', 'mph--all-data', 'ddh0550', 'th_agent_customer444', 'geottt23.33', 'xxx路11h', '1', null, '帽子机', '31', '55', '59', '66', '100', null, '合同客户223', '12', '2018-07-22', '0', null);
 
 -- ----------------------------
 -- Table structure for `maintain_abnormal_record`
@@ -365,7 +370,7 @@ CREATE TABLE `maintain_record` (
 -- ----------------------------
 -- Records of maintain_record
 -- ----------------------------
-INSERT INTO `maintain_record` VALUES ('1', 'mph2233', '1', '2018-07-12', '2018-07-12', '5', 'sssssgg', '1', 'info 1111', '0000-00-00 00:00:00', null, '3', '1');
+INSERT INTO `maintain_record` VALUES ('1', 'mph2233', '1', '2018-07-12', '2018-07-12', '5', 'sssssgg', '12', 'info 1111', '2018-07-25 10:35:27', '2018-07-25 11:35:32', '3', '1');
 INSERT INTO `maintain_record` VALUES ('2', 'mph333', '1', '2018-07-16', '2018-07-16', '4', 'sssssssssssssssssg', '2', 'ffff23343', '0000-00-00 00:00:00', null, '3', '2');
 
 -- ----------------------------
@@ -529,14 +534,14 @@ CREATE TABLE `repair_record` (
 -- ----------------------------
 -- Records of repair_record
 -- ----------------------------
-INSERT INTO `repair_record` VALUES ('3', null, '6', 'mph333', '11', null, '4', null, null, null, '0', null, null, null);
-INSERT INTO `repair_record` VALUES ('4', null, '6', 'mph333', '12', null, '4', null, null, null, '0', '2018-07-19 11:09:49', null, null);
-INSERT INTO `repair_record` VALUES ('5', null, '7', 'mph333', '13', null, '4', null, null, null, '0', '2018-07-19 13:41:09', null, null);
-INSERT INTO `repair_record` VALUES ('6', null, '7', 'mph333', '14', null, '3', null, null, null, '0', '2018-07-19 13:44:14', null, null);
-INSERT INTO `repair_record` VALUES ('7', null, '8', 'mph333', '15', null, '3', null, null, null, '0', '2018-07-19 13:45:23', null, null);
-INSERT INTO `repair_record` VALUES ('8', null, '8', 'mph333', '16', null, '3', null, null, null, '0', '2018-07-19 13:46:38', null, null);
-INSERT INTO `repair_record` VALUES ('9', null, '9', 'mph333', '17', null, '10', null, null, null, '0', '2018-07-19 13:50:51', null, null);
-INSERT INTO `repair_record` VALUES ('10', null, '6', 'mph333', '18', null, '10', null, null, null, '0', '2018-07-19 13:55:23', null, null);
+INSERT INTO `repair_record` VALUES ('3', 'xx11', '6', 'mph333', '11', '1', '4', '2018-07-24 10:08:45', '2018-07-25 10:08:50', '2', '5', '2018-07-25 10:38:25', '2018-07-25 10:38:30', '1');
+INSERT INTO `repair_record` VALUES ('4', null, '6', 'mph--all-data', '12', '1', '4', '2018-07-24 10:37:35', '2018-07-25 10:15:51', '1', '5', '2018-07-19 11:09:49', '2018-07-25 10:38:32', '1');
+INSERT INTO `repair_record` VALUES ('5', null, '7', 'mph788', '13', '1', '4', null, '2018-07-25 10:15:55', null, '0', '2018-07-19 13:41:09', null, null);
+INSERT INTO `repair_record` VALUES ('6', null, '7', 'mph333', '14', '0', '3', null, '2018-07-26 10:15:59', null, '0', '2018-07-19 13:44:14', null, null);
+INSERT INTO `repair_record` VALUES ('7', null, '8', 'mph2233', '15', '0', '3', null, '2018-07-26 10:16:03', null, '0', '2018-07-19 13:45:23', null, null);
+INSERT INTO `repair_record` VALUES ('8', null, '8', 'mph555', '16', '0', '3', null, '2018-07-25 10:16:18', null, '0', '2018-07-19 13:46:38', null, null);
+INSERT INTO `repair_record` VALUES ('9', null, '9', 'mph777', '17', '1', '10', null, '2018-07-26 10:16:07', null, '0', '2018-07-19 13:50:51', null, null);
+INSERT INTO `repair_record` VALUES ('10', null, '6', 'mph789', '18', '1', '10', null, '2018-07-26 10:16:07', null, '0', '2018-07-19 13:55:23', null, null);
 
 -- ----------------------------
 -- Table structure for `repair_request_info`

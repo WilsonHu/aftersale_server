@@ -128,12 +128,9 @@ public class MachineController {
      * @param agent
      * @param status
      * @param customerName
+     * 下面都是查询实际发生的时间/日期
      * @param query_start_time_install
      * @param query_finish_time_install
-     * @param query_start_time_maintain
-     * @param query_finish_time_maintain
-     * @param query_start_time_repair
-     * @param query_finish_time_repair
      * @return
      */
     @PostMapping("/getSaledMachineInfoList")
@@ -146,10 +143,8 @@ public class MachineController {
                                           String customerName,
                                           String query_start_time_install,
                                           String query_finish_time_install,
-                                          String query_start_time_maintain,
-                                          String query_finish_time_maintain,
-                                          String query_start_time_repair,
-                                          String query_finish_time_repair,
+                                          String machineWhereFrom,
+                                          String installChargePerson,
                                           boolean isFuzzy) {
         PageHelper.startPage(page, size);
         List<MachineInfo> list = machineService.getSaledMachineInfoList(nameplate,
@@ -160,10 +155,9 @@ public class MachineController {
                 customerName,
                 query_start_time_install,
                 query_finish_time_install,
-                query_start_time_maintain,
-                query_finish_time_maintain,
-                query_start_time_repair,
-                query_finish_time_repair, isFuzzy);
+                machineWhereFrom,
+                installChargePerson,
+                isFuzzy);
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
     }

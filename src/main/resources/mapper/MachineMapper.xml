@@ -1,126 +1,142 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.eservice.api.dao.MachineMapper">
-	<resultMap id="BaseResultMap" type="com.eservice.api.model.machine.Machine">
-		<!--
-		  WARNING - @mbg.generated
-		-->
-		<id column="id" jdbcType="INTEGER" property="id"/>
-		<result column="nameplate" jdbcType="VARCHAR" property="nameplate"/>
-		<result column="order_num" jdbcType="VARCHAR" property="orderNum"/>
-		<result column="contract_num" jdbcType="VARCHAR" property="contractNum"/>
-		<result column="geo_location" jdbcType="VARCHAR" property="geoLocation"/>
-		<result column="address" jdbcType="VARCHAR" property="address"/>
-		<result column="status" jdbcType="VARCHAR" property="status"/>
-		<result column="nameplate_picture" jdbcType="VARCHAR" property="nameplatePicture"/>
-		<result column="machine_type" jdbcType="VARCHAR" property="machineType"/>
-		<result column="needle_num" jdbcType="VARCHAR" property="needleNum"/>
-		<result column="x_distance" jdbcType="VARCHAR" property="xDistance"/>
-		<result column="y_distance" jdbcType="VARCHAR" property="yDistance"/>
-		<result column="head_distance" jdbcType="VARCHAR" property="headDistance"/>
-		<result column="head_num" jdbcType="VARCHAR" property="headNum"/>
-		<result column="loadinglist" jdbcType="VARCHAR" property="loadinglist"/>
-		<result column="customer_in_contract" jdbcType="VARCHAR" property="customerInContract"/>
-		<result column="customer" jdbcType="INTEGER" property="customer"/>
-		<result column="facory_date" jdbcType="DATE" property="facoryDate"/>
-		<result column="is_old_machine" jdbcType="VARCHAR" property="isOldMachine"/>
-		<result column="old_machine_check" jdbcType="VARCHAR" property="oldMachineCheck"/>
-	</resultMap>
-	<resultMap id="MachineInfoMap" type="com.eservice.api.model.machine.MachineInfo">
-		<!--
-		  WARNING - @mbg.generated
-		-->
-		<id column="id" jdbcType="INTEGER" property="id"/>
-		<result column="nameplate" jdbcType="VARCHAR" property="nameplate"/>
-		<result column="order_num" jdbcType="VARCHAR" property="orderNum"/>
-		<result column="contract_num" jdbcType="VARCHAR" property="contractNum"/>
-		<result column="geo_location" jdbcType="VARCHAR" property="geoLocation"/>
-		<result column="address" jdbcType="VARCHAR" property="address"/>
-		<result column="status" jdbcType="VARCHAR" property="status"/>
-		<result column="nameplate_picture" jdbcType="VARCHAR" property="nameplatePicture"/>
-		<result column="machine_type" jdbcType="VARCHAR" property="machineType"/>
-		<result column="needle_num" jdbcType="VARCHAR" property="needleNum"/>
-		<result column="x_distance" jdbcType="VARCHAR" property="xDistance"/>
-		<result column="y_distance" jdbcType="VARCHAR" property="yDistance"/>
-		<result column="head_distance" jdbcType="VARCHAR" property="headDistance"/>
-		<result column="head_num" jdbcType="VARCHAR" property="headNum"/>
-		<result column="loadinglist" jdbcType="VARCHAR" property="loadinglist"/>
-		<result column="customer_in_contract" jdbcType="VARCHAR" property="customerInContract"/>
-		<result column="customer" jdbcType="INTEGER" property="customer"/>
-		<result column="facory_date" jdbcType="DATE" property="facoryDate"/>
-		<result column="is_old_machine" jdbcType="VARCHAR" property="isOldMachine"/>
-		<result column="old_machine_check" jdbcType="VARCHAR" property="oldMachineCheck"/>
+  <resultMap id="BaseResultMap" type="com.eservice.api.model.machine.Machine">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="nameplate" jdbcType="VARCHAR" property="nameplate" />
+    <result column="order_num" jdbcType="VARCHAR" property="orderNum" />
+    <result column="contract_num" jdbcType="VARCHAR" property="contractNum" />
+    <result column="geo_location" jdbcType="VARCHAR" property="geoLocation" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="nameplate_picture" jdbcType="VARCHAR" property="nameplatePicture" />
+    <result column="machine_type" jdbcType="VARCHAR" property="machineType" />
+    <result column="needle_num" jdbcType="VARCHAR" property="needleNum" />
+    <result column="x_distance" jdbcType="VARCHAR" property="xDistance" />
+    <result column="y_distance" jdbcType="VARCHAR" property="yDistance" />
+    <result column="head_distance" jdbcType="VARCHAR" property="headDistance" />
+    <result column="head_num" jdbcType="VARCHAR" property="headNum" />
+    <result column="loadinglist" jdbcType="VARCHAR" property="loadinglist" />
+    <result column="customer_in_contract" jdbcType="VARCHAR" property="customerInContract" />
+    <result column="customer" jdbcType="INTEGER" property="customer" />
+    <result column="facory_date" jdbcType="DATE" property="facoryDate" />
+    <result column="is_old_machine" jdbcType="VARCHAR" property="isOldMachine" />
+    <result column="old_machine_check" jdbcType="VARCHAR" property="oldMachineCheck" />
+  </resultMap>
+  <resultMap id="MachineInfoMap" type="com.eservice.api.model.machine.MachineInfo">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id"/>
+    <result column="nameplate" jdbcType="VARCHAR" property="nameplate" />
+    <result column="order_num" jdbcType="VARCHAR" property="orderNum" />
+    <result column="contract_num" jdbcType="VARCHAR" property="contractNum" />
+    <result column="geo_location" jdbcType="VARCHAR" property="geoLocation" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="nameplate_picture" jdbcType="VARCHAR" property="nameplatePicture" />
+    <result column="machine_type" jdbcType="VARCHAR" property="machineType" />
+    <result column="needle_num" jdbcType="VARCHAR" property="needleNum" />
+    <result column="x_distance" jdbcType="VARCHAR" property="xDistance" />
+    <result column="y_distance" jdbcType="VARCHAR" property="yDistance" />
+    <result column="head_distance" jdbcType="VARCHAR" property="headDistance" />
+    <result column="head_num" jdbcType="VARCHAR" property="headNum" />
+    <result column="loadinglist" jdbcType="VARCHAR" property="loadinglist" />
+    <result column="customer_in_contract" jdbcType="VARCHAR" property="customerInContract" />
+    <result column="customer" jdbcType="INTEGER" property="customer" />
+    <result column="facory_date" jdbcType="DATE" property="facoryDate" />
+    <result column="is_old_machine" jdbcType="VARCHAR" property="isOldMachine" />
+    <result column="old_machine_check" jdbcType="VARCHAR" property="oldMachineCheck" />
 
-		<result column="customerName" jdbcType="VARCHAR" property="customerName"/>
-		<result column="agent_name" jdbcType="VARCHAR" property="agent"/>
+    <result column="customerName" jdbcType="VARCHAR" property="customerName" />
+    <result column="agentName" jdbcType="VARCHAR" property="agent" />
+    <result column="install_actual_time" jdbcType="VARCHAR" property="installActualTime" />
+    <result column="install_charge_person" jdbcType="VARCHAR" property="installChargePerson" />
 
-	</resultMap>
 
-	<select id="selectByAccount" resultMap="BaseResultMap">
+
+  </resultMap>
+
+  <select id="selectByAccount" resultMap="BaseResultMap">
     SELECT * from machine m
     left join user u on u.id = m.customer
     where u.account = '${account}'
   </select>
 
-	<select id="getSaledMachineInfoList" resultMap="MachineInfoMap">
+  <select id="getSaledMachineInfoList" resultMap="MachineInfoMap">
 
-		SELECT u.name as customerName,
-		a.name as agent_name, m.*, m.id as machineId
-		FROM machine m
-		LEFT JOIN user u ON u.id=m.customer
-		LEFT JOIN agent a on a.id =u.agent
+    SELECT
+    u.name as customerName,
+    a.name as agentName,
+    m.*, m.id as machineId,
+    ir.install_actual_time,
+    ir.install_charge_person
+    FROM machine m
+    LEFT JOIN user u ON u.id=m.customer
+    LEFT JOIN agent a on a.id =u.agent
+    LEFT JOIN install_record ir ON ir.machine_nameplate = m.nameplate
 
-		WHERE 1=1
-		<if test="isFuzzy == true">
-			<if test="customerName != null and customerName != ''">
-				AND customerName like CONCAT('%','${customerName}','%' )
-			</if>
-			<if test="agent != null and agent != ''">
-				AND agent_name like CONCAT('%','${agent}','%' )
-			</if>
-			<if test="nameplate != null and nameplate != ''">
-				and m.nameplate like CONCAT('%','${nameplate}','%' )
-			</if>
+    WHERE 1=1
+    <if test="isFuzzy == true">
+      <if test="customerName != null and customerName != ''">
+        AND customerName like CONCAT('%','${customerName}','%' )
+      </if>
+      <if test="agent != null and agent != ''">
+        AND agent_name like CONCAT('%','${agent}','%' )
+      </if>
+      <if test="nameplate != null and nameplate != ''">
+        and m.nameplate like CONCAT('%','${nameplate}','%' )
+      </if>
+      <if test="orderNum != null and orderNum != ''">
+        and m.order_num like CONCAT('%','${orderNum}','%' )
+      </if>
+      <if test="machineType != null and machineType != ''">
+        and m.machine_type like CONCAT('%','${machineType}','%' )
+      </if>
+      <if test="machineWhereFrom != null and machineWhereFrom != ''">
+        and m.is_old_machine  like CONCAT('%','${machineWhereFrom}','%' )
+      </if>
+      <if test="installChargePerson != null and installChargePerson != ''">
+        and ir.install_charge_person like CONCAT('%','${installChargePerson}','%' )
+      </if>
+    </if>
+    <if test="isFuzzy == false">
+      <if test="customerName != null and customerName != ''">
+        AND u.customerName ='${customerName}'
+      </if>
+      <if test="agent != null and agent != ''">
+        AND a.agent_name = '${agent}'
+      </if>
+      <if test="nameplate != null and nameplate != ''">
+        and m.nameplate = '${nameplate}'
+      </if>
+      <if test="orderNum != null and orderNum != ''">
+        and m.order_num = '${orderNum}'
+      </if>
+      <if test="machineType != null and machineType != ''">
+        and m.machine_type = '${machineType}'
+      </if>
+      <if test="machineWhereFrom != null and machineWhereFrom != ''">
+        and m.is_old_machine = '${machineWhereFrom}'
+      </if>
+      <if test="installChargePerson != null and installChargePerson != ''">
+        and ir.install_charge_person = '${installChargePerson}'
+      </if>
+    </if>
 
-			<if test="orderNum != null and orderNum != ''">
-				and m.order_num like CONCAT('%','${orderNum}','%' )
-			</if>
+    <if test="status != null and status != ''">
+      and m.status = '${status}'
+    </if>
+    <if test="query_start_time_install!=null and query_start_time_install != '' ">
+      and DATE_FORMAT(install_actual_time,'%Y-%m-%d %T') &gt;= #{query_start_time_install}
+    </if>
+    <if test="query_finish_time_install!=null and query_finish_time_install != '' ">
+      and DATE_FORMAT(install_actual_time,'%Y-%m-%d %T') &lt;= #{query_finish_time_install}
+    </if>
+    ORDER By ir.install_actual_time DESC
 
-			<if test="machineType != null and machineType != ''">
-				and m.machine_type like CONCAT('%','${machineType}','%' )
-			</if>
-		</if>
-		<if test="isFuzzy == false">
-			<if test="customerName != null and customerName != ''">
-				AND u.customerName ='${customerName}'
-			</if>
-			<if test="agent != null and agent != ''">
-				AND a.agent_name = '${agent}'
-			</if>
-			<if test="nameplate != null and nameplate != ''">
-				and m.nameplate = '${nameplate}'
-			</if>
-
-			<if test="orderNum != null and orderNum != ''">
-				and m.order_num = '${orderNum}'
-			</if>
-
-			<if test="machineType != null and machineType != ''">
-				and m.machine_type = '${machineType}'
-			</if>
-
-		</if>
-
-		<if test="status != null and status != ''">
-			and m.status = '${status}'
-		</if>
-		<!--<if test="query_start_time!=null and query_start_time != '' ">-->
-		<!--and DATE_FORMAT(create_time,'%Y-%m-%d %T') &gt;= #{query_start_time}-->
-		<!--</if>-->
-		<!--<if test="query_finish_time!=null and query_finish_time != '' ">-->
-		<!--and DATE_FORMAT(create_time,'%Y-%m-%d %T') &lt;= #{query_finish_time}-->
-		<!--</if>-->
-		<!--ORDER By create_time DESC,update_time DESC, ship_time DESC-->
-
-	</select>
+  </select>
 </mapper>

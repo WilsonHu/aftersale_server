@@ -18,9 +18,7 @@ public interface MachineMapper extends Mapper<Machine> {
                                               @Param("customerName") String customerName ,
                                               @Param("query_start_time_install") String query_start_time_install,
                                               @Param("query_finish_time_install") String query_finish_time_install,
-                                              @Param("query_start_time_maintain") String query_start_time_maintain,
-                                              @Param("query_finish_time_maintain") String query_finish_time_maintain,
-                                              @Param("query_start_time_repair") String query_start_time_repair,
-                                              @Param("query_finish_time_repair") String query_finish_time_repair,
+                                              @Param("machineWhereFrom") String machineWhereFrom,
+                                              @Param("installChargePerson") String installChargePerson,
                                               @Param("isFuzzy") boolean isFuzzy);
 }

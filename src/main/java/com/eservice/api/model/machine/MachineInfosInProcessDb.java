@@ -4,7 +4,6 @@ import java.util.Date;
 import javax.persistence.*;
 
 public class MachineInfosInProcessDb {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -22,9 +21,9 @@ public class MachineInfosInProcessDb {
     private String orderNum;
 
     /**
-     * 来自于sinsim_db.contract.contract_num
+     *  来自于sinsim_db.contract.contract_num
      */
-    //   @Column(name = "contract_num")
+ //   @Column(name = "contract_num")
     private String contractNum;
     /**
      * 系统内部维护用的机器编号(年、月、类型、头数、针数、不大于台数的数字)
