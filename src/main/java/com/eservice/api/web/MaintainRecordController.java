@@ -2,6 +2,7 @@ package com.eservice.api.web;
 import com.eservice.api.core.Result;
 import com.eservice.api.core.ResultGenerator;
 import com.eservice.api.model.maintain_record.MaintainRecord;
+import com.eservice.api.model.maintain_record.MaintainRecordInfo;
 import com.eservice.api.service.MaintainRecordService;
 import com.eservice.api.service.impl.MaintainRecordServiceImpl;
 import com.github.pagehelper.PageHelper;
@@ -74,4 +75,35 @@ public class MaintainRecordController {
         return ResultGenerator.genSuccessResult(pageInfo);
     }
 
+    /**
+     * 返回保养管理信息
+     * TBD: agent、maintainStatus、customerName等参数查询有问题待处理。
+     */
+    @PostMapping("/getMaintainRecordInfoList")
+    public Result getMaintainRecordInfoList(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size,
+                                            String nameplate,
+                                            String orderNum,
+                                            String agent,
+                                            String maintainStatus,
+                                            String customerName,
+                                            String machineType,
+                                            String maintainChargePerson,
+                                            String query_start_time_maintain,
+                                            String query_finish_time_maintain,
+                                            boolean isFuzzy) {
+        PageHelper.startPage(page, size);
+        List<MaintainRecordInfo> list = maintainRecordService.getMaintainRecordInfoList(
+                nameplate,
+                orderNum,
+                machineType,
+                agent,
+                maintainStatus,
+                customerName,
+                maintainChargePerson,
+                query_start_time_maintain,
+                query_finish_time_maintain,
+                isFuzzy);
+        PageInfo pageInfo = new PageInfo(list);
+        return ResultGenerator.genSuccessResult(pageInfo);
+    }
 }

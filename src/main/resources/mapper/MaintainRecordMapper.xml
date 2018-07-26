@@ -19,6 +19,43 @@
     <result column="customer_feedback" jdbcType="INTEGER" property="customerFeedback" />
     <result column="maintain_info" jdbcType="LONGVARCHAR" property="maintainInfo" />
   </resultMap>
+
+
+  <resultMap id="MaintainRecordInfoMap" type="com.eservice.api.model.maintain_record.MaintainRecordInfo">
+      <!--
+        WARNING - @mbg.generated
+      -->
+      <id column="id" jdbcType="INTEGER" property="id" />
+      <result column="nameplate" jdbcType="VARCHAR" property="nameplate" />
+      <result column="order_num" jdbcType="VARCHAR" property="orderNum" />
+      <result column="contract_num" jdbcType="VARCHAR" property="contractNum" />
+      <result column="geo_location" jdbcType="VARCHAR" property="geoLocation" />
+      <result column="address" jdbcType="VARCHAR" property="address" />
+      <result column="status" jdbcType="VARCHAR" property="status" />
+      <result column="nameplate_picture" jdbcType="VARCHAR" property="nameplatePicture" />
+      <result column="machine_type" jdbcType="VARCHAR" property="machineType" />
+      <result column="needle_num" jdbcType="VARCHAR" property="needleNum" />
+      <result column="x_distance" jdbcType="VARCHAR" property="xDistance" />
+      <result column="y_distance" jdbcType="VARCHAR" property="yDistance" />
+      <result column="head_distance" jdbcType="VARCHAR" property="headDistance" />
+      <result column="head_num" jdbcType="VARCHAR" property="headNum" />
+      <result column="loadinglist" jdbcType="VARCHAR" property="loadinglist" />
+      <result column="customer_in_contract" jdbcType="VARCHAR" property="customerInContract" />
+      <result column="customer" jdbcType="INTEGER" property="customer" />
+      <result column="facory_date" jdbcType="DATE" property="facoryDate" />
+      <result column="is_old_machine" jdbcType="VARCHAR" property="isOldMachine" />
+      <result column="old_machine_check" jdbcType="VARCHAR" property="oldMachineCheck" />
+
+      <result column="customerName" jdbcType="VARCHAR" property="customerName" />
+      <result column="agent_name" jdbcType="VARCHAR" property="agent" />
+      <result column="maintain_lib_name" jdbcType="VARCHAR" property="maintainLibName" />
+      <result column="maintain_charge_person_name" jdbcType="VARCHAR" property="maintainChargePerson" />
+      <result column="maintain_date_plan" jdbcType="DATE" property="maintainDatePlan" />
+      <result column="maintain_date_actual" jdbcType="DATE" property="maintainDateActual" />
+      <result column="maintain_status" jdbcType="VARCHAR" property="maintainStatus" />
+
+  </resultMap>
+
   <select id="selectByNameplate" resultMap="BaseResultMap">
     SELECT *
     FROM  maintain_record as mr
@@ -33,4 +70,82 @@
     -->
     where c.account = #{contacter} AND mr.maintain_status = 3
   </select>
+
+  <select id="getMaintainRecordInfoList" resultMap="MaintainRecordInfoMap">
+      SELECT
+      u.name as customerName,
+      a.name as agent_name,
+      m.*,
+      mr.maintain_lib_name,
+      mr.maintain_date_plan,
+      mr.maintain_date_actual,
+      mr.maintain_status,
+      userInMaintainRecord.name AS maintain_charge_person_name
+
+      FROM
+      machine m
+      LEFT JOIN user u ON u.id = m.customer
+      LEFT JOIN agent a ON a.id = u.agent
+      LEFT JOIN maintain_record mr ON mr.machine_nameplate = m.nameplate
+      LEFT JOIN user userInMaintainRecord ON userInMaintainRecord.id = mr.maintain_charge_person
+    WHERE 1 = 1
+    <if test="isFuzzy == true">
+      <if test="customerName != null and customerName != ''">
+--         AND customerName like CONCAT('%','${customerName}','%' )
+        AND u.name like CONCAT('%','${customerName}','%' )
+      </if>
+      <if test="agent != null and agent != ''">
+--         AND agent_name like CONCAT('%','${agent}','%' )
+        AND a.name like CONCAT('%','${agent}','%' )
+      </if>
+      <if test="nameplate != null and nameplate != ''">
+        and m.nameplate like CONCAT('%','${nameplate}','%' )
+      </if>
+      <if test="orderNum != null and orderNum != ''">
+        and m.order_num like CONCAT('%','${orderNum}','%' )
+      </if>
+      <if test="machineType != null and machineType != ''">
+        and m.machine_type like CONCAT('%','${machineType}','%' )
+      </if>
+      <if test="maintainChargePerson != null and maintainChargePerson != ''">
+        and mr.maintain_charge_person like CONCAT('%','${maintainChargePerson}','%' )
+      </if>
+    </if>
+
+    <if test="isFuzzy == false">
+      <if test="customerName != null and customerName != ''">
+--         AND customerName = '${customerName}'
+        AND u.name = '${customerName}'
+      </if>
+      <if test="agent != null and agent != ''">
+--         AND agent_name = '${agent}'
+        AND a.name = '${agent}'
+      </if>
+      <if test="nameplate != null and nameplate != ''">
+        and m.nameplate = '${nameplate}'
+      </if>
+      <if test="orderNum != null and orderNum != ''">
+        and m.order_num = '${orderNum}'
+      </if>
+      <if test="machineType != null and machineType != ''">
+        and m.machine_type = '${machineType}'
+      </if>
+      <if test="maintainChargePerson != null and maintainChargePerson != ''">
+        and mr.maintain_charge_person = '${maintainChargePerson}'
+      </if>
+    </if>
+
+    <if test="maintainStatus != null and maintainStatus != ''">
+      and mr.maintain_status = #{maintainStatus}
+    </if>
+    <if test="query_start_time_maintain!=null and query_start_time_maintain != '' ">
+      and DATE_FORMAT(maintain_date_actual,'%Y-%m-%d') &gt;= #{query_start_time_maintain}
+    </if>
+    <if test="query_finish_time_maintain!=null and query_finish_time_maintain != '' ">
+      and DATE_FORMAT(maintain_date_actual,'%Y-%m-%d') &lt;= #{query_finish_time_maintain}
+    </if>
+    ORDER By mr.maintain_date_actual DESC
+  </select>
+
+
 </mapper>

@@ -53,11 +53,8 @@
 
     <result column="customerName" jdbcType="VARCHAR" property="customerName" />
     <result column="agent_name" jdbcType="VARCHAR" property="agent" />
-    <result column="install_actual_time" jdbcType="VARCHAR" property="installActualTime" />
+    <result column="install_actual_time" jdbcType="DATE" property="installActualTime" />
     <result column="install_charge_person_name" jdbcType="VARCHAR" property="installChargePerson" />
-
-
-
   </resultMap>
 
   <select id="selectByAccount" resultMap="BaseResultMap">
@@ -85,10 +82,12 @@
     WHERE 1=1
     <if test="isFuzzy == true">
       <if test="customerName != null and customerName != ''">
-        AND customerName like CONCAT('%','${customerName}','%' )
+--         AND customerName like CONCAT('%','${customerName}','%' )
+        AND u.name like CONCAT('%','${customerName}','%' )
       </if>
       <if test="agent != null and agent != ''">
-        AND agent_name like CONCAT('%','${agent}','%' )
+--         AND agent_name like CONCAT('%','${agent}','%' )
+        AND a.name like CONCAT('%','${agent}','%' )
       </if>
       <if test="nameplate != null and nameplate != ''">
         and m.nameplate like CONCAT('%','${nameplate}','%' )
@@ -103,15 +102,17 @@
         and m.is_old_machine  like CONCAT('%','${machineWhereFrom}','%' )
       </if>
       <if test="installChargePerson != null and installChargePerson != ''">
-        and ir.install_charge_person like CONCAT('%','${installChargePerson}','%' )
+        and userInInstallRecord.name like CONCAT('%','${installChargePerson}','%' )
       </if>
     </if>
     <if test="isFuzzy == false">
       <if test="customerName != null and customerName != ''">
-        AND u.customerName ='${customerName}'
+--         AND u.customerName ='${customerName}'
+        AND u.name ='${customerName}'
       </if>
       <if test="agent != null and agent != ''">
-        AND a.agent_name = '${agent}'
+--         AND agent_name = '${agent}'
+        AND a.name = '${agent}'
       </if>
       <if test="nameplate != null and nameplate != ''">
         and m.nameplate = '${nameplate}'
@@ -131,7 +132,7 @@
     </if>
 
     <if test="status != null and status != ''">
-      and m.status = '${status}'
+      and m.status = #{status}
     </if>
     <if test="query_start_time_install!=null and query_start_time_install != '' ">
       and DATE_FORMAT(install_actual_time,'%Y-%m-%d %T') &gt;= #{query_start_time_install}
