@@ -10,4 +10,21 @@
     <result column="maintain_type" jdbcType="INTEGER" property="maintainType" />
     <result column="maintain_content" jdbcType="LONGVARCHAR" property="maintainContent" />
   </resultMap>
+  <select id="selectLibList" resultMap="BaseResultMap">
+    SELECT * FROM maintain_lib
+    WHERE 1=1
+    <if test="maintainType != null and maintainType != ''">
+      and maintain_type=#{maintainType}
+    </if>
+    <if test="maintainLibName != null and maintainLibName != ''">
+      and maintain_lib_name=#{maintainLibName}
+    </if>
+  </select>
+
+  <delete id="deleteByName" parameterType="com.eservice.api.model.maintain_lib.MaintainLib">
+    DELETE FROM maintain_lib where 1=1
+    <if test="maintainLibName != null and maintainLibName != ''">
+      and maintain_lib_name=#{maintainLibName}
+    </if>
+  </delete>
 </mapper>

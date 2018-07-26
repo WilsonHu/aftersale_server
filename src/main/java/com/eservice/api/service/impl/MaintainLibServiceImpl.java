@@ -8,17 +8,27 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 
 /**
-* Class Description: xxx
-* @author Wilson Hu
-* @date 2018/07/10.
-*/
+ * Class Description: xxx
+ *
+ * @author Wilson Hu
+ * @date 2018/07/10.
+ */
 @Service
 @Transactional
 public class MaintainLibServiceImpl extends AbstractService<MaintainLib> implements MaintainLibService {
     @Resource
     private MaintainLibMapper maintainLibMapper;
+
+    public List<MaintainLib> selectLibList(String maintainType, String maintainLibName) {
+        return maintainLibMapper.selectLibList(maintainType, maintainLibName);
+    }
+
+    public Integer deleteByName(String maintainLibName){
+        return maintainLibMapper.deleteByName(maintainLibName);
+    }
 
 }

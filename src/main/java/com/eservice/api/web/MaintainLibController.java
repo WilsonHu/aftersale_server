@@ -1,8 +1,10 @@
 package com.eservice.api.web;
+
+import com.alibaba.fastjson.JSON;
 import com.eservice.api.core.Result;
 import com.eservice.api.core.ResultGenerator;
 import com.eservice.api.model.maintain_lib.MaintainLib;
-import com.eservice.api.service.MaintainLibService;
+import com.eservice.api.service.impl.MaintainLibServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,19 +16,27 @@ import javax.annotation.Resource;
 import java.util.List;
 
 /**
-* Class Description: xxx
-* @author Wilson Hu
-* @date 2018/07/10.
-*/
+ * Class Description: xxx
+ *
+ * @author Wilson Hu
+ * @date 2018/07/10.
+ */
 @RestController
 @RequestMapping("/maintain/lib")
 public class MaintainLibController {
     @Resource
-    private MaintainLibService maintainLibService;
+    private MaintainLibServiceImpl maintainLibService;
 
     @PostMapping("/add")
-    public Result add(MaintainLib maintainLib) {
-        maintainLibService.save(maintainLib);
+    public Result add(String maintainLib) {
+        MaintainLib model = JSON.parseObject(maintainLib, MaintainLib.class);
+        if (model.getMaintainType() == 0) {//大项
+            List<MaintainLib> list = maintainLibService.selectLibList(model.getMaintainType().toString(), model.getMaintainLibName());
+            if (list.size() > 0) {
+                return ResultGenerator.genFailResult("不能添加重复的保养项!");
+            }
+        }
+        maintainLibService.save(model);
         return ResultGenerator.genSuccessResult();
     }
 
@@ -37,8 +47,15 @@ public class MaintainLibController {
     }
 
     @PostMapping("/update")
-    public Result update(MaintainLib maintainLib) {
-        maintainLibService.update(maintainLib);
+    public Result update(String maintainLib) {
+        MaintainLib model = JSON.parseObject(maintainLib, MaintainLib.class);
+        if (model.getMaintainType() == 0) {//大项
+            List<MaintainLib> list = maintainLibService.selectLibList(model.getMaintainType().toString(), model.getMaintainLibName());
+            if (list.size() > 0) {
+                return ResultGenerator.genFailResult("不能修改为重复的保养项!");
+            }
+        }
+        maintainLibService.update(model);
         return ResultGenerator.genSuccessResult();
     }
 
@@ -54,5 +71,19 @@ public class MaintainLibController {
         List<MaintainLib> list = maintainLibService.findAll();
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
+    }
+
+    @PostMapping("/selectLibList")
+    public Result selectLibList(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size, @RequestParam String maintainType, @RequestParam String maintainLibName) {
+        PageHelper.startPage(page, size);
+        List<MaintainLib> list = maintainLibService.selectLibList(maintainType, maintainLibName);
+        PageInfo pageInfo = new PageInfo(list);
+        return ResultGenerator.genSuccessResult(pageInfo);
+    }
+
+    @PostMapping("/deleteByName")
+    public Result deleteByName(@RequestParam String maintainLibName) {
+        int deleteCount = maintainLibService.deleteByName(maintainLibName);
+        return ResultGenerator.genSuccessResult(deleteCount);
     }
 }
