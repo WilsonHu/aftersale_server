@@ -161,17 +161,17 @@ CREATE TABLE `install_record` (
   CONSTRAINT `fk_ir_customer_feedback` FOREIGN KEY (`customer_feedback`) REFERENCES `install_customer_feedback` (`id`),
   CONSTRAINT `fk_ir_machine_nameplate` FOREIGN KEY (`machine_nameplate`) REFERENCES `machine` (`nameplate`),
   CONSTRAINT `fk_ir_maintain_charge_person` FOREIGN KEY (`install_charge_person`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of install_record
 -- ----------------------------
-INSERT INTO `install_record` VALUES ('1', 'aaa', '2018-07-11', '2018-07-11 14:27:13', 'mph2233', 'an安装ok', '2', '1', '1', 'ins info aaaa', '0000-00-00 00:00:00', null, '0');
-INSERT INTO `install_record` VALUES ('2', 'abbb', '2018-07-16', '2018-07-16 15:03:24', 'mph333', 'okkk', '2', '2', '5', 'info4444', '0000-00-00 00:00:00', null, '0');
-INSERT INTO `install_record` VALUES ('3', 'aaa', '2018-07-11', '2018-07-11 14:27:13', 'mph555', 'an安装ok', '2', '1', '1', 'ins info aaaa', '0000-00-00 00:00:00', null, '0');
-INSERT INTO `install_record` VALUES ('4', 'abbb', '2018-07-16', '2018-07-16 15:03:24', 'mph444', 'okkk', '2', '2', '5', 'info4444', '0000-00-00 00:00:00', null, '0');
-INSERT INTO `install_record` VALUES ('5', 'aaa', '2018-07-11', '2018-07-25 14:27:13', 'mph777', 'an安装ok', '2', '1', '1', 'ins info aaaa', '0000-00-00 00:00:00', null, '0');
-INSERT INTO `install_record` VALUES ('6', 'abbb', '2018-07-16', '2018-07-26 15:03:24', 'mph--all-data', 'okkk', '2', '2', '5', 'info4444', '2018-07-25 10:30:39', '2018-07-25 11:30:43', '12');
+INSERT INTO `install_record` VALUES ('1', 'aaa', '2018-07-11', '2018-07-11 14:27:13', 'mph2233', 'an安装ok', '2', '1', '1', 'ins info aaaa', '0000-00-00 00:00:00', null, '9');
+INSERT INTO `install_record` VALUES ('2', 'abbb', '2018-07-16', '2018-07-16 15:03:24', 'mph333', 'okkk', '2', '2', '5', 'info4444', '0000-00-00 00:00:00', null, '8');
+INSERT INTO `install_record` VALUES ('3', 'aaa', '2018-07-11', '2018-07-11 14:27:13', 'mph555', 'an安装ok', '2', '1', '1', 'ins info aaaa', '0000-00-00 00:00:00', null, '9');
+INSERT INTO `install_record` VALUES ('4', 'abbb', '2018-07-16', '2018-07-16 15:03:24', 'mph444', 'okkk', '2', '2', '5', 'info4444', '0000-00-00 00:00:00', null, '7');
+INSERT INTO `install_record` VALUES ('5', 'aaa', '2018-07-11', '2018-07-25 14:27:13', 'mph777', 'an安装ok', '2', '1', '12', 'ins info aaaa', '0000-00-00 00:00:00', null, '5');
+INSERT INTO `install_record` VALUES ('6', 'abbb', '2018-07-16', '2018-07-26 15:03:24', 'mph--all-data', 'okkk', '2', '2', '7', 'info4444', '2018-07-25 10:30:39', '2018-07-25 11:30:43', '12');
 
 -- ----------------------------
 -- Table structure for `issue_position_list`
@@ -255,14 +255,14 @@ CREATE TABLE `machine` (
 -- ----------------------------
 -- Records of machine
 -- ----------------------------
-INSERT INTO `machine` VALUES ('1', 'mph2233', 'ddh22333', 'ht22333', 'geo-11-34', '杭州市XX路XX号', '1', null, '绣花机', '22', '33', '44', '55', '66', null, '合同客户ABC', '11', '2018-07-10', '', null);
-INSERT INTO `machine` VALUES ('2', 'mph333', 'ddh444', 'thaaa223', 'geo233', '杭州市XX路XX222', '5', null, '帽子机', '33', '22', '11', '11', '11', null, '合同客户ABC22', '8', '2018-07-06', '', null);
-INSERT INTO `machine` VALUES ('3', 'mph555', 'ddh-abc111', 'thaaa555', 'geo2555', '杭州市XX路XX555', '1', null, '帽子机', '33', '22', '11', '11', '11', null, '合同客户ABC22', '9', '2018-07-06', '', null);
-INSERT INTO `machine` VALUES ('4', 'mph444', 'ddh444', 'htaaa233', 'geo111', 'xxl路xx区块', '1', null, '绣花机', '25', '500', '300', '200', '100', null, '合同客户888', '7', '2018-07-21', '', null);
-INSERT INTO `machine` VALUES ('5', 'mph777', 'ddh0550', 'th_agent_customer444', 'geo999', 'xxx路', '1', null, '帽子机', '31', '55', '59', '66', '100', null, '合同客户223', '11', '2018-07-11', '', null);
-INSERT INTO `machine` VALUES ('6', 'mph788', 'ddh0550', 'th_agent_customer444', 'geo999', 'xxx路', '1', null, '帽子机', '31', '55', '59', '66', '100', null, '合同客户223', '11', '2018-07-11', '', null);
-INSERT INTO `machine` VALUES ('7', 'mph789', 'ddh0550', 'th_agent_customer444', 'geo999', 'xxx路', '1', null, '帽子机', '31', '55', '59', '66', '100', null, '合同客户223', '12', '2018-07-22', '', null);
-INSERT INTO `machine` VALUES ('8', 'mph--all-data', 'ddh0550', 'th_agent_customer444', 'geottt23.33', 'xxx路11h', '1', null, '帽子机', '31', '55', '59', '66', '100', null, '合同客户223', '12', '2018-07-22', '0', null);
+INSERT INTO `machine` VALUES ('1', 'mph2233', 'ddh22333', 'ht22333', 'geo-11-34', '机器地址杭州市XX路XX号', '1', null, '绣花机', '22', '33', '44', '55', '66', null, '合同客户ABC', '11', '2018-07-10', '1', null);
+INSERT INTO `machine` VALUES ('2', 'mph333', 'ddh444', 'thaaa223', 'geo233', '机器地址杭州市XX路XX222', '5', null, '帽子机', '33', '22', '11', '11', '11', null, '合同客户ABC22', '8', '2018-07-06', '1', null);
+INSERT INTO `machine` VALUES ('3', 'mph555', 'ddh-abc111', 'thaaa555', 'geo2555', '机器地址 杭州市XX路XX555', '1', null, 'maoziji', '33', '22', '11', '11', '11', null, '合同客户ABC22', '9', '2018-07-06', '0', null);
+INSERT INTO `machine` VALUES ('4', 'mph444', 'ddh444', 'htaaa233', 'geo111', '机器地址xxl路xx区块', '1', null, 'maoziji', '25', '500', '300', '200', '100', null, '合同客户888', '7', '2018-07-21', '0', null);
+INSERT INTO `machine` VALUES ('5', 'mph777', 'ddh0550', 'th_agent_customer444', 'geo999', '机器地址xxx路', '1', null, '帽子机', '31', '55', '59', '66', '100', null, '合同客户223', '11', '2018-07-11', '0', null);
+INSERT INTO `machine` VALUES ('6', 'mph788', 'ddh0550', 'th_agent_customer444', 'geo999', '机器地址xxx路', '1', null, '帽子机', '31', '55', '59', '66', '100', null, '合同客户223', '11', '2018-07-11', '1', null);
+INSERT INTO `machine` VALUES ('7', 'mph789', 'ddh0550', 'th_agent_customer444', 'geo999', '机器地址xxx路', '1', null, '帽子机', '31', '55', '59', '66', '100', null, '合同客户223', '12', '2018-07-22', '1', null);
+INSERT INTO `machine` VALUES ('8', 'mph--all-data', 'ddh0550', 'th_agent_customer444', 'geottt23.33', '机器地址xxx路11h', '1', null, 'maoziji', '31', '55', '59', '66', '100', null, '合同客户223', '12', '2018-07-22', '0', null);
 
 -- ----------------------------
 -- Table structure for `maintain_abnormal_record`
@@ -365,13 +365,15 @@ CREATE TABLE `maintain_record` (
   CONSTRAINT `fk_mr_customer_feedback` FOREIGN KEY (`customer_feedback`) REFERENCES `maintain_customer_feedback` (`id`),
   CONSTRAINT `fk_mr_machine_nameplate` FOREIGN KEY (`machine_nameplate`) REFERENCES `machine` (`nameplate`),
   CONSTRAINT `fk_mr_maintain_charge_person` FOREIGN KEY (`maintain_charge_person`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of maintain_record
 -- ----------------------------
-INSERT INTO `maintain_record` VALUES ('1', 'mph2233', '1', '2018-07-12', '2018-07-12', '5', 'sssssgg', '12', 'info 1111', '2018-07-25 10:35:27', '2018-07-25 11:35:32', '3', '1');
-INSERT INTO `maintain_record` VALUES ('2', 'mph333', '1', '2018-07-16', '2018-07-16', '4', 'sssssssssssssssssg', '2', 'ffff23343', '0000-00-00 00:00:00', null, '3', '2');
+INSERT INTO `maintain_record` VALUES ('1', 'mph2233', '一期保养', '2018-07-12', '2018-07-12', '5', 'sssssgg', '12', 'info 1111', '2018-07-25 10:35:27', '2018-07-25 11:35:32', '3', '1');
+INSERT INTO `maintain_record` VALUES ('2', 'mph333', '二期保养', '2018-07-16', '2018-07-16', '4', 'sssssssssssssssssg', '2', 'ffff23343', '0000-00-00 00:00:00', null, '3', '2');
+INSERT INTO `maintain_record` VALUES ('3', 'mph--all-data', '三期保养', '2018-07-25', '2018-07-26', '9', 'ssgeeee', '11', 'maintain infos112233', '2018-07-25 17:51:26', null, '2', '2');
+INSERT INTO `maintain_record` VALUES ('4', 'mph--all-data', '二期保养', '2018-07-12', '2018-07-25', '4', 'ssssssssssgestsss', '11', 'maint infos23444', '2018-07-25 18:07:32', null, 'maintainStatus111', '1');
 
 -- ----------------------------
 -- Table structure for `maintain_type`
@@ -630,15 +632,15 @@ CREATE TABLE `user` (
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES ('1', 'admin', 'admin', 'wechat222', '1', null, 'sinsim', '1', '13566667777', '2018-07-11 10:03:43');
-INSERT INTO `user` VALUES ('2', 'admin_in_aftersale', 'admin_in_aftersale', null, '2', null, 'sinsim', '1', '13455556666', '2018-07-21 08:53:49');
-INSERT INTO `user` VALUES ('3', 'repairPerson_zhansan', 'repairPerson_zhansan', '', '3', null, 'sinsim', '1', '', '0000-00-00 00:00:00');
-INSERT INTO `user` VALUES ('4', 'repairPerson_lisi', 'repairPerson_lisi', '', '3', null, 'sinsim', '1', '', '0000-00-00 00:00:00');
-INSERT INTO `user` VALUES ('5', 'agent444', 'agent444', null, '4', null, 'sinsim', '1', '13300002222', '0000-00-00 00:00:00');
-INSERT INTO `user` VALUES ('6', 'kehu1', 'kehu1', null, '5', null, 'sinsim', '1', '', '0000-00-00 00:00:00');
-INSERT INTO `user` VALUES ('7', 'kehu2', 'kehu2', null, '5', null, 'sinsim', '1', '', '0000-00-00 00:00:00');
-INSERT INTO `user` VALUES ('8', 'kehu_Lxr1', 'kehu_Lxr1', null, '6', null, 'sinsim', '1', '', '0000-00-00 00:00:00');
-INSERT INTO `user` VALUES ('9', 'kehu_Lxr2', 'kehu_Lxr2', null, '6', null, 'sinsim', '1', '', '0000-00-00 00:00:00');
-INSERT INTO `user` VALUES ('10', 'repairPerson_wangwu', 'repairPerson_wangwu', null, '3', null, 'sinsim', '1', '', '0000-00-00 00:00:00');
-INSERT INTO `user` VALUES ('11', 'kehu3_w_agent', 'kehu3_w_agent', null, '5', '2', 'sinsim', '1', '', '0000-00-00 00:00:00');
-INSERT INTO `user` VALUES ('12', 'kehu4_w_agent', 'kehu4_w_agent', null, '5', '1', 'sinsim', '1', '', '0000-00-00 00:00:00');
+INSERT INTO `user` VALUES ('1', 'admin', 'admin', 'wechat222', '1', '1', 'sinsim', '1', '13566667777', '2018-07-11 10:03:43');
+INSERT INTO `user` VALUES ('2', 'admin_in_aftersale', 'admin_in_aftersale', null, '2', '1', 'sinsim', '1', '13455556666', '2018-07-21 08:53:49');
+INSERT INTO `user` VALUES ('3', 'repairPerson_zhansan', 'repairPerson_zhansan', '', '3', '1', 'sinsim', '1', '13455556666', '0000-00-00 00:00:00');
+INSERT INTO `user` VALUES ('4', 'repairPerson_lisi', 'repairPerson_lisi', '', '3', '2', 'sinsim', '1', '13455556666', '0000-00-00 00:00:00');
+INSERT INTO `user` VALUES ('5', 'agent444', 'agent444', null, '4', '2', 'sinsim', '1', '13300002222', '0000-00-00 00:00:00');
+INSERT INTO `user` VALUES ('6', 'kehu1', 'kehu1', null, '5', '2', 'sinsim', '1', '13455556666', '0000-00-00 00:00:00');
+INSERT INTO `user` VALUES ('7', 'kehu2', 'kehu2', null, '5', '1', 'sinsim', '1', '13455556666', '0000-00-00 00:00:00');
+INSERT INTO `user` VALUES ('8', 'kehu_Lxr1', 'kehu_Lxr1', null, '6', '1', 'sinsim', '1', '13455556666', '0000-00-00 00:00:00');
+INSERT INTO `user` VALUES ('9', 'kehu_Lxr2', 'kehu_Lxr2', null, '6', '1', 'sinsim', '1', '13455556666', '0000-00-00 00:00:00');
+INSERT INTO `user` VALUES ('10', 'repairPerson_wangwu', 'repairPerson_wangwu', null, '3', '1', 'sinsim', '1', '13455556666', '0000-00-00 00:00:00');
+INSERT INTO `user` VALUES ('11', 'kehu3_w_agent', 'kehu3_w_agent', null, '5', '2', 'sinsim', '1', '13455556666', '0000-00-00 00:00:00');
+INSERT INTO `user` VALUES ('12', 'kehu4_w_agent', 'kehu4_w_agent', null, '5', '1', 'sinsim', '1', '13455556666', '0000-00-00 00:00:00');

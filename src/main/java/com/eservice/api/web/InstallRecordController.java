@@ -2,6 +2,7 @@ package com.eservice.api.web;
 import com.eservice.api.core.Result;
 import com.eservice.api.core.ResultGenerator;
 import com.eservice.api.model.install_record.InstallRecord;
+import com.eservice.api.model.install_record.InstallRecordInfo;
 import com.eservice.api.service.InstallRecordService;
 import com.eservice.api.service.impl.InstallRecordServiceImpl;
 import com.github.pagehelper.PageHelper;
@@ -73,5 +74,17 @@ public class InstallRecordController {
     public Result selectByNameplate(@RequestParam String nameplate) {
         InstallRecord installRecord = installRecordService.selectByNameplate(nameplate);
         return ResultGenerator.genSuccessResult(installRecord);
+    }
+
+    /**
+     * 根据铭牌号查询安装信息
+     */
+    @PostMapping("/getInstallDetail")
+    public Result getInstallDetail(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size,
+                                            @RequestParam String nameplate) {
+        PageHelper.startPage(page, size);
+        List<InstallRecordInfo> list = installRecordService.getInstallDetail(nameplate);
+        PageInfo pageInfo = new PageInfo(list);
+        return ResultGenerator.genSuccessResult(pageInfo);
     }
 }

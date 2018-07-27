@@ -19,6 +19,39 @@
     <result column="install_result" jdbcType="LONGVARCHAR" property="installResult" />
     <result column="install_info" jdbcType="LONGVARCHAR" property="installInfo" />
   </resultMap>
+
+
+  <resultMap id="InstallRecordInfoMap" type="com.eservice.api.model.install_record.InstallRecordInfo">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="nameplate" jdbcType="VARCHAR" property="nameplate" />
+    <result column="order_num" jdbcType="VARCHAR" property="orderNum" />
+    <result column="contract_num" jdbcType="VARCHAR" property="contractNum" />
+    <result column="geo_location" jdbcType="VARCHAR" property="geoLocation" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="nameplate_picture" jdbcType="VARCHAR" property="nameplatePicture" />
+    <result column="machine_type" jdbcType="VARCHAR" property="machineType" />
+    <result column="needle_num" jdbcType="VARCHAR" property="needleNum" />
+    <result column="x_distance" jdbcType="VARCHAR" property="xDistance" />
+    <result column="y_distance" jdbcType="VARCHAR" property="yDistance" />
+    <result column="head_distance" jdbcType="VARCHAR" property="headDistance" />
+    <result column="head_num" jdbcType="VARCHAR" property="headNum" />
+    <result column="loadinglist" jdbcType="VARCHAR" property="loadinglist" />
+    <result column="customer_in_contract" jdbcType="VARCHAR" property="customerInContract" />
+    <result column="customer" jdbcType="INTEGER" property="customer" />
+    <result column="facory_date" jdbcType="DATE" property="facoryDate" />
+    <result column="is_old_machine" jdbcType="VARCHAR" property="isOldMachine" />
+    <result column="old_machine_check" jdbcType="VARCHAR" property="oldMachineCheck" />
+
+    <result column="machineCustomerName" jdbcType="VARCHAR" property="machineCustomerName" />
+    <result column="machineCustomerPhone" jdbcType="VARCHAR" property="machineCustomerPhone" />
+    <result column="machineAgentName" jdbcType="VARCHAR" property="machineAgentName" />
+    <result column="machineAgentPhone" jdbcType="VARCHAR" property="machineAgentPhone" />
+  </resultMap>
+
   <select id="selectWaitProcessForGuest" resultMap="BaseResultMap">
     SELECT ir.*
     from install_record as ir
@@ -32,5 +65,32 @@
     SELECT *
     FROM  install_record as ir
     where ir.machine_nameplate='${nameplate}'
+  </select>
+
+  <select id="getInstallDetail" resultMap="InstallRecordInfoMap">
+    SELECT
+      userOfCustomerInMachine.name AS machineCustomerName,
+      userOfCustomerInMachine.phone AS machineCustomerPhone,
+      agentOfCustomerInMachine. NAME AS machineAgentName,
+      agentOfCustomerInMachine.phone AS machineAgentPhone,
+      m.facory_date,
+      m.nameplate,
+      m.machine_type,
+      m.needle_num,
+      m.head_num,
+      m.head_distance,
+      m.x_distance,
+      m.y_distance,
+      userOfCustomerInInstallRecord.`name` as customerInInstallRecord, -- 调试联系人
+      userOfCustomerInInstallRecord.phone as customerPhoneInInstallRecord, -- 调试联系人电话
+      m.address,
+      userOfCustomerInInstallRecord.`name` as installChargePerson -- 调试员
+    FROM
+	  install_record AS ir
+      LEFT JOIN USER AS userOfCustomerInMachine ON userOfCustomerInMachine.id = ir.customer
+      LEFT JOIN agent AS agentOfCustomerInMachine ON agentOfCustomerInMachine.id = userOfCustomerInMachine.agent
+      LEFT JOIN machine AS m ON m.nameplate = ir.machine_nameplate
+      LEFT JOIN USER AS userOfCustomerInInstallRecord ON userOfCustomerInInstallRecord.id = ir.install_charge_person
+      WHERE nameplate = #{nameplate}
   </select>
 </mapper>
