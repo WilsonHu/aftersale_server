@@ -26,12 +26,9 @@
         WARNING - @mbg.generated
       -->
       <id column="id" jdbcType="INTEGER" property="id" />
-      <result column="nameplate" jdbcType="VARCHAR" property="nameplate" />
       <result column="order_num" jdbcType="VARCHAR" property="orderNum" />
-      <result column="contract_num" jdbcType="VARCHAR" property="contractNum" />
       <result column="geo_location" jdbcType="VARCHAR" property="geoLocation" />
       <result column="address" jdbcType="VARCHAR" property="address" />
-      <result column="status" jdbcType="VARCHAR" property="status" />
       <result column="nameplate_picture" jdbcType="VARCHAR" property="nameplatePicture" />
       <result column="machine_type" jdbcType="VARCHAR" property="machineType" />
       <result column="needle_num" jdbcType="VARCHAR" property="needleNum" />
@@ -40,19 +37,26 @@
       <result column="head_distance" jdbcType="VARCHAR" property="headDistance" />
       <result column="head_num" jdbcType="VARCHAR" property="headNum" />
       <result column="loadinglist" jdbcType="VARCHAR" property="loadinglist" />
-      <result column="customer_in_contract" jdbcType="VARCHAR" property="customerInContract" />
       <result column="customer" jdbcType="INTEGER" property="customer" />
       <result column="facory_date" jdbcType="DATE" property="facoryDate" />
-      <result column="is_old_machine" jdbcType="VARCHAR" property="isOldMachine" />
-      <result column="old_machine_check" jdbcType="VARCHAR" property="oldMachineCheck" />
 
       <result column="customerName" jdbcType="VARCHAR" property="customerName" />
       <result column="agent_name" jdbcType="VARCHAR" property="agent" />
+      <result column="machine_nameplate" jdbcType="VARCHAR" property="machineNameplate" />
       <result column="maintain_lib_name" jdbcType="VARCHAR" property="maintainLibName" />
-      <result column="maintain_charge_person_name" jdbcType="VARCHAR" property="maintainChargePerson" />
       <result column="maintain_date_plan" jdbcType="DATE" property="maintainDatePlan" />
       <result column="maintain_date_actual" jdbcType="DATE" property="maintainDateActual" />
+      <result column="maintain_charge_person" jdbcType="INTEGER" property="maintainChargePerson" />
+      <result column="maintain_suggestion" jdbcType="VARCHAR" property="maintainSuggestion" />
+      <result column="customer" jdbcType="INTEGER" property="customer" />
+      <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+      <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
       <result column="maintain_status" jdbcType="VARCHAR" property="maintainStatus" />
+      <result column="customer_feedback" jdbcType="INTEGER" property="customerFeedback" />
+      <result column="maintain_info" jdbcType="LONGVARCHAR" property="maintainInfo" />
+
+      <result column="installChargePersonName" jdbcType="VARCHAR" property="installChargePersonName" />
+
 
   </resultMap>
 
@@ -75,18 +79,24 @@
       SELECT
       u.name as customerName,
       a.name as agent_name,
-      m.*,
-      mr.maintain_lib_name,
-      mr.maintain_date_plan,
-      mr.maintain_date_actual,
-      mr.maintain_status,
+      mr.*,
+      m.facory_date,
+      m.nameplate,
+      m.machine_type,
+      m.needle_num,
+      m.head_num,
+      m.head_distance,
+      m.order_num,
+      m.x_distance,
+      m.y_distance,
+      m.address,
       userInMaintainRecord.name AS maintain_charge_person_name
 
       FROM
-      machine m
+      maintain_record mr
+      LEFT JOIN machine m ON mr.machine_nameplate = m.nameplate
       LEFT JOIN user u ON u.id = m.customer
       LEFT JOIN agent a ON a.id = u.agent
-      LEFT JOIN maintain_record mr ON mr.machine_nameplate = m.nameplate
       LEFT JOIN user userInMaintainRecord ON userInMaintainRecord.id = mr.maintain_charge_person
     WHERE 1 = 1
     <if test="isFuzzy == true">
