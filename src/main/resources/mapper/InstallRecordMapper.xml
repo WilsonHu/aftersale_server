@@ -25,8 +25,20 @@
     <!--
       WARNING - @mbg.generated
     -->
+
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="nameplate" jdbcType="VARCHAR" property="nameplate" />
+    <result column="install_record_num" jdbcType="VARCHAR" property="installRecordNum" />
+    <result column="install_plan_date" jdbcType="DATE" property="installPlanDate" />
+    <result column="install_actual_time" jdbcType="TIMESTAMP" property="installActualTime" />
+    <result column="machine_nameplate" jdbcType="VARCHAR" property="machineNameplate" />
+    <result column="install_status" jdbcType="VARCHAR" property="installStatus" />
+    <result column="customer_feedback" jdbcType="INTEGER" property="customerFeedback" />
+    <result column="install_charge_person" jdbcType="INTEGER" property="installChargePerson" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="customer" jdbcType="INTEGER" property="customer" />
+    <result column="install_result" jdbcType="LONGVARCHAR" property="installResult" />
+    <result column="install_info" jdbcType="LONGVARCHAR" property="installInfo" />
     <result column="order_num" jdbcType="VARCHAR" property="orderNum" />
     <result column="contract_num" jdbcType="VARCHAR" property="contractNum" />
     <result column="geo_location" jdbcType="VARCHAR" property="geoLocation" />
@@ -50,6 +62,8 @@
     <result column="machineCustomerPhone" jdbcType="VARCHAR" property="machineCustomerPhone" />
     <result column="machineAgentName" jdbcType="VARCHAR" property="machineAgentName" />
     <result column="machineAgentPhone" jdbcType="VARCHAR" property="machineAgentPhone" />
+    <result column="installChargePersonName" jdbcType="VARCHAR" property="installChargePersonName" />
+
   </resultMap>
 
   <select id="selectWaitProcessForGuest" resultMap="BaseResultMap">
@@ -69,9 +83,10 @@
 
   <select id="getInstallDetail" resultMap="InstallRecordInfoMap">
     SELECT
+      ir.*,
       userOfCustomerInMachine.name AS machineCustomerName,
       userOfCustomerInMachine.phone AS machineCustomerPhone,
-      agentOfCustomerInMachine. NAME AS machineAgentName,
+      agentOfCustomerInMachine.`name` AS machineAgentName,
       agentOfCustomerInMachine.phone AS machineAgentPhone,
       m.facory_date,
       m.nameplate,
@@ -79,12 +94,13 @@
       m.needle_num,
       m.head_num,
       m.head_distance,
+      m.order_num,
       m.x_distance,
       m.y_distance,
       userOfCustomerInInstallRecord.`name` as customerInInstallRecord, -- 调试联系人
       userOfCustomerInInstallRecord.phone as customerPhoneInInstallRecord, -- 调试联系人电话
       m.address,
-      userOfCustomerInInstallRecord.`name` as installChargePerson -- 调试员
+      userOfCustomerInInstallRecord.`name` as installChargePersonName -- 调试员
     FROM
 	  install_record AS ir
       LEFT JOIN USER AS userOfCustomerInMachine ON userOfCustomerInMachine.id = ir.customer
