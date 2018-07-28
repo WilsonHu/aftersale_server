@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50547
 File Encoding         : 65001
 
-Date: 2018-07-21 17:21:05
+Date: 2018-07-28 09:08:38
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -99,11 +99,11 @@ DROP TABLE IF EXISTS `install_lib`;
 CREATE TABLE `install_lib` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `is_base_lib` varchar(255) NOT NULL COMMENT '0:非基础库，1：基础库',
-  `install_lib_name` varchar(255) DEFAULT NULL COMMENT '所属的安装库的名称， ',
+  `install_lib_name` varchar(255) NOT NULL COMMENT '所属的安装库的名称， ',
   `install_content` text COMMENT '安装验收的内容',
   PRIMARY KEY (`id`),
   KEY `fk_ii_install_lib` (`install_lib_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of install_lib
@@ -114,6 +114,7 @@ INSERT INTO `install_lib` VALUES ('4', '1', 'aaa', 'eetertre');
 INSERT INTO `install_lib` VALUES ('6', '1', 'aaa', 'sddfgf');
 INSERT INTO `install_lib` VALUES ('23', '0', 'bbb', null);
 INSERT INTO `install_lib` VALUES ('24', '1', 'bbb', 'sdfdsfdsa');
+INSERT INTO `install_lib` VALUES ('25', '1', 'bbb', 'fsdgfgfdfd');
 
 -- ----------------------------
 -- Table structure for `install_members`
@@ -311,13 +312,13 @@ CREATE TABLE `maintain_lib` (
   `maintain_content` text COMMENT '保养内容',
   PRIMARY KEY (`id`),
   KEY `fk_mi_maintain_lib` (`maintain_lib_name`) USING BTREE,
-  KEY `fk_mi_maintain_type` (`maintain_type`) USING BTREE,
-  CONSTRAINT `fk_mi_maintain_type` FOREIGN KEY (`maintain_type`) REFERENCES `maintain_type` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  KEY `fk_mi_maintain_type` (`maintain_type`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of maintain_lib
 -- ----------------------------
+INSERT INTO `maintain_lib` VALUES ('2', 'y54yrt', '0', null);
 
 -- ----------------------------
 -- Table structure for `maintain_members`
