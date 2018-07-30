@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 
 /**
@@ -20,7 +21,7 @@ import javax.annotation.Resource;
 public class RepairRecordServiceImpl extends AbstractService<RepairRecord> implements RepairRecordService {
     @Resource
     private RepairRecordMapper repairRecordMapper;
-    public RepairRecord selectByNameplate(String nameplate){
+    public List<RepairRecord> selectByNameplate(String nameplate){
         return repairRecordMapper.selectByNameplate(nameplate);
     }
 

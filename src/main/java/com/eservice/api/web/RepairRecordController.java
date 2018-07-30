@@ -58,8 +58,11 @@ public class RepairRecordController {
     }
 
     @PostMapping("/selectByNameplate")
-    public Result selectByNameplate(@RequestParam String nameplate) {
-        RepairRecord repairRecord = repairRecordService.selectByNameplate(nameplate);
-        return ResultGenerator.genSuccessResult(repairRecord);
+    public Result selectByNameplate(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size,
+                                    @RequestParam String nameplate) {
+        PageHelper.startPage(page, size);
+        List<RepairRecord> list = repairRecordService.selectByNameplate(nameplate);
+        PageInfo pageInfo = new PageInfo(list);
+        return ResultGenerator.genSuccessResult(pageInfo);
     }
 }

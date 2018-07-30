@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface MaintainRecordMapper extends Mapper<MaintainRecord> {
 
-    MaintainRecord selectByNameplate(@Param("nameplate")String nameplate);
+    List<MaintainRecord>  selectByNameplate(@Param("nameplate")String nameplate);
 
     List<MaintainRecord> selectWaitProcessForGuest(@Param("contacter") String contacter);
 

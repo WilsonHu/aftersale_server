@@ -10,4 +10,12 @@
     <result column="customer_suggestion" jdbcType="VARCHAR" property="customerSuggestion" />
     <result column="customer_repair_result" jdbcType="VARCHAR" property="customerRepairResult" />
   </resultMap>
+
+  <insert id="saveAndGetID" useGeneratedKeys="true" parameterType="com.eservice.api.model.repair_customer_feedback.RepairCustomerFeedback"
+          keyProperty="id">
+    insert into
+    repair_customer_feedback(customer_mark, customer_suggestion, customer_repair_result)
+    values(
+    #{customerMark},#{customerSuggestion},#{customerRepairResult})
+  </insert>
 </mapper>

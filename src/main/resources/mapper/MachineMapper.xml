@@ -57,7 +57,44 @@
     <result column="install_charge_person_name" jdbcType="VARCHAR" property="installChargePerson" />
   </resultMap>
 
-  <select id="selectByAccount" resultMap="BaseResultMap">
+    <resultMap id="MachineBaseRecordInfoResultMap" type="com.eservice.api.model.machine.MachineBaseRecordInfo">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="nameplate" jdbcType="VARCHAR" property="nameplate" />
+        <result column="order_num" jdbcType="VARCHAR" property="orderNum" />
+        <result column="contract_num" jdbcType="VARCHAR" property="contractNum" />
+        <result column="geo_location" jdbcType="VARCHAR" property="geoLocation" />
+        <result column="address" jdbcType="VARCHAR" property="address" />
+        <result column="status" jdbcType="VARCHAR" property="status" />
+        <result column="nameplate_picture" jdbcType="VARCHAR" property="nameplatePicture" />
+        <result column="machine_type" jdbcType="VARCHAR" property="machineType" />
+        <result column="needle_num" jdbcType="VARCHAR" property="needleNum" />
+        <result column="x_distance" jdbcType="VARCHAR" property="xDistance" />
+        <result column="y_distance" jdbcType="VARCHAR" property="yDistance" />
+        <result column="head_distance" jdbcType="VARCHAR" property="headDistance" />
+        <result column="head_num" jdbcType="VARCHAR" property="headNum" />
+        <result column="loadinglist" jdbcType="VARCHAR" property="loadinglist" />
+        <result column="customer_in_contract" jdbcType="VARCHAR" property="customerInContract" />
+        <result column="customer" jdbcType="INTEGER" property="customer" />
+        <result column="facory_date" jdbcType="DATE" property="facoryDate" />
+        <result column="is_old_machine" jdbcType="VARCHAR" property="isOldMachine" />
+        <result column="old_machine_check" jdbcType="VARCHAR" property="oldMachineCheck" />
+
+        <result column="install_actual_time" jdbcType="DATE" property="installActualTime" />
+        <result column="install_charge_person_name" jdbcType="VARCHAR" property="installChargePersonName" />
+        <result column="install_status" jdbcType="VARCHAR" property="installStatus" />
+        <result column="maintain_date_actual" jdbcType="DATE" property="maintainDateActual" />
+        <result column="maintain_charge_person_name" jdbcType="VARCHAR" property="maintainChargePersonName" />
+        <result column="maintain_status" jdbcType="VARCHAR" property="maintainStatus" />
+        <result column="repair_end_time" jdbcType="DATE" property="repairEndTime" />
+        <result column="repair_charge_person_name" jdbcType="VARCHAR" property="repairChargePersonName" />
+        <result column="repair_status" jdbcType="VARCHAR" property="repairStatus" />
+
+    </resultMap>
+
+    <select id="selectByAccount" resultMap="BaseResultMap">
     SELECT * from machine m
     left join user u on u.id = m.customer
     where u.account = '${account}'
@@ -143,4 +180,40 @@
     ORDER By ir.install_actual_time DESC
 
   </select>
+
+    <select id="selectBaseRecordByNameplate" resultMap="MachineBaseRecordInfoResultMap">
+        SELECT
+            m.nameplate,
+            m.machine_type,
+            m.x_distance,
+            m.y_distance,
+            m.head_distance,
+            m.head_num,
+            m.needle_num,
+            ir.install_actual_time,
+            ir.install_charge_person,
+            userInInstallRecord. NAME AS install_charge_person_name,
+            ir.install_status,
+            mr.maintain_date_actual,
+            mr.maintain_charge_person,
+            userInMaintainRecord.`name` AS maintain_charge_person_name,
+            mr.maintain_status,
+            rr.repair_end_time,
+            rr.repair_charge_person,
+            userInRepairRecord.`name` AS repair_charge_person_name,
+            rr.`status` AS repair_status
+        FROM
+            machine AS m
+        LEFT JOIN install_record AS ir ON ir.machine_nameplate = m.nameplate
+        LEFT JOIN USER AS userInInstallRecord ON userInInstallRecord.id = ir.install_charge_person
+        LEFT JOIN maintain_record AS mr ON mr.machine_nameplate = m.nameplate
+        LEFT JOIN USER AS userInMaintainRecord ON userInMaintainRecord.id = mr.maintain_charge_person
+        LEFT JOIN repair_record AS rr ON rr.machine_nameplate = m.nameplate
+        LEFT JOIN USER AS userInRepairRecord ON userInRepairRecord.id = rr.repair_charge_person
+
+        WHERE m.nameplate = #{nameplate}
+        order by ir.install_actual_time desc, mr.maintain_date_actual desc,  rr.repair_end_time desc
+    </select>
+
+
 </mapper>

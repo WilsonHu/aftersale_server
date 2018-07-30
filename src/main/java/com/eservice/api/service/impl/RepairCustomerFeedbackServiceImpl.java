@@ -21,4 +21,8 @@ public class RepairCustomerFeedbackServiceImpl extends AbstractService<RepairCus
     @Resource
     private RepairCustomerFeedbackMapper repairCustomerFeedbackMapper;
 
+    public void saveAndGetID(RepairCustomerFeedback repairCustomerFeedback){
+        repairCustomerFeedbackMapper.saveAndGetID(repairCustomerFeedback);
+    }
+
 }

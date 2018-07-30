@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.eservice.api.core.Result;
 import com.eservice.api.core.ResultGenerator;
 import com.eservice.api.model.machine.Machine;
+import com.eservice.api.model.machine.MachineBaseRecordInfo;
 import com.eservice.api.model.machine.MachineInfo;
 import com.eservice.api.service.MachineService;
 import com.eservice.api.service.impl.MachineServiceImpl;
@@ -158,6 +159,22 @@ public class MachineController {
                 machineWhereFrom,
                 installChargePerson,
                 isFuzzy);
+        PageInfo pageInfo = new PageInfo(list);
+        return ResultGenerator.genSuccessResult(pageInfo);
+    }
+
+    /**
+     * 根据铭牌号返回机器的
+     * 基本信息，
+     * 安装信息：时间，人员，状态
+     * 保养信息：时间，人员，状态
+     * 维修信息：时间，人员，状态
+     */
+    @PostMapping("/selectBaseRecordByNameplate")
+    public Result selectBaseRecordByNameplate(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size,
+                                   @RequestParam String nameplate) {
+        PageHelper.startPage(page, size);
+        List<MachineBaseRecordInfo> list = machineService.selectBaseRecordByNameplate(nameplate);
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
     }

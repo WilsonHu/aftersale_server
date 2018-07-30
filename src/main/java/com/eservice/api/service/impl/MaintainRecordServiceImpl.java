@@ -23,7 +23,7 @@ public class MaintainRecordServiceImpl extends AbstractService<MaintainRecord> i
     @Resource
     private MaintainRecordMapper maintainRecordMapper;
 
-    public MaintainRecord selectByNameplate(String nameplate){
+    public List<MaintainRecord> selectByNameplate(String nameplate){
         return maintainRecordMapper.selectByNameplate(nameplate);
     }
 

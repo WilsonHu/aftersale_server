@@ -71,13 +71,16 @@ public class InstallRecordController {
     }
 
     @PostMapping("/selectByNameplate")
-    public Result selectByNameplate(@RequestParam String nameplate) {
-        InstallRecord installRecord = installRecordService.selectByNameplate(nameplate);
-        return ResultGenerator.genSuccessResult(installRecord);
+    public Result selectByNameplate(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size,
+                                    @RequestParam String nameplate) {
+        PageHelper.startPage(page, size);
+        List<InstallRecord> list = installRecordService.selectByNameplate(nameplate);
+        PageInfo pageInfo = new PageInfo(list);
+        return ResultGenerator.genSuccessResult(pageInfo);
     }
 
     /**
-     * 根据铭牌号查询安装信息
+     * 根据铭牌号查询安装信息详情
      */
     @PostMapping("/getInstallDetail")
     public Result getInstallDetail(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size,

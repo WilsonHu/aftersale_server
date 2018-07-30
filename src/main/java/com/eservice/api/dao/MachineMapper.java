@@ -2,6 +2,7 @@ package com.eservice.api.dao;
 
 import com.eservice.api.core.Mapper;
 import com.eservice.api.model.machine.Machine;
+import com.eservice.api.model.machine.MachineBaseRecordInfo;
 import com.eservice.api.model.machine.MachineInfo;
 import org.apache.ibatis.annotations.Param;
 
@@ -21,4 +22,6 @@ public interface MachineMapper extends Mapper<Machine> {
                                               @Param("machineWhereFrom") String machineWhereFrom,
                                               @Param("installChargePerson") String installChargePerson,
                                               @Param("isFuzzy") boolean isFuzzy);
+
+    List<MachineBaseRecordInfo> selectBaseRecordByNameplate(@Param("nameplate") String nameplate);
 }

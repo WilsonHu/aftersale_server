@@ -59,9 +59,12 @@ public class MaintainRecordController {
     }
 
     @PostMapping("/selectByNameplate")
-    public Result selectByNameplate(@RequestParam String nameplate) {
-        MaintainRecord installRecord = maintainRecordService.selectByNameplate(nameplate);
-        return ResultGenerator.genSuccessResult(installRecord);
+    public Result selectByNameplate(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size,
+                                    @RequestParam String nameplate) {
+        PageHelper.startPage(page, size);
+        List<MaintainRecord> list = maintainRecordService.selectByNameplate(nameplate);
+        PageInfo pageInfo = new PageInfo(list);
+        return ResultGenerator.genSuccessResult(pageInfo);
     }
     /**
      * 等待某个客户处理的保养任务
