@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 
 /**
@@ -39,4 +40,8 @@ public class UserServiceImpl extends AbstractService<User> implements UserServic
     public User requestLogin(String account, String password,String unionid) {
         return userMapper.requestLogin(account, password,unionid);
     }
-}
+
+    public List<User> getUsersByType(String type){
+        return userMapper.getUsersByType(type);
+    }
+ }

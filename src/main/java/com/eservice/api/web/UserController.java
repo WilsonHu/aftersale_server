@@ -77,4 +77,20 @@ public class UserController {
             }
         }
     }
+
+    /**
+     * 根据参数返回该类型的用户
+     * 比如，
+     * 5:返回属性为客户的user
+     * 6:返回属性为客户的联系人的user
+     */
+    @PostMapping("/getUsersByType")
+    public Result getCustomers(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size,
+                               @RequestParam( ) String type) {
+        PageHelper.startPage(page, size);
+        List<User> list = userService.getUsersByType(type);
+        PageInfo pageInfo = new PageInfo(list);
+        return ResultGenerator.genSuccessResult(pageInfo);
+    }
+
 }

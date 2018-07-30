@@ -29,4 +29,12 @@
     </if>
 
   </select>
+
+  <select id="getUsersByType" resultMap="BaseResultMap">
+    SELECT
+    *
+    from user
+--     5：客户本身，6：客户的联系人
+    WHERE `user`.role_id = #{type}
+  </select>
 </mapper>

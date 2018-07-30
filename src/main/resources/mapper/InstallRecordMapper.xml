@@ -103,10 +103,10 @@
       userOfCustomerInInstallRecord.`name` as installChargePersonName -- 调试员
     FROM
 	  install_record AS ir
-      LEFT JOIN USER AS userOfCustomerInMachine ON userOfCustomerInMachine.id = ir.customer
-      LEFT JOIN agent AS agentOfCustomerInMachine ON agentOfCustomerInMachine.id = userOfCustomerInMachine.agent
-      LEFT JOIN machine AS m ON m.nameplate = ir.machine_nameplate
       LEFT JOIN USER AS userOfCustomerInInstallRecord ON userOfCustomerInInstallRecord.id = ir.install_charge_person
+      LEFT JOIN machine AS m ON m.nameplate = ir.machine_nameplate
+      LEFT JOIN USER AS userOfCustomerInMachine ON userOfCustomerInMachine.id = m.customer
+      LEFT JOIN agent AS agentOfCustomerInMachine ON agentOfCustomerInMachine.id = userOfCustomerInMachine.agent
       WHERE nameplate = #{nameplate}
   </select>
 </mapper>
