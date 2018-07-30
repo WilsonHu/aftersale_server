@@ -55,7 +55,7 @@
       <result column="customer_feedback" jdbcType="INTEGER" property="customerFeedback" />
       <result column="maintain_info" jdbcType="LONGVARCHAR" property="maintainInfo" />
 
-      <result column="installChargePersonName" jdbcType="VARCHAR" property="installChargePersonName" />
+      <result column="maintain_charge_person_name" jdbcType="VARCHAR" property="maintainChargePersonName" />
 
 
   </resultMap>
@@ -118,7 +118,8 @@
         and m.machine_type like CONCAT('%','${machineType}','%' )
       </if>
       <if test="maintainChargePerson != null and maintainChargePerson != ''">
-        and mr.maintain_charge_person like CONCAT('%','${maintainChargePerson}','%' )
+--         and mr.maintain_charge_person like CONCAT('%','${maintainChargePerson}','%' )
+          and userInMaintainRecord.name like CONCAT('%','${maintainChargePerson}','%' )
       </if>
     </if>
 

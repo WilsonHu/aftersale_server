@@ -44,10 +44,10 @@ public class MaintainRecordServiceImpl extends AbstractService<MaintainRecord> i
         return maintainRecordMapper.getMaintainRecordInfoList(
                 nameplate,
                 orderNum,
-                machineType,
                 agent,
                 maintainStatus,
                 customerName,
+                machineType,
                 maintainChargePerson,
                 query_start_time_maintain,
                 query_finish_time_maintain,

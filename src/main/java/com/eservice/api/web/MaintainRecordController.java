@@ -79,8 +79,7 @@ public class MaintainRecordController {
     }
 
     /**
-     * 返回保养管理信息
-     * TBD: agent、maintainStatus、customerName等参数查询有问题待处理。
+     * 根据条件查询保养信息
      */
     @PostMapping("/getMaintainRecordInfoList")
     public Result getMaintainRecordInfoList(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size,
@@ -98,10 +97,10 @@ public class MaintainRecordController {
         List<MaintainRecordInfo> list = maintainRecordService.getMaintainRecordInfoList(
                 nameplate,
                 orderNum,
-                machineType,
                 agent,
                 maintainStatus,
                 customerName,
+                machineType,
                 maintainChargePerson,
                 query_start_time_maintain,
                 query_finish_time_maintain,

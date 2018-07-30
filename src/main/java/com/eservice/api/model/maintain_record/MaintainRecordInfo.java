@@ -6,12 +6,12 @@ import java.util.Date;
 public class MaintainRecordInfo extends MaintainRecord {
 
 
-    public String getInstallChargePersonName() {
-        return installChargePersonName;
+    public String getMaintainChargePersonName() {
+        return maintainChargePersonName;
     }
 
-    public void setInstallChargePersonName(String installChargePersonName) {
-        this.installChargePersonName = installChargePersonName;
+    public void setMaintainChargePersonName(String maintainChargePersonName) {
+        this.maintainChargePersonName = maintainChargePersonName;
     }
 
     public String getMachineType() {
@@ -166,9 +166,9 @@ public class MaintainRecordInfo extends MaintainRecord {
     private Date facoryDate;
 
     /**
-     * 调试员
+     * 保养员负责人
      */
-    private String installChargePersonName;
+    private String maintainChargePersonName;
 
 
     /**

@@ -119,7 +119,7 @@ public class MachineController {
     }
 
     /**
-     * 根据条件查询机器及其相关记录信息,时间查询待完成。
+     * 根据条件查询机器及其相关记录信息。
      *
      * @param page
      * @param size
