@@ -90,4 +90,60 @@ public class InstallRecordController {
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
     }
+
+    /**
+     *根据条件查询安装信息
+     * @param page
+     * @param size
+     * @param nameplate
+     * @param orderNum
+     * @param machineType
+     * @param agent 代理商名称
+     * @param installStatus 安装状态，0：已分配安装(但未接单）；1：已接受任务（不用驳回，如果有异议，电话沟通后可以重新派单）； 2：安装OK(客户未确认); 3：安装NG(如果用不到这个就不用）4：客户已确认
+     * @param installRecordCustomerName 记录中的customerName，不是machine的customerName
+     * @param installChargePersonName 安装工负责人名字
+     * @param query_start_install_plan_date
+     * @param query_finish_install_plan_date
+     * @param query_start_facory_date
+     * @param query_finish_facory_date
+     * @param query_start_install_actual_time
+     * @param query_finish_install_actual_time
+     * @param isFuzzy
+     * @return
+     */
+    @PostMapping("/getInstallRecordInfoList")
+    public Result getInstallRecordInfoList(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size,
+                                           String nameplate,
+                                           String orderNum,
+                                           String machineType,
+                                           String agent,
+                                           String installStatus,
+                                           String installRecordCustomerName,
+                                           String installChargePersonName,
+                                           String query_start_install_plan_date,
+                                           String query_finish_install_plan_date,
+                                           String query_start_facory_date,
+                                           String query_finish_facory_date,
+                                           String query_start_install_actual_time,
+                                           String query_finish_install_actual_time,
+                                           boolean isFuzzy) {
+        PageHelper.startPage(page, size);
+        List<InstallRecordInfo> list = installRecordService.getInstallRecordInfoList(
+                nameplate,
+                orderNum,
+                machineType,
+                agent,
+                installStatus,
+                installRecordCustomerName,
+                installChargePersonName,
+                query_start_install_plan_date,
+                query_finish_install_plan_date,
+                query_start_facory_date,
+                query_finish_facory_date,
+                query_start_install_actual_time,
+                query_finish_install_actual_time,
+                isFuzzy);
+        PageInfo pageInfo = new PageInfo(list);
+        return ResultGenerator.genSuccessResult(pageInfo);
+    }
 }

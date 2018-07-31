@@ -39,12 +39,13 @@
     <result column="customer" jdbcType="INTEGER" property="customer" />
     <result column="install_result" jdbcType="LONGVARCHAR" property="installResult" />
     <result column="install_info" jdbcType="LONGVARCHAR" property="installInfo" />
+
     <result column="order_num" jdbcType="VARCHAR" property="orderNum" />
-    <result column="contract_num" jdbcType="VARCHAR" property="contractNum" />
+    <!--<result column="contract_num" jdbcType="VARCHAR" property="contractNum" />-->
     <result column="geo_location" jdbcType="VARCHAR" property="geoLocation" />
     <result column="address" jdbcType="VARCHAR" property="address" />
-    <result column="status" jdbcType="VARCHAR" property="status" />
-    <result column="nameplate_picture" jdbcType="VARCHAR" property="nameplatePicture" />
+    <!--<result column="status" jdbcType="VARCHAR" property="status" />-->
+    <!--<result column="nameplate_picture" jdbcType="VARCHAR" property="nameplatePicture" />-->
     <result column="machine_type" jdbcType="VARCHAR" property="machineType" />
     <result column="needle_num" jdbcType="VARCHAR" property="needleNum" />
     <result column="x_distance" jdbcType="VARCHAR" property="xDistance" />
@@ -52,13 +53,14 @@
     <result column="head_distance" jdbcType="VARCHAR" property="headDistance" />
     <result column="head_num" jdbcType="VARCHAR" property="headNum" />
     <result column="loadinglist" jdbcType="VARCHAR" property="loadinglist" />
-    <result column="customer_in_contract" jdbcType="VARCHAR" property="customerInContract" />
+    <!--<result column="customer_in_contract" jdbcType="VARCHAR" property="customerInContract" />-->
     <result column="customer" jdbcType="INTEGER" property="customer" />
     <result column="facory_date" jdbcType="DATE" property="facoryDate" />
-    <result column="is_old_machine" jdbcType="VARCHAR" property="isOldMachine" />
-    <result column="old_machine_check" jdbcType="VARCHAR" property="oldMachineCheck" />
+    <!--<result column="is_old_machine" jdbcType="VARCHAR" property="isOldMachine" />-->
+    <!--<result column="old_machine_check" jdbcType="VARCHAR" property="oldMachineCheck" />-->
 
     <result column="machineCustomerName" jdbcType="VARCHAR" property="machineCustomerName" />
+    <result column="installRecordCustomerName" jdbcType="VARCHAR" property="customerInInstallRecord" />
     <result column="machineCustomerPhone" jdbcType="VARCHAR" property="machineCustomerPhone" />
     <result column="machineAgentName" jdbcType="VARCHAR" property="machineAgentName" />
     <result column="machineAgentPhone" jdbcType="VARCHAR" property="machineAgentPhone" />
@@ -82,31 +84,136 @@
   </select>
 
   <select id="getInstallDetail" resultMap="InstallRecordInfoMap">
-    SELECT
-      ir.*,
-      userOfCustomerInMachine.name AS machineCustomerName,
-      userOfCustomerInMachine.phone AS machineCustomerPhone,
-      agentOfCustomerInMachine.`name` AS machineAgentName,
-      agentOfCustomerInMachine.phone AS machineAgentPhone,
-      m.facory_date,
-      m.nameplate,
-      m.machine_type,
-      m.needle_num,
-      m.head_num,
-      m.head_distance,
-      m.order_num,
-      m.x_distance,
-      m.y_distance,
-      userOfCustomerInInstallRecord.`name` as customerInInstallRecord, -- 调试联系人
-      userOfCustomerInInstallRecord.phone as customerPhoneInInstallRecord, -- 调试联系人电话
-      m.address,
-      userOfCustomerInInstallRecord.`name` as installChargePersonName -- 调试员
+   SELECT
+    ir.*,
+    userOfCustomerInMachine.name AS machineCustomerName,    -- 机器的客户的名称
+    userOfCustomerInMachine.phone AS machineCustomerPhone,  -- 机器的客户的电话
+    agentOfCustomerInMachine.`name` AS machineAgentName,    -- 机器的客户的代理商的名称
+    agentOfCustomerInMachine.phone AS machineAgentPhone,    -- 机器的客户的代理商的电话
+    m.facory_date,
+    m.nameplate,
+    m.machine_type,
+    m.needle_num,
+    m.head_num,
+    m.head_distance,
+    m.order_num,
+    m.x_distance,
+    m.y_distance,
+    userOfCustomerInInstallRecord.`name` as installRecordCustomerName, -- 调试联系人
+    userOfCustomerInInstallRecord.phone as customerPhoneInInstallRecord, -- 调试联系人电话
+    m.address,
+    userOfChargePersonInInstallRecord.`name` as installChargePersonName -- 调试员
     FROM
-	  install_record AS ir
-      LEFT JOIN USER AS userOfCustomerInInstallRecord ON userOfCustomerInInstallRecord.id = ir.install_charge_person
-      LEFT JOIN machine AS m ON m.nameplate = ir.machine_nameplate
-      LEFT JOIN USER AS userOfCustomerInMachine ON userOfCustomerInMachine.id = m.customer
-      LEFT JOIN agent AS agentOfCustomerInMachine ON agentOfCustomerInMachine.id = userOfCustomerInMachine.agent
-      WHERE nameplate = #{nameplate}
+    install_record AS ir
+    LEFT JOIN user AS userOfChargePersonInInstallRecord ON userOfChargePersonInInstallRecord.id = ir.install_charge_person
+    LEFT JOIN user AS userOfCustomerInInstallRecord ON userOfCustomerInInstallRecord.id = ir.customer
+    LEFT JOIN machine AS m ON m.nameplate = ir.machine_nameplate
+    LEFT JOIN user AS userOfCustomerInMachine ON userOfCustomerInMachine.id = m.customer
+    LEFT JOIN agent AS agentOfCustomerInMachine ON agentOfCustomerInMachine.id = userOfCustomerInMachine.agent
+    WHERE nameplate = #{nameplate}
   </select>
+
+  <select id="getInstallRecordInfoList" resultMap="InstallRecordInfoMap">
+    SELECT
+    ir.*,
+    userOfCustomerInMachine.name AS machineCustomerName,    -- 机器的客户的名称
+    userOfCustomerInMachine.phone AS machineCustomerPhone,  -- 机器的客户的电话
+    agentOfCustomerInMachine.`name` AS machineAgentName,    -- 机器的客户的代理商的名称
+    agentOfCustomerInMachine.phone AS machineAgentPhone,    -- 机器的客户的代理商的电话
+    m.facory_date,
+    m.nameplate,
+    m.machine_type,
+    m.needle_num,
+    m.head_num,
+    m.head_distance,
+    m.order_num,
+    m.x_distance,
+    m.y_distance,
+    userOfCustomerInInstallRecord.`name` as installRecordCustomerName, -- 调试联系人
+    userOfCustomerInInstallRecord.phone as customerPhoneInInstallRecord, -- 调试联系人电话
+    m.address,
+    userOfChargePersonInInstallRecord.`name` as installChargePersonName -- 调试员
+    FROM
+    install_record AS ir
+    LEFT JOIN user AS userOfChargePersonInInstallRecord ON userOfChargePersonInInstallRecord.id = ir.install_charge_person
+    LEFT JOIN user AS userOfCustomerInInstallRecord ON userOfCustomerInInstallRecord.id = ir.customer
+    LEFT JOIN machine AS m ON m.nameplate = ir.machine_nameplate
+    LEFT JOIN user AS userOfCustomerInMachine ON userOfCustomerInMachine.id = m.customer
+    LEFT JOIN agent AS agentOfCustomerInMachine ON agentOfCustomerInMachine.id = userOfCustomerInMachine.agent
+    WHERE 1=1
+    <if test="isFuzzy == true">
+      <if test="nameplate != null and nameplate != ''">
+        AND m.nameplate like CONCAT('%','${nameplate}','%' )
+      </if>
+      <if test="orderNum != null and orderNum != ''">
+        AND m.order_num like CONCAT('%','${orderNum}','%' )
+      </if>
+      <if test="machineType != null and machineType != ''">
+        AND m.machine_type like CONCAT('%','${machineType}','%' )
+      </if>
+      <if test="agent != null and agent != ''">
+        AND agentOfCustomerInMachine.`name`  like CONCAT('%','${agent}','%' )
+      </if>
+      <if test="installStatus != null and installStatus != ''">
+        AND ir.install_status  like CONCAT('%','${installStatus}','%' )
+      </if>
+      <if test="installRecordCustomerName != null and installRecordCustomerName != ''">
+        AND userOfCustomerInInstallRecord.`name`   like CONCAT('%','${installRecordCustomerName}','%' )
+      </if>
+      <if test="installChargePersonName != null and installChargePersonName != ''">
+        AND userOfChargePersonInInstallRecord.`name`   like CONCAT('%','${installChargePersonName}','%' )
+      </if>
+    </if>
+    <if test="isFuzzy== false">
+      <if test="nameplate != null and nameplate != ''">
+        AND m.nameplate ='${nameplate}'
+      </if>
+      <if test="orderNum != null and orderNum != ''">
+        AND m.order_num = '${orderNum}'
+      </if>
+      <if test="machineType != null and machineType != ''">
+        AND m.machine_type = '${machineType}'
+      </if>
+      <if test="agent != null and agent != ''">
+        AND agentOfCustomerInMachine.`name` = '${agent}'
+      </if>
+      <if test="installStatus != null and installStatus != ''">
+        AND ir.install_status = '${installStatus}'
+      </if>
+      <if test="installRecordCustomerName != null and installRecordCustomerName != ''">
+        AND userOfCustomerInInstallRecord.`name` = '${installRecordCustomerName}'
+      </if>
+      <if test="installChargePersonName != null and installChargePersonName != ''">
+        AND userOfChargePersonInInstallRecord.`name` = '${installChargePersonName}'
+      </if>
+    </if>
+
+    <if test="query_start_install_plan_date!=null and query_start_install_plan_date != '' ">
+      and DATE_FORMAT(ir.install_plan_date,'%Y-%m-%d %T') &gt;= #{query_start_install_plan_date}
+    </if>
+    <if test="query_finish_install_plan_date!=null and query_finish_install_plan_date != '' ">
+      and DATE_FORMAT(ir.install_plan_date,'%Y-%m-%d %T') &lt;= #{query_finish_install_plan_date}
+    </if>
+
+    <if test="query_start_facory_date!=null and query_start_facory_date != '' ">
+      and DATE_FORMAT( m.facory_date,'%Y-%m-%d %T') &gt;= #{query_start_facory_date}
+    </if>
+    <if test="query_finish_facory_date!=null and query_finish_facory_date != '' ">
+      and DATE_FORMAT( m.facory_date,'%Y-%m-%d %T') &lt;= #{query_finish_facory_date}
+    </if>
+
+    <if test="query_start_install_actual_time!=null and query_start_install_actual_time != '' ">
+      and DATE_FORMAT( ir.install_actual_time,'%Y-%m-%d %T') &gt;= #{query_start_install_actual_time}
+    </if>
+    <if test="query_finish_install_actual_time!=null and query_finish_install_actual_time != '' ">
+      and DATE_FORMAT( ir.install_actual_time,'%Y-%m-%d %T') &lt;= #{query_finish_install_actual_time}
+    </if>
+
+    ORDER By ir.install_actual_time DESC,ir.install_plan_date DESC, m.facory_date DESC
+
+
+  </select>
+
+  <!--query_start_install_plan_date,-->
+  <!--,query_finish_install_plan_date-->
 </mapper>

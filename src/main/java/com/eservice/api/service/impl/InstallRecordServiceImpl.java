@@ -33,4 +33,36 @@ public class InstallRecordServiceImpl extends AbstractService<InstallRecord> imp
     public List<InstallRecordInfo> getInstallDetail(String nameplate) {
         return installRecordMapper.getInstallDetail(nameplate);
     }
+
+    public List<InstallRecordInfo> getInstallRecordInfoList(String nameplate,
+                                                            String orderNum,
+                                                            String machineType,
+                                                            String agent,
+                                                            String installStatus,
+                                                            String installRecordCustomerName,
+                                                            String installChargePersonName,
+                                                            String query_start_install_plan_date,
+                                                            String query_finish_install_plan_date,
+                                                            String query_start_facory_date,
+                                                            String query_finish_facory_date,
+                                                            String query_start_install_actual_time,
+                                                            String query_finish_install_actual_time,
+                                                            boolean isFuzzy) {
+        return installRecordMapper.getInstallRecordInfoList(
+                nameplate,
+                orderNum,
+                machineType,
+                agent,
+                installStatus,
+                installRecordCustomerName,
+                installChargePersonName,
+                query_start_install_plan_date,
+                query_finish_install_plan_date,
+                query_start_facory_date,
+                query_finish_facory_date,
+                query_start_install_actual_time,
+                query_finish_install_actual_time,
+                isFuzzy);
+    }
+
 }

@@ -158,11 +158,15 @@ public class InstallRecordInfo extends InstallRecord {
     @Column(name = "facory_date")
     private Date facoryDate;
 
-
     /**
      * customer索引转换实际名字,来自 machine.customer-->user.name
      */
     private String machineCustomerName;
+
+    /**
+     * customer索引转换实际名字,来自 install_Record.customer-->user.name
+     */
+    private String installRecordCustomerName;
 
     /**
      * customer索引转换实际名字,来自 machine.customer-->user.phone
@@ -241,6 +245,14 @@ public class InstallRecordInfo extends InstallRecord {
 
     public void setMachineCustomerName(String machineCustomerName) {
         this.machineCustomerName = machineCustomerName;
+    }
+
+    public String getInstallRecordCustomerName() {
+        return installRecordCustomerName;
+    }
+
+    public void setInstallRecordCustomerName(String installRecordCustomerName) {
+        this.installRecordCustomerName = installRecordCustomerName;
     }
 
     public String getMachineCustomerPhone() {
