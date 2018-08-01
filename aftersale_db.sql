@@ -1,16 +1,16 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : localhost
-Source Server Version : 50547
+Source Server         : Local_sinsim
+Source Server Version : 50553
 Source Host           : localhost:3306
 Source Database       : aftersale_db
 
 Target Server Type    : MYSQL
-Target Server Version : 50547
+Target Server Version : 50553
 File Encoding         : 65001
 
-Date: 2018-07-28 09:08:38
+Date: 2018-08-01 11:02:56
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -21,9 +21,8 @@ SET FOREIGN_KEY_CHECKS=0;
 DROP TABLE IF EXISTS `agent`;
 CREATE TABLE `agent` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) NOT NULL,
-  `phone` varchar(50) NOT NULL COMMENT '电话号码',
-  `wechat_union_id` varchar(255) DEFAULT NULL COMMENT '微信unionId，在没授权前是空的。',
+  `name` varchar(255) NOT NULL,
+  `phone` varchar(255) NOT NULL COMMENT '电话号码',
   `address` varchar(255) NOT NULL COMMENT '地址',
   `create_time` datetime NOT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`)
@@ -32,8 +31,22 @@ CREATE TABLE `agent` (
 -- ----------------------------
 -- Records of agent
 -- ----------------------------
-INSERT INTO `agent` VALUES ('1', '代理商1', '13566663333', null, 'XX市XX路XX号', '2018-07-11 10:46:10');
-INSERT INTO `agent` VALUES ('2', '代理商2', '13566662222', null, 'xx路XX号', '2018-07-11 10:46:42');
+INSERT INTO `agent` VALUES ('1', '代理商1', '代理商1的的电话13566661111', 'XX市XX路XX号', '2018-07-11 10:46:10');
+INSERT INTO `agent` VALUES ('2', '代理商2', '代理商2的的电话13566662222', 'xx路XX号', '2018-07-11 10:46:42');
+
+-- ----------------------------
+-- Table structure for `customer_company`
+-- ----------------------------
+DROP TABLE IF EXISTS `customer_company`;
+CREATE TABLE `customer_company` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `customer_company_name` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- ----------------------------
+-- Records of customer_company
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for `experience_lib`
@@ -168,11 +181,11 @@ CREATE TABLE `install_record` (
 -- Records of install_record
 -- ----------------------------
 INSERT INTO `install_record` VALUES ('1', 'aaa', '2018-07-11', '2018-07-11 14:27:13', 'mph2233', 'an安装ok', '2', '1', '1', 'ins info aaaa', '0000-00-00 00:00:00', null, '9');
-INSERT INTO `install_record` VALUES ('2', 'abbb', '2018-07-16', '2018-07-16 15:03:24', 'mph333', 'okkk', '2', '2', '5', 'info4444', '0000-00-00 00:00:00', null, '8');
-INSERT INTO `install_record` VALUES ('3', 'aaa', '2018-07-11', '2018-07-11 14:27:13', 'mph555', 'an安装ok', '2', '1', '1', 'ins info aaaa', '0000-00-00 00:00:00', null, '9');
-INSERT INTO `install_record` VALUES ('4', 'abbb', '2018-07-16', '2018-07-16 15:03:24', 'mph444', 'okkk', '2', '2', '5', 'info4444', '0000-00-00 00:00:00', null, '7');
-INSERT INTO `install_record` VALUES ('5', 'aaa', '2018-07-11', '2018-07-25 14:27:13', 'mph777', 'an安装ok', '2', '1', '12', 'ins info aaaa', '0000-00-00 00:00:00', null, '5');
-INSERT INTO `install_record` VALUES ('6', 'abbb', '2018-07-16', '2018-07-26 15:03:24', 'mph--all-data', 'okkk', '2', '2', '7', 'info4444', '2018-07-25 10:30:39', '2018-07-25 11:30:43', '12');
+INSERT INTO `install_record` VALUES ('2', 'abbb', '2018-07-16', '2018-07-16 15:03:24', 'mph2233', 'okkk', '2', '2', '5', 'info4444', '0000-00-00 00:00:00', null, '8');
+INSERT INTO `install_record` VALUES ('3', 'aaa', '2018-07-11', '2018-07-11 14:27:13', 'mph333', 'an安装ok', '2', '1', '1', 'ins info aaaa', '0000-00-00 00:00:00', null, '9');
+INSERT INTO `install_record` VALUES ('4', 'abbb', '2018-07-16', '2018-07-16 15:03:24', 'mph444', 'okkk', '3', '2', '4', 'info4444', '0000-00-00 00:00:00', null, '8');
+INSERT INTO `install_record` VALUES ('5', 'aaa', '2018-07-11', '2018-07-25 14:27:13', 'mph777', 'an安装ok', '4', '1', '12', 'ins info aaaa', '0000-00-00 00:00:00', null, '5');
+INSERT INTO `install_record` VALUES ('6', 'abbb', '2018-07-16', '2018-07-26 15:03:24', 'mph--all-data', 'okkk', '5', '2', '4', 'info4444', '2018-07-25 10:30:39', '2018-07-25 11:30:43', '12');
 
 -- ----------------------------
 -- Table structure for `issue_position_list`
@@ -182,11 +195,14 @@ CREATE TABLE `issue_position_list` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '故障部位列表，由信胜提供',
   `name` varchar(255) NOT NULL COMMENT '故障部位名称',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of issue_position_list
 -- ----------------------------
+INSERT INTO `issue_position_list` VALUES ('1', '上轴问题');
+INSERT INTO `issue_position_list` VALUES ('2', '下轴问题');
+INSERT INTO `issue_position_list` VALUES ('3', '马达问题');
 
 -- ----------------------------
 -- Table structure for `knowledge_lib`
@@ -257,13 +273,13 @@ CREATE TABLE `machine` (
 -- Records of machine
 -- ----------------------------
 INSERT INTO `machine` VALUES ('1', 'mph2233', 'ddh22333', 'ht22333', 'geo-11-34', '机器地址杭州市XX路XX号', '1', null, '绣花机', '22', '33', '44', '55', '66', null, '合同客户ABC', '11', '2018-07-10', '1', null);
-INSERT INTO `machine` VALUES ('2', 'mph333', 'ddh444', 'thaaa223', 'geo233', '机器地址杭州市XX路XX222', '5', null, '帽子机', '33', '22', '11', '11', '11', null, '合同客户ABC22', '8', '2018-07-06', '1', null);
+INSERT INTO `machine` VALUES ('2', 'mph333', 'ddh444', 'thaaa223', 'geo233', '机器地址杭州市XX路XX222', '3', null, '帽子机', '33', '22', '11', '11', '11', null, '合同客户ABC22', '8', '2018-07-06', '1', null);
 INSERT INTO `machine` VALUES ('3', 'mph555', 'ddh-abc111', 'thaaa555', 'geo2555', '机器地址 杭州市XX路XX555', '1', null, 'maoziji', '33', '22', '11', '11', '11', null, '合同客户ABC22', '9', '2018-07-06', '0', null);
 INSERT INTO `machine` VALUES ('4', 'mph444', 'ddh444', 'htaaa233', 'geo111', '机器地址xxl路xx区块', '1', null, 'maoziji', '25', '500', '300', '200', '100', null, '合同客户888', '7', '2018-07-21', '0', null);
 INSERT INTO `machine` VALUES ('5', 'mph777', 'ddh0550', 'th_agent_customer444', 'geo999', '机器地址xxx路', '1', null, '帽子机', '31', '55', '59', '66', '100', null, '合同客户223', '11', '2018-07-11', '0', null);
 INSERT INTO `machine` VALUES ('6', 'mph788', 'ddh0550', 'th_agent_customer444', 'geo999', '机器地址xxx路', '1', null, '帽子机', '31', '55', '59', '66', '100', null, '合同客户223', '11', '2018-07-11', '1', null);
 INSERT INTO `machine` VALUES ('7', 'mph789', 'ddh0550', 'th_agent_customer444', 'geo999', '机器地址xxx路', '1', null, '帽子机', '31', '55', '59', '66', '100', null, '合同客户223', '12', '2018-07-22', '1', null);
-INSERT INTO `machine` VALUES ('8', 'mph--all-data', 'ddh0550', 'th_agent_customer444', 'geottt23.33', '机器地址xxx路11h', '1', null, 'maoziji', '31', '55', '59', '66', '100', null, '合同客户223', '12', '2018-07-22', '0', null);
+INSERT INTO `machine` VALUES ('8', 'mph--all-data', 'ddh0550', 'th_agent_customer444', 'geottt23.33', '机器地址xxx路11h', '1', null, 'maoziji', '31', '55', '59', '66', '100', null, '合同客户223', '11', '2018-07-22', '0', null);
 
 -- ----------------------------
 -- Table structure for `maintain_abnormal_record`
@@ -454,11 +470,15 @@ CREATE TABLE `repair_actual_info` (
   KEY `fk_rai_issue_position` (`issue_position`),
   CONSTRAINT `fk_rai_issue_position` FOREIGN KEY (`issue_position`) REFERENCES `issue_position_list` (`id`),
   CONSTRAINT `fk_rai_repair_record_id` FOREIGN KEY (`repair_record_id`) REFERENCES `repair_record` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of repair_actual_info
 -- ----------------------------
+INSERT INTO `repair_actual_info` VALUES ('1', '3', '1', '问题描述11111', '维修方法1111', null);
+INSERT INTO `repair_actual_info` VALUES ('2', '4', '3', '问题描述22222', '维修方法22222', null);
+INSERT INTO `repair_actual_info` VALUES ('3', '5', '2', '问题描述3333', '维修方法3333', null);
+INSERT INTO `repair_actual_info` VALUES ('4', '6', '1', '问题描述4444', '维修方法4444', null);
 
 -- ----------------------------
 -- Table structure for `repair_customer_feedback`
@@ -470,7 +490,7 @@ CREATE TABLE `repair_customer_feedback` (
   `customer_suggestion` varchar(255) NOT NULL COMMENT '客户意见',
   `customer_repair_result` varchar(255) DEFAULT NULL COMMENT '维修结果。',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of repair_customer_feedback
@@ -480,6 +500,12 @@ INSERT INTO `repair_customer_feedback` VALUES ('2', '5', '5F很满意', '修理O
 INSERT INTO `repair_customer_feedback` VALUES ('3', '5', '5F很满意', '修理OK');
 INSERT INTO `repair_customer_feedback` VALUES ('4', '5', '5F很满意0719', '修理OK');
 INSERT INTO `repair_customer_feedback` VALUES ('5', '5', '5F很满意0719', '修理OK');
+INSERT INTO `repair_customer_feedback` VALUES ('6', '5', '5分很满意0719', '修理OK0727');
+INSERT INTO `repair_customer_feedback` VALUES ('7', '5', '5分很满意0719', '修理OK0727');
+INSERT INTO `repair_customer_feedback` VALUES ('8', '5', '5分很满意0719', '修理OK0727');
+INSERT INTO `repair_customer_feedback` VALUES ('9', '5', '5分很满意0719-0727-a', '修理OK0727-a');
+INSERT INTO `repair_customer_feedback` VALUES ('10', '5', '5分很满意0719-0727-a', '修理OK0727-a');
+INSERT INTO `repair_customer_feedback` VALUES ('11', '5', '5分很满意0719-0727-a', '修理OK0727-a');
 
 -- ----------------------------
 -- Table structure for `repair_members`
@@ -537,7 +563,7 @@ CREATE TABLE `repair_record` (
 -- ----------------------------
 -- Records of repair_record
 -- ----------------------------
-INSERT INTO `repair_record` VALUES ('3', 'xx11', '6', 'mph333', '11', '1', '4', '2018-07-24 10:08:45', '2018-07-25 10:08:50', '2', '5', '2018-07-25 10:38:25', '2018-07-25 10:38:30', '1');
+INSERT INTO `repair_record` VALUES ('3', 'xx11', '6', 'mph333', '11', '1', '3', '2018-07-24 10:08:45', '2018-07-25 10:08:50', '11', '5', '2018-07-25 10:38:25', '2018-07-27 13:58:54', '1');
 INSERT INTO `repair_record` VALUES ('4', null, '6', 'mph--all-data', '12', '1', '4', '2018-07-24 10:37:35', '2018-07-25 10:15:51', '1', '5', '2018-07-19 11:09:49', '2018-07-25 10:38:32', '1');
 INSERT INTO `repair_record` VALUES ('5', null, '7', 'mph788', '13', '1', '4', null, '2018-07-25 10:15:55', null, '0', '2018-07-19 13:41:09', null, null);
 INSERT INTO `repair_record` VALUES ('6', null, '7', 'mph333', '14', '0', '3', null, '2018-07-26 10:15:59', null, '0', '2018-07-19 13:44:14', null, null);
@@ -619,29 +645,30 @@ CREATE TABLE `user` (
   `wechat_union_id` varchar(255) DEFAULT NULL COMMENT '微信unionId，在没授权前是空的。',
   `role_id` int(10) unsigned NOT NULL,
   `agent` int(10) unsigned DEFAULT NULL COMMENT '代理商,如果是空表示是信胜自己的员工',
+  `customer_company` int(10) unsigned DEFAULT NULL COMMENT '客户公司',
   `password` varchar(255) NOT NULL,
   `valid` varchar(255) NOT NULL COMMENT '是否在职 ， “1”:在职 “0”:离职',
   `phone` varchar(255) NOT NULL COMMENT '电话',
   `create_time` datetime NOT NULL,
+  `address` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_u_role_id` (`role_id`),
   KEY `fk_u_agent` (`agent`),
-  CONSTRAINT `fk_u_agent` FOREIGN KEY (`agent`) REFERENCES `agent` (`id`),
   CONSTRAINT `fk_u_role_id` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES ('1', 'admin', 'admin', 'wechat222', '1', '1', 'sinsim', '1', '13566667777', '2018-07-11 10:03:43');
-INSERT INTO `user` VALUES ('2', 'admin_in_aftersale', 'admin_in_aftersale', null, '2', '1', 'sinsim', '1', '13455556666', '2018-07-21 08:53:49');
-INSERT INTO `user` VALUES ('3', 'repairPerson_zhansan', 'repairPerson_zhansan', '', '3', '1', 'sinsim', '1', '13455556666', '0000-00-00 00:00:00');
-INSERT INTO `user` VALUES ('4', 'repairPerson_lisi', 'repairPerson_lisi', '', '3', '2', 'sinsim', '1', '13455556666', '0000-00-00 00:00:00');
-INSERT INTO `user` VALUES ('5', 'agent444', 'agent444', null, '4', '2', 'sinsim', '1', '13300002222', '0000-00-00 00:00:00');
-INSERT INTO `user` VALUES ('6', 'kehu1', 'kehu1', null, '5', '2', 'sinsim', '1', '13455556666', '0000-00-00 00:00:00');
-INSERT INTO `user` VALUES ('7', 'kehu2', 'kehu2', null, '5', '1', 'sinsim', '1', '13455556666', '0000-00-00 00:00:00');
-INSERT INTO `user` VALUES ('8', 'kehu_Lxr1', 'kehu_Lxr1', null, '6', '1', 'sinsim', '1', '13455556666', '0000-00-00 00:00:00');
-INSERT INTO `user` VALUES ('9', 'kehu_Lxr2', 'kehu_Lxr2', null, '6', '1', 'sinsim', '1', '13455556666', '0000-00-00 00:00:00');
-INSERT INTO `user` VALUES ('10', 'repairPerson_wangwu', 'repairPerson_wangwu', null, '3', '1', 'sinsim', '1', '13455556666', '0000-00-00 00:00:00');
-INSERT INTO `user` VALUES ('11', 'kehu3_w_agent', 'kehu3_w_agent', null, '5', '2', 'sinsim', '1', '13455556666', '0000-00-00 00:00:00');
-INSERT INTO `user` VALUES ('12', 'kehu4_w_agent', 'kehu4_w_agent', null, '5', '1', 'sinsim', '1', '13455556666', '0000-00-00 00:00:00');
+INSERT INTO `user` VALUES ('1', 'admin', 'admin', 'wechat222', '1', '1', '0', 'sinsim', '1', '13566667777', '2018-07-11 10:03:43', null);
+INSERT INTO `user` VALUES ('2', 'admin_in_aftersale', 'admin_in_aftersale', null, '2', '1', '0', 'sinsim', '1', '13455556666', '2018-07-21 08:53:49', null);
+INSERT INTO `user` VALUES ('3', 'repairPerson_zhansan', 'repairPerson_zhansan', '', '3', '1', '0', 'sinsim', '1', 'repairPerson_zhansan的电话13455556633', '0000-00-00 00:00:00', null);
+INSERT INTO `user` VALUES ('4', 'repairPerson_lisi', 'repairPerson_lisi', '', '3', '2', '0', 'sinsim', '1', 'repairPerson_lisi1的电话3455556666', '0000-00-00 00:00:00', null);
+INSERT INTO `user` VALUES ('5', 'agent444', 'agent444', null, '4', '2', '0', 'sinsim', '1', 'agent444的电话444', '0000-00-00 00:00:00', null);
+INSERT INTO `user` VALUES ('6', 'kehu1', 'kehu1', null, '5', '2', '0', 'sinsim', '1', 'kehu1的的电话xxxx', '0000-00-00 00:00:00', null);
+INSERT INTO `user` VALUES ('7', 'kehu2', 'kehu2', null, '5', '1', '0', 'sinsim', '1', 'kehu2的的电话xxxx', '0000-00-00 00:00:00', null);
+INSERT INTO `user` VALUES ('8', 'kehu_Lxr1', 'kehu_Lxr1', null, '6', '1', '0', 'sinsim', '1', 'kehu_Lxr1的的电话xxxx', '0000-00-00 00:00:00', null);
+INSERT INTO `user` VALUES ('9', 'kehu_Lxr2', 'kehu_Lxr2', null, '6', '1', '0', 'sinsim', '1', 'kehu_Lxr2的的电话xxxx', '0000-00-00 00:00:00', null);
+INSERT INTO `user` VALUES ('10', 'repairPerson_wangwu', 'repairPerson_wangwu', null, '3', '1', '0', 'sinsim', '1', 'repairPerson_wangwu的电话yyyy', '0000-00-00 00:00:00', null);
+INSERT INTO `user` VALUES ('11', 'kehu3_w_agent', 'kehu3_w_agent', null, '5', '2', '0', 'sinsim', '1', 'kehu3_w_agent的电话zzz', '0000-00-00 00:00:00', null);
+INSERT INTO `user` VALUES ('12', 'kehu4_w_agent', 'kehu4_w_agent', null, '5', '1', '0', 'sinsim', '1', 'kehu4_w_agent的电话www4444', '0000-00-00 00:00:00', null);

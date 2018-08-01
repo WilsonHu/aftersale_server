@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50553
 File Encoding         : 65001
 
-Date: 2018-07-19 16:04:39
+Date: 2018-08-01 11:02:56
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -21,9 +21,8 @@ SET FOREIGN_KEY_CHECKS=0;
 DROP TABLE IF EXISTS `agent`;
 CREATE TABLE `agent` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) NOT NULL,
-  `phone` varchar(50) NOT NULL COMMENT '电话号码',
-  `wechat_union_id` varchar(255) DEFAULT NULL COMMENT '微信unionId，在没授权前是空的。',
+  `name` varchar(255) NOT NULL,
+  `phone` varchar(255) NOT NULL COMMENT '电话号码',
   `address` varchar(255) NOT NULL COMMENT '地址',
   `create_time` datetime NOT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`)
@@ -33,6 +32,19 @@ CREATE TABLE `agent` (
 -- Records of agent
 -- ----------------------------
 
+-- ----------------------------
+-- Table structure for `customer_company`
+-- ----------------------------
+DROP TABLE IF EXISTS `customer_company`;
+CREATE TABLE `customer_company` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `customer_company_name` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- ----------------------------
+-- Records of customer_company
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for `experience_lib`
@@ -96,7 +108,7 @@ CREATE TABLE `install_lib` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `is_base_lib` varchar(255) NOT NULL COMMENT '0:非基础库，1：基础库',
   `install_lib_name` varchar(255) NOT NULL COMMENT '所属的安装库的名称， ',
-  `install_content` text NOT NULL COMMENT '安装验收的内容',
+  `install_content` text COMMENT '安装验收的内容',
   PRIMARY KEY (`id`),
   KEY `fk_ii_install_lib` (`install_lib_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -282,12 +294,11 @@ CREATE TABLE `maintain_lib` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `maintain_lib_name` varchar(255) NOT NULL COMMENT '保养库的名字， 一期，二期，三期等',
   `maintain_type` int(10) unsigned NOT NULL COMMENT '1: 清理清洁， 2：注油润滑， 3： 检查修理',
-  `maintain_content` text NOT NULL COMMENT '保养内容',
+  `maintain_content` text COMMENT '保养内容',
   PRIMARY KEY (`id`),
   KEY `fk_mi_maintain_lib` (`maintain_lib_name`) USING BTREE,
-  KEY `fk_mi_maintain_type` (`maintain_type`) USING BTREE,
-  CONSTRAINT `fk_mi_maintain_type` FOREIGN KEY (`maintain_type`) REFERENCES `maintain_type` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  KEY `fk_mi_maintain_type` (`maintain_type`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of maintain_lib
@@ -557,14 +568,15 @@ CREATE TABLE `user` (
   `wechat_union_id` varchar(255) DEFAULT NULL COMMENT '微信unionId，在没授权前是空的。',
   `role_id` int(10) unsigned NOT NULL,
   `agent` int(10) unsigned DEFAULT NULL COMMENT '代理商,如果是空表示是信胜自己的员工',
+  `customer_company` int(10) unsigned DEFAULT NULL COMMENT '客户公司',
   `password` varchar(255) NOT NULL,
   `valid` varchar(255) NOT NULL COMMENT '是否在职 ， “1”:在职 “0”:离职',
   `phone` varchar(255) NOT NULL COMMENT '电话',
   `create_time` datetime NOT NULL,
+  `address` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_u_role_id` (`role_id`),
   KEY `fk_u_agent` (`agent`),
-  CONSTRAINT `fk_u_agent` FOREIGN KEY (`agent`) REFERENCES `agent` (`id`),
   CONSTRAINT `fk_u_role_id` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
