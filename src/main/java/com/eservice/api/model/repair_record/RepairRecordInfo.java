@@ -223,23 +223,102 @@ public class RepairRecordInfo extends RepairRecord {
     public String getCustomerAddressInRepairRecord() {
         return customerAddressInRepairRecord;
     }
+
+    /**
+     * 报修信息的标题
+     */
+    private String repairRequestTitle;
+
+    public void setRepairRequestTitle(String repairRequestTitle){
+        this.repairRequestTitle = repairRequestTitle;
+    }
+
+    public String getRepairRequestTitle(){
+        return repairRequestTitle;
+    }
+
+    /**
+     * 报修信息的内容描述
+     */
+    private String repairRequestContent;
+
+    public void setRepairRequestContent(String repairRequestContent){
+        this.repairRequestContent = repairRequestContent;
+    }
+
+    public String getRepairRequestContent(){
+        return repairRequestContent;
+    }
+
+    /**
+     * 报修信息的语音（保存的地址）
+     */
+    private String repairRequestVoice;
+
+    public String getRepairRequestVoice(){
+        return repairRequestVoice;
+    }
+
+    public void setRepairRequestVoice(String repairRequestVoice){
+        this.repairRequestVoice = repairRequestVoice;
+    }
+
+
+    /**
+     * 报修信息的照片（保存的地址）
+     */
+    private String repairRequestPictures;
+
+    public void setRepairRequestPictures(String repairRequestPictures) {
+        this.repairRequestPictures = repairRequestPictures;
+    }
+
+    public String getRepairRequestPictures() {
+        return repairRequestPictures;
+    }
+
+    /**
+     * 实际维修的问题描述
+     */
+    private String repairActualIssueDescription;
+
+    public String getRepairActualIssueDescription() {
+        return repairActualIssueDescription;
+    }
+
+    public void setRepairActualIssueDescription(String repairActualIssueDescription) {
+        this.repairActualIssueDescription = repairActualIssueDescription;
+    }
+
+    /**
+     * 实际维修的处理方法
+     */
+    private String repairActualMethod;
+
+    public String getRepairActualMethod() {
+        return repairActualMethod;
+    }
+
+    public void setRepairActualMethod(String repairActualMethod) {
+        this.repairActualMethod = repairActualMethod;
+    }
+
+
+    /**
+     * 实际维修的处理方法
+     */
+    private String afterResolvePictures;
+
+    public void setAfterResolvePictures(String afterResolvePictures) {
+        this.afterResolvePictures = afterResolvePictures;
+    }
+
+    public String getAfterResolvePictures() {
+        return afterResolvePictures;
+    }
+
+    /**
+     * 配件名称，可以有多个配件要寄回， todo, 考虑调用一次PartsInfoController
+     */
+
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
