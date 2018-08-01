@@ -68,7 +68,7 @@ public class RepairRecord {
     private String status;
 
     /**
-     * 该条记录的创建时间
+     * 该条记录的创建时间 --就是报修日期，在报修时生成的该条记录
      */
     @Column(name = "create_time")
     private Date createTime;

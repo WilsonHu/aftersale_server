@@ -154,9 +154,6 @@
       <if test="agent != null and agent != ''">
         AND agentOfCustomerInMachine.`name`  like CONCAT('%','${agent}','%' )
       </if>
-      <if test="installStatus != null and installStatus != ''">
-        AND ir.install_status  like CONCAT('%','${installStatus}','%' )
-      </if>
       <if test="installRecordCustomerName != null and installRecordCustomerName != ''">
         AND userOfCustomerInInstallRecord.`name`   like CONCAT('%','${installRecordCustomerName}','%' )
       </if>
@@ -177,9 +174,6 @@
       <if test="agent != null and agent != ''">
         AND agentOfCustomerInMachine.`name` = '${agent}'
       </if>
-      <if test="installStatus != null and installStatus != ''">
-        AND ir.install_status = '${installStatus}'
-      </if>
       <if test="installRecordCustomerName != null and installRecordCustomerName != ''">
         AND userOfCustomerInInstallRecord.`name` = '${installRecordCustomerName}'
       </if>
@@ -188,6 +182,9 @@
       </if>
     </if>
 
+    <if test="installStatus != null and installStatus != ''">
+      AND ir.install_status = '${installStatus}'
+    </if>
     <if test="query_start_install_plan_date!=null and query_start_install_plan_date != '' ">
       and DATE_FORMAT(ir.install_plan_date,'%Y-%m-%d %T') &gt;= #{query_start_install_plan_date}
     </if>

@@ -2,6 +2,7 @@ package com.eservice.api.web;
 import com.eservice.api.core.Result;
 import com.eservice.api.core.ResultGenerator;
 import com.eservice.api.model.repair_record.RepairRecord;
+import com.eservice.api.model.repair_record.RepairRecordInfo;
 import com.eservice.api.service.RepairRecordService;
 import com.eservice.api.service.impl.RepairRecordServiceImpl;
 import com.github.pagehelper.PageHelper;
@@ -62,6 +63,56 @@ public class RepairRecordController {
                                     @RequestParam String nameplate) {
         PageHelper.startPage(page, size);
         List<RepairRecord> list = repairRecordService.selectByNameplate(nameplate);
+        PageInfo pageInfo = new PageInfo(list);
+        return ResultGenerator.genSuccessResult(pageInfo);
+    }
+
+    /**
+     * 根据条件查询维修信息
+     * @param nameplate
+     * @param orderNum
+     * @param repairStatus
+     * @param repairRecordCustomerName -- 维修记录中的客户联系人，不是machine的customerName
+     * @param agent -- 机器的代理商的名称
+     * @param repairChargePersonName -- 维修员负责人
+     * @param issuePositionName
+     * @param inWarrantyPeriod
+     * @param queryStartRepairCreateTime -- 报修时间 查询起点
+     * @param queryFinishRepairCreateTime --报修时间 结束点
+     * @param queryStartRepairEndTime -- 维修完成时间 查询起点
+     * @param queryFinishRepairEndTime -- 维修完成时间 查询终点
+     * @param isFuzzy
+     */
+    @PostMapping("/getRepairRecordInfoList")
+    public Result getRepairRecordInfoList(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size,
+                                           String nameplate,
+                                           String orderNum,
+                                           String repairStatus,
+                                           String repairRecordCustomerName,
+                                           String agent,
+                                           String repairChargePersonName,
+                                           String issuePositionName,
+                                           String inWarrantyPeriod,
+                                           String queryStartRepairCreateTime,
+                                           String queryFinishRepairCreateTime,
+                                           String queryStartRepairEndTime,
+                                           String queryFinishRepairEndTime,
+                                           boolean isFuzzy) {
+        PageHelper.startPage(page, size);
+        List<RepairRecordInfo> list = repairRecordService.getRepairRecordInfoList(
+                nameplate,
+                orderNum,
+                repairStatus,
+                repairRecordCustomerName,
+                agent,
+                repairChargePersonName,
+                issuePositionName,
+                inWarrantyPeriod,
+                queryStartRepairCreateTime,
+                queryFinishRepairCreateTime,
+                queryStartRepairEndTime,
+                queryFinishRepairEndTime,
+                isFuzzy);
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
     }
