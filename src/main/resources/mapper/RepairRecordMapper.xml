@@ -56,7 +56,7 @@
     <result column="y_distance" jdbcType="VARCHAR" property="yDistance" />
     <result column="repairRecordCustomerName" jdbcType="VARCHAR" property="customerNameInRepairRecord" />
     <result column="customerPhoneInRepairRecord" jdbcType="VARCHAR" property="customerPhoneInRepairRecord" />
-    <result column="customerAddressInRepairRecord" jdbcType="VARCHAR" property="machineAddress" />
+    <result column="customerAddressInRepairRecord" jdbcType="VARCHAR" property="customerAddressInRepairRecord" />
   </resultMap>
   <select id="selectByNameplate" resultMap="BaseResultMap">
     SELECT *
@@ -78,7 +78,7 @@
     m.machine_type,m.needle_num,m.head_num,m.head_distance,m.x_distance,m.y_distance,
     userOfCustomerInRepairRecord.`name` as repairRecordCustomerName, -- 客户方的维修联系人
     userOfCustomerInRepairRecord.phone as customerPhoneInRepairRecord,
-    m.address as machineAddress,
+    userOfCustomerInRepairRecord.address as customerAddressInRepairRecord,
     rr.*
     from repair_record as rr
     LEFT JOIN machine as m ON m.nameplate = rr.machine_nameplate

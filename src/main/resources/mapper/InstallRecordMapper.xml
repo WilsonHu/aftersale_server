@@ -43,7 +43,7 @@
     <result column="order_num" jdbcType="VARCHAR" property="orderNum" />
     <!--<result column="contract_num" jdbcType="VARCHAR" property="contractNum" />-->
     <result column="geo_location" jdbcType="VARCHAR" property="geoLocation" />
-    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="customerAddressInInstallRecord" jdbcType="VARCHAR" property="customerAddressInInstallRecord" />
     <!--<result column="status" jdbcType="VARCHAR" property="status" />-->
     <!--<result column="nameplate_picture" jdbcType="VARCHAR" property="nameplatePicture" />-->
     <result column="machine_type" jdbcType="VARCHAR" property="machineType" />
@@ -101,7 +101,7 @@
     m.y_distance,
     userOfCustomerInInstallRecord.`name` as installRecordCustomerName, -- 调试联系人
     userOfCustomerInInstallRecord.phone as customerPhoneInInstallRecord, -- 调试联系人电话
-    m.address,
+    userOfCustomerInInstallRecord.address as customerAddressInInstallRecord,
     userOfChargePersonInInstallRecord.`name` as installChargePersonName -- 调试员
     FROM
     install_record AS ir
@@ -131,7 +131,7 @@
     m.y_distance,
     userOfCustomerInInstallRecord.`name` as installRecordCustomerName, -- 调试联系人
     userOfCustomerInInstallRecord.phone as customerPhoneInInstallRecord, -- 调试联系人电话
-    m.address,
+    userOfCustomerInInstallRecord.address as customerAddressInInstallRecord,
     userOfChargePersonInInstallRecord.`name` as installChargePersonName -- 调试员
     FROM
     install_record AS ir

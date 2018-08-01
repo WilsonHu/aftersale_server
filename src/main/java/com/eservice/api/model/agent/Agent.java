@@ -16,12 +16,6 @@ public class Agent {
     private String phone;
 
     /**
-     * 微信unionId，在没授权前是空的。
-     */
-    @Column(name = "wechat_union_id")
-    private String wechatUnionId;
-
-    /**
      * 地址
      */
     private String address;
@@ -76,24 +70,6 @@ public class Agent {
      */
     public void setPhone(String phone) {
         this.phone = phone;
-    }
-
-    /**
-     * 获取微信unionId，在没授权前是空的。
-     *
-     * @return wechat_union_id - 微信unionId，在没授权前是空的。
-     */
-    public String getWechatUnionId() {
-        return wechatUnionId;
-    }
-
-    /**
-     * 设置微信unionId，在没授权前是空的。
-     *
-     * @param wechatUnionId 微信unionId，在没授权前是空的。
-     */
-    public void setWechatUnionId(String wechatUnionId) {
-        this.wechatUnionId = wechatUnionId;
     }
 
     /**

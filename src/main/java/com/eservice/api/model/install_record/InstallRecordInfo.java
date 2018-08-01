@@ -71,12 +71,12 @@ public class InstallRecordInfo extends InstallRecord {
         this.geoLocation = geoLocation;
     }
 
-    public String getAddress() {
-        return address;
+    public String getCustomerAddressInInstallRecord() {
+        return customerAddressInInstallRecord;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setCustomerAddressInInstallRecord(String customerAddressInInstallRecord) {
+        this.customerAddressInInstallRecord = customerAddressInInstallRecord;
     }
 
     public String getOrderNum() {
@@ -143,9 +143,9 @@ public class InstallRecordInfo extends InstallRecord {
     private String geoLocation;
 
     /**
-     * 机器地址，厂家门牌号
+     * 该次安装的安装联系人地址（不是机器的地址）
      */
-    private String address;
+    private String customerAddressInInstallRecord;
 
     /**
      * 对应的订单号,来自sinsim_db.machine_order.order_num

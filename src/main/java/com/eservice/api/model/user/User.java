@@ -238,4 +238,27 @@ public class User implements UserDetails{
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
+
+    /**
+     * 该用户所属公司名称，对于没有公司的用户，可以直接用用户自己名称。
+     */
+    private Integer customerCompany;
+
+    public void setCustomerCompany(Integer customerCompany) {
+        this.customerCompany = customerCompany;
+    }
+
+    public Integer getCustomerCompany() {
+        return customerCompany;
+    }
+
+    private String address;
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
 }

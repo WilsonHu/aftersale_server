@@ -212,16 +212,16 @@ public class RepairRecordInfo extends RepairRecord {
         this.customerNameInRepairRecord = customerNameInRepairRecord;
     }
     /**
-     * 该次维修的维修联系人地址,就是机器的地址
+     * 该次维修的维修联系人地址（不是机器的地址）
      */
-    private String machineAddress;
+    private String customerAddressInRepairRecord;
 
-    public void setMachineAddress(String machineAddress) {
-        this.machineAddress = machineAddress;
+    public void setCustomerAddressInRepairRecord(String customerAddressInRepairRecord) {
+        this.customerAddressInRepairRecord = customerAddressInRepairRecord;
     }
 
-    public String getMachineAddress() {
-        return machineAddress;
+    public String getCustomerAddressInRepairRecord() {
+        return customerAddressInRepairRecord;
     }
 }
 

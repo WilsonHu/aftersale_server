@@ -78,12 +78,12 @@ public class MaintainRecordInfo extends MaintainRecord {
         this.geoLocation = geoLocation;
     }
 
-    public String getAddress() {
-        return address;
+    public String getCustomerAddressInMaintainRecord() {
+        return customerAddressInMaintainRecord;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setCustomerAddressInMaintainRecord(String customerAddressInMaintainRecord) {
+        this.customerAddressInMaintainRecord = customerAddressInMaintainRecord;
     }
 
     public String getOrderNum() {
@@ -150,9 +150,9 @@ public class MaintainRecordInfo extends MaintainRecord {
     private String geoLocation;
 
     /**
-     * 机器地址，厂家门牌号
+     * 该次安装的安装联系人地址（不是机器的地址）
      */
-    private String address;
+    private String customerAddressInMaintainRecord;
 
     /**
      * 对应的订单号,来自sinsim_db.machine_order.order_num
@@ -174,19 +174,19 @@ public class MaintainRecordInfo extends MaintainRecord {
     /**
      * customer索引转换实际名字,来自 machine.customer-->user.name
      */
-    private String customerName;
+    private String machineCustomerName;
 
     /**
      * 索引转换实际名字,来自 machine.customer-->user-->agent.name
      */
     private String agent;
 
-    public String getCustomerName() {
-        return customerName;
+    public String getMachineCustomerName() {
+        return machineCustomerName;
     }
 
-    public void setCustomerName(String customerName){
-        this.customerName = customerName;
+    public void setMachineCustomerName(String machineCustomerName){
+        this.machineCustomerName = machineCustomerName;
     }
 
     public String getAgent() {

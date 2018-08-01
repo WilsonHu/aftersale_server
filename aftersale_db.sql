@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50553
 File Encoding         : 65001
 
-Date: 2018-08-01 11:02:56
+Date: 2018-08-01 16:38:12
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -660,15 +660,15 @@ CREATE TABLE `user` (
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES ('1', 'admin', 'admin', 'wechat222', '1', '1', '0', 'sinsim', '1', '13566667777', '2018-07-11 10:03:43', null);
-INSERT INTO `user` VALUES ('2', 'admin_in_aftersale', 'admin_in_aftersale', null, '2', '1', '0', 'sinsim', '1', '13455556666', '2018-07-21 08:53:49', null);
-INSERT INTO `user` VALUES ('3', 'repairPerson_zhansan', 'repairPerson_zhansan', '', '3', '1', '0', 'sinsim', '1', 'repairPerson_zhansan的电话13455556633', '0000-00-00 00:00:00', null);
-INSERT INTO `user` VALUES ('4', 'repairPerson_lisi', 'repairPerson_lisi', '', '3', '2', '0', 'sinsim', '1', 'repairPerson_lisi1的电话3455556666', '0000-00-00 00:00:00', null);
-INSERT INTO `user` VALUES ('5', 'agent444', 'agent444', null, '4', '2', '0', 'sinsim', '1', 'agent444的电话444', '0000-00-00 00:00:00', null);
-INSERT INTO `user` VALUES ('6', 'kehu1', 'kehu1', null, '5', '2', '0', 'sinsim', '1', 'kehu1的的电话xxxx', '0000-00-00 00:00:00', null);
-INSERT INTO `user` VALUES ('7', 'kehu2', 'kehu2', null, '5', '1', '0', 'sinsim', '1', 'kehu2的的电话xxxx', '0000-00-00 00:00:00', null);
-INSERT INTO `user` VALUES ('8', 'kehu_Lxr1', 'kehu_Lxr1', null, '6', '1', '0', 'sinsim', '1', 'kehu_Lxr1的的电话xxxx', '0000-00-00 00:00:00', null);
-INSERT INTO `user` VALUES ('9', 'kehu_Lxr2', 'kehu_Lxr2', null, '6', '1', '0', 'sinsim', '1', 'kehu_Lxr2的的电话xxxx', '0000-00-00 00:00:00', null);
-INSERT INTO `user` VALUES ('10', 'repairPerson_wangwu', 'repairPerson_wangwu', null, '3', '1', '0', 'sinsim', '1', 'repairPerson_wangwu的电话yyyy', '0000-00-00 00:00:00', null);
-INSERT INTO `user` VALUES ('11', 'kehu3_w_agent', 'kehu3_w_agent', null, '5', '2', '0', 'sinsim', '1', 'kehu3_w_agent的电话zzz', '0000-00-00 00:00:00', null);
-INSERT INTO `user` VALUES ('12', 'kehu4_w_agent', 'kehu4_w_agent', null, '5', '1', '0', 'sinsim', '1', 'kehu4_w_agent的电话www4444', '0000-00-00 00:00:00', null);
+INSERT INTO `user` VALUES ('1', 'admin', 'admin', 'wechat222', '1', '1', '0', 'sinsim', '1', '13566667777', '2018-07-11 10:03:43', '客户地址admin111');
+INSERT INTO `user` VALUES ('2', 'admin_in_aftersale', 'admin_in_aftersale', null, '2', '1', '0', 'sinsim', '1', '13455556666', '2018-07-21 08:53:49', '客户地址admin_in_after111');
+INSERT INTO `user` VALUES ('3', 'repairPerson_zhansan', 'repairPerson_zhansan', '', '3', '1', '0', 'sinsim', '1', 'repairPerson_zhansan的电话13455556633', '0000-00-00 00:00:00', '客户地址zhangsan3333');
+INSERT INTO `user` VALUES ('4', 'repairPerson_lisi', 'repairPerson_lisi', '', '3', '2', '0', 'sinsim', '1', 'repairPerson_lisi1的电话3455556666', '0000-00-00 00:00:00', '客户地址Lisi444');
+INSERT INTO `user` VALUES ('5', 'agent444', 'agent444', null, '4', '2', '0', 'sinsim', '1', 'agent444的电话444', '0000-00-00 00:00:00', '客户地址agent444');
+INSERT INTO `user` VALUES ('6', 'kehu1', 'kehu1', null, '5', '2', '0', 'sinsim', '1', 'kehu1的的电话xxxx', '0000-00-00 00:00:00', '客户地址kehu1');
+INSERT INTO `user` VALUES ('7', 'kehu2', 'kehu2', null, '5', '1', '0', 'sinsim', '1', 'kehu2的的电话xxxx', '0000-00-00 00:00:00', '客户地址kehu2');
+INSERT INTO `user` VALUES ('8', 'kehu_Lxr1', 'kehu_Lxr1', null, '6', '1', '0', 'sinsim', '1', 'kehu_Lxr1的的电话xxxx', '0000-00-00 00:00:00', '客户地址kehu_Lxr1');
+INSERT INTO `user` VALUES ('9', 'kehu_Lxr2', 'kehu_Lxr2', null, '6', '1', '0', 'sinsim', '1', 'kehu_Lxr2的的电话xxxx', '0000-00-00 00:00:00', '客户地址kehu_Lxr2');
+INSERT INTO `user` VALUES ('10', 'repairPerson_wangwu', 'repairPerson_wangwu', null, '3', '1', '0', 'sinsim', '1', 'repairPerson_wangwu的电话yyyy', '0000-00-00 00:00:00', '客户地址wangwu5555');
+INSERT INTO `user` VALUES ('11', 'kehu3_w_agent', 'kehu3_w_agent', null, '5', '2', '0', 'sinsim', '1', 'kehu3_w_agent的电话zzz', '0000-00-00 00:00:00', '客户地址kehu3_w_agent3333');
+INSERT INTO `user` VALUES ('12', 'kehu4_w_agent', 'kehu4_w_agent', null, '5', '1', '0', 'sinsim', '1', 'kehu4_w_agent的电话www4444', '0000-00-00 00:00:00', '客户地址kehu4_w_agent4444444');

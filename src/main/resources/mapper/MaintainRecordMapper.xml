@@ -26,22 +26,6 @@
         WARNING - @mbg.generated
       -->
       <id column="id" jdbcType="INTEGER" property="id" />
-      <result column="order_num" jdbcType="VARCHAR" property="orderNum" />
-      <result column="geo_location" jdbcType="VARCHAR" property="geoLocation" />
-      <result column="address" jdbcType="VARCHAR" property="address" />
-      <result column="nameplate_picture" jdbcType="VARCHAR" property="nameplatePicture" />
-      <result column="machine_type" jdbcType="VARCHAR" property="machineType" />
-      <result column="needle_num" jdbcType="VARCHAR" property="needleNum" />
-      <result column="x_distance" jdbcType="VARCHAR" property="xDistance" />
-      <result column="y_distance" jdbcType="VARCHAR" property="yDistance" />
-      <result column="head_distance" jdbcType="VARCHAR" property="headDistance" />
-      <result column="head_num" jdbcType="VARCHAR" property="headNum" />
-      <result column="loadinglist" jdbcType="VARCHAR" property="loadinglist" />
-      <result column="customer" jdbcType="INTEGER" property="customer" />
-      <result column="facory_date" jdbcType="DATE" property="facoryDate" />
-
-      <result column="customerName" jdbcType="VARCHAR" property="customerName" />
-      <result column="agent_name" jdbcType="VARCHAR" property="agent" />
       <result column="machine_nameplate" jdbcType="VARCHAR" property="machineNameplate" />
       <result column="maintain_lib_name" jdbcType="VARCHAR" property="maintainLibName" />
       <result column="maintain_date_plan" jdbcType="DATE" property="maintainDatePlan" />
@@ -55,7 +39,20 @@
       <result column="customer_feedback" jdbcType="INTEGER" property="customerFeedback" />
       <result column="maintain_info" jdbcType="LONGVARCHAR" property="maintainInfo" />
 
+      <result column="machine_type" jdbcType="VARCHAR" property="machineType" />
+      <result column="needle_num" jdbcType="VARCHAR" property="needleNum" />
+      <result column="x_distance" jdbcType="VARCHAR" property="xDistance" />
+      <result column="y_distance" jdbcType="VARCHAR" property="yDistance" />
+      <result column="head_distance" jdbcType="VARCHAR" property="headDistance" />
+      <result column="head_num" jdbcType="VARCHAR" property="headNum" />
+      <result column="loadinglist" jdbcType="VARCHAR" property="loadinglist" />
+      <result column="geo_location" jdbcType="VARCHAR" property="geoLocation" />
+      <result column="customerAddressInMaintainRecord" jdbcType="VARCHAR" property="customerAddressInMaintainRecord" />
+      <result column="order_num" jdbcType="VARCHAR" property="orderNum" />
+      <result column="facory_date" jdbcType="DATE" property="facoryDate" />
       <result column="maintain_charge_person_name" jdbcType="VARCHAR" property="maintainChargePersonName" />
+      <result column="machineCustomerName" jdbcType="VARCHAR" property="machineCustomerName" />
+      <result column="agent_name" jdbcType="VARCHAR" property="agent" />
 
 
   </resultMap>
@@ -77,7 +74,7 @@
 
   <select id="getMaintainRecordInfoList" resultMap="MaintainRecordInfoMap">
       SELECT
-      u.name as customerName,
+      userOfCustomerInMachine.name as machineCustomerName,
       a.name as agent_name,
       mr.*,
       m.facory_date,
@@ -89,15 +86,18 @@
       m.order_num,
       m.x_distance,
       m.y_distance,
-      m.address,
-      userInMaintainRecord.name AS maintain_charge_person_name
+      m.loadinglist,
+      m.geo_location,
+      userOfCustomerInMaintainRecord.address as customerAddressInMaintainRecord,
+      userOfMaintainChargePerson.name AS maintain_charge_person_name
 
       FROM
       maintain_record mr
       LEFT JOIN machine m ON mr.machine_nameplate = m.nameplate
-      LEFT JOIN user u ON u.id = m.customer
-      LEFT JOIN agent a ON a.id = u.agent
-      LEFT JOIN user userInMaintainRecord ON userInMaintainRecord.id = mr.maintain_charge_person
+      LEFT JOIN `user` as userOfCustomerInMachine ON userOfCustomerInMachine.id = m.customer
+      LEFT JOIN agent a ON a.id = userOfCustomerInMachine.agent
+      LEFT JOIN user userOfMaintainChargePerson ON userOfMaintainChargePerson.id = mr.maintain_charge_person
+      LEFT JOIN user as userOfCustomerInMaintainRecord ON userOfCustomerInMaintainRecord.id = mr.customer
     WHERE 1 = 1
     <if test="isFuzzy == true">
       <if test="customerName != null and customerName != ''">
