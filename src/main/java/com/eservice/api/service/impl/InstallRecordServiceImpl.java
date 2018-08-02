@@ -3,6 +3,7 @@ package com.eservice.api.service.impl;
 import com.eservice.api.dao.InstallRecordMapper;
 import com.eservice.api.model.install_record.InstallRecord;
 import com.eservice.api.model.install_record.InstallRecordInfo;
+import com.eservice.api.model.machine.Machine;
 import com.eservice.api.service.InstallRecordService;
 import com.eservice.api.core.AbstractService;
 import org.springframework.stereotype.Service;
@@ -63,6 +64,10 @@ public class InstallRecordServiceImpl extends AbstractService<InstallRecord> imp
                 query_start_install_actual_time,
                 query_finish_install_actual_time,
                 isFuzzy);
+    }
+
+    public List<Machine> selectInstallTaskMachine(String userName){
+        return installRecordMapper.selectInstallTaskMachine(userName);
     }
 
 }

@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50553
 File Encoding         : 65001
 
-Date: 2018-08-02 14:21:47
+Date: 2018-08-02 15:25:06
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -146,11 +146,15 @@ CREATE TABLE `install_members` (
   KEY `fk_user_id` (`user_id`),
   CONSTRAINT `fk_install_record_id` FOREIGN KEY (`install_record_id`) REFERENCES `install_record` (`id`),
   CONSTRAINT `fk_user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of install_members
 -- ----------------------------
+INSERT INTO `install_members` VALUES ('1', '1', '3');
+INSERT INTO `install_members` VALUES ('2', '2', '3');
+INSERT INTO `install_members` VALUES ('3', '3', '3');
+INSERT INTO `install_members` VALUES ('4', '4', '4');
 
 -- ----------------------------
 -- Table structure for `install_record`
@@ -353,11 +357,17 @@ CREATE TABLE `maintain_members` (
   KEY `fk_maintain_record_id` (`maintain_record_id`) USING BTREE,
   CONSTRAINT `fk_mrh_maintain_record_id` FOREIGN KEY (`maintain_record_id`) REFERENCES `maintain_record` (`id`),
   CONSTRAINT `fk_mrh_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of maintain_members
 -- ----------------------------
+INSERT INTO `maintain_members` VALUES ('1', '1', '3');
+INSERT INTO `maintain_members` VALUES ('2', '1', '4');
+INSERT INTO `maintain_members` VALUES ('3', '2', '3');
+INSERT INTO `maintain_members` VALUES ('4', '3', '3');
+INSERT INTO `maintain_members` VALUES ('5', '4', '4');
+INSERT INTO `maintain_members` VALUES ('6', '4', '14');
 
 -- ----------------------------
 -- Table structure for `maintain_record`
@@ -394,7 +404,7 @@ CREATE TABLE `maintain_record` (
 INSERT INTO `maintain_record` VALUES ('1', 'mph2233', '一期保养', '2018-07-12', '2018-07-12', '5', 'sssssgg', '12', 'info 1111', '2018-07-25 10:35:27', '2018-07-25 11:35:32', '3', '1');
 INSERT INTO `maintain_record` VALUES ('2', 'mph333', '二期保养', '2018-07-16', '2018-07-16', '4', 'sssssssssssssssssg', '2', 'ffff23343', '0000-00-00 00:00:00', null, '3', '2');
 INSERT INTO `maintain_record` VALUES ('3', 'mph--all-data', '三期保养', '2018-07-25', '2018-07-26', '9', 'ssgeeee', '11', 'maintain infos112233', '2018-07-25 17:51:26', null, '2', '2');
-INSERT INTO `maintain_record` VALUES ('4', 'mph--all-data', '二期保养', '2018-07-12', '2018-07-25', '4', 'ssssssssssgestsss', '11', 'maint infos23444', '2018-07-25 18:07:32', null, 'maintainStatus111', '1');
+INSERT INTO `maintain_record` VALUES ('4', 'mph--all-data', '二期保养', '2018-07-12', '2018-07-25', '4', 'ssssssssssgestsss', '11', 'maint infos23444', '2018-07-25 18:07:32', null, '1', '1');
 
 -- ----------------------------
 -- Table structure for `maintain_type`
@@ -671,7 +681,7 @@ CREATE TABLE `user` (
   KEY `fk_u_role_id` (`role_id`),
   KEY `fk_u_agent` (`agent`),
   CONSTRAINT `fk_u_role_id` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of user
@@ -688,3 +698,5 @@ INSERT INTO `user` VALUES ('9', 'kehu_Lxr2', 'kehu_Lxr2', null, '6', '1', '0', '
 INSERT INTO `user` VALUES ('10', 'repairPerson_wangwu', 'repairPerson_wangwu', null, '3', '1', '0', 'sinsim', '1', 'repairPerson_wangwu的电话yyyy', '0000-00-00 00:00:00', '客户地址wangwu5555');
 INSERT INTO `user` VALUES ('11', 'kehu3_w_agent', 'kehu3_w_agent', null, '5', '2', '0', 'sinsim', '1', 'kehu3_w_agent的电话zzz', '0000-00-00 00:00:00', '客户地址kehu3_w_agent3333');
 INSERT INTO `user` VALUES ('12', 'kehu4_w_agent', 'kehu4_w_agent', null, '5', '1', '0', 'sinsim', '1', 'kehu4_w_agent的电话www4444', '0000-00-00 00:00:00', '客户地址kehu4_w_agent4444444');
+INSERT INTO `user` VALUES ('13', 'repairPerson13', 'repairPerson13', null, '3', null, null, 'sinsim', '', 'repairPerson13-phone333', '0000-00-00 00:00:00', null);
+INSERT INTO `user` VALUES ('14', 'user14', 'user14', null, '3', null, '0', 'sinsim', '1', 'user14-phone123', '0000-00-00 00:00:00', null);

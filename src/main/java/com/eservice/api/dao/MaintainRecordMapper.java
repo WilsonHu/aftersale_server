@@ -1,6 +1,7 @@
 package com.eservice.api.dao;
 
 import com.eservice.api.core.Mapper;
+import com.eservice.api.model.machine.Machine;
 import com.eservice.api.model.maintain_record.MaintainRecord;
 import com.eservice.api.model.maintain_record.MaintainRecordInfo;
 import org.apache.ibatis.annotations.Param;
@@ -23,4 +24,6 @@ public interface MaintainRecordMapper extends Mapper<MaintainRecord> {
                                                        @Param("query_start_time_maintain")String query_start_time_maintain,
                                                        @Param("query_finish_time_maintain")String query_finish_time_maintain,
                                                        @Param("isFuzzy")boolean isFuzzy);
+
+    List<Machine> selectMaintainTaskMachine(@Param("userName") String userName);
 }

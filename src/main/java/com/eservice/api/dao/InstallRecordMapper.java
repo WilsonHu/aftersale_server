@@ -3,6 +3,7 @@ package com.eservice.api.dao;
 import com.eservice.api.core.Mapper;
 import com.eservice.api.model.install_record.InstallRecord;
 import com.eservice.api.model.install_record.InstallRecordInfo;
+import com.eservice.api.model.machine.Machine;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.security.access.method.P;
 
@@ -30,4 +31,6 @@ public interface InstallRecordMapper extends Mapper<InstallRecord> {
                                                      @Param("query_start_install_actual_time")String query_start_install_actual_time,
                                                      @Param("query_finish_install_actual_time")String query_finish_install_actual_time,
                                                      @Param("isFuzzy")boolean isFuzzy);
+
+    List<Machine> selectInstallTaskMachine(@Param("userName") String userName);
 }

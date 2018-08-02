@@ -1,6 +1,7 @@
 package com.eservice.api.service.impl;
 
 import com.eservice.api.dao.MaintainRecordMapper;
+import com.eservice.api.model.machine.Machine;
 import com.eservice.api.model.maintain_record.MaintainRecord;
 import com.eservice.api.model.maintain_record.MaintainRecordInfo;
 import com.eservice.api.service.MaintainRecordService;
@@ -52,5 +53,9 @@ public class MaintainRecordServiceImpl extends AbstractService<MaintainRecord> i
                 query_start_time_maintain,
                 query_finish_time_maintain,
                 isFuzzy);
+    }
+
+    public List<Machine> selectMaintainTaskMachine(String userName){
+        return maintainRecordMapper.selectMaintainTaskMachine(userName);
     }
 }

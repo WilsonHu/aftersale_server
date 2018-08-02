@@ -1,6 +1,7 @@
 package com.eservice.api.web;
 import com.eservice.api.core.Result;
 import com.eservice.api.core.ResultGenerator;
+import com.eservice.api.model.machine.Machine;
 import com.eservice.api.model.maintain_record.MaintainRecord;
 import com.eservice.api.model.maintain_record.MaintainRecordInfo;
 import com.eservice.api.service.MaintainRecordService;
@@ -105,6 +106,18 @@ public class MaintainRecordController {
                 query_start_time_maintain,
                 query_finish_time_maintain,
                 isFuzzy);
+        PageInfo pageInfo = new PageInfo(list);
+        return ResultGenerator.genSuccessResult(pageInfo);
+    }
+
+    /**
+     * 根据用户(无论是负责人还是保养成员)返回他的保养待处理机器,如果用户为空则返回所有待处理的保养相关的机器。
+     */
+    @PostMapping("/selectMaintainTaskMachine")
+    public Result selectMaintainTaskMachine(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size,
+                                          @RequestParam String userName) {
+        PageHelper.startPage(page, size);
+        List<Machine> list = maintainRecordService.selectMaintainTaskMachine(userName);
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
     }

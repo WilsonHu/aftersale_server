@@ -3,6 +3,7 @@ import com.eservice.api.core.Result;
 import com.eservice.api.core.ResultGenerator;
 import com.eservice.api.model.install_record.InstallRecord;
 import com.eservice.api.model.install_record.InstallRecordInfo;
+import com.eservice.api.model.machine.Machine;
 import com.eservice.api.service.InstallRecordService;
 import com.eservice.api.service.impl.InstallRecordServiceImpl;
 import com.github.pagehelper.PageHelper;
@@ -143,6 +144,18 @@ public class InstallRecordController {
                 query_start_install_actual_time,
                 query_finish_install_actual_time,
                 isFuzzy);
+        PageInfo pageInfo = new PageInfo(list);
+        return ResultGenerator.genSuccessResult(pageInfo);
+    }
+
+    /**
+     * 根据用户(无论是负责人还是安装成员)返回他的安装待处理机器,如果用户为空则返回所有待处理的安装相关的机器。
+     */
+    @PostMapping("/selectInstallTaskMachine")
+    public Result selectInstallTaskMachine(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size,
+                                            @RequestParam String userName) {
+        PageHelper.startPage(page, size);
+        List<Machine> list = installRecordService.selectInstallTaskMachine(userName);
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
     }
