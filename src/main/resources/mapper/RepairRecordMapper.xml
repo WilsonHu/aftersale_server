@@ -167,6 +167,27 @@
     <if test="queryFinishRepairEndTime!=null and queryFinishRepairEndTime != '' ">
       and DATE_FORMAT( rr.repair_end_time,'%Y-%m-%d %T') &lt;= #{queryFinishRepairEndTime}
     </if>
+  </select>
 
+  <select id="selectRepairTaskMachine" resultMap="com.eservice.api.dao.MachineMapper.BaseResultMap">
+    SELECT
+    m.*
+    FROM
+    repair_record as rr
+    LEFT JOIN repair_members as rm ON rm.repair_record_id = rr.id
+    LEFT JOIN user as userOfMembersInRepairRecord ON userOfMembersInRepairRecord.id = rm.user_id
+    LEFT JOIN user as userOfChargeInRepairRecord ON userOfChargeInRepairRecord.id = rr.repair_charge_person
+    LEFT JOIN machine as m ON m.nameplate = rr.machine_nameplate
+
+    -- 维修状态 0：未派单，
+    -- 1：已派单（但未接单）,
+    -- 2： 已接受任务，
+    -- 3：维修成功(客户未确认)，
+    -- 4：无法维修，维修被转派（不需要客户确认），
+    -- 5.客户已确认（维修成功）。转派后，前面的维修记录要保留，但是客户只需要看到成功的最后那次记录。
+    where (rr.status = 1 or rr.status = 2 or  rr.status = 3 or rr.status = 4)
+    <if test="userName!=null and userName != '' ">
+      and (userOfMembersInRepairRecord.name = #{userName} or  userOfChargeInRepairRecord.name = #{userName})
+    </if>
   </select>
 </mapper>

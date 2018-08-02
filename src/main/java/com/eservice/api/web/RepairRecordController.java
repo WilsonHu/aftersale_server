@@ -1,6 +1,7 @@
 package com.eservice.api.web;
 import com.eservice.api.core.Result;
 import com.eservice.api.core.ResultGenerator;
+import com.eservice.api.model.machine.Machine;
 import com.eservice.api.model.repair_record.RepairRecord;
 import com.eservice.api.model.repair_record.RepairRecordInfo;
 import com.eservice.api.service.RepairRecordService;
@@ -116,4 +117,17 @@ public class RepairRecordController {
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
     }
+
+    /**
+     * 根据用户(无论是负责人还是维修成员)返回他的维修待处理机器
+     */
+    @PostMapping("/selectRepairTaskMachine")
+    public Result selectRepairTaskMachine(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size,
+                                    @RequestParam String userName) {
+        PageHelper.startPage(page, size);
+        List<Machine> list = repairRecordService.selectRepairTaskMachine(userName);
+        PageInfo pageInfo = new PageInfo(list);
+        return ResultGenerator.genSuccessResult(pageInfo);
+    }
+
 }

@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50553
 File Encoding         : 65001
 
-Date: 2018-08-01 16:38:12
+Date: 2018-08-02 14:21:47
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -42,11 +42,15 @@ CREATE TABLE `customer_company` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `customer_company_name` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Records of customer_company
 -- ----------------------------
+INSERT INTO `customer_company` VALUES ('1', 'sinsim');
+INSERT INTO `customer_company` VALUES ('2', 'company_222');
+INSERT INTO `customer_company` VALUES ('3', 'company_333');
+INSERT INTO `customer_company` VALUES ('4', 'company_444');
 
 -- ----------------------------
 -- Table structure for `experience_lib`
@@ -448,11 +452,15 @@ CREATE TABLE `parts_info` (
   KEY `fk_pi_sendback_confirmed_person` (`sendback_confirmed_person`),
   CONSTRAINT `fk_pi_repair_actual_info` FOREIGN KEY (`repair_actual_info_id`) REFERENCES `repair_actual_info` (`id`),
   CONSTRAINT `fk_pi_sendback_confirmed_person` FOREIGN KEY (`sendback_confirmed_person`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of parts_info
 -- ----------------------------
+INSERT INTO `parts_info` VALUES ('1', '马达12AB', '松下', 'param123', '1', '2', 'sf-track-number-111', null, '2018-08-01', null, null);
+INSERT INTO `parts_info` VALUES ('2', '上轴部件222', 'xs', 'pram222', '2', '3', 'sf-track-number-222', null, '2018-08-01', null, null);
+INSERT INTO `parts_info` VALUES ('3', '下轴部件333', 'xs', 'param33', '3', '4', 'sf-track-number-333', null, '2018-07-31', '2018-08-01 17:24:43', '2');
+INSERT INTO `parts_info` VALUES ('4', '下轴部件333part2', 'xs', 'ppp', '3', '4', 'sf-track-number-333', null, '2018-07-31', '2018-08-01 17:26:10', '2');
 
 -- ----------------------------
 -- Table structure for `repair_actual_info`
@@ -475,10 +483,10 @@ CREATE TABLE `repair_actual_info` (
 -- ----------------------------
 -- Records of repair_actual_info
 -- ----------------------------
-INSERT INTO `repair_actual_info` VALUES ('1', '3', '1', '问题描述11111', '维修方法1111', null);
-INSERT INTO `repair_actual_info` VALUES ('2', '4', '3', '问题描述22222', '维修方法22222', null);
-INSERT INTO `repair_actual_info` VALUES ('3', '5', '2', '问题描述3333', '维修方法3333', null);
-INSERT INTO `repair_actual_info` VALUES ('4', '6', '1', '问题描述4444', '维修方法4444', null);
+INSERT INTO `repair_actual_info` VALUES ('1', '3', '1', '问题描述,实际发生了xx11111', '实际维修方法1111', '维修后的图片路径111');
+INSERT INTO `repair_actual_info` VALUES ('2', '4', '3', '问题描述,实际发生了xx22222', '实际维修方法22222', '维修后的图片路径222');
+INSERT INTO `repair_actual_info` VALUES ('3', '5', '2', '问题描述,实际发生了xx3333', '实际维修方法3333', '维修后的图片路径333');
+INSERT INTO `repair_actual_info` VALUES ('4', '6', '1', '问题描述,实际发生了xx4444', '实际维修方法4444', '维修后的图片路径444');
 
 -- ----------------------------
 -- Table structure for `repair_customer_feedback`
@@ -520,11 +528,19 @@ CREATE TABLE `repair_members` (
   KEY `fk_rrh_repair_record_id` (`repair_record_id`),
   CONSTRAINT `fk_rrh_repair_record_id` FOREIGN KEY (`repair_record_id`) REFERENCES `repair_record` (`id`),
   CONSTRAINT `fk_rrh_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of repair_members
 -- ----------------------------
+INSERT INTO `repair_members` VALUES ('1', '3', '3');
+INSERT INTO `repair_members` VALUES ('2', '3', '4');
+INSERT INTO `repair_members` VALUES ('3', '4', '3');
+INSERT INTO `repair_members` VALUES ('4', '4', '3');
+INSERT INTO `repair_members` VALUES ('5', '4', '4');
+INSERT INTO `repair_members` VALUES ('6', '5', '4');
+INSERT INTO `repair_members` VALUES ('7', '6', '4');
+INSERT INTO `repair_members` VALUES ('8', '7', '3');
 
 -- ----------------------------
 -- Table structure for `repair_record`
@@ -565,12 +581,12 @@ CREATE TABLE `repair_record` (
 -- ----------------------------
 INSERT INTO `repair_record` VALUES ('3', 'xx11', '6', 'mph333', '11', '1', '3', '2018-07-24 10:08:45', '2018-07-25 10:08:50', '11', '5', '2018-07-25 10:38:25', '2018-07-27 13:58:54', '1');
 INSERT INTO `repair_record` VALUES ('4', null, '6', 'mph--all-data', '12', '1', '4', '2018-07-24 10:37:35', '2018-07-25 10:15:51', '1', '5', '2018-07-19 11:09:49', '2018-07-25 10:38:32', '1');
-INSERT INTO `repair_record` VALUES ('5', null, '7', 'mph788', '13', '1', '4', null, '2018-07-25 10:15:55', null, '0', '2018-07-19 13:41:09', null, null);
-INSERT INTO `repair_record` VALUES ('6', null, '7', 'mph333', '14', '0', '3', null, '2018-07-26 10:15:59', null, '0', '2018-07-19 13:44:14', null, null);
-INSERT INTO `repair_record` VALUES ('7', null, '8', 'mph2233', '15', '0', '3', null, '2018-07-26 10:16:03', null, '0', '2018-07-19 13:45:23', null, null);
-INSERT INTO `repair_record` VALUES ('8', null, '8', 'mph555', '16', '0', '3', null, '2018-07-25 10:16:18', null, '0', '2018-07-19 13:46:38', null, null);
-INSERT INTO `repair_record` VALUES ('9', null, '9', 'mph777', '17', '1', '10', null, '2018-07-26 10:16:07', null, '0', '2018-07-19 13:50:51', null, null);
-INSERT INTO `repair_record` VALUES ('10', null, '6', 'mph789', '18', '1', '10', null, '2018-07-26 10:16:07', null, '0', '2018-07-19 13:55:23', null, null);
+INSERT INTO `repair_record` VALUES ('5', null, '7', 'mph788', '13', '1', '4', null, '2018-07-25 10:15:55', null, '1', '2018-07-19 13:41:09', null, null);
+INSERT INTO `repair_record` VALUES ('6', null, '7', 'mph333', '14', '0', '3', null, '2018-07-26 10:15:59', null, '2', '2018-07-19 13:44:14', null, null);
+INSERT INTO `repair_record` VALUES ('7', null, '8', 'mph2233', '15', '0', '3', null, '2018-07-26 10:16:03', null, '3', '2018-07-19 13:45:23', null, null);
+INSERT INTO `repair_record` VALUES ('8', null, '8', 'mph555', '16', '0', '3', null, '2018-07-25 10:16:18', null, '4', '2018-07-19 13:46:38', null, null);
+INSERT INTO `repair_record` VALUES ('9', null, '9', 'mph777', '17', '1', '10', null, '2018-07-26 10:16:07', null, '2', '2018-07-19 13:50:51', null, null);
+INSERT INTO `repair_record` VALUES ('10', null, '6', 'mph789', '18', '1', '10', null, '2018-07-26 10:16:07', null, '3', '2018-07-19 13:55:23', null, null);
 
 -- ----------------------------
 -- Table structure for `repair_request_info`
@@ -602,9 +618,9 @@ INSERT INTO `repair_request_info` VALUES ('6', 'mph333', '[D:/images/repair_req_
 INSERT INTO `repair_request_info` VALUES ('7', 'mph333', '[D:/images/repair_req_nameplate/ mph333_REPAIR_REQUEST_NAMEPLATE_IMAGE_2018-07-19-11-04-40_2.png]', '[]', '标题有时会断线0719', '内容最近从五月份开始有时候会断线', '[D:/images/repair_req_img/ mph333_REPAIR_REQUEST_IMAGE_2018-07-19-11-04-40_1.png]', '1');
 INSERT INTO `repair_request_info` VALUES ('8', 'mph333', '[D:/images/repair_req_nameplate/ mph333_REPAIR_REQUEST_NAMEPLATE_IMAGE_2018-07-19-11-05-54_2.png]', '[]', '标题有时会断线0719', '内容最近从五月份开始有时候会断线', '[D:/images/repair_req_img/ mph333_REPAIR_REQUEST_IMAGE_2018-07-19-11-05-54_1.png]', '1');
 INSERT INTO `repair_request_info` VALUES ('9', 'mph333', '[D:/images/repair_req_nameplate/ mph333_REPAIR_REQUEST_NAMEPLATE_IMAGE_2018-07-19-11-06-01_2.png]', '[]', '标题有时会断线0719', '内容最近从五月份开始有时候会断线', '[D:/images/repair_req_img/ mph333_REPAIR_REQUEST_IMAGE_2018-07-19-11-06-01_1.png]', '1');
-INSERT INTO `repair_request_info` VALUES ('10', 'mph333', '[D:/images/repair_req_nameplate/ mph333_REPAIR_REQUEST_NAMEPLATE_IMAGE_2018-07-19-11-06-35_2.png]', '[]', '标题有时会断线0719', '内容最近从五月份开始有时候会断线', '[D:/images/repair_req_img/ mph333_REPAIR_REQUEST_IMAGE_2018-07-19-11-06-35_1.png]', '1');
-INSERT INTO `repair_request_info` VALUES ('11', 'mph333', '[D:/images/repair_req_nameplate/ mph333_REPAIR_REQUEST_NAMEPLATE_IMAGE_2018-07-19-11-07-25_2.png]', '[]', '标题有时会断线0719', '内容最近从五月份开始有时候会断线', '[D:/images/repair_req_img/ mph333_REPAIR_REQUEST_IMAGE_2018-07-19-11-07-25_1.png]', '1');
-INSERT INTO `repair_request_info` VALUES ('12', 'mph333', '[D:/images/repair_req_nameplate/ mph333_REPAIR_REQUEST_NAMEPLATE_IMAGE_2018-07-19-11-09-49_2.png]', '[]', '标题有时会断线0719', '内容最近从五月份开始有时候会断线', '[D:/images/repair_req_img/ mph333_REPAIR_REQUEST_IMAGE_2018-07-19-11-09-49_1.png]', '1');
+INSERT INTO `repair_request_info` VALUES ('10', 'mph333', '[D:/images/repair_req_nameplate/ mph333_REPAIR_REQUEST_NAMEPLATE_IMAGE_2018-07-19-11-06-35_2.png]', '[D:/images/repair_req_voice/ mph333_REPAIR_REQUEST_VOICE_2018xxxx.mp3]', '标题有时会断线0719', '内容最近从五月份开始有时候会断线', '[D:/images/repair_req_img/ mph333_REPAIR_REQUEST_IMAGE_2018-07-19-11-06-35_1.png]', '1');
+INSERT INTO `repair_request_info` VALUES ('11', 'mph333', '[D:/images/repair_req_nameplate/ mph333_REPAIR_REQUEST_NAMEPLATE_IMAGE_2018-07-19-11-07-25_2.png]', '[D:/images/repair_req_voice/ mph333_REPAIR_REQUEST_VOICE_2018xxxx22.mp3]', '标题有时会断线0719', '内容最近从五月份开始有时候会断线', '[D:/images/repair_req_img/ mph333_REPAIR_REQUEST_IMAGE_2018-07-19-11-07-25_1.png]', '1');
+INSERT INTO `repair_request_info` VALUES ('12', 'mph333', '[D:/images/repair_req_nameplate/ mph333_REPAIR_REQUEST_NAMEPLATE_IMAGE_2018-07-19-11-09-49_2.png]', '[D:/images/repair_req_voice/ mph333_REPAIR_REQUEST_VOICE_2018xxxx33.mp3]', '标题有时会断线0719', '内容最近从五月份开始有时候会断线', '[D:/images/repair_req_img/ mph333_REPAIR_REQUEST_IMAGE_2018-07-19-11-09-49_1.png]', '1');
 INSERT INTO `repair_request_info` VALUES ('13', 'mph333', '[D:/images/repair_req_nameplate/ mph333_REPAIR_REQUEST_NAMEPLATE_IMAGE_2018-07-19-13-41-09_2.png]', '[]', '标题有时会断线0719-2', '内容最近从五月份开始有时候会断线', '[D:/images/repair_req_img/ mph333_REPAIR_REQUEST_IMAGE_2018-07-19-13-41-09_1.png]', '1');
 INSERT INTO `repair_request_info` VALUES ('14', 'mph333', '[D:/images/repair_req_nameplate/ mph333_REPAIR_REQUEST_NAMEPLATE_IMAGE_2018-07-19-13-44-14_2.png]', '[]', '标题有时会断线0719-2', '内容最近从五月份开始有时候会断线', '[D:/images/repair_req_img/ mph333_REPAIR_REQUEST_IMAGE_2018-07-19-13-44-14_1.png]', '1');
 INSERT INTO `repair_request_info` VALUES ('15', 'mph333', '[D:/images/repair_req_nameplate/ mph333_REPAIR_REQUEST_NAMEPLATE_IMAGE_2018-07-19-13-45-23_2.png]', '[]', '标题有时会断线0719-2', '内容最近从五月份开始有时候会断线', '[D:/images/repair_req_img/ mph333_REPAIR_REQUEST_IMAGE_2018-07-19-13-45-23_1.png]', '1');
