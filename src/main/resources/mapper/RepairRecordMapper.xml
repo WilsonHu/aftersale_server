@@ -66,6 +66,14 @@
     <result column="repairActualIssueDescription" jdbcType="VARCHAR" property="repairActualIssueDescription" />
     <result column="repairActualMethod" jdbcType="VARCHAR" property="repairActualMethod" />
     <result column="afterResolvePictures" jdbcType="VARCHAR" property="afterResolvePictures" />
+    <result column="parts_name" jdbcType="VARCHAR" property="partsName" />
+    <result column="supplier" jdbcType="VARCHAR" property="partsSupplier" />
+    <result column="sendback_tracking_number" jdbcType="VARCHAR" property="sendbackTrackingNumber" />
+    <result column="sendback_tracking_pictrue" jdbcType="VARCHAR" property="sendbackTrackingPictrue" />
+    <result column="sendback_date" jdbcType="DATE" property="sendbackDate" />
+    <result column="sendback_confirmed_time" jdbcType="DATE" property="sendbackConfirmedTime" />
+    <result column="sendbackConfirmedPersonName" jdbcType="VARCHAR" property="sendbackConfirmedPersonName" />
+
   </resultMap>
   <select id="selectByNameplate" resultMap="BaseResultMap">
     SELECT *
@@ -77,6 +85,8 @@
     SELECT
     m.order_num,
     userOfCustomerInMachine.`name` as machineCustomerName,
+    parts_info.*,
+    userOfSendbackConfirmedPerson.name as sendbackConfirmedPersonName,
     a.name as machineAgentName,
     m.facory_date,
     rai.issue_position,
@@ -106,6 +116,8 @@
     LEFT JOIN user as userOfRepairChargePerson ON userOfRepairChargePerson.id = rr.repair_charge_person
     LEFT JOIN user as userOfCustomerInRepairRecord ON userOfCustomerInRepairRecord.id = rr.customer
     LEFT JOIN repair_request_info as rri ON rri.id = rr.repair_request_info
+    LEFT JOIN parts_info ON parts_info.repair_actual_info_id = rai.id
+    LEFT JOIN user as userOfSendbackConfirmedPerson ON userOfSendbackConfirmedPerson.id = parts_info.sendback_confirmed_person
     WHERE 1=1
     <if test="isFuzzy == true">
       <if test="nameplate != null and nameplate != ''">
