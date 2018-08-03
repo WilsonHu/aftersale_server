@@ -61,7 +61,7 @@ public class UserController {
 
     @PostMapping("/requestLogin")
     public Result requestLogin(@RequestParam String account, @RequestParam String password,
-                               @RequestParam(defaultValue = "0") String unionid) {
+                               @RequestParam String unionid) {
         boolean result = true;
 
         if(account == null || "".equals(account)) {

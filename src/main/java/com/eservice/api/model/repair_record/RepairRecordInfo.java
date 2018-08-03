@@ -318,6 +318,17 @@ public class RepairRecordInfo extends RepairRecord {
     }
 
     /**
+     * 维修员负责人电话
+     */
+    private String repairChargePersonPhone;
+
+    public void setRepairChargePersonPhone(String repairChargePersonPhone) {
+        this.repairChargePersonPhone = repairChargePersonPhone;
+    }
+
+    public String getRepairChargePersonPhone() {
+        return repairChargePersonPhone;
+    }
      * 配件名称，可以有多个配件要寄回， todo, 考虑调用一次PartsInfoController
      */
 

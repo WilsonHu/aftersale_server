@@ -46,6 +46,7 @@
     <result column="facory_date" jdbcType="DATE" property="facoryDate" />
     <result column="issuePositionName" jdbcType="VARCHAR" property="issuePositionName" />
     <result column="repairChargePersonName" jdbcType="VARCHAR" property="repairChargePersonName" />
+    <result column="repairChargePersonPhone" jdbcType="VARCHAR" property="repairChargePersonPhone" />
     <result column="machineCustomerPhone" jdbcType="VARCHAR" property="machineCustomerPhone" />
     <result column="machineAgentPhone" jdbcType="VARCHAR" property="machineAgentPhone" />
     <result column="machine_type" jdbcType="VARCHAR" property="machineType" />
@@ -81,6 +82,7 @@
     rai.issue_position,
     ipl.`name` as issuePositionName,
     userOfRepairChargePerson.`name` as repairChargePersonName,
+    userOfRepairChargePerson.`phone` as repairChargePersonPhone,
     userOfCustomerInMachine.phone as machineCustomerPhone,
     a.phone as machineAgentPhone,
     m.machine_type,m.needle_num,m.head_num,m.head_distance,m.x_distance,m.y_distance,

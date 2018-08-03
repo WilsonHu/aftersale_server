@@ -11,8 +11,6 @@ import java.util.List;
 
 public interface InstallRecordMapper extends Mapper<InstallRecord> {
 
-    List<InstallRecord> selectWaitProcessForGuest(@Param("contacter") String contacter);
-
     List<InstallRecord> selectByNameplate(@Param("nameplate")String nameplate);
 
     List<InstallRecordInfo> getInstallDetail(@Param("nameplate")String nameplate);
