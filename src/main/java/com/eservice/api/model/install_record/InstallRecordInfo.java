@@ -262,4 +262,17 @@ public class InstallRecordInfo extends InstallRecord {
     public void setMachineCustomerPhone(String machineCustomerPhone) {
         this.machineCustomerPhone = machineCustomerPhone;
     }
+
+    /**
+     * 调试员负责人电话
+     */
+    private String installChargePersonPhone;
+
+    public void setInstallChargePersonPhone(String installChargePersonPhone) {
+        this.installChargePersonPhone = installChargePersonPhone;
+    }
+
+    public String getInstallChargePersonPhone() {
+        return installChargePersonPhone;
+    }
 }

@@ -197,4 +197,55 @@ public class MaintainRecordInfo extends MaintainRecord {
         this.agent = agent;
     }
 
+    /**
+     * 该次保养的客户联系人的名字
+     */
+    private String customerNameInMaintainRecord;
+
+    public String getCustomerNameInMaintainRecord() {
+        return customerNameInMaintainRecord;
+    }
+
+    public void setCustomerNameInMaintainRecord(String customerNameInMaintainRecord) {
+        this.customerNameInMaintainRecord = customerNameInMaintainRecord;
+    }
+
+    /**
+     * 该次保养的客户联系人的电话
+     */
+    private String customerPhoneInMaintainRecord;
+
+    public String getCustomerPhoneInMaintainRecord() {
+        return customerPhoneInMaintainRecord;
+    }
+
+    public void setCustomerPhoneInMaintainRecord(String customerPhoneInMaintainRecord) {
+        this.customerPhoneInMaintainRecord = customerPhoneInMaintainRecord;
+    }
+
+    /**
+     * 保养员负责人电话
+     */
+    private String maintainChargePersonPhone;
+
+    public void setMaintainChargePersonPhone(String maintainChargePersonPhone) {
+        this.maintainChargePersonPhone = maintainChargePersonPhone;
+    }
+
+    public String getMaintainChargePersonPhone(){
+        return maintainChargePersonPhone;
+    }
+
+    /**
+     * 机器所属客户的电话
+     */
+    public String machineCustomerPhone;
+
+    public String getMachineCustomerPhone() {
+        return machineCustomerPhone;
+    }
+
+    public void setMachineCustomerPhone(String machineCustomerPhone) {
+        this.machineCustomerPhone = machineCustomerPhone;
+    }
 }

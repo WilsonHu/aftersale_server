@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50553
 File Encoding         : 65001
 
-Date: 2018-08-02 15:25:06
+Date: 2018-08-03 17:01:28
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -462,15 +462,16 @@ CREATE TABLE `parts_info` (
   KEY `fk_pi_sendback_confirmed_person` (`sendback_confirmed_person`),
   CONSTRAINT `fk_pi_repair_actual_info` FOREIGN KEY (`repair_actual_info_id`) REFERENCES `repair_actual_info` (`id`),
   CONSTRAINT `fk_pi_sendback_confirmed_person` FOREIGN KEY (`sendback_confirmed_person`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of parts_info
 -- ----------------------------
-INSERT INTO `parts_info` VALUES ('1', '马达12AB', '松下', 'param123', '1', '2', 'sf-track-number-111', null, '2018-08-01', null, null);
-INSERT INTO `parts_info` VALUES ('2', '上轴部件222', 'xs', 'pram222', '2', '3', 'sf-track-number-222', null, '2018-08-01', null, null);
-INSERT INTO `parts_info` VALUES ('3', '下轴部件333', 'xs', 'param33', '3', '4', 'sf-track-number-333', null, '2018-07-31', '2018-08-01 17:24:43', '2');
-INSERT INTO `parts_info` VALUES ('4', '下轴部件333part2', 'xs', 'ppp', '3', '4', 'sf-track-number-333', null, '2018-07-31', '2018-08-01 17:26:10', '2');
+INSERT INTO `parts_info` VALUES ('1', '马达12AB', '松下', 'param123', '1', '2', 'sf-track-number-111--马达12AB', '马达12AB 回寄的照片', '2018-08-01', null, null);
+INSERT INTO `parts_info` VALUES ('2', '上轴部件222', 'xs', 'pram222', '2', '3', 'sf-track-number-222', 'TEST上轴部件222回寄的照片', '2018-08-01', null, null);
+INSERT INTO `parts_info` VALUES ('3', '部件333part_A', 'xs', 'param33', '3', '4', 'sf-track-number-333-部件333--part_A', 'TEST部件333part_A-回寄的照片', '2018-07-31', '2018-08-01 17:24:43', '2');
+INSERT INTO `parts_info` VALUES ('4', '部件333part_B', 'xs', 'ppp', '3', '4', 'sf-track-number-333-部件333part_B', null, '2018-07-31', '2018-08-01 17:26:10', '2');
+INSERT INTO `parts_info` VALUES ('5', '部件333part_C', 'xs', 'ppram', '3', '4', 'sf-track-number-333--部件333part_C', null, '2018-07-31', '2018-08-01 17:26:10', '2');
 
 -- ----------------------------
 -- Table structure for `repair_actual_info`
@@ -686,8 +687,8 @@ CREATE TABLE `user` (
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES ('1', 'admin', 'admin', 'wechat222', '1', '1', '0', 'sinsim', '1', '13566667777', '2018-07-11 10:03:43', '客户地址admin111');
-INSERT INTO `user` VALUES ('2', 'admin_in_aftersale', 'admin_in_aftersale', null, '2', '1', '0', 'sinsim', '1', '13455556666', '2018-07-21 08:53:49', '客户地址admin_in_after111');
+INSERT INTO `user` VALUES ('1', 'admin', 'admin', 'wechat222', '1', '1', '0', 'sinsim', '1', 'admin13566667777', '2018-07-11 10:03:43', '客户地址admin111');
+INSERT INTO `user` VALUES ('2', 'admin_in_aftersale', 'admin_in_aftersale', null, '2', '1', '0', 'sinsim', '1', 'admin_in_aftersale13455556666', '2018-07-21 08:53:49', '客户地址admin_in_after111');
 INSERT INTO `user` VALUES ('3', 'repairPerson_zhansan', 'repairPerson_zhansan', '', '3', '1', '0', 'sinsim', '1', 'repairPerson_zhansan的电话13455556633', '0000-00-00 00:00:00', '客户地址zhangsan3333');
 INSERT INTO `user` VALUES ('4', 'repairPerson_lisi', 'repairPerson_lisi', '', '3', '2', '0', 'sinsim', '1', 'repairPerson_lisi1的电话3455556666', '0000-00-00 00:00:00', '客户地址Lisi444');
 INSERT INTO `user` VALUES ('5', 'agent444', 'agent444', null, '4', '2', '0', 'sinsim', '1', 'agent444的电话444', '0000-00-00 00:00:00', '客户地址agent444');

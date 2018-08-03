@@ -67,20 +67,20 @@ public class MaintainRecordController {
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
     }
-    /**
-     * 等待某个客户处理的保养任务
-     */
-    @PostMapping("/selectWaitProcessForGuest")
-    public Result selectWaitProcessForGuest(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size,
-                                            @RequestParam String contacter) {
-        PageHelper.startPage(page, size);
-        List<MaintainRecord> list = maintainRecordService.selectWaitProcessForGuest(contacter);
-        PageInfo pageInfo = new PageInfo(list);
-        return ResultGenerator.genSuccessResult(pageInfo);
-    }
 
     /**
      * 根据条件查询保养信息
+     * @param nameplate
+     * @param orderNum
+     * @param agent -- 代理商名称
+     * @param maintainStatus
+     * @param customerName 保养的客户联系人名称
+     * @param machineType
+     * @param maintainChargePerson 保养员负责人
+     * @param query_start_time_maintain
+     * @param query_finish_time_maintain
+     * @param isFuzzy
+     * @return
      */
     @PostMapping("/getMaintainRecordInfoList")
     public Result getMaintainRecordInfoList(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size,

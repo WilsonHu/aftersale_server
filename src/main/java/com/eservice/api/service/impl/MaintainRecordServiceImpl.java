@@ -28,10 +28,6 @@ public class MaintainRecordServiceImpl extends AbstractService<MaintainRecord> i
         return maintainRecordMapper.selectByNameplate(nameplate);
     }
 
-    public List<MaintainRecord> selectWaitProcessForGuest(String contacter){
-        return maintainRecordMapper.selectWaitProcessForGuest(contacter);
-    }
-
     public  List<MaintainRecordInfo> getMaintainRecordInfoList(String nameplate,
                                                                String orderNum,
                                                                String agent,

@@ -48,10 +48,14 @@
       <result column="loadinglist" jdbcType="VARCHAR" property="loadinglist" />
       <result column="geo_location" jdbcType="VARCHAR" property="geoLocation" />
       <result column="customerAddressInMaintainRecord" jdbcType="VARCHAR" property="customerAddressInMaintainRecord" />
+      <result column="customerNameInMaintainRecord" jdbcType="VARCHAR" property="customerNameInMaintainRecord" />
+      <result column="customerPhoneInMaintainRecord" jdbcType="VARCHAR" property="customerPhoneInMaintainRecord" />
       <result column="order_num" jdbcType="VARCHAR" property="orderNum" />
       <result column="facory_date" jdbcType="DATE" property="facoryDate" />
       <result column="maintain_charge_person_name" jdbcType="VARCHAR" property="maintainChargePersonName" />
+      <result column="maintainChargePersonPhone" jdbcType="VARCHAR" property="maintainChargePersonPhone" />
       <result column="machineCustomerName" jdbcType="VARCHAR" property="machineCustomerName" />
+      <result column="machineCustomerPhone" jdbcType="VARCHAR" property="machineCustomerPhone" />
       <result column="agent_name" jdbcType="VARCHAR" property="agent" />
 
 
@@ -63,18 +67,10 @@
     where mr.machine_nameplate='${nameplate}'
   </select>
 
-  <select id="selectWaitProcessForGuest" resultMap="BaseResultMap">
-    SELECT mr.*
-    from maintain_record as mr
-    JOIN contacts c on c.id = mr.contacter
-    <!-- 保养状态 0：待分配，1：已分配(但未接单）2：已接受任务，3：保养完成(客户未确认)，4：客户已确认保养结果
-    -->
-    where c.account = #{contacter} AND mr.maintain_status = 3
-  </select>
-
   <select id="getMaintainRecordInfoList" resultMap="MaintainRecordInfoMap">
       SELECT
       userOfCustomerInMachine.name as machineCustomerName,
+      userOfCustomerInMachine.phone as machineCustomerPhone,
       a.name as agent_name,
       mr.*,
       m.facory_date,
@@ -89,7 +85,11 @@
       m.loadinglist,
       m.geo_location,
       userOfCustomerInMaintainRecord.address as customerAddressInMaintainRecord,
-      userOfMaintainChargePerson.name AS maintain_charge_person_name
+      userOfCustomerInMaintainRecord.name  as customerNameInMaintainRecord,
+      userOfCustomerInMaintainRecord.phone as customerPhoneInMaintainRecord,
+      userOfMaintainChargePerson.name AS maintain_charge_person_name,
+      userOfMaintainChargePerson.phone as maintainChargePersonPhone
+
 
       FROM
       maintain_record mr

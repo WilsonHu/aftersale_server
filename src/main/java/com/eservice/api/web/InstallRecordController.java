@@ -59,18 +59,6 @@ public class InstallRecordController {
         return ResultGenerator.genSuccessResult(pageInfo);
     }
 
-    /**
-     * 等待某联系人处理的安装任务
-     */
-    @PostMapping("/selectWaitProcessForGuest")
-    public Result selectWaitProcessForGuest(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size,
-                                            @RequestParam String contacter) {
-        PageHelper.startPage(page, size);
-        List<InstallRecord> list = installRecordService.selectWaitProcessForGuest(contacter);
-        PageInfo pageInfo = new PageInfo(list);
-        return ResultGenerator.genSuccessResult(pageInfo);
-    }
-
     @PostMapping("/selectByNameplate")
     public Result selectByNameplate(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size,
                                     @RequestParam String nameplate) {

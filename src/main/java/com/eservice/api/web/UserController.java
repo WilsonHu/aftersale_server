@@ -65,7 +65,7 @@ public class UserController {
 
     @PostMapping("/requestLogin")
     public Result requestLogin(@RequestParam String account, @RequestParam String password,
-                               @RequestParam(defaultValue = "0") String unionid) {
+                               @RequestParam String unionid) {
         boolean result = true;
 
         if(account == null || "".equals(account)) {
@@ -89,7 +89,7 @@ public class UserController {
      * 6:返回属性为客户的联系人的user
      */
     @PostMapping("/getUsersByType")
-    public Result getCustomers(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size,
+    public Result getUsersByType(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size,
                                @RequestParam( ) String type) {
         PageHelper.startPage(page, size);
         List<User> list = userService.getUsersByType(type);
