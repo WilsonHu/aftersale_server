@@ -7,12 +7,11 @@ import com.eservice.api.service.UserService;
 import com.eservice.api.service.impl.UserServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.validation.constraints.NotNull;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -26,8 +25,13 @@ public class UserController {
     @Resource
     private UserServiceImpl userService;
 
-    @PostMapping("/add")
-    public Result add(User user) {
+    @PostMapping("/addStaff")
+    public Result addStaff(@RequestBody @NotNull User user) {
+        if(userService.selectByAccount(user.getAccount()) != null) {
+            return ResultGenerator.genFailResult("用户名已存在！");
+        }
+        user.setPassword("password");
+        user.setCreateTime(new Date());
         userService.save(user);
         return ResultGenerator.genSuccessResult();
     }
