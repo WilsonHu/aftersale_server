@@ -8,15 +8,17 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
 * Class Description: xxx
 * @author Wilson Hu
-* @date 2018/07/10.
+* @date 2018/08/04.
 */
 @RestController
 @RequestMapping("/forward/info")
@@ -25,7 +27,7 @@ public class ForwardInfoController {
     private ForwardInfoService forwardInfoService;
 
     @PostMapping("/add")
-    public Result add(ForwardInfo forwardInfo) {
+    public Result add(@RequestBody @NotNull ForwardInfo forwardInfo) {
         forwardInfoService.save(forwardInfo);
         return ResultGenerator.genSuccessResult();
     }
@@ -37,13 +39,13 @@ public class ForwardInfoController {
     }
 
     @PostMapping("/update")
-    public Result update(ForwardInfo forwardInfo) {
+    public Result update(@RequestBody @NotNull ForwardInfo forwardInfo) {
         forwardInfoService.update(forwardInfo);
         return ResultGenerator.genSuccessResult();
     }
 
     @PostMapping("/detail")
-    public Result detail(@RequestParam Integer id) {
+    public Result detail(@RequestParam @NotNull Integer id) {
         ForwardInfo forwardInfo = forwardInfoService.findById(id);
         return ResultGenerator.genSuccessResult(forwardInfo);
     }

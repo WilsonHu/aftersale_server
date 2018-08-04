@@ -8,15 +8,17 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
 * Class Description: xxx
 * @author Wilson Hu
-* @date 2018/07/10.
+* @date 2018/08/04.
 */
 @RestController
 @RequestMapping("/repair/members")
@@ -25,7 +27,7 @@ public class RepairMembersController {
     private RepairMembersService repairMembersService;
 
     @PostMapping("/add")
-    public Result add(RepairMembers repairMembers) {
+    public Result add(@RequestBody @NotNull RepairMembers repairMembers) {
         repairMembersService.save(repairMembers);
         return ResultGenerator.genSuccessResult();
     }
@@ -37,13 +39,13 @@ public class RepairMembersController {
     }
 
     @PostMapping("/update")
-    public Result update(RepairMembers repairMembers) {
+    public Result update(@RequestBody @NotNull RepairMembers repairMembers) {
         repairMembersService.update(repairMembers);
         return ResultGenerator.genSuccessResult();
     }
 
     @PostMapping("/detail")
-    public Result detail(@RequestParam Integer id) {
+    public Result detail(@RequestParam @NotNull Integer id) {
         RepairMembers repairMembers = repairMembersService.findById(id);
         return ResultGenerator.genSuccessResult(repairMembers);
     }

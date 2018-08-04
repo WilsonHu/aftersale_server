@@ -39,8 +39,7 @@ public class CodeGenerator {
 
     private static String[] TABLES = {
             "agent",
-            "contacts",
-            "customer",
+            "customer_company",
             "experience_lib",
             "forward_info",
             "install_customer_feedback",

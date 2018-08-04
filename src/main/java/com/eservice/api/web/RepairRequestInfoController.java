@@ -17,10 +17,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import javax.validation.constraints.NotNull;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -30,7 +32,7 @@ import java.util.List;
 /**
 * Class Description: xxx
 * @author Wilson Hu
-* @date 2018/07/10.
+* @date 2018/08/04.
 */
 @RestController
 @RequestMapping("/repair/request/info")
@@ -163,13 +165,13 @@ public class RepairRequestInfoController {
     }
 
     @PostMapping("/update")
-    public Result update(RepairRequestInfo repairRequestInfo) {
+    public Result update(@RequestBody @NotNull RepairRequestInfo repairRequestInfo) {
         repairRequestInfoService.update(repairRequestInfo);
         return ResultGenerator.genSuccessResult();
     }
 
     @PostMapping("/detail")
-    public Result detail(@RequestParam Integer id) {
+    public Result detail(@RequestParam @NotNull Integer id) {
         RepairRequestInfo repairRequestInfo = repairRequestInfoService.findById(id);
         return ResultGenerator.genSuccessResult(repairRequestInfo);
     }

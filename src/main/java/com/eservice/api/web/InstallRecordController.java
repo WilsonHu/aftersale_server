@@ -11,15 +11,17 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
 * Class Description: xxx
 * @author Wilson Hu
-* @date 2018/07/10.
+* @date 2018/08/04.
 */
 @RestController
 @RequestMapping("/install/record")
@@ -28,7 +30,7 @@ public class InstallRecordController {
     private InstallRecordServiceImpl installRecordService;
 
     @PostMapping("/add")
-    public Result add(InstallRecord installRecord) {
+    public Result add(@RequestBody @NotNull InstallRecord installRecord) {
         installRecordService.save(installRecord);
         return ResultGenerator.genSuccessResult();
     }
@@ -40,13 +42,13 @@ public class InstallRecordController {
     }
 
     @PostMapping("/update")
-    public Result update(InstallRecord installRecord) {
+    public Result update(@RequestBody @NotNull InstallRecord installRecord) {
         installRecordService.update(installRecord);
         return ResultGenerator.genSuccessResult();
     }
 
     @PostMapping("/detail")
-    public Result detail(@RequestParam Integer id) {
+    public Result detail(@RequestParam @NotNull Integer id) {
         InstallRecord installRecord = installRecordService.findById(id);
         return ResultGenerator.genSuccessResult(installRecord);
     }

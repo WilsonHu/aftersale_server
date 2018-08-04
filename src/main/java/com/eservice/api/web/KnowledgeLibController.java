@@ -8,15 +8,17 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
 * Class Description: xxx
 * @author Wilson Hu
-* @date 2018/07/10.
+* @date 2018/08/04.
 */
 @RestController
 @RequestMapping("/knowledge/lib")
@@ -25,7 +27,7 @@ public class KnowledgeLibController {
     private KnowledgeLibService knowledgeLibService;
 
     @PostMapping("/add")
-    public Result add(KnowledgeLib knowledgeLib) {
+    public Result add(@RequestBody @NotNull KnowledgeLib knowledgeLib) {
         knowledgeLibService.save(knowledgeLib);
         return ResultGenerator.genSuccessResult();
     }
@@ -37,13 +39,13 @@ public class KnowledgeLibController {
     }
 
     @PostMapping("/update")
-    public Result update(KnowledgeLib knowledgeLib) {
+    public Result update(@RequestBody @NotNull KnowledgeLib knowledgeLib) {
         knowledgeLibService.update(knowledgeLib);
         return ResultGenerator.genSuccessResult();
     }
 
     @PostMapping("/detail")
-    public Result detail(@RequestParam Integer id) {
+    public Result detail(@RequestParam @NotNull Integer id) {
         KnowledgeLib knowledgeLib = knowledgeLibService.findById(id);
         return ResultGenerator.genSuccessResult(knowledgeLib);
     }

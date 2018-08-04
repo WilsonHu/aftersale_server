@@ -2,30 +2,33 @@ package com.eservice.api.web;
 import com.eservice.api.core.Result;
 import com.eservice.api.core.ResultGenerator;
 import com.eservice.api.model.install_members.InstallMembers;
+import com.eservice.api.service.InstallMembersService;
 import com.eservice.api.service.impl.InstallMembersServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
 * Class Description: xxx
 * @author Wilson Hu
-* @date 2018/07/10.
+* @date 2018/08/04.
 */
 @RestController
 @RequestMapping("/install/members")
 public class InstallMembersController {
     @Resource
-    private InstallMembersServiceImpl installMembersService;
+    private InstallMembersService installMembersService;
 
     @PostMapping("/add")
-    public Result add(InstallMembers installMembers) {
+    public Result add(@RequestBody @NotNull InstallMembers installMembers) {
         installMembersService.save(installMembers);
         return ResultGenerator.genSuccessResult();
     }
@@ -37,13 +40,13 @@ public class InstallMembersController {
     }
 
     @PostMapping("/update")
-    public Result update(InstallMembers installMembers) {
+    public Result update(@RequestBody @NotNull InstallMembers installMembers) {
         installMembersService.update(installMembers);
         return ResultGenerator.genSuccessResult();
     }
 
     @PostMapping("/detail")
-    public Result detail(@RequestParam Integer id) {
+    public Result detail(@RequestParam @NotNull Integer id) {
         InstallMembers installMembers = installMembersService.findById(id);
         return ResultGenerator.genSuccessResult(installMembers);
     }

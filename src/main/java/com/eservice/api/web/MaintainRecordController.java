@@ -1,5 +1,4 @@
 package com.eservice.api.web;
-
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.eservice.api.core.Result;
@@ -17,18 +16,19 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
 
 /**
- * Class Description: xxx
- *
- * @author Wilson Hu
- * @date 2018/07/10.
- */
+* Class Description: xxx
+* @author Wilson Hu
+* @date 2018/08/04.
+*/
 @RestController
 @RequestMapping("/maintain/record")
 public class MaintainRecordController {
@@ -37,11 +37,9 @@ public class MaintainRecordController {
     @Resource
     private InstallMembersServiceImpl installMembersService;
 
-
     @PostMapping("/add")
-    public Result add(String maintainRecord) {
-        MaintainRecord model = JSON.parseObject(maintainRecord, MaintainRecord.class);
-        maintainRecordService.save(model);
+    public Result add(@RequestBody @NotNull MaintainRecord maintainRecord) {
+        maintainRecordService.save(maintainRecord);
         return ResultGenerator.genSuccessResult();
     }
 
@@ -52,14 +50,13 @@ public class MaintainRecordController {
     }
 
     @PostMapping("/update")
-    public Result update(String maintainRecord) {
-        MaintainRecord model = JSON.parseObject(maintainRecord, MaintainRecord.class);
-        maintainRecordService.update(model);
+    public Result update(@RequestBody @NotNull MaintainRecord maintainRecord) {
+        maintainRecordService.update(maintainRecord);
         return ResultGenerator.genSuccessResult();
     }
 
     @PostMapping("/detail")
-    public Result detail(@RequestParam Integer id) {
+    public Result detail(@RequestParam @NotNull Integer id) {
         MaintainRecord maintainRecord = maintainRecordService.findById(id);
         return ResultGenerator.genSuccessResult(maintainRecord);
     }

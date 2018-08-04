@@ -8,15 +8,17 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
 * Class Description: xxx
 * @author Wilson Hu
-* @date 2018/07/10.
+* @date 2018/08/04.
 */
 @RestController
 @RequestMapping("/maintain/customer/feedback")
@@ -25,7 +27,7 @@ public class MaintainCustomerFeedbackController {
     private MaintainCustomerFeedbackService maintainCustomerFeedbackService;
 
     @PostMapping("/add")
-    public Result add(MaintainCustomerFeedback maintainCustomerFeedback) {
+    public Result add(@RequestBody @NotNull MaintainCustomerFeedback maintainCustomerFeedback) {
         maintainCustomerFeedbackService.save(maintainCustomerFeedback);
         return ResultGenerator.genSuccessResult();
     }
@@ -37,13 +39,13 @@ public class MaintainCustomerFeedbackController {
     }
 
     @PostMapping("/update")
-    public Result update(MaintainCustomerFeedback maintainCustomerFeedback) {
+    public Result update(@RequestBody @NotNull MaintainCustomerFeedback maintainCustomerFeedback) {
         maintainCustomerFeedbackService.update(maintainCustomerFeedback);
         return ResultGenerator.genSuccessResult();
     }
 
     @PostMapping("/detail")
-    public Result detail(@RequestParam Integer id) {
+    public Result detail(@RequestParam @NotNull Integer id) {
         MaintainCustomerFeedback maintainCustomerFeedback = maintainCustomerFeedbackService.findById(id);
         return ResultGenerator.genSuccessResult(maintainCustomerFeedback);
     }

@@ -11,17 +11,18 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
- * Class Description: xxx
- *
- * @author Wilson Hu
- * @date 2018/07/10.
- */
+* Class Description: xxx
+* @author Wilson Hu
+* @date 2018/08/04.
+*/
 @RestController
 @RequestMapping("/install/lib")
 public class InstallLibController {
@@ -29,15 +30,14 @@ public class InstallLibController {
     private InstallLibServiceImpl installLibService;
 
     @PostMapping("/add")
-    public Result add(String installLib) {
-        InstallLib model = JSON.parseObject(installLib, InstallLib.class);
-        if (model.getIsBaseLib().equals(Constant.IsBaseLibEnum.BASE_LIB_ENUM.getValue().toString())) {
-            List<InstallLib> list = installLibService.selectLibList(Constant.IsBaseLibEnum.BASE_LIB_ENUM.getValue().toString(), model.getInstallLibName());
+    public Result add(@RequestBody @NotNull InstallLib installLib) {
+        if (installLib.getIsBaseLib().equals(Constant.IsBaseLibEnum.BASE_LIB_ENUM.getValue().toString())) {
+            List<InstallLib> list = installLibService.selectLibList(Constant.IsBaseLibEnum.BASE_LIB_ENUM.getValue().toString(), installLib.getInstallLibName());
             if (list.size() > 0) {
                 return ResultGenerator.genFailResult("不能添加重复的调试项!");
             }
         }
-        installLibService.save(model);
+        installLibService.save(installLib);
         return ResultGenerator.genSuccessResult();
     }
 
@@ -54,20 +54,19 @@ public class InstallLibController {
     }
 
     @PostMapping("/update")
-    public Result update(String installLib) {
-        InstallLib model = JSON.parseObject(installLib, InstallLib.class);
-        if (model.getIsBaseLib().equals(Constant.IsBaseLibEnum.BASE_LIB_ENUM.getValue().toString())) {
-            List<InstallLib> list = installLibService.selectLibList(Constant.IsBaseLibEnum.BASE_LIB_ENUM.getValue().toString(), model.getInstallLibName());
+    public Result update(@RequestBody @NotNull InstallLib installLib) {
+        if (installLib.getIsBaseLib().equals(Constant.IsBaseLibEnum.BASE_LIB_ENUM.getValue().toString())) {
+            List<InstallLib> list = installLibService.selectLibList(Constant.IsBaseLibEnum.BASE_LIB_ENUM.getValue().toString(), installLib.getInstallLibName());
             if (list.size() > 0) {
                 return ResultGenerator.genFailResult("不能添加重复的调试项!");
             }
         }
-        installLibService.update(model);
+        installLibService.update(installLib);
         return ResultGenerator.genSuccessResult();
     }
 
     @PostMapping("/detail")
-    public Result detail(@RequestParam Integer id) {
+    public Result detail(@RequestParam @NotNull Integer id) {
         InstallLib installLib = installLibService.findById(id);
         return ResultGenerator.genSuccessResult(installLib);
     }

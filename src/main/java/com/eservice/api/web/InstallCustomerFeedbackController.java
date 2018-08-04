@@ -8,15 +8,17 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
 * Class Description: xxx
 * @author Wilson Hu
-* @date 2018/07/10.
+* @date 2018/08/04.
 */
 @RestController
 @RequestMapping("/install/customer/feedback")
@@ -25,7 +27,7 @@ public class InstallCustomerFeedbackController {
     private InstallCustomerFeedbackService installCustomerFeedbackService;
 
     @PostMapping("/add")
-    public Result add(InstallCustomerFeedback installCustomerFeedback) {
+    public Result add(@RequestBody @NotNull InstallCustomerFeedback installCustomerFeedback) {
         installCustomerFeedbackService.save(installCustomerFeedback);
         return ResultGenerator.genSuccessResult();
     }
@@ -37,13 +39,13 @@ public class InstallCustomerFeedbackController {
     }
 
     @PostMapping("/update")
-    public Result update(InstallCustomerFeedback installCustomerFeedback) {
+    public Result update(@RequestBody @NotNull InstallCustomerFeedback installCustomerFeedback) {
         installCustomerFeedbackService.update(installCustomerFeedback);
         return ResultGenerator.genSuccessResult();
     }
 
     @PostMapping("/detail")
-    public Result detail(@RequestParam Integer id) {
+    public Result detail(@RequestParam @NotNull Integer id) {
         InstallCustomerFeedback installCustomerFeedback = installCustomerFeedbackService.findById(id);
         return ResultGenerator.genSuccessResult(installCustomerFeedback);
     }

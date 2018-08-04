@@ -13,17 +13,18 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
- * Class Description: xxx
- *
- * @author Wilson Hu
- * @date 2018/07/10.
- */
+* Class Description: xxx
+* @author Wilson Hu
+* @date 2018/08/04.
+*/
 @RestController
 @RequestMapping("/maintain/type")
 public class MaintainTypeController {
@@ -31,13 +32,12 @@ public class MaintainTypeController {
     private MaintainTypeServiceImpl maintainTypeService;
 
     @PostMapping("/add")
-    public Result add(String maintainType) {
-        MaintainType model = JSON.parseObject(maintainType, MaintainType.class);
-        List<MaintainType> list = maintainTypeService.getListByParam(model.getMaintainTypeName());
+    public Result add(@RequestBody @NotNull MaintainType maintainType) {
+        List<MaintainType> list = maintainTypeService.getListByParam(maintainType.getMaintainTypeName());
         if (list.size() > 0) {
             return ResultGenerator.genFailResult("不能添加重复的保养类型!");
         }
-        maintainTypeService.save(model);
+        maintainTypeService.save(maintainType);
         return ResultGenerator.genSuccessResult();
     }
 
@@ -48,19 +48,18 @@ public class MaintainTypeController {
     }
 
     @PostMapping("/update")
-    public Result update(String maintainType) {
-        MaintainType model = JSON.parseObject(maintainType, MaintainType.class);
+    public Result update(@RequestBody @NotNull MaintainType maintainType) {
 
-        List<MaintainType> list = maintainTypeService.getListByParam(model.getMaintainTypeName());
+        List<MaintainType> list = maintainTypeService.getListByParam(maintainType.getMaintainTypeName());
         if (list.size() > 0) {
             return ResultGenerator.genFailResult("不能修改为重复保养类型!");
         }
-        maintainTypeService.update(model);
+        maintainTypeService.update(maintainType);
         return ResultGenerator.genSuccessResult();
     }
 
     @PostMapping("/detail")
-    public Result detail(@RequestParam Integer id) {
+    public Result detail(@RequestParam @NotNull Integer id) {
         MaintainType maintainType = maintainTypeService.findById(id);
         return ResultGenerator.genSuccessResult(maintainType);
     }

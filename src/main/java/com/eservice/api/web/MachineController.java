@@ -16,17 +16,18 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
- * Class Description: xxx
- *
- * @author Wilson Hu
- * @date 2018/07/10.
- */
+* Class Description: xxx
+* @author Wilson Hu
+* @date 2018/08/04.
+*/
 @RestController
 @RequestMapping("/machine")
 public class MachineController {
@@ -34,9 +35,8 @@ public class MachineController {
     private MachineServiceImpl machineService;
 
     @PostMapping("/add")
-    public Result add(String machine) {
-        Machine model = JSON.parseObject(machine, Machine.class);
-        machineService.save(model);
+    public Result add(@RequestBody @NotNull Machine machine) {
+        machineService.save(machine);
         return ResultGenerator.genSuccessResult();
     }
 
@@ -77,14 +77,13 @@ public class MachineController {
     }
 
     @PostMapping("/update")
-    public Result update(String machine) {
-        Machine model = JSON.parseObject(machine, Machine.class);
-        machineService.update(model);
+    public Result update(@RequestBody @NotNull Machine machine) {
+        machineService.update(machine);
         return ResultGenerator.genSuccessResult();
     }
 
     @PostMapping("/detail")
-    public Result detail(@RequestParam Integer id) {
+    public Result detail(@RequestParam @NotNull Integer id) {
         Machine machine = machineService.findById(id);
         return ResultGenerator.genSuccessResult(machine);
     }
