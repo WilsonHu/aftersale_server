@@ -46,6 +46,10 @@ public class UserController {
 
     @PostMapping("/update")
     public Result update(@RequestBody @NotNull User user) {
+
+        if(user.getAgent() == null) {
+            user.setAgent(0);
+        }
         userService.update(user);
         return ResultGenerator.genSuccessResult();
     }
