@@ -1,4 +1,5 @@
 package com.eservice.api.web;
+
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.eservice.api.core.Result;
@@ -25,10 +26,11 @@ import java.util.Date;
 import java.util.List;
 
 /**
-* Class Description: xxx
-* @author Wilson Hu
-* @date 2018/08/04.
-*/
+ * Class Description: xxx
+ *
+ * @author Wilson Hu
+ * @date 2018/07/10.
+ */
 @RestController
 @RequestMapping("/maintain/record")
 public class MaintainRecordController {
@@ -37,9 +39,11 @@ public class MaintainRecordController {
     @Resource
     private InstallMembersServiceImpl installMembersService;
 
+
     @PostMapping("/add")
-    public Result add(@RequestBody @NotNull MaintainRecord maintainRecord) {
-        maintainRecordService.save(maintainRecord);
+    public Result add(String maintainRecord) {
+        MaintainRecord model = JSON.parseObject(maintainRecord, MaintainRecord.class);
+        maintainRecordService.save(model);
         return ResultGenerator.genSuccessResult();
     }
 
@@ -144,12 +148,9 @@ public class MaintainRecordController {
                 TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
                 return ResultGenerator.genFailResult("数据保存出错！");
             }
-            model.setCreateTime(new Date());
+            model.setUpdateTime(new Date());
             model.setMaintainStatus(com.eservice.api.service.common.Constant.MAINTAIN_STATUS_ASSIGNED);
-            maintainRecordService.save(model);
-            for (InstallMembers member : members) {
-                member.setInstallRecordId(model.getId());//set record Id
-            }
+            maintainRecordService.update(model);
             installMembersService.save(members);
         } catch (Exception ex) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
