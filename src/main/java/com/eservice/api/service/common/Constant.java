@@ -47,7 +47,7 @@ public class Constant {
         }
     }
 
-    public enum IsBaseLibEnum{
+    public enum IsBaseLibEnum {
         BASE_LIB_ENUM(0), NOT_BASE_LIB_ENUM(1);
         private Integer value;
 
@@ -93,4 +93,19 @@ public class Constant {
     public static final String MACHINE_STATUS_WAIT_FOR_MAINTAIN = "4";
     public static final String MACHINE_STATUS_WAIT_FOR_REPAIR = "5";
     public static final String MACHINE_STATUS_WAIT_FOR_CHECK = "6";
+
+
+    /*
+     保养状态
+      0：待分配，
+      1：已分配(但未接单）
+      2：已接受任务，
+      3：保养完成(客户未确认)，
+      4：已确认保养结果
+     */
+    public static final String MAINTAIN_STATUS_NOT_ASSIGN = "0";
+    public static final String MAINTAIN_STATUS_ASSIGNED = "1";
+    public static final String MAINTAIN_STATUS_TASK_DOING = "2";
+    public static final String MAINTAIN_STATUS_FINISHED = "3";
+    public static final String MAINTAIN_STATUS_CONFIRMED= "4";
 }

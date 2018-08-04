@@ -2,7 +2,7 @@ package com.eservice.api.web;
 import com.eservice.api.core.Result;
 import com.eservice.api.core.ResultGenerator;
 import com.eservice.api.model.install_members.InstallMembers;
-import com.eservice.api.service.InstallMembersService;
+import com.eservice.api.service.impl.InstallMembersServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,7 +22,7 @@ import java.util.List;
 @RequestMapping("/install/members")
 public class InstallMembersController {
     @Resource
-    private InstallMembersService installMembersService;
+    private InstallMembersServiceImpl installMembersService;
 
     @PostMapping("/add")
     public Result add(InstallMembers installMembers) {

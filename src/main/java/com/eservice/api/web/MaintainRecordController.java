@@ -1,35 +1,47 @@
 package com.eservice.api.web;
+
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.eservice.api.core.Result;
 import com.eservice.api.core.ResultGenerator;
+import com.eservice.api.model.install_members.InstallMembers;
 import com.eservice.api.model.machine.Machine;
 import com.eservice.api.model.maintain_record.MaintainRecord;
 import com.eservice.api.model.maintain_record.MaintainRecordInfo;
-import com.eservice.api.service.MaintainRecordService;
+import com.eservice.api.service.impl.InstallMembersServiceImpl;
 import com.eservice.api.service.impl.MaintainRecordServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
 
 /**
-* Class Description: xxx
-* @author Wilson Hu
-* @date 2018/07/10.
-*/
+ * Class Description: xxx
+ *
+ * @author Wilson Hu
+ * @date 2018/07/10.
+ */
 @RestController
 @RequestMapping("/maintain/record")
 public class MaintainRecordController {
     @Resource
     private MaintainRecordServiceImpl maintainRecordService;
+    @Resource
+    private InstallMembersServiceImpl installMembersService;
+
 
     @PostMapping("/add")
-    public Result add(MaintainRecord maintainRecord) {
-        maintainRecordService.save(maintainRecord);
+    public Result add(String maintainRecord) {
+        MaintainRecord model = JSON.parseObject(maintainRecord, MaintainRecord.class);
+        maintainRecordService.save(model);
         return ResultGenerator.genSuccessResult();
     }
 
@@ -40,8 +52,9 @@ public class MaintainRecordController {
     }
 
     @PostMapping("/update")
-    public Result update(MaintainRecord maintainRecord) {
-        maintainRecordService.update(maintainRecord);
+    public Result update(String maintainRecord) {
+        MaintainRecord model = JSON.parseObject(maintainRecord, MaintainRecord.class);
+        maintainRecordService.update(model);
         return ResultGenerator.genSuccessResult();
     }
 
@@ -70,13 +83,14 @@ public class MaintainRecordController {
 
     /**
      * 根据条件查询保养信息
+     *
      * @param nameplate
      * @param orderNum
-     * @param agent -- 代理商名称
+     * @param agent                      -- 代理商名称
      * @param maintainStatus
-     * @param customerName 保养的客户联系人名称
+     * @param customerName               保养的客户联系人名称
      * @param machineType
-     * @param maintainChargePerson 保养员负责人
+     * @param maintainChargePerson       保养员负责人
      * @param query_start_time_maintain
      * @param query_finish_time_maintain
      * @param isFuzzy
@@ -115,10 +129,35 @@ public class MaintainRecordController {
      */
     @PostMapping("/selectMaintainTaskMachine")
     public Result selectMaintainTaskMachine(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size,
-                                          @RequestParam String userName) {
+                                            @RequestParam String userName) {
         PageHelper.startPage(page, size);
         List<Machine> list = maintainRecordService.selectMaintainTaskMachine(userName);
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @PostMapping("/AssignTask")
+    public Result AssignTask(String maintainRecord, String installMembers) {
+        try {
+            MaintainRecord model = JSON.parseObject(maintainRecord, MaintainRecord.class);
+            List<InstallMembers> members = JSONObject.parseArray(installMembers, InstallMembers.class);
+
+            if (model == null || members == null || members.size() < 1) {
+                TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+                return ResultGenerator.genFailResult("数据保存出错！");
+            }
+            model.setCreateTime(new Date());
+            model.setMaintainStatus(com.eservice.api.service.common.Constant.MAINTAIN_STATUS_ASSIGNED);
+            maintainRecordService.save(model);
+            for (InstallMembers member : members) {
+                member.setInstallRecordId(model.getId());//set record Id
+            }
+            installMembersService.save(members);
+        } catch (Exception ex) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return ResultGenerator.genFailResult("数据保存出错！" + ex.getMessage());
+        }
+        return ResultGenerator.genSuccessResult();
     }
 }
