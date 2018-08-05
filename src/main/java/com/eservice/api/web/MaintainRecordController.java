@@ -41,9 +41,8 @@ public class MaintainRecordController {
 
 
     @PostMapping("/add")
-    public Result add(String maintainRecord) {
-        MaintainRecord model = JSON.parseObject(maintainRecord, MaintainRecord.class);
-        maintainRecordService.save(model);
+    public Result add(@RequestBody @NotNull MaintainRecord maintainRecord) {
+        maintainRecordService.save(maintainRecord);
         return ResultGenerator.genSuccessResult();
     }
 

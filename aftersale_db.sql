@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50547
 File Encoding         : 65001
 
-Date: 2018-08-04 11:19:08
+Date: 2018-08-05 11:06:24
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -146,7 +146,7 @@ CREATE TABLE `install_members` (
   KEY `fk_user_id` (`user_id`),
   CONSTRAINT `fk_install_record_id` FOREIGN KEY (`install_record_id`) REFERENCES `install_record` (`id`),
   CONSTRAINT `fk_user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of install_members
@@ -155,6 +155,8 @@ INSERT INTO `install_members` VALUES ('1', '1', '3');
 INSERT INTO `install_members` VALUES ('2', '2', '3');
 INSERT INTO `install_members` VALUES ('3', '3', '3');
 INSERT INTO `install_members` VALUES ('4', '4', '4');
+INSERT INTO `install_members` VALUES ('5', '6', '3');
+INSERT INTO `install_members` VALUES ('6', '6', '4');
 
 -- ----------------------------
 -- Table structure for `install_record`
@@ -275,7 +277,7 @@ CREATE TABLE `machine` (
   KEY `nameplate` (`nameplate`),
   KEY `fk_m_customer` (`customer`),
   CONSTRAINT `fk_m_customer` FOREIGN KEY (`customer`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of machine
@@ -288,6 +290,8 @@ INSERT INTO `machine` VALUES ('5', 'mph777', 'ddh0550', 'th_agent_customer444', 
 INSERT INTO `machine` VALUES ('6', 'mph788', 'ddh0550', 'th_agent_customer444', 'geo999', '机器地址xxx路', '1', null, '帽子机', '31', '55', '59', '66', '100', null, '合同客户223', '11', '2018-07-11', '1', null);
 INSERT INTO `machine` VALUES ('7', 'mph789', 'ddh0550', 'th_agent_customer444', 'geo999', '机器地址xxx路', '1', null, '帽子机', '31', '55', '59', '66', '100', null, '合同客户223', '12', '2018-07-22', '1', null);
 INSERT INTO `machine` VALUES ('8', 'mph--all-data', 'ddh0550', 'th_agent_customer444', 'geottt23.33', '机器地址xxx路11h', '1', null, 'maoziji', '31', '55', '59', '66', '100', null, '合同客户223', '11', '2018-07-22', '0', null);
+INSERT INTO `machine` VALUES ('9', '1806004', 'XS-1801109B', 'XS-1801109', null, '', '1', null, '高速双凸轮', '6', '800', '1600', '165', '88+2', null, '绍兴华文电脑刺绣有限公司', '2', '2018-08-25', '0', null);
+INSERT INTO `machine` VALUES ('10', '1806003', 'XS-1801109B', 'XS-1801109', null, '', '1', null, '高速双凸轮', '6', '800', '1600', '165', '88+2', null, '绍兴华文电脑刺绣有限公司', '2', '2018-08-25', '0', null);
 
 -- ----------------------------
 -- Table structure for `maintain_abnormal_record`
@@ -337,12 +341,17 @@ CREATE TABLE `maintain_lib` (
   PRIMARY KEY (`id`),
   KEY `fk_mi_maintain_lib` (`maintain_lib_name`) USING BTREE,
   KEY `fk_mi_maintain_type` (`maintain_type`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of maintain_lib
 -- ----------------------------
 INSERT INTO `maintain_lib` VALUES ('2', 'y54yrt', '0', null);
+INSERT INTO `maintain_lib` VALUES ('3', 'aaa', '0', null);
+INSERT INTO `maintain_lib` VALUES ('5', 'aaa', '1', 'dsfdsfdsfdsfdsafasdfdasfasd');
+INSERT INTO `maintain_lib` VALUES ('6', 'aaa', '1', 'sdfsdfsdfasd');
+INSERT INTO `maintain_lib` VALUES ('7', 'bbbb', '0', null);
+INSERT INTO `maintain_lib` VALUES ('8', 'bbbb', '1', 'cccccc');
 
 -- ----------------------------
 -- Table structure for `maintain_members`
@@ -377,13 +386,13 @@ CREATE TABLE `maintain_record` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID号',
   `machine_nameplate` varchar(255) NOT NULL COMMENT '机器铭牌号，以此为依据查询机型信息,客户能看到的也是这个铭牌号',
   `maintain_lib_name` varchar(255) NOT NULL COMMENT '1：一期，2：二期，3：三期保养',
-  `maintain_date_plan` date NOT NULL,
+  `maintain_date_plan` date DEFAULT NULL,
   `maintain_date_actual` date DEFAULT NULL COMMENT '实际保养日期',
-  `maintain_charge_person` int(10) unsigned NOT NULL COMMENT '保养人员',
+  `maintain_charge_person` int(10) unsigned DEFAULT NULL COMMENT '保养人员',
   `maintain_suggestion` varchar(255) DEFAULT NULL COMMENT '保养建议',
-  `customer` int(10) unsigned NOT NULL COMMENT '客户',
+  `customer` int(10) unsigned DEFAULT NULL COMMENT '客户',
   `maintain_info` text COMMENT '保养json 举例:\r\n[\r\n  {\r\n        "maintain_lib_name":"一期",\r\n        "maintain_type":"注油润滑",\r\n        "maintain_content":"给针杆、主动轴、一号销、旋梭轴、旋梭加注适量白油；给Y前后、X驱动导轨及滑车轴承加注适量润滑脂。" \r\n		"maintain_value":"1"			//1代表确认OK\r\n    },\r\n    {\r\n        "maintain_lib_name":"一期",\r\n        "maintain_type":"检查修理",\r\n        "maintain_content":"1.检查中间脚盘是否正常" \r\n		"maintain_value":"1" //1代表确认OK\r\n    },\r\n    {\r\n        "maintain_lib_name":"一期",\r\n        "maintain_type":"检查修理",\r\n        "maintain_content":"2. 检查主轴皮带、上下轴同步带的张力和位置，带轮螺丝是否有松动；" \r\n		"maintain_value":"0"  //0代表异常  \r\n		"maintain_abnormal_record": {}  //maintain_abnormal_record类型的json\r\n    }\r\n]',
-  `create_time` datetime NOT NULL,
+  `create_time` datetime DEFAULT NULL,
   `update_time` datetime DEFAULT NULL,
   `maintain_status` varchar(255) NOT NULL COMMENT '保养状态 0：待分配，1：已分配(但未接单）2：已接受任务，3：保养完成(客户未确认)，4：客户已确认保养结果',
   `customer_feedback` int(10) unsigned DEFAULT NULL COMMENT '用户反馈（意见&建议）',
@@ -392,10 +401,9 @@ CREATE TABLE `maintain_record` (
   KEY `fk_mr_maintain_person` (`maintain_charge_person`),
   KEY `fk_mr_contacter` (`customer`),
   KEY `fk_mr_customer_feedback` (`customer_feedback`),
-  CONSTRAINT `fk_mr_customer` FOREIGN KEY (`customer`) REFERENCES `user` (`id`),
   CONSTRAINT `fk_mr_machine_nameplate` FOREIGN KEY (`machine_nameplate`) REFERENCES `machine` (`nameplate`),
   CONSTRAINT `fk_mr_maintain_charge_person` FOREIGN KEY (`maintain_charge_person`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of maintain_record
@@ -405,6 +413,8 @@ INSERT INTO `maintain_record` VALUES ('2', 'mph333', '二期保养', '2018-07-16
 INSERT INTO `maintain_record` VALUES ('3', 'mph--all-data', '三期保养', '2018-07-25', '2018-07-26', '9', 'ssgeeee', '11', 'maintain infos112233', '2018-07-25 17:51:26', null, '2', '2');
 INSERT INTO `maintain_record` VALUES ('4', 'mph--all-data', '二期保养', '2018-07-12', '2018-07-25', '4', 'ssssssssssgestsss', '11', 'maint infos23444', '2018-07-25 18:07:32', null, '1', '1');
 INSERT INTO `maintain_record` VALUES ('5', 'mph--all-data', '三期保养', '2018-08-25', null, '3', null, '6', null, '2018-08-04 10:30:47', null, '1', null);
+INSERT INTO `maintain_record` VALUES ('6', 'mph788', 'y54yrt', '2018-08-31', null, '4', null, '6', null, '2018-08-05 00:00:00', '2018-08-05 10:45:36', '1', null);
+INSERT INTO `maintain_record` VALUES ('7', 'mph555', 'aaa', null, null, null, null, null, null, '2018-08-05 00:00:00', null, '0', null);
 
 -- ----------------------------
 -- Table structure for `maintain_type`
@@ -415,11 +425,13 @@ CREATE TABLE `maintain_type` (
   `maintain_type_name` varchar(255) NOT NULL COMMENT '保养类型，比如清洁清理/注油润滑/检查修理',
   PRIMARY KEY (`id`),
   KEY `type_name` (`maintain_type_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of maintain_type
 -- ----------------------------
+INSERT INTO `maintain_type` VALUES ('4', 'aaa');
+INSERT INTO `maintain_type` VALUES ('5', 'bbb');
 INSERT INTO `maintain_type` VALUES ('3', '检查修理');
 INSERT INTO `maintain_type` VALUES ('2', '注油润滑');
 INSERT INTO `maintain_type` VALUES ('1', '清理清洁');
