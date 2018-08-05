@@ -188,4 +188,17 @@ public class MachineController {
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
     }
+
+    /**
+     * 客户端的要获取的待处理机器列表
+     * 获取该客户的安装、保养、维修、配件寄回等任务信息（包括机器信息+任务信息）
+     */
+    @PostMapping("/selectBaseRecordByUser")
+    public Result selectBaseRecordByUser(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size,
+                                              @RequestParam String userName) {
+        PageHelper.startPage(page, size);
+        List<MachineBaseRecordInfo> list = machineService.selectBaseRecordByUser(userName);
+        PageInfo pageInfo = new PageInfo(list);
+        return ResultGenerator.genSuccessResult(pageInfo);
+    }
 }

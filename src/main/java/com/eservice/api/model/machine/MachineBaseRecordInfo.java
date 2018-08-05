@@ -120,4 +120,17 @@ public class MachineBaseRecordInfo extends Machine {
         return installStatus;
     }
 
+    /**
+     * 寄回配件的状态
+     * 1: 无需回寄，其他表示需要寄回(具体 2：未寄回，3：已寄回（待确认），4：已确认)
+     */
+    private String partsStatus;
+
+    public void setPartsStatus(String partsStatus) {
+        this.partsStatus = partsStatus;
+    }
+
+    public String getPartsStatus() {
+        return partsStatus;
+    }
 }

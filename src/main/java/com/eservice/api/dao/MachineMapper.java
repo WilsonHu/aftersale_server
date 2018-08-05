@@ -24,4 +24,5 @@ public interface MachineMapper extends Mapper<Machine> {
                                               @Param("isFuzzy") boolean isFuzzy);
 
     List<MachineBaseRecordInfo> selectBaseRecordByNameplate(@Param("nameplate") String nameplate);
+    List<MachineBaseRecordInfo> selectBaseRecordByUser(@Param("userName") String userName);
 }

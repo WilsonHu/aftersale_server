@@ -55,4 +55,9 @@ public class MachineServiceImpl extends AbstractService<Machine> implements Mach
     public List<MachineBaseRecordInfo> selectBaseRecordByNameplate(String nameplate){
         return machineMapper.selectBaseRecordByNameplate(nameplate);
     }
+
+    public List<MachineBaseRecordInfo> selectBaseRecordByUser(String userName){
+        return machineMapper.selectBaseRecordByUser(userName);
+    }
+
 }

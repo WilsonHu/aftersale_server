@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50553
 File Encoding         : 65001
 
-Date: 2018-08-01 11:02:56
+Date: 2018-08-05 13:58:54
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -332,22 +332,21 @@ CREATE TABLE `maintain_record` (
   `machine_nameplate` varchar(255) NOT NULL COMMENT '机器铭牌号，以此为依据查询机型信息,客户能看到的也是这个铭牌号',
   `maintain_lib_name` varchar(255) NOT NULL COMMENT '1：一期，2：二期，3：三期保养',
   `maintain_date_plan` date NOT NULL,
-  `maintain_date_actual` date NOT NULL COMMENT '实际保养日期',
+  `maintain_date_actual` date DEFAULT NULL COMMENT '实际保养日期',
   `maintain_charge_person` int(10) unsigned NOT NULL COMMENT '保养人员',
   `maintain_suggestion` varchar(255) DEFAULT NULL COMMENT '保养建议',
   `customer` int(10) unsigned NOT NULL COMMENT '客户',
-  `maintain_info` text NOT NULL COMMENT '保养json 举例:\r\n[\r\n  {\r\n        "maintain_lib_name":"一期",\r\n        "maintain_type":"注油润滑",\r\n        "maintain_content":"给针杆、主动轴、一号销、旋梭轴、旋梭加注适量白油；给Y前后、X驱动导轨及滑车轴承加注适量润滑脂。" \r\n		"maintain_value":"1"			//1代表确认OK\r\n    },\r\n    {\r\n        "maintain_lib_name":"一期",\r\n        "maintain_type":"检查修理",\r\n        "maintain_content":"1.检查中间脚盘是否正常" \r\n		"maintain_value":"1" //1代表确认OK\r\n    },\r\n    {\r\n        "maintain_lib_name":"一期",\r\n        "maintain_type":"检查修理",\r\n        "maintain_content":"2. 检查主轴皮带、上下轴同步带的张力和位置，带轮螺丝是否有松动；" \r\n		"maintain_value":"0"  //0代表异常  \r\n		"maintain_abnormal_record": {}  //maintain_abnormal_record类型的json\r\n    }\r\n]',
+  `maintain_info` text COMMENT '保养json 举例:\r\n[\r\n  {\r\n        "maintain_lib_name":"一期",\r\n        "maintain_type":"注油润滑",\r\n        "maintain_content":"给针杆、主动轴、一号销、旋梭轴、旋梭加注适量白油；给Y前后、X驱动导轨及滑车轴承加注适量润滑脂。" \r\n		"maintain_value":"1"			//1代表确认OK\r\n    },\r\n    {\r\n        "maintain_lib_name":"一期",\r\n        "maintain_type":"检查修理",\r\n        "maintain_content":"1.检查中间脚盘是否正常" \r\n		"maintain_value":"1" //1代表确认OK\r\n    },\r\n    {\r\n        "maintain_lib_name":"一期",\r\n        "maintain_type":"检查修理",\r\n        "maintain_content":"2. 检查主轴皮带、上下轴同步带的张力和位置，带轮螺丝是否有松动；" \r\n		"maintain_value":"0"  //0代表异常  \r\n		"maintain_abnormal_record": {}  //maintain_abnormal_record类型的json\r\n    }\r\n]',
   `create_time` datetime NOT NULL,
   `update_time` datetime DEFAULT NULL,
   `maintain_status` varchar(255) NOT NULL COMMENT '保养状态 0：待分配，1：已分配(但未接单）2：已接受任务，3：保养完成(客户未确认)，4：客户已确认保养结果',
-  `customer_feedback` int(10) unsigned NOT NULL COMMENT '用户反馈（意见&建议）',
+  `customer_feedback` int(10) unsigned DEFAULT NULL COMMENT '用户反馈（意见&建议）',
   PRIMARY KEY (`id`),
   KEY `fk_mr_machine_nameplate` (`machine_nameplate`),
   KEY `fk_mr_maintain_person` (`maintain_charge_person`),
   KEY `fk_mr_contacter` (`customer`),
   KEY `fk_mr_customer_feedback` (`customer_feedback`),
   CONSTRAINT `fk_mr_customer` FOREIGN KEY (`customer`) REFERENCES `user` (`id`),
-  CONSTRAINT `fk_mr_customer_feedback` FOREIGN KEY (`customer_feedback`) REFERENCES `maintain_customer_feedback` (`id`),
   CONSTRAINT `fk_mr_machine_nameplate` FOREIGN KEY (`machine_nameplate`) REFERENCES `machine` (`nameplate`),
   CONSTRAINT `fk_mr_maintain_charge_person` FOREIGN KEY (`maintain_charge_person`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -545,7 +544,7 @@ CREATE TABLE `role` (
   `role_des` varchar(255) DEFAULT NULL COMMENT '角色说明',
   `role_scope` text COMMENT '角色权限列表',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of role

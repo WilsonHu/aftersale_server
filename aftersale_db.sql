@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50547
 File Encoding         : 65001
 
-Date: 2018-08-05 14:50:18
+Date: 2018-08-05 14:49:05
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -463,16 +463,18 @@ CREATE TABLE `parts_info` (
   KEY `fk_pi_sendback_confirmed_person` (`sendback_confirmed_person`),
   CONSTRAINT `fk_pi_repair_actual_info` FOREIGN KEY (`repair_actual_info_id`) REFERENCES `repair_actual_info` (`id`),
   CONSTRAINT `fk_pi_sendback_confirmed_person` FOREIGN KEY (`sendback_confirmed_person`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of parts_info
 -- ----------------------------
-INSERT INTO `parts_info` VALUES ('1', '马达12AB', '松下', 'param123', '1', '2', 'sf-track-number-111--马达12AB', '马达12AB 回寄的照片', '2018-08-01', null, null);
+INSERT INTO `parts_info` VALUES ('1', '马达12AB', '松下', 'param123', '1', '3', 'sf-track-number-111--马达12AB', '马达12AB 回寄的照片', '2018-08-01', null, null);
 INSERT INTO `parts_info` VALUES ('2', '上轴部件222', 'xs', 'pram222', '2', '3', 'sf-track-number-222', 'TEST上轴部件222回寄的照片', '2018-08-01', null, null);
 INSERT INTO `parts_info` VALUES ('3', '部件333part_A', 'xs', 'param33', '3', '4', 'sf-track-number-333-部件333--part_A', 'TEST部件333part_A-回寄的照片', '2018-07-31', '2018-08-01 17:24:43', '2');
 INSERT INTO `parts_info` VALUES ('4', '部件333part_B', 'xs', 'ppp', '3', '4', 'sf-track-number-333-部件333part_B', null, '2018-07-31', '2018-08-01 17:26:10', '2');
 INSERT INTO `parts_info` VALUES ('5', '部件333part_C', 'xs', 'ppram', '3', '4', 'sf-track-number-333--部件333part_C', null, '2018-07-31', '2018-08-01 17:26:10', '2');
+INSERT INTO `parts_info` VALUES ('6', '部件666', '部件供应商666', '参数666', '1', '2', '未寄回--无快递单号', null, '0000-00-00', null, null);
+INSERT INTO `parts_info` VALUES ('7', '部件777', '部件供应商777', null, '5', '2', null, null, null, null, null);
 
 -- ----------------------------
 -- Table structure for `repair_actual_info`
@@ -490,7 +492,7 @@ CREATE TABLE `repair_actual_info` (
   KEY `fk_rai_issue_position` (`issue_position`),
   CONSTRAINT `fk_rai_issue_position` FOREIGN KEY (`issue_position`) REFERENCES `issue_position_list` (`id`),
   CONSTRAINT `fk_rai_repair_record_id` FOREIGN KEY (`repair_record_id`) REFERENCES `repair_record` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of repair_actual_info
@@ -499,6 +501,7 @@ INSERT INTO `repair_actual_info` VALUES ('1', '3', '1', '问题描述,实际发�
 INSERT INTO `repair_actual_info` VALUES ('2', '4', '3', '问题描述,实际发生了xx22222', '实际维修方法22222', '维修后的图片路径222');
 INSERT INTO `repair_actual_info` VALUES ('3', '5', '2', '问题描述,实际发生了xx3333', '实际维修方法3333', '维修后的图片路径333');
 INSERT INTO `repair_actual_info` VALUES ('4', '6', '1', '问题描述,实际发生了xx4444', '实际维修方法4444', '维修后的图片路径444');
+INSERT INTO `repair_actual_info` VALUES ('5', '10', '3', '问题描述,实际发生了xx55555', '实际维修方法5555', null);
 
 -- ----------------------------
 -- Table structure for `repair_customer_feedback`
@@ -598,7 +601,7 @@ INSERT INTO `repair_record` VALUES ('6', null, '7', 'mph333', '14', '0', '3', nu
 INSERT INTO `repair_record` VALUES ('7', null, '8', 'mph2233', '15', '0', '3', null, '2018-07-26 10:16:03', null, '3', '2018-07-19 13:45:23', null, null);
 INSERT INTO `repair_record` VALUES ('8', null, '8', 'mph555', '16', '0', '3', null, '2018-07-25 10:16:18', null, '4', '2018-07-19 13:46:38', null, null);
 INSERT INTO `repair_record` VALUES ('9', null, '9', 'mph777', '17', '1', '10', null, '2018-07-26 10:16:07', null, '2', '2018-07-19 13:50:51', null, null);
-INSERT INTO `repair_record` VALUES ('10', null, '6', 'mph789', '18', '1', '10', null, '2018-07-26 10:16:07', null, '3', '2018-07-19 13:55:23', null, null);
+INSERT INTO `repair_record` VALUES ('10', null, '14', 'mph789', '18', '1', '10', null, '2018-07-26 10:16:07', null, '3', '2018-07-19 13:55:23', null, null);
 
 -- ----------------------------
 -- Table structure for `repair_request_info`
