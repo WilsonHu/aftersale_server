@@ -4,11 +4,11 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.eservice.api.core.Result;
 import com.eservice.api.core.ResultGenerator;
-import com.eservice.api.model.install_members.InstallMembers;
+import com.eservice.api.model.maintain_members.MaintainMembers;
 import com.eservice.api.model.machine.Machine;
 import com.eservice.api.model.maintain_record.MaintainRecord;
 import com.eservice.api.model.maintain_record.MaintainRecordInfo;
-import com.eservice.api.service.impl.InstallMembersServiceImpl;
+import com.eservice.api.service.impl.MaintainMembersServiceImpl;
 import com.eservice.api.service.impl.MaintainRecordServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -37,7 +37,7 @@ public class MaintainRecordController {
     @Resource
     private MaintainRecordServiceImpl maintainRecordService;
     @Resource
-    private InstallMembersServiceImpl installMembersService;
+    private MaintainMembersServiceImpl maintainMembersService;
 
 
     @PostMapping("/add")
@@ -138,10 +138,10 @@ public class MaintainRecordController {
 
     @Transactional(rollbackFor = Exception.class)
     @PostMapping("/AssignTask")
-    public Result AssignTask(String maintainRecord, String installMembers) {
+    public Result AssignTask(String maintainRecord, String maintainMembers) {
         try {
             MaintainRecord model = JSON.parseObject(maintainRecord, MaintainRecord.class);
-            List<InstallMembers> members = JSONObject.parseArray(installMembers, InstallMembers.class);
+            List<MaintainMembers> members = JSONObject.parseArray(maintainMembers, MaintainMembers.class);
 
             if (model == null || members == null || members.size() < 1) {
                 TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
@@ -150,7 +150,7 @@ public class MaintainRecordController {
             model.setUpdateTime(new Date());
             model.setMaintainStatus(com.eservice.api.service.common.Constant.MAINTAIN_STATUS_ASSIGNED);
             maintainRecordService.update(model);
-            installMembersService.save(members);
+            maintainMembersService.save(members);
         } catch (Exception ex) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return ResultGenerator.genFailResult("数据保存出错！" + ex.getMessage());

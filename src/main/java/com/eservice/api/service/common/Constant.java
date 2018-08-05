@@ -108,4 +108,19 @@ public class Constant {
     public static final String MAINTAIN_STATUS_TASK_DOING = "2";
     public static final String MAINTAIN_STATUS_FINISHED = "3";
     public static final String MAINTAIN_STATUS_CONFIRMED= "4";
+
+    /**
+     * 安装状态，
+     0：待分配，
+     1：已分配(但未接单）
+     2：已接受
+     3：完成(客户未确认)，
+     4：已确认
+     */
+    public static final String INSTALL_STATUS_NOT_ASSIGN = "0";
+    public static final String INSTALL_STATUS_ASSIGNED = "1";
+    public static final String INSTALL_STATUS_TASK_DOING = "2";
+    public static final String INSTALL_STATUS_FINISHED = "3";
+    public static final String INSTALL_STATUS_CONFIRMED= "4";
+
 }

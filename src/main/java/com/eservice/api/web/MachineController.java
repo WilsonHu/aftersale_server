@@ -4,10 +4,11 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.eservice.api.core.Result;
 import com.eservice.api.core.ResultGenerator;
+import com.eservice.api.model.install_record.InstallRecord;
 import com.eservice.api.model.machine.Machine;
 import com.eservice.api.model.machine.MachineBaseRecordInfo;
 import com.eservice.api.model.machine.MachineInfo;
-import com.eservice.api.service.MachineService;
+import com.eservice.api.service.impl.InstallRecordServiceImpl;
 import com.eservice.api.service.impl.MachineServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -21,18 +22,23 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 import java.util.List;
 
 /**
-* Class Description: xxx
-* @author Wilson Hu
-* @date 2018/08/04.
-*/
+ * Class Description: xxx
+ *
+ * @author Wilson Hu
+ * @date 2018/08/04.
+ */
 @RestController
 @RequestMapping("/machine")
 public class MachineController {
     @Resource
     private MachineServiceImpl machineService;
+
+    @Resource
+    private InstallRecordServiceImpl installRecordService;
 
     @PostMapping("/add")
     public Result add(@RequestBody @NotNull Machine machine) {
@@ -58,6 +64,12 @@ public class MachineController {
                     }
                     item.setStatus("1");
                     machineService.save(item);
+
+                    InstallRecord ir = new InstallRecord();
+                    ir.setMachineNameplate(item.getNameplate());
+                    ir.setInstallStatus("0");
+                    ir.setCreateTime(new Date());
+                    installRecordService.save(ir);
                 } catch (Exception ex) {
                     TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
                     return ResultGenerator.genFailResult("数据保存出错！" + ex.getMessage());
@@ -127,8 +139,7 @@ public class MachineController {
      * @param machineType
      * @param agent
      * @param status
-     * @param customerName
-     * 下面都是查询实际发生的时间/日期
+     * @param customerName              下面都是查询实际发生的时间/日期
      * @param query_start_time_install
      * @param query_finish_time_install
      * @return
@@ -171,7 +182,7 @@ public class MachineController {
      */
     @PostMapping("/selectBaseRecordByNameplate")
     public Result selectBaseRecordByNameplate(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size,
-                                   @RequestParam String nameplate) {
+                                              @RequestParam String nameplate) {
         PageHelper.startPage(page, size);
         List<MachineBaseRecordInfo> list = machineService.selectBaseRecordByNameplate(nameplate);
         PageInfo pageInfo = new PageInfo(list);

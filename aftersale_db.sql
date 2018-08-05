@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50547
 File Encoding         : 65001
 
-Date: 2018-08-05 11:06:24
+Date: 2018-08-05 14:50:18
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -120,7 +120,7 @@ CREATE TABLE `install_lib` (
   `install_content` text COMMENT '安装验收的内容',
   PRIMARY KEY (`id`),
   KEY `fk_ii_install_lib` (`install_lib_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of install_lib
@@ -132,6 +132,7 @@ INSERT INTO `install_lib` VALUES ('6', '1', 'aaa', 'sddfgf');
 INSERT INTO `install_lib` VALUES ('23', '0', 'bbb', null);
 INSERT INTO `install_lib` VALUES ('24', '1', 'bbb', 'sdfdsfdsa');
 INSERT INTO `install_lib` VALUES ('25', '1', 'bbb', 'fsdgfgfdfd');
+INSERT INTO `install_lib` VALUES ('26', '1', 'bbb', 'asdsdfsd');
 
 -- ----------------------------
 -- Table structure for `install_members`
@@ -146,17 +147,13 @@ CREATE TABLE `install_members` (
   KEY `fk_user_id` (`user_id`),
   CONSTRAINT `fk_install_record_id` FOREIGN KEY (`install_record_id`) REFERENCES `install_record` (`id`),
   CONSTRAINT `fk_user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of install_members
 -- ----------------------------
-INSERT INTO `install_members` VALUES ('1', '1', '3');
-INSERT INTO `install_members` VALUES ('2', '2', '3');
-INSERT INTO `install_members` VALUES ('3', '3', '3');
-INSERT INTO `install_members` VALUES ('4', '4', '4');
-INSERT INTO `install_members` VALUES ('5', '6', '3');
-INSERT INTO `install_members` VALUES ('6', '6', '4');
+INSERT INTO `install_members` VALUES ('7', '9', '3');
+INSERT INTO `install_members` VALUES ('8', '9', '4');
 
 -- ----------------------------
 -- Table structure for `install_record`
@@ -165,37 +162,32 @@ DROP TABLE IF EXISTS `install_record`;
 CREATE TABLE `install_record` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID号',
   `install_record_num` varchar(255) DEFAULT NULL COMMENT '安装调试验收单的编号，先保留着，可能用不到,允许空。',
-  `install_plan_date` date NOT NULL COMMENT '安装调试计划日期（上门日期）',
-  `install_actual_time` datetime NOT NULL COMMENT '安装调试的结束时间（安装工提交时的时间）',
+  `install_plan_date` date DEFAULT NULL COMMENT '安装调试计划日期（上门日期）',
+  `install_actual_time` datetime DEFAULT NULL COMMENT '安装调试的结束时间（安装工提交时的时间）',
   `machine_nameplate` varchar(255) NOT NULL COMMENT '机器铭牌号，以此为依据查询机型信息,客户能看到的也是这个铭牌号',
-  `install_result` text NOT NULL COMMENT '安装结果(安装人员建议可以写在此处)',
-  `install_status` varchar(255) NOT NULL DEFAULT '0' COMMENT '安装状态，0：已分配安装(但未接单）；1：已接受任务（不用驳回，如果有异议，电话沟通后可以重新派单）； 2：安装OK(客户未确认); 3：安装NG(如果用不到这个就不用）4：客户已确认',
-  `customer_feedback` int(10) unsigned NOT NULL COMMENT '客户反馈和建议',
+  `install_result` text COMMENT '安装结果(安装人员建议可以写在此处)',
+  `install_status` varchar(255) DEFAULT '0' COMMENT '安装状态，0：已分配安装(但未接单）；1：已接受任务（不用驳回，如果有异议，电话沟通后可以重新派单）； 2：安装OK(客户未确认); 3：安装NG(如果用不到这个就不用）4：客户已确认',
+  `customer_feedback` int(10) unsigned DEFAULT NULL COMMENT '客户反馈和建议',
   `install_charge_person` int(10) unsigned DEFAULT NULL COMMENT '安装的负责人',
-  `install_info` longtext NOT NULL COMMENT '全部安装信息，json格式\r\n [\r\n   {\r\n        "is_base_lib":1,\r\n        "install_lib_name":"基础库",\r\n        "install_content":"电源电压A",\r\n        "install_value":"220v"\r\n    },\r\n    {\r\n        "is_base_lib":1,\r\n        "install_lib_name":"基础库",\r\n        "install_content":"电源电压B",\r\n        "install_value":"220v"\r\n    }\r\n]',
-  `create_time` datetime NOT NULL COMMENT '该记录的创建时间',
+  `install_info` longtext COMMENT '全部安装信息，json格式\r\n [\r\n   {\r\n        "is_base_lib":1,\r\n        "install_lib_name":"基础库",\r\n        "install_content":"电源电压A",\r\n        "install_value":"220v"\r\n    },\r\n    {\r\n        "is_base_lib":1,\r\n        "install_lib_name":"基础库",\r\n        "install_content":"电源电压B",\r\n        "install_value":"220v"\r\n    }\r\n]',
+  `create_time` datetime DEFAULT NULL COMMENT '该记录的创建时间',
   `update_time` datetime DEFAULT NULL,
-  `customer` int(10) unsigned NOT NULL COMMENT '客户',
+  `customer` int(10) unsigned DEFAULT NULL COMMENT '客户',
   PRIMARY KEY (`id`),
   KEY `fk_ir_machine_nameplate` (`machine_nameplate`),
   KEY `fk_ir_contacter` (`customer`),
   KEY `fk_ir_maintain_charge_person` (`install_charge_person`),
   KEY `fk_ir_customer_feedback` (`customer_feedback`),
-  CONSTRAINT `fk_ir_customer` FOREIGN KEY (`customer`) REFERENCES `user` (`id`),
-  CONSTRAINT `fk_ir_customer_feedback` FOREIGN KEY (`customer_feedback`) REFERENCES `install_customer_feedback` (`id`),
-  CONSTRAINT `fk_ir_machine_nameplate` FOREIGN KEY (`machine_nameplate`) REFERENCES `machine` (`nameplate`),
-  CONSTRAINT `fk_ir_maintain_charge_person` FOREIGN KEY (`install_charge_person`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+  CONSTRAINT `fk_ir_machine_nameplate` FOREIGN KEY (`machine_nameplate`) REFERENCES `machine` (`nameplate`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of install_record
 -- ----------------------------
 INSERT INTO `install_record` VALUES ('1', 'aaa', '2018-07-11', '2018-07-11 14:27:13', 'mph2233', 'an安装ok', '2', '1', '1', 'ins info aaaa', '0000-00-00 00:00:00', null, '9');
 INSERT INTO `install_record` VALUES ('2', 'abbb', '2018-07-16', '2018-07-16 15:03:24', 'mph2233', 'okkk', '2', '2', '5', 'info4444', '0000-00-00 00:00:00', null, '8');
-INSERT INTO `install_record` VALUES ('3', 'aaa', '2018-07-11', '2018-07-11 14:27:13', 'mph333', 'an安装ok', '2', '1', '1', 'ins info aaaa', '0000-00-00 00:00:00', null, '9');
-INSERT INTO `install_record` VALUES ('4', 'abbb', '2018-07-16', '2018-07-16 15:03:24', 'mph444', 'okkk', '3', '2', '4', 'info4444', '0000-00-00 00:00:00', null, '8');
-INSERT INTO `install_record` VALUES ('5', 'aaa', '2018-07-11', '2018-07-25 14:27:13', 'mph777', 'an安装ok', '4', '1', '12', 'ins info aaaa', '0000-00-00 00:00:00', null, '5');
-INSERT INTO `install_record` VALUES ('6', 'abbb', '2018-07-16', '2018-07-26 15:03:24', 'mph--all-data', 'okkk', '5', '2', '4', 'info4444', '2018-07-25 10:30:39', '2018-07-25 11:30:43', '12');
+INSERT INTO `install_record` VALUES ('9', null, null, null, '1806004', null, '1', null, '3', null, '2018-08-05 14:17:18', '2018-08-05 14:49:32', '7');
+INSERT INTO `install_record` VALUES ('10', null, null, null, '1806003', null, '0', null, null, null, '2018-08-05 14:17:24', null, null);
 
 -- ----------------------------
 -- Table structure for `issue_position_list`
@@ -277,7 +269,7 @@ CREATE TABLE `machine` (
   KEY `nameplate` (`nameplate`),
   KEY `fk_m_customer` (`customer`),
   CONSTRAINT `fk_m_customer` FOREIGN KEY (`customer`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of machine
@@ -290,8 +282,8 @@ INSERT INTO `machine` VALUES ('5', 'mph777', 'ddh0550', 'th_agent_customer444', 
 INSERT INTO `machine` VALUES ('6', 'mph788', 'ddh0550', 'th_agent_customer444', 'geo999', '机器地址xxx路', '1', null, '帽子机', '31', '55', '59', '66', '100', null, '合同客户223', '11', '2018-07-11', '1', null);
 INSERT INTO `machine` VALUES ('7', 'mph789', 'ddh0550', 'th_agent_customer444', 'geo999', '机器地址xxx路', '1', null, '帽子机', '31', '55', '59', '66', '100', null, '合同客户223', '12', '2018-07-22', '1', null);
 INSERT INTO `machine` VALUES ('8', 'mph--all-data', 'ddh0550', 'th_agent_customer444', 'geottt23.33', '机器地址xxx路11h', '1', null, 'maoziji', '31', '55', '59', '66', '100', null, '合同客户223', '11', '2018-07-22', '0', null);
-INSERT INTO `machine` VALUES ('9', '1806004', 'XS-1801109B', 'XS-1801109', null, '', '1', null, '高速双凸轮', '6', '800', '1600', '165', '88+2', null, '绍兴华文电脑刺绣有限公司', '2', '2018-08-25', '0', null);
-INSERT INTO `machine` VALUES ('10', '1806003', 'XS-1801109B', 'XS-1801109', null, '', '1', null, '高速双凸轮', '6', '800', '1600', '165', '88+2', null, '绍兴华文电脑刺绣有限公司', '2', '2018-08-25', '0', null);
+INSERT INTO `machine` VALUES ('13', '1806004', 'XS-1801109B', 'XS-1801109', null, '', '1', null, '高速双凸轮', '6', '800', '1600', '165', '88+2', null, '绍兴华文电脑刺绣有限公司', '2', '2018-08-31', '0', null);
+INSERT INTO `machine` VALUES ('14', '1806003', 'XS-1801109B', 'XS-1801109', null, '', '1', null, '高速双凸轮', '6', '800', '1600', '165', '88+2', null, '绍兴华文电脑刺绣有限公司', '2', '2018-08-31', '0', null);
 
 -- ----------------------------
 -- Table structure for `maintain_abnormal_record`
@@ -403,7 +395,7 @@ CREATE TABLE `maintain_record` (
   KEY `fk_mr_customer_feedback` (`customer_feedback`),
   CONSTRAINT `fk_mr_machine_nameplate` FOREIGN KEY (`machine_nameplate`) REFERENCES `machine` (`nameplate`),
   CONSTRAINT `fk_mr_maintain_charge_person` FOREIGN KEY (`maintain_charge_person`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of maintain_record
@@ -412,9 +404,6 @@ INSERT INTO `maintain_record` VALUES ('1', 'mph2233', '一期保养', '2018-07-1
 INSERT INTO `maintain_record` VALUES ('2', 'mph333', '二期保养', '2018-07-16', '2018-07-16', '4', 'sssssssssssssssssg', '2', 'ffff23343', '0000-00-00 00:00:00', null, '3', '2');
 INSERT INTO `maintain_record` VALUES ('3', 'mph--all-data', '三期保养', '2018-07-25', '2018-07-26', '9', 'ssgeeee', '11', 'maintain infos112233', '2018-07-25 17:51:26', null, '2', '2');
 INSERT INTO `maintain_record` VALUES ('4', 'mph--all-data', '二期保养', '2018-07-12', '2018-07-25', '4', 'ssssssssssgestsss', '11', 'maint infos23444', '2018-07-25 18:07:32', null, '1', '1');
-INSERT INTO `maintain_record` VALUES ('5', 'mph--all-data', '三期保养', '2018-08-25', null, '3', null, '6', null, '2018-08-04 10:30:47', null, '1', null);
-INSERT INTO `maintain_record` VALUES ('6', 'mph788', 'y54yrt', '2018-08-31', null, '4', null, '6', null, '2018-08-05 00:00:00', '2018-08-05 10:45:36', '1', null);
-INSERT INTO `maintain_record` VALUES ('7', 'mph555', 'aaa', null, null, null, null, null, null, '2018-08-05 00:00:00', null, '0', null);
 
 -- ----------------------------
 -- Table structure for `maintain_type`

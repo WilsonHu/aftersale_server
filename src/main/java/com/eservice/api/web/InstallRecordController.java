@@ -1,13 +1,19 @@
 package com.eservice.api.web;
+
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.eservice.api.core.Result;
 import com.eservice.api.core.ResultGenerator;
+import com.eservice.api.model.install_members.InstallMembers;
 import com.eservice.api.model.install_record.InstallRecord;
 import com.eservice.api.model.install_record.InstallRecordInfo;
 import com.eservice.api.model.machine.Machine;
-import com.eservice.api.service.InstallRecordService;
+import com.eservice.api.service.impl.InstallMembersServiceImpl;
 import com.eservice.api.service.impl.InstallRecordServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,18 +22,22 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 import java.util.List;
 
 /**
-* Class Description: xxx
-* @author Wilson Hu
-* @date 2018/08/04.
-*/
+ * Class Description: xxx
+ *
+ * @author Wilson Hu
+ * @date 2018/08/04.
+ */
 @RestController
 @RequestMapping("/install/record")
 public class InstallRecordController {
     @Resource
     private InstallRecordServiceImpl installRecordService;
+    @Resource
+    private InstallMembersServiceImpl installMembersService;
 
     @PostMapping("/add")
     public Result add(@RequestBody @NotNull InstallRecord installRecord) {
@@ -75,7 +85,7 @@ public class InstallRecordController {
      */
     @PostMapping("/getInstallDetail")
     public Result getInstallDetail(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size,
-                                            @RequestParam String nameplate) {
+                                   @RequestParam String nameplate) {
         PageHelper.startPage(page, size);
         List<InstallRecordInfo> list = installRecordService.getInstallDetail(nameplate);
         PageInfo pageInfo = new PageInfo(list);
@@ -83,16 +93,17 @@ public class InstallRecordController {
     }
 
     /**
-     *根据条件查询安装信息
+     * 根据条件查询安装信息
+     *
      * @param page
      * @param size
      * @param nameplate
      * @param orderNum
      * @param machineType
-     * @param agent 代理商名称
-     * @param installStatus 安装状态，0：已分配安装(但未接单）；1：已接受任务（不用驳回，如果有异议，电话沟通后可以重新派单）； 2：安装OK(客户未确认); 3：安装NG(如果用不到这个就不用）4：客户已确认
-     * @param installRecordCustomerName 记录中的customerName，不是machine的customerName
-     * @param installChargePersonName 安装工负责人名字
+     * @param agent                            代理商名称
+     * @param installStatus                    安装状态，0：已分配安装(但未接单）；1：已接受任务（不用驳回，如果有异议，电话沟通后可以重新派单）； 2：安装OK(客户未确认); 3：安装NG(如果用不到这个就不用）4：客户已确认
+     * @param installRecordCustomerName        记录中的customerName，不是machine的customerName
+     * @param installChargePersonName          安装工负责人名字
      * @param query_start_install_plan_date
      * @param query_finish_install_plan_date
      * @param query_start_facory_date
@@ -143,10 +154,32 @@ public class InstallRecordController {
      */
     @PostMapping("/selectInstallTaskMachine")
     public Result selectInstallTaskMachine(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size,
-                                            @RequestParam String userName) {
+                                           @RequestParam String userName) {
         PageHelper.startPage(page, size);
         List<Machine> list = installRecordService.selectInstallTaskMachine(userName);
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @PostMapping("/AssignTask")
+    public Result AssignTask(String installRecord, String installMembers) {
+        try {
+            InstallRecord model = JSON.parseObject(installRecord, InstallRecord.class);
+            List<InstallMembers> members = JSONObject.parseArray(installMembers, InstallMembers.class);
+
+            if (model == null || members == null || members.size() < 1) {
+                TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+                return ResultGenerator.genFailResult("数据保存出错！");
+            }
+            model.setUpdateTime(new Date());
+            model.setInstallStatus(com.eservice.api.service.common.Constant.INSTALL_STATUS_ASSIGNED);
+            installRecordService.update(model);
+            installMembersService.save(members);
+        } catch (Exception ex) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return ResultGenerator.genFailResult("数据保存出错！" + ex.getMessage());
+        }
+        return ResultGenerator.genSuccessResult();
     }
 }
