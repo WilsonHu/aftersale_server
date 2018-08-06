@@ -66,6 +66,8 @@
     <result column="machineAgentPhone" jdbcType="VARCHAR" property="machineAgentPhone" />
     <result column="installChargePersonName" jdbcType="VARCHAR" property="installChargePersonName" />
     <result column="installChargePersonPhone" jdbcType="VARCHAR" property="installChargePersonPhone" />
+    <result column="installFeedbackCustomerMark" jdbcType="VARCHAR" property="installFeedbackCustomerMark" />
+    <result column="installFeedbackCustomerSuggestion" jdbcType="VARCHAR" property="installFeedbackCustomerSuggestion" />
 
   </resultMap>
 
@@ -95,7 +97,9 @@
     userOfCustomerInInstallRecord.phone as customerPhoneInInstallRecord, -- 调试联系人电话
     userOfCustomerInInstallRecord.address as customerAddressInInstallRecord,
     userOfChargePersonInInstallRecord.`name` as installChargePersonName, -- 调试员名称
-    userOfChargePersonInInstallRecord.phone as installChargePersonPhone -- 调试员电话
+    userOfChargePersonInInstallRecord.phone as installChargePersonPhone, -- 调试员电话
+    icf.customer_mark as installFeedbackCustomerMark,
+    icf.customer_suggestion as installFeedbackCustomerSuggestion
     FROM
     install_record AS ir
     LEFT JOIN user AS userOfChargePersonInInstallRecord ON userOfChargePersonInInstallRecord.id = ir.install_charge_person
@@ -103,6 +107,7 @@
     LEFT JOIN machine AS m ON m.nameplate = ir.machine_nameplate
     LEFT JOIN user AS userOfCustomerInMachine ON userOfCustomerInMachine.id = m.customer
     LEFT JOIN agent AS agentOfCustomerInMachine ON agentOfCustomerInMachine.id = userOfCustomerInMachine.agent
+    LEFT JOIN install_customer_feedback as icf ON icf.id = ir.customer_feedback
     WHERE nameplate = #{nameplate}
   </select>
 
@@ -126,7 +131,9 @@
     userOfCustomerInInstallRecord.phone as customerPhoneInInstallRecord, -- 调试联系人电话
     userOfCustomerInInstallRecord.address as customerAddressInInstallRecord,
     userOfChargePersonInInstallRecord.`name` as installChargePersonName, -- 调试员
-    userOfChargePersonInInstallRecord.phone as installChargePersonPhone
+    userOfChargePersonInInstallRecord.phone as installChargePersonPhone,
+    icf.customer_mark as installFeedbackCustomerMark,
+    icf.customer_suggestion as installFeedbackCustomerSuggestion
     FROM
     install_record AS ir
     LEFT JOIN user AS userOfChargePersonInInstallRecord ON userOfChargePersonInInstallRecord.id = ir.install_charge_person
@@ -134,6 +141,7 @@
     LEFT JOIN machine AS m ON m.nameplate = ir.machine_nameplate
     LEFT JOIN user AS userOfCustomerInMachine ON userOfCustomerInMachine.id = m.customer
     LEFT JOIN agent AS agentOfCustomerInMachine ON agentOfCustomerInMachine.id = userOfCustomerInMachine.agent
+    LEFT JOIN install_customer_feedback as icf ON icf.id = ir.customer_feedback
     WHERE 1=1
     <if test="isFuzzy == true">
       <if test="nameplate != null and nameplate != ''">

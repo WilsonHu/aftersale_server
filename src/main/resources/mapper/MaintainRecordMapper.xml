@@ -58,6 +58,8 @@
       <result column="machineCustomerPhone" jdbcType="VARCHAR" property="machineCustomerPhone" />
       <result column="agent_name" jdbcType="VARCHAR" property="machineAgentName" />
       <result column="agent_phone" jdbcType="VARCHAR" property="machineAgentPhone" />
+      <result column="maintainFeedbackCustomerMark" jdbcType="VARCHAR" property="maintainFeedbackCustomerMark" />
+      <result column="maintainFeedbackCustomerSuggestion" jdbcType="VARCHAR" property="maintainFeedbackCustomerSuggestion" />
 
   </resultMap>
 
@@ -89,8 +91,9 @@
       userOfCustomerInMaintainRecord.name  as customerNameInMaintainRecord,
       userOfCustomerInMaintainRecord.phone as customerPhoneInMaintainRecord,
       userOfMaintainChargePerson.name AS maintain_charge_person_name,
-      userOfMaintainChargePerson.phone as maintainChargePersonPhone
-
+      userOfMaintainChargePerson.phone as maintainChargePersonPhone,
+      mcf.customer_mark as maintainFeedbackCustomerMark,
+      mcf.customer_suggestion as maintainFeedbackCustomerSuggestion
 
       FROM
       maintain_record mr
@@ -99,6 +102,7 @@
       LEFT JOIN agent a ON a.id = userOfCustomerInMachine.agent
       LEFT JOIN user userOfMaintainChargePerson ON userOfMaintainChargePerson.id = mr.maintain_charge_person
       LEFT JOIN user as userOfCustomerInMaintainRecord ON userOfCustomerInMaintainRecord.id = mr.customer
+      LEFT JOIN maintain_customer_feedback as mcf ON mcf.id = mr.customer_feedback
     WHERE 1 = 1
     <if test="isFuzzy == true">
       <if test="customerName != null and customerName != ''">

@@ -74,7 +74,9 @@
     <result column="sendback_date" jdbcType="DATE" property="sendbackDate" />
     <result column="sendback_confirmed_time" jdbcType="DATE" property="sendbackConfirmedTime" />
     <result column="sendbackConfirmedPersonName" jdbcType="VARCHAR" property="sendbackConfirmedPersonName" />
-
+    <result column="repairFeedbackCustomerMark" jdbcType="VARCHAR" property="repairFeedbackCustomerMark" />
+    <result column="repairFeedbackCustomerSuggestion" jdbcType="VARCHAR" property="repairFeedbackCustomerSuggestion" />
+    <result column="repairFeedbackRepairResult" jdbcType="VARCHAR" property="repairFeedbackRepairResult" />
   </resultMap>
   <select id="selectByNameplate" resultMap="BaseResultMap">
     SELECT *
@@ -107,7 +109,11 @@
     rai.issue_description as repairActualIssueDescription,
     rai.repair_method as repairActualMethod,
     rai.after_resolve_pictures as afterResolvePictures,
-    rr.*
+    rr.*,
+    rcf.customer_mark as repairFeedbackCustomerMark,
+    rcf.customer_suggestion as repairFeedbackCustomerSuggestion,
+    rcf.customer_repair_result as repairFeedbackRepairResult
+
     from repair_record as rr
     LEFT JOIN machine as m ON m.nameplate = rr.machine_nameplate
     LEFT JOIN `user` as userOfCustomerInMachine ON userOfCustomerInMachine.id = m.customer
@@ -119,6 +125,7 @@
     LEFT JOIN repair_request_info as rri ON rri.id = rr.repair_request_info
     LEFT JOIN parts_info ON parts_info.repair_actual_info_id = rai.id
     LEFT JOIN user as userOfSendbackConfirmedPerson ON userOfSendbackConfirmedPerson.id = parts_info.sendback_confirmed_person
+    LEFT JOIN repair_customer_feedback as rcf ON rcf.id = rr.customer_feedback
     WHERE 1=1
     <if test="isFuzzy == true">
       <if test="nameplate != null and nameplate != ''">

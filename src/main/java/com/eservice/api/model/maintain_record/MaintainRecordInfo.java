@@ -261,4 +261,29 @@ public class MaintainRecordInfo extends MaintainRecord {
         this.machineCustomerPhone = machineCustomerPhone;
     }
 
+    /**
+     * 客户评价信息中的分数
+     */
+    private String maintainFeedbackCustomerMark;
+
+    public void setMaintainFeedbackCustomerMark(String maintainFeedbackCustomerMark) {
+        this.maintainFeedbackCustomerMark = maintainFeedbackCustomerMark;
+    }
+
+    public String getMaintainFeedbackCustomerMark() {
+        return maintainFeedbackCustomerMark;
+    }
+
+    /**
+     * 客户评价信息中的建议内容
+     */
+    private String maintainFeedbackCustomerSuggestion;
+
+    public void setMaintainFeedbackCustomerSuggestion(String maintainFeedbackCustomerSuggestion) {
+        this.maintainFeedbackCustomerSuggestion = maintainFeedbackCustomerSuggestion;
+    }
+
+    public String getMaintainFeedbackCustomerSuggestion() {
+        return maintainFeedbackCustomerSuggestion;
+    }
 }

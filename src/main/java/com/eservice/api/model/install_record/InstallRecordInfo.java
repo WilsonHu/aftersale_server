@@ -275,4 +275,30 @@ public class InstallRecordInfo extends InstallRecord {
     public String getInstallChargePersonPhone() {
         return installChargePersonPhone;
     }
+
+    /**
+     * 客户评价信息中的分数
+     */
+    private String installFeedbackCustomerMark;
+
+    public void setInstallFeedbackCustomerMark(String installFeedbackCustomerMark) {
+        this.installFeedbackCustomerMark = installFeedbackCustomerMark;
+    }
+
+    public String getInstallFeedbackCustomerMark() {
+        return installFeedbackCustomerMark;
+    }
+
+    /**
+     * 客户评价信息中的建议内容
+     */
+    private String installFeedbackCustomerSuggestion;
+
+    public void setInstallFeedbackCustomerSuggestion(String installFeedbackCustomerSuggestion) {
+        this.installFeedbackCustomerSuggestion = installFeedbackCustomerSuggestion;
+    }
+
+    public String getInstallFeedbackCustomerSuggestion() {
+        return installFeedbackCustomerSuggestion;
+    }
 }

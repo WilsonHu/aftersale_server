@@ -430,4 +430,43 @@ public class RepairRecordInfo extends RepairRecord {
     public String getSendbackConfirmedPersonName() {
         return sendbackConfirmedPersonName;
     }
+
+    /**
+     * 客户评价信息中的分数
+     */
+    private String repairFeedbackCustomerMark;
+
+    public void setRepairFeedbackCustomerMark(String repairFeedbackCustomerMark) {
+        this.repairFeedbackCustomerMark = repairFeedbackCustomerMark;
+    }
+
+    public String getRepairFeedbackCustomerMark() {
+        return repairFeedbackCustomerMark;
+    }
+
+    /**
+     * 客户评价信息中的建议内容
+     */
+    private String repairFeedbackCustomerSuggestion;
+
+    public void setRepairFeedbackCustomerSuggestion(String repairFeedbackCustomerSuggestion) {
+        this.repairFeedbackCustomerSuggestion = repairFeedbackCustomerSuggestion;
+    }
+
+    public String getRepairFeedbackCustomerSuggestion() {
+        return repairFeedbackCustomerSuggestion;
+    }
+
+    /**
+     * 客户评价信息中的维修结果
+     */
+    private String repairFeedbackRepairResult;
+
+    public void setRepairFeedbackRepairResult(String repairFeedbackRepairResult) {
+        this.repairFeedbackRepairResult = repairFeedbackRepairResult;
+    }
+
+    public String getRepairFeedbackRepairResult() {
+        return repairFeedbackRepairResult;
+    }
 }
