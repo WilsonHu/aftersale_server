@@ -39,4 +39,33 @@
 --     5：客户本身，6：客户的联系人
     WHERE `user`.role_id = #{type}
   </select>
+
+  <select id="selectUsers" resultMap="BaseResultMap">
+    SELECT u.*
+    FROM user u
+    JOIN role r ON r.id = u.role_id
+    LEFT JOIN agent a ON a.id = u.agent
+    where 1=1
+    <if test="account != null and account != ''">
+      AND u.account LIKE CONCAT('%','${account}','%' )
+    </if>
+    <if test="name != null and name != ''">
+      AND u.name LIKE CONCAT('%','${name}','%' )
+    </if>
+    <if test="roleId != null and roleId > 0">
+      AND u.role_id = ${roleId}
+    </if>
+    <if test="currentUserAgent != null and currentUserAgent != ''">
+      AND u.agent = ${currentUserAgent}
+    </if>
+    <if test="(currentUserAgent == null or currentUserAgent != '') and isAgent and agent != null and agent > 0">
+      AND u.agent = ${agent}
+    </if>
+    <if test="!isAgent">
+      AND u.agent = 0
+    </if>
+    <if test="valid != null and valid != ''">
+      AND u.valid = ${valid}
+    </if>
+  </select>
 </mapper>

@@ -44,4 +44,8 @@ public class UserServiceImpl extends AbstractService<User> implements UserServic
     public List<User> getUsersByType(String type){
         return userMapper.getUsersByType(type);
     }
+
+    public List<User> selectUsers(Integer currentUserAgent, String account, String name, Integer roleId, Boolean isAgent, Integer agent, String valid) {
+        return userMapper.selectUsers(currentUserAgent, account, name, roleId, isAgent, agent, valid);
+    }
  }
