@@ -7,6 +7,7 @@ import com.eservice.api.model.repair_record.RepairRecord;
 import com.eservice.api.service.PartsInfoService;
 import com.eservice.api.service.RepairActualInfoService;
 import com.eservice.api.service.common.Constant;
+import com.eservice.api.service.impl.RepairActualInfoServiceImpl;
 import com.eservice.api.service.impl.RepairRecordServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -31,7 +32,7 @@ import java.util.List;
 @RequestMapping("/repair/actual/info")
 public class RepairActualInfoController {
     @Resource
-    private RepairActualInfoService repairActualInfoService;
+    private RepairActualInfoServiceImpl repairActualInfoService;
     @Resource
     PartsInfoService partsInfoService;
     @Resource
@@ -43,8 +44,11 @@ public class RepairActualInfoController {
     @PostMapping("/add")
     public Result add(@RequestBody @NotNull RepairActualInfo repairActualInfo, @RequestBody @NotNull  PartsInfo partsInfo) {
         try {
-            repairActualInfoService.save(repairActualInfo);
+            repairActualInfoService.saveAndGetID(repairActualInfo);
+
+            partsInfo.setRepairActualInfoId(repairActualInfo.getId());
             partsInfoService.update(partsInfo);
+
             RepairRecord repairRecord = repairRecordService.findById(repairActualInfo.getRepairRecordId());
             repairRecord.setStatus(Constant.REPAIR_STATUS_REPAIR_OK);
             repairRecordService.update(repairRecord);

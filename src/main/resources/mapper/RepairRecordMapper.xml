@@ -68,6 +68,7 @@
     <result column="afterResolvePictures" jdbcType="VARCHAR" property="afterResolvePictures" />
     <result column="parts_name" jdbcType="VARCHAR" property="partsName" />
     <result column="supplier" jdbcType="VARCHAR" property="partsSupplier" />
+    <result column="parts_status" jdbcType="VARCHAR" property="partsStatus" />
     <result column="sendback_tracking_number" jdbcType="VARCHAR" property="sendbackTrackingNumber" />
     <result column="sendback_tracking_pictrue" jdbcType="VARCHAR" property="sendbackTrackingPictrue" />
     <result column="sendback_date" jdbcType="DATE" property="sendbackDate" />
@@ -163,6 +164,9 @@
 
     <if test="repairStatus != null and repairStatus != ''">
       AND rr.status = #{repairStatus}
+    </if>
+    <if test="partsStatus != null and partsStatus != ''">
+    AND parts_info.parts_status = #{partsStatus}
     </if>
     <if test="inWarrantyPeriod != null and inWarrantyPeriod != ''">
       AND rr.in_warranty_period = #{inWarrantyPeriod}

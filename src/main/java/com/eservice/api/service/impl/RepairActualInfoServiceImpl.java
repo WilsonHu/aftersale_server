@@ -21,4 +21,8 @@ public class RepairActualInfoServiceImpl extends AbstractService<RepairActualInf
     @Resource
     private RepairActualInfoMapper repairActualInfoMapper;
 
+    public void saveAndGetID(RepairActualInfo repairActualInfo){
+        repairActualInfoMapper.saveAndGetID(repairActualInfo);
+    }
+
 }

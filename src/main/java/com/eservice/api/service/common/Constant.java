@@ -123,4 +123,16 @@ public class Constant {
     public static final String INSTALL_STATUS_FINISHED = "3";
     public static final String INSTALL_STATUS_CONFIRMED= "4";
 
+    /**
+     * 配件寄回状态，
+     * 1: 无需回寄，其他表示需要寄回
+     * 2：未寄回，
+     * 3：已寄回（待售后确认）
+     * 4：售后已确认
+     */
+    public static final String PARTS_STATUS_NOT_NEED = "1";
+    public static final String PARTS_STATUS_WAIT_FOR_SENDBACK = "2";
+    public static final String PARTS_STATUS_ALREADY_SENDBACK = "3";
+    public static final String PARTS_STATUS_AFTERSALE_CONFIRMED = "4";
+
 }

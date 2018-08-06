@@ -15,6 +15,7 @@ public interface RepairRecordMapper extends Mapper<RepairRecord> {
     List<RepairRecordInfo> getRepairRecordInfoList(@Param("nameplate")String nameplate,
                                                    @Param("orderNum")String orderNum,
                                                    @Param("repairStatus")String repairStatus,
+                                                   @Param("partsStatus")String partsStatus,
                                                    @Param("repairRecordCustomerName")String repairRecordCustomerName,
                                                    @Param("agent")String agent,
                                                    @Param("repairChargePersonName")String repairChargePersonName,

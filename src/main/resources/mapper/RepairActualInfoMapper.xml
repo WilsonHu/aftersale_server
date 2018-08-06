@@ -12,4 +12,12 @@
     <result column="issue_description" jdbcType="LONGVARCHAR" property="issueDescription" />
     <result column="repair_method" jdbcType="LONGVARCHAR" property="repairMethod" />
   </resultMap>
+
+  <insert id="saveAndGetID" useGeneratedKeys="true" parameterType="com.eservice.api.model.repair_actual_info.RepairActualInfo"
+          keyProperty="id">
+  insert into
+  repair_actual_info(repair_record_id, issue_position, issue_description, repair_method, after_resolve_pictures)
+  values(
+  #{repairRecordId},#{issuePosition}, #{issueDescription}, #{repairMethod}, #{afterResolvePictures})
+  </insert>
 </mapper>

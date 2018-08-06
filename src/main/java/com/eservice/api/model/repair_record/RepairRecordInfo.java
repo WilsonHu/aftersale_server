@@ -357,6 +357,19 @@ public class RepairRecordInfo extends RepairRecord {
     }
 
     /**
+     * 配件状态
+     */
+    public String partsStatus;
+
+    public String getPartsStatus() {
+        return partsStatus;
+    }
+
+    public void setPartsStatus(String partsStatus) {
+        this.partsStatus = partsStatus;
+    }
+
+    /**
      * 配件回寄的快递单号
      */
     private String sendbackTrackingNumber;
