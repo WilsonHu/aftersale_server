@@ -179,7 +179,26 @@ public class MaintainRecordInfo extends MaintainRecord {
     /**
      * 索引转换实际名字,来自 machine.customer-->user-->agent.name
      */
-    private String agent;
+    private String machineAgentName;
+
+    public String getMachineAgentName() {
+        return machineAgentName;
+    }
+
+    public void setMachineAgentName(String machineAgentName) {
+        this.machineAgentName = machineAgentName;
+    }
+
+    private String machineAgentPhone;
+
+    public String getMachineAgentPhone() {
+        return machineAgentPhone;
+    }
+
+    public void setMachineAgentPhone(String machineAgentPhone) {
+        this.machineAgentPhone = machineAgentPhone;
+    }
+
 
     public String getMachineCustomerName() {
         return machineCustomerName;
@@ -189,13 +208,6 @@ public class MaintainRecordInfo extends MaintainRecord {
         this.machineCustomerName = machineCustomerName;
     }
 
-    public String getAgent() {
-        return agent;
-    }
-
-    public void setAgent(String agent){
-        this.agent = agent;
-    }
 
     /**
      * 该次保养的客户联系人的名字
@@ -239,7 +251,7 @@ public class MaintainRecordInfo extends MaintainRecord {
     /**
      * 机器所属客户的电话
      */
-    public String machineCustomerPhone;
+    private String machineCustomerPhone;
 
     public String getMachineCustomerPhone() {
         return machineCustomerPhone;
@@ -248,4 +260,5 @@ public class MaintainRecordInfo extends MaintainRecord {
     public void setMachineCustomerPhone(String machineCustomerPhone) {
         this.machineCustomerPhone = machineCustomerPhone;
     }
+
 }

@@ -56,8 +56,8 @@
       <result column="maintainChargePersonPhone" jdbcType="VARCHAR" property="maintainChargePersonPhone" />
       <result column="machineCustomerName" jdbcType="VARCHAR" property="machineCustomerName" />
       <result column="machineCustomerPhone" jdbcType="VARCHAR" property="machineCustomerPhone" />
-      <result column="agent_name" jdbcType="VARCHAR" property="agent" />
-
+      <result column="agent_name" jdbcType="VARCHAR" property="machineAgentName" />
+      <result column="agent_phone" jdbcType="VARCHAR" property="machineAgentPhone" />
 
   </resultMap>
 
@@ -72,6 +72,7 @@
       userOfCustomerInMachine.name as machineCustomerName,
       userOfCustomerInMachine.phone as machineCustomerPhone,
       a.name as agent_name,
+      a.phone as agent_phone,
       mr.*,
       m.facory_date,
       m.nameplate,
@@ -102,7 +103,7 @@
     <if test="isFuzzy == true">
       <if test="customerName != null and customerName != ''">
 --         AND customerName like CONCAT('%','${customerName}','%' )
-        AND u.name like CONCAT('%','${customerName}','%' )
+        AND userOfCustomerInMachine.name like CONCAT('%','${customerName}','%' )
       </if>
       <if test="agent != null and agent != ''">
 --         AND agent_name like CONCAT('%','${agent}','%' )
@@ -126,7 +127,7 @@
     <if test="isFuzzy == false">
       <if test="customerName != null and customerName != ''">
 --         AND customerName = '${customerName}'
-        AND u.name = '${customerName}'
+        AND userOfCustomerInMachine.name = '${customerName}'
       </if>
       <if test="agent != null and agent != ''">
 --         AND agent_name = '${agent}'
