@@ -1,11 +1,11 @@
 package com.eservice.api.web;
+import com.alibaba.fastjson.JSON;
 import com.eservice.api.core.Result;
 import com.eservice.api.core.ResultGenerator;
 import com.eservice.api.model.parts_info.PartsInfo;
 import com.eservice.api.model.repair_actual_info.RepairActualInfo;
 import com.eservice.api.model.repair_record.RepairRecord;
 import com.eservice.api.service.PartsInfoService;
-import com.eservice.api.service.RepairActualInfoService;
 import com.eservice.api.service.common.Constant;
 import com.eservice.api.service.impl.RepairActualInfoServiceImpl;
 import com.eservice.api.service.impl.RepairRecordServiceImpl;
@@ -39,17 +39,26 @@ public class RepairActualInfoController {
     private RepairRecordServiceImpl repairRecordService;
 
     /**
-     * 在上传实际维修情况时，也同时上传了要寄回的配件，更新record状态
+     * 在上传（新增）实际维修情况时，也同时上传（新增）了要寄回的配件，并更新record状态
      */
+    @Transactional(rollbackFor = Exception.class)
     @PostMapping("/add")
-    public Result add(@RequestBody @NotNull RepairActualInfo repairActualInfo, @RequestBody @NotNull  PartsInfo partsInfo) {
+    public Result add(@RequestParam String repairActualInfo, @RequestParam String partsInfo) {
         try {
-            repairActualInfoService.saveAndGetID(repairActualInfo);
+            RepairActualInfo repairActualInfo1 = JSON.parseObject(repairActualInfo, RepairActualInfo.class);
+            if( null == repairActualInfo1) {
+                return ResultGenerator.genFailResult("repairActualInfo解析出错！");
+            }
+            repairActualInfoService.saveAndGetID(repairActualInfo1);
 
-            partsInfo.setRepairActualInfoId(repairActualInfo.getId());
-            partsInfoService.update(partsInfo);
+            PartsInfo partsInfo1 = JSON.parseObject(partsInfo,PartsInfo.class);
+            if( null == partsInfo1) {
+                return ResultGenerator.genFailResult("partsInfo 解析出错！");
+            }
+            partsInfo1.setRepairActualInfoId(repairActualInfo1.getId());
+            partsInfoService.save(partsInfo1);
 
-            RepairRecord repairRecord = repairRecordService.findById(repairActualInfo.getRepairRecordId());
+            RepairRecord repairRecord = repairRecordService.findById(repairActualInfo1.getRepairRecordId());
             repairRecord.setStatus(Constant.REPAIR_STATUS_REPAIR_OK);
             repairRecordService.update(repairRecord);
         } catch (Exception ex) {
