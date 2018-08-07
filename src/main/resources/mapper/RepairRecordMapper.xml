@@ -11,6 +11,7 @@
     <result column="machine_nameplate" jdbcType="VARCHAR" property="machineNameplate" />
     <result column="repair_request_info" jdbcType="INTEGER" property="repairRequestInfo" />
     <result column="in_warranty_period" jdbcType="VARCHAR" property="inWarrantyPeriod" />
+    <result column="repair_plan_date" jdbcType="DATE" property="repairPlanDate" />
     <result column="repair_charge_person" jdbcType="INTEGER" property="repairChargePerson" />
     <result column="repair_start_time" jdbcType="TIMESTAMP" property="repairStartTime" />
     <result column="repair_end_time" jdbcType="TIMESTAMP" property="repairEndTime" />
@@ -31,6 +32,7 @@
     <result column="machine_nameplate" jdbcType="VARCHAR" property="machineNameplate" />
     <result column="repair_request_info" jdbcType="INTEGER" property="repairRequestInfo" />
     <result column="in_warranty_period" jdbcType="VARCHAR" property="inWarrantyPeriod" />
+    <result column="repair_plan_date" jdbcType="DATE" property="repairPlanDate" />
     <result column="repair_charge_person" jdbcType="INTEGER" property="repairChargePerson" />
     <result column="repair_start_time" jdbcType="TIMESTAMP" property="repairStartTime" />
     <result column="repair_end_time" jdbcType="TIMESTAMP" property="repairEndTime" />

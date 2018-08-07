@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50553
 File Encoding         : 65001
 
-Date: 2018-08-05 13:58:54
+Date: 2018-08-07 15:17:55
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -143,26 +143,23 @@ DROP TABLE IF EXISTS `install_record`;
 CREATE TABLE `install_record` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID号',
   `install_record_num` varchar(255) DEFAULT NULL COMMENT '安装调试验收单的编号，先保留着，可能用不到,允许空。',
-  `install_plan_date` date NOT NULL COMMENT '安装调试计划日期（上门日期）',
-  `install_actual_time` datetime NOT NULL COMMENT '安装调试的结束时间（安装工提交时的时间）',
+  `install_plan_date` date DEFAULT NULL COMMENT '安装调试计划日期（上门日期）',
+  `install_actual_time` datetime DEFAULT NULL COMMENT '安装调试的结束时间（安装工提交时的时间）',
   `machine_nameplate` varchar(255) NOT NULL COMMENT '机器铭牌号，以此为依据查询机型信息,客户能看到的也是这个铭牌号',
-  `install_result` text NOT NULL COMMENT '安装结果(安装人员建议可以写在此处)',
-  `install_status` varchar(255) NOT NULL DEFAULT '0' COMMENT '安装状态，0：已分配安装(但未接单）；1：已接受任务（不用驳回，如果有异议，电话沟通后可以重新派单）； 2：安装OK(客户未确认); 3：安装NG(如果用不到这个就不用）4：客户已确认',
-  `customer_feedback` int(10) unsigned NOT NULL COMMENT '客户反馈和建议',
+  `install_result` text COMMENT '安装结果(安装人员建议可以写在此处)',
+  `install_status` varchar(255) DEFAULT '0' COMMENT '安装状态，0：已分配安装(但未接单）；1：已接受任务（不用驳回，如果有异议，电话沟通后可以重新派单）； 2：安装OK(客户未确认); 3：安装NG(如果用不到这个就不用）4：客户已确认',
+  `customer_feedback` int(10) unsigned DEFAULT NULL COMMENT '客户反馈和建议',
   `install_charge_person` int(10) unsigned DEFAULT NULL COMMENT '安装的负责人',
-  `install_info` longtext NOT NULL COMMENT '全部安装信息，json格式\r\n [\r\n   {\r\n        "is_base_lib":1,\r\n        "install_lib_name":"基础库",\r\n        "install_content":"电源电压A",\r\n        "install_value":"220v"\r\n    },\r\n    {\r\n        "is_base_lib":1,\r\n        "install_lib_name":"基础库",\r\n        "install_content":"电源电压B",\r\n        "install_value":"220v"\r\n    }\r\n]',
-  `create_time` datetime NOT NULL COMMENT '该记录的创建时间',
+  `install_info` longtext COMMENT '全部安装信息，json格式\r\n [\r\n   {\r\n        "is_base_lib":1,\r\n        "install_lib_name":"基础库",\r\n        "install_content":"电源电压A",\r\n        "install_value":"220v"\r\n    },\r\n    {\r\n        "is_base_lib":1,\r\n        "install_lib_name":"基础库",\r\n        "install_content":"电源电压B",\r\n        "install_value":"220v"\r\n    }\r\n]',
+  `create_time` datetime DEFAULT NULL COMMENT '该记录的创建时间',
   `update_time` datetime DEFAULT NULL,
-  `customer` int(10) unsigned NOT NULL COMMENT '客户',
+  `customer` int(10) unsigned DEFAULT NULL COMMENT '客户',
   PRIMARY KEY (`id`),
   KEY `fk_ir_machine_nameplate` (`machine_nameplate`),
   KEY `fk_ir_contacter` (`customer`),
   KEY `fk_ir_maintain_charge_person` (`install_charge_person`),
   KEY `fk_ir_customer_feedback` (`customer_feedback`),
-  CONSTRAINT `fk_ir_customer` FOREIGN KEY (`customer`) REFERENCES `user` (`id`),
-  CONSTRAINT `fk_ir_customer_feedback` FOREIGN KEY (`customer_feedback`) REFERENCES `install_customer_feedback` (`id`),
-  CONSTRAINT `fk_ir_machine_nameplate` FOREIGN KEY (`machine_nameplate`) REFERENCES `machine` (`nameplate`),
-  CONSTRAINT `fk_ir_maintain_charge_person` FOREIGN KEY (`install_charge_person`) REFERENCES `user` (`id`)
+  CONSTRAINT `fk_ir_machine_nameplate` FOREIGN KEY (`machine_nameplate`) REFERENCES `machine` (`nameplate`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -331,13 +328,13 @@ CREATE TABLE `maintain_record` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID号',
   `machine_nameplate` varchar(255) NOT NULL COMMENT '机器铭牌号，以此为依据查询机型信息,客户能看到的也是这个铭牌号',
   `maintain_lib_name` varchar(255) NOT NULL COMMENT '1：一期，2：二期，3：三期保养',
-  `maintain_date_plan` date NOT NULL,
+  `maintain_date_plan` date DEFAULT NULL,
   `maintain_date_actual` date DEFAULT NULL COMMENT '实际保养日期',
-  `maintain_charge_person` int(10) unsigned NOT NULL COMMENT '保养人员',
+  `maintain_charge_person` int(10) unsigned DEFAULT NULL COMMENT '保养人员',
   `maintain_suggestion` varchar(255) DEFAULT NULL COMMENT '保养建议',
-  `customer` int(10) unsigned NOT NULL COMMENT '客户',
+  `customer` int(10) unsigned DEFAULT NULL COMMENT '客户',
   `maintain_info` text COMMENT '保养json 举例:\r\n[\r\n  {\r\n        "maintain_lib_name":"一期",\r\n        "maintain_type":"注油润滑",\r\n        "maintain_content":"给针杆、主动轴、一号销、旋梭轴、旋梭加注适量白油；给Y前后、X驱动导轨及滑车轴承加注适量润滑脂。" \r\n		"maintain_value":"1"			//1代表确认OK\r\n    },\r\n    {\r\n        "maintain_lib_name":"一期",\r\n        "maintain_type":"检查修理",\r\n        "maintain_content":"1.检查中间脚盘是否正常" \r\n		"maintain_value":"1" //1代表确认OK\r\n    },\r\n    {\r\n        "maintain_lib_name":"一期",\r\n        "maintain_type":"检查修理",\r\n        "maintain_content":"2. 检查主轴皮带、上下轴同步带的张力和位置，带轮螺丝是否有松动；" \r\n		"maintain_value":"0"  //0代表异常  \r\n		"maintain_abnormal_record": {}  //maintain_abnormal_record类型的json\r\n    }\r\n]',
-  `create_time` datetime NOT NULL,
+  `create_time` datetime DEFAULT NULL,
   `update_time` datetime DEFAULT NULL,
   `maintain_status` varchar(255) NOT NULL COMMENT '保养状态 0：待分配，1：已分配(但未接单）2：已接受任务，3：保养完成(客户未确认)，4：客户已确认保养结果',
   `customer_feedback` int(10) unsigned DEFAULT NULL COMMENT '用户反馈（意见&建议）',
@@ -346,7 +343,6 @@ CREATE TABLE `maintain_record` (
   KEY `fk_mr_maintain_person` (`maintain_charge_person`),
   KEY `fk_mr_contacter` (`customer`),
   KEY `fk_mr_customer_feedback` (`customer_feedback`),
-  CONSTRAINT `fk_mr_customer` FOREIGN KEY (`customer`) REFERENCES `user` (`id`),
   CONSTRAINT `fk_mr_machine_nameplate` FOREIGN KEY (`machine_nameplate`) REFERENCES `machine` (`nameplate`),
   CONSTRAINT `fk_mr_maintain_charge_person` FOREIGN KEY (`maintain_charge_person`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -485,6 +481,7 @@ CREATE TABLE `repair_record` (
   `machine_nameplate` varchar(255) NOT NULL COMMENT '机器编号',
   `repair_request_info` int(10) unsigned NOT NULL COMMENT '用户发起报修信息，一次报修可以有多个维修记录。',
   `in_warranty_period` varchar(255) DEFAULT NULL COMMENT '1：在保修期内，0：保修期已过， 在派单时指定。',
+  `repair_plan_date` date DEFAULT NULL COMMENT '计划的上门日期',
   `repair_charge_person` int(10) unsigned DEFAULT NULL COMMENT '维修人员',
   `repair_start_time` datetime DEFAULT NULL COMMENT '维修工时',
   `repair_end_time` datetime DEFAULT NULL,

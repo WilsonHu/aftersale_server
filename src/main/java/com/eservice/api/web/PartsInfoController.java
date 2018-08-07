@@ -57,4 +57,9 @@ public class PartsInfoController {
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
     }
+
+    /**
+     * 配件信息的查询方法： 共用 getRepairRecordInfoList(...)
+     */
+
 }

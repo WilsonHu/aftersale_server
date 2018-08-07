@@ -57,6 +57,20 @@ public class RepairRecord {
     private Date repairEndTime;
 
     /**
+     * 计划上门日期
+     */
+    @Column(name = "repair_plan_date")
+    private Date repairPlanDate;
+
+    public Date getRepairPlanDate() {
+        return repairPlanDate;
+    }
+
+    public void setRepairPlanDate(Date repairPlanDate) {
+        this.repairPlanDate = repairPlanDate;
+    }
+
+    /**
      * 改善建议
      */
     @Column(name = "customer_feedback")
