@@ -5,13 +5,14 @@ import com.eservice.api.core.ResultGenerator;
 import com.eservice.api.model.machine.Machine;
 import com.eservice.api.model.repair_customer_feedback.RepairCustomerFeedback;
 import com.eservice.api.model.repair_record.RepairRecord;
-import com.eservice.api.service.RepairCustomerFeedbackService;
 import com.eservice.api.service.common.Constant;
 import com.eservice.api.service.impl.MachineServiceImpl;
 import com.eservice.api.service.impl.RepairCustomerFeedbackServiceImpl;
 import com.eservice.api.service.impl.RepairRecordServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -44,30 +45,43 @@ public class RepairCustomerFeedbackController {
      * 上传维修的用户评价
      * 更新对应的维修记录，更新对应的机器状态
      */
+    @Transactional(rollbackFor = Exception.class)
     @PostMapping("/add")
     public Result add(String repairCustomerFeedback,
                       String repairRecordId) {
-        RepairCustomerFeedback repairCustomerFeedback1 = JSON.parseObject(repairCustomerFeedback,RepairCustomerFeedback.class);
-        repairCustomerFeedbackService.saveAndGetID(repairCustomerFeedback1);
+        try {
+            RepairCustomerFeedback repairCustomerFeedback1 = JSON.parseObject(repairCustomerFeedback,RepairCustomerFeedback.class);
+            repairCustomerFeedbackService.saveAndGetID(repairCustomerFeedback1);
 
-        /**
-         * 更新对应的维修记录
-         */
-        RepairRecord repairRecord = repairRecordService.findById(Integer.parseInt(repairRecordId));
-        if(repairRecord == null){
-            return ResultGenerator.genFailResult("获取维修记录失败");
+            /**
+             * 更新对应的维修记录
+             */
+            RepairRecord repairRecord = repairRecordService.findById(Integer.parseInt(repairRecordId));
+            if(repairRecord == null){
+                return ResultGenerator.genFailResult("获取维修记录失败");
+            }
+            repairRecord.setUpdateTime(new Date());
+            repairRecord.setStatus(Constant.REPAIR_STATUS_REPAIR_CUSTOMER_CONFIRMED);
+            repairRecord.setCustomerFeedback(repairCustomerFeedback1.getId());
+            repairRecordService.update(repairRecord);
+
+            /**
+             * 更新对应的机器状态
+             * 根据客户的选择“未解决”、“已解决” 来更新相应状态
+             */
+            Machine machine = machineService.findBy("nameplate",repairRecord.getMachineNameplate());
+            if(repairCustomerFeedback1.getCustomerRepairResult().equals(Constant.REPAIR_RESULT_FIXED_NG)){
+                machine.setStatus(Constant.MACHINE_STATUS_WAIT_FOR_REPAIR);
+            } else if(repairCustomerFeedback1.getCustomerRepairResult().equals(Constant.REPAIR_RESULT_FIXED_OK)) {
+                machine.setStatus(Constant.MACHINE_STATUS_IN_NORMAL);
+            } else {
+                throw new RuntimeException();
+            }
+            machineService.update(machine);
+        } catch (Exception ex) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return ResultGenerator.genFailResult("数据更新出错！" + ex.getMessage());
         }
-        repairRecord.setUpdateTime(new Date());
-        repairRecord.setStatus(Constant.REPAIR_STATUS_REPAIR_CUSTOMER_CONFIRMED);
-        repairRecord.setCustomerFeedback(repairCustomerFeedback1.getId());
-        repairRecordService.update(repairRecord);
-        
-        /**
-         * 更新对应的机器状态
-         */
-        Machine machine = machineService.findBy("nameplate",repairRecord.getMachineNameplate());
-        machine.setStatus(Constant.MACHINE_STATUS_IN_NORMAL);
-        machineService.update(machine);
         return ResultGenerator.genSuccessResult();
     }
 

@@ -77,6 +77,14 @@ public class Constant {
     public static final String REPAIR_STATUS_REPAIR_CUSTOMER_CONFIRMED = "5";
 
     /**
+     * 维修结果（客户选择）
+     * 0：已解决
+     * 1：未解决
+     */
+    public static final String REPAIR_RESULT_FIXED_OK = "Fixed_OK";
+    public static final String REPAIR_RESULT_FIXED_NG = "Fixed_NG";
+    
+    /**
      * 机器状态
      * 0：未绑定，
      * 1：已绑定，
@@ -93,7 +101,6 @@ public class Constant {
     public static final String MACHINE_STATUS_WAIT_FOR_MAINTAIN = "4";
     public static final String MACHINE_STATUS_WAIT_FOR_REPAIR = "5";
     public static final String MACHINE_STATUS_WAIT_FOR_CHECK = "6";
-
 
     /*
      保养状态

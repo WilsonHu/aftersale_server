@@ -21,4 +21,7 @@ public class InstallCustomerFeedbackServiceImpl extends AbstractService<InstallC
     @Resource
     private InstallCustomerFeedbackMapper installCustomerFeedbackMapper;
 
+    public void saveAndGetID(InstallCustomerFeedback installCustomerFeedback){
+        installCustomerFeedbackMapper.saveAndGetID(installCustomerFeedback);
+    }
 }

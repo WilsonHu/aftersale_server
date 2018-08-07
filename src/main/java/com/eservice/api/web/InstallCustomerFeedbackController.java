@@ -1,10 +1,18 @@
 package com.eservice.api.web;
+import com.alibaba.fastjson.JSON;
 import com.eservice.api.core.Result;
 import com.eservice.api.core.ResultGenerator;
 import com.eservice.api.model.install_customer_feedback.InstallCustomerFeedback;
-import com.eservice.api.service.InstallCustomerFeedbackService;
+import com.eservice.api.model.install_record.InstallRecord;
+import com.eservice.api.model.machine.Machine;
+import com.eservice.api.service.InstallRecordService;
+import com.eservice.api.service.common.Constant;
+import com.eservice.api.service.impl.InstallCustomerFeedbackServiceImpl;
+import com.eservice.api.service.impl.MachineServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -13,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -24,11 +33,46 @@ import java.util.List;
 @RequestMapping("/install/customer/feedback")
 public class InstallCustomerFeedbackController {
     @Resource
-    private InstallCustomerFeedbackService installCustomerFeedbackService;
+    private InstallCustomerFeedbackServiceImpl installCustomerFeedbackService;
+    @Resource
+    private InstallRecordService installRecordService;
+    @Resource
+    private MachineServiceImpl machineService;
 
+    /**
+     * 上传安装的用户评价
+     * 更新对应的安装记录，更新对应的机器状态
+     */
+    @Transactional(rollbackFor = Exception.class)
     @PostMapping("/add")
-    public Result add(@RequestBody @NotNull InstallCustomerFeedback installCustomerFeedback) {
-        installCustomerFeedbackService.save(installCustomerFeedback);
+    public Result add(@RequestParam String installCustomerFeedback1,
+                      @RequestParam String installRecordId){
+        try {
+            InstallCustomerFeedback installCustomerFeedback = JSON.parseObject(installCustomerFeedback1, InstallCustomerFeedback.class);
+            installCustomerFeedbackService.saveAndGetID(installCustomerFeedback);
+
+            /**
+             * 更新对应的安装记录
+             */
+            InstallRecord installRecord = installRecordService.findById(Integer.parseInt(installRecordId));
+            if (installRecord == null) {
+                return ResultGenerator.genFailResult("获取安装记录失败");
+            }
+            installRecord.setUpdateTime(new Date());
+            installRecord.setInstallStatus(Constant.INSTALL_STATUS_FINISHED);
+            installRecord.setCustomerFeedback(installCustomerFeedback.getId());
+            installRecordService.update(installRecord);
+
+            /**
+             * 更新对应的机器状态
+             */
+            Machine machine = machineService.findBy("nameplate", installRecord.getMachineNameplate());
+            machine.setStatus(Constant.MACHINE_STATUS_IN_NORMAL);
+            machineService.update(machine);
+        } catch (Exception ex) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return ResultGenerator.genFailResult("数据更新出错！" + ex.getMessage());
+        }
         return ResultGenerator.genSuccessResult();
     }
 

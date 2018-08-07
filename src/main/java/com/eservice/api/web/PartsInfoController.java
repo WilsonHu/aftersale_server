@@ -59,7 +59,7 @@ public class PartsInfoController {
     }
 
     /**
-     * 配件信息的查询方法： 共用 getRepairRecordInfoList(...)
+     * 閰嶄欢淇℃伅鐨勬煡璇㈡柟娉曪細 鍏辩敤 getRepairRecordInfoList(...)
      */
 
 }

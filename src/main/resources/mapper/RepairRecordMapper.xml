@@ -26,7 +26,7 @@
     <!--
      WARNING - @mbg.generated
    -->
-    <id column="id" jdbcType="INTEGER" property="id" />
+    <id column="repairRecordId" jdbcType="INTEGER" property="id" />
     <result column="repair_record_num" jdbcType="VARCHAR" property="repairRecordNum" />
     <result column="customer" jdbcType="INTEGER" property="customer" />
     <result column="machine_nameplate" jdbcType="VARCHAR" property="machineNameplate" />
@@ -111,6 +111,7 @@
     rai.issue_description as repairActualIssueDescription,
     rai.repair_method as repairActualMethod,
     rai.after_resolve_pictures as afterResolvePictures,
+    rr.id as repairRecordId,
     rr.*,
     rcf.customer_mark as repairFeedbackCustomerMark,
     rcf.customer_suggestion as repairFeedbackCustomerSuggestion,
