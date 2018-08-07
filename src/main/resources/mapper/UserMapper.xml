@@ -46,6 +46,12 @@
     JOIN role r ON r.id = u.role_id
     LEFT JOIN agent a ON a.id = u.agent
     where 1=1
+    <if test="userType == 1">
+      AND (r.id = 1 OR r.id = 2 OR r.id = 3 OR r.id = 4)
+    </if>
+    <if test="userType == 2">
+      AND (r.id = 5 OR r.id = 6)
+    </if>
     <if test="account != null and account != ''">
       AND u.account LIKE CONCAT('%','${account}','%' )
     </if>

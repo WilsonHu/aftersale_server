@@ -1,16 +1,16 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : localhost
-Source Server Version : 50547
+Source Server         : local
+Source Server Version : 50553
 Source Host           : localhost:3306
 Source Database       : aftersale_db
 
 Target Server Type    : MYSQL
-Target Server Version : 50547
+Target Server Version : 50553
 File Encoding         : 65001
 
-Date: 2018-08-07 15:17:55
+Date: 2018-08-08 00:46:46
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -671,8 +671,8 @@ INSERT INTO `role` VALUES ('1', '超级管理员', '全局管理', '');
 INSERT INTO `role` VALUES ('2', '管理员', '售后业务管理', null);
 INSERT INTO `role` VALUES ('3', '普通员工', '安装，保养，维修（包括了信胜和客户的）', null);
 INSERT INTO `role` VALUES ('4', '代理商', '代理商', null);
-INSERT INTO `role` VALUES ('5', '客户本身', '权限在客户级别，比如查看客户自己所有机器', null);
-INSERT INTO `role` VALUES ('6', '客户的联系人', '权限在联系人自己级别，比如只能查看联系人自己名下的机器', null);
+INSERT INTO `role` VALUES ('5', '客户', '权限在客户级别，比如查看客户自己所有机器', null);
+INSERT INTO `role` VALUES ('6', '联系人', '权限在联系人自己级别，比如只能查看联系人自己名下的机器', null);
 
 -- ----------------------------
 -- Table structure for `user`
@@ -684,7 +684,7 @@ CREATE TABLE `user` (
   `name` varchar(255) NOT NULL,
   `wechat_union_id` varchar(255) DEFAULT NULL COMMENT '微信unionId，在没授权前是空的。',
   `role_id` int(10) unsigned NOT NULL,
-  `agent` int(10) unsigned DEFAULT NULL COMMENT '代理商,如果是空表示是信胜自己的员工',
+  `agent` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '代理商,如果是空表示是信胜自己的员工',
   `customer_company` int(10) unsigned DEFAULT NULL COMMENT '客户公司',
   `password` varchar(255) NOT NULL,
   `valid` varchar(255) NOT NULL COMMENT '是否在职 ， “1”:在职 “0”:离职',
@@ -700,7 +700,7 @@ CREATE TABLE `user` (
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES ('1', 'admin', 'admin', 'wechat222', '1', '1', '0', 'sinsim', '1', 'admin13566667777', '2018-07-11 10:03:43', '客户地址admin111');
+INSERT INTO `user` VALUES ('1', 'admin', 'admin', 'wechat222', '1', '0', '0', 'sinsim', '1', '13566667777', '2018-07-11 10:03:43', '客户地址admin111');
 INSERT INTO `user` VALUES ('2', 'admin_in_aftersale', 'admin_in_aftersale', null, '2', '1', '0', 'sinsim', '1', 'admin_in_aftersale13455556666', '2018-07-21 08:53:49', '客户地址admin_in_after111');
 INSERT INTO `user` VALUES ('3', 'repairPerson_zhansan', 'repairPerson_zhansan', '', '3', '1', '0', 'sinsim', '1', 'repairPerson_zhansan的电话13455556633', '0000-00-00 00:00:00', '客户地址zhangsan3333');
 INSERT INTO `user` VALUES ('4', 'repairPerson_lisi', 'repairPerson_lisi', '', '3', '2', '0', 'sinsim', '1', 'repairPerson_lisi1的电话3455556666', '0000-00-00 00:00:00', '客户地址Lisi444');
@@ -712,5 +712,5 @@ INSERT INTO `user` VALUES ('9', 'kehu_Lxr2', 'kehu_Lxr2', null, '6', '1', '0', '
 INSERT INTO `user` VALUES ('10', 'repairPerson_wangwu', 'repairPerson_wangwu', null, '3', '1', '0', 'sinsim', '1', 'repairPerson_wangwu的电话yyyy', '0000-00-00 00:00:00', '客户地址wangwu5555');
 INSERT INTO `user` VALUES ('11', 'kehu3_w_agent', 'kehu3_w_agent', null, '5', '2', '0', 'sinsim', '1', 'kehu3_w_agent的电话zzz', '0000-00-00 00:00:00', '客户地址kehu3_w_agent3333');
 INSERT INTO `user` VALUES ('12', 'kehu4_w_agent', 'kehu4_w_agent', null, '5', '1', '0', 'sinsim', '1', 'kehu4_w_agent的电话www4444', '0000-00-00 00:00:00', '客户地址kehu4_w_agent4444444');
-INSERT INTO `user` VALUES ('13', 'repairPerson13', 'repairPerson13', null, '3', null, null, 'sinsim', '', 'repairPerson13-phone333', '0000-00-00 00:00:00', null);
-INSERT INTO `user` VALUES ('14', 'user14', 'user14', null, '3', null, '0', 'sinsim', '1', 'user14-phone123', '0000-00-00 00:00:00', null);
+INSERT INTO `user` VALUES ('13', 'repairPerson13', 'repairPerson13', null, '3', '0', null, 'sinsim', '', 'repairPerson13-phone333', '0000-00-00 00:00:00', null);
+INSERT INTO `user` VALUES ('14', 'user14', 'user14', null, '3', '0', '0', 'sinsim', '1', 'user14-phone123', '0000-00-00 00:00:00', null);
