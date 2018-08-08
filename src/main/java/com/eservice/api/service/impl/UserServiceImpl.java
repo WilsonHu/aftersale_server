@@ -1,9 +1,10 @@
 package com.eservice.api.service.impl;
 
+import com.eservice.api.core.AbstractService;
 import com.eservice.api.dao.UserMapper;
 import com.eservice.api.model.user.User;
+import com.eservice.api.model.user.UserInfo;
 import com.eservice.api.service.UserService;
-import com.eservice.api.core.AbstractService;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -41,7 +42,7 @@ public class UserServiceImpl extends AbstractService<User> implements UserServic
         return userMapper.requestLogin(account, password,unionid);
     }
 
-    public List<User> getUsersByType(String type){
+    public List<UserInfo> getUsersByType(String type){
         return userMapper.getUsersByType(type);
     }
 

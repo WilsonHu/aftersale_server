@@ -1,77 +1,98 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.eservice.api.dao.UserMapper">
-  <resultMap id="BaseResultMap" type="com.eservice.api.model.user.User">
-    <!--
-      WARNING - @mbg.generated
-    -->
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="account" jdbcType="VARCHAR" property="account" />
-    <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="wechat_union_id" jdbcType="VARCHAR" property="wechatUnionId" />
-    <result column="role_id" jdbcType="INTEGER" property="roleId" />
-    <result column="agent" jdbcType="INTEGER" property="agent" />
-    <result column="password" jdbcType="VARCHAR" property="password" />
-    <result column="valid" jdbcType="VARCHAR" property="valid" />
-    <result column="phone" jdbcType="VARCHAR" property="phone" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="customer_company" jdbcType="INTEGER" property="customerCompany" />
-    <result column="address" jdbcType="VARCHAR" property="address" />
-  </resultMap>
-    <select id="selectByAccount" resultMap="BaseResultMap">
+	<resultMap id="BaseResultMap" type="com.eservice.api.model.user.User">
+		<!--
+		  WARNING - @mbg.generated
+		-->
+		<id column="id" jdbcType="INTEGER" property="id"/>
+		<result column="account" jdbcType="VARCHAR" property="account"/>
+		<result column="name" jdbcType="VARCHAR" property="name"/>
+		<result column="wechat_union_id" jdbcType="VARCHAR" property="wechatUnionId"/>
+		<result column="role_id" jdbcType="INTEGER" property="roleId"/>
+		<result column="agent" jdbcType="INTEGER" property="agent"/>
+		<result column="password" jdbcType="VARCHAR" property="password"/>
+		<result column="valid" jdbcType="VARCHAR" property="valid"/>
+		<result column="phone" jdbcType="VARCHAR" property="phone"/>
+		<result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+		<result column="customer_company" jdbcType="INTEGER" property="customerCompany"/>
+		<result column="address" jdbcType="VARCHAR" property="address"/>
+	</resultMap>
+	<resultMap id="UserInfoResultMap" type="com.eservice.api.model.user.UserInfo">
+		<!--
+		  WARNING - @mbg.generated
+		-->
+		<id column="id" jdbcType="INTEGER" property="id"/>
+		<result column="account" jdbcType="VARCHAR" property="account"/>
+		<result column="name" jdbcType="VARCHAR" property="name"/>
+		<result column="wechat_union_id" jdbcType="VARCHAR" property="wechatUnionId"/>
+		<result column="role_id" jdbcType="INTEGER" property="roleId"/>
+		<result column="agent" jdbcType="INTEGER" property="agent"/>
+		<result column="password" jdbcType="VARCHAR" property="password"/>
+		<result column="valid" jdbcType="VARCHAR" property="valid"/>
+		<result column="phone" jdbcType="VARCHAR" property="phone"/>
+		<result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+		<result column="customer_company" jdbcType="INTEGER" property="customerCompany"/>
+		<result column="address" jdbcType="VARCHAR" property="address"/>
+
+		<result column="agent_name" jdbcType="VARCHAR" property="agentName"/>
+	</resultMap>
+	<select id="selectByAccount" resultMap="BaseResultMap">
          select * from user  where account=#{account}
     </select>
 
-  <select id="requestLogin" resultMap="BaseResultMap">
-    SELECT u.*
-    FROM user u
-    WHERE u.account = '${account}' AND u.password = '${password}'
-    <if test="unionid != null and unionid !='' " >
-      AND  u.wechat_union_id ='${unionid}'
-    </if>
+	<select id="requestLogin" resultMap="BaseResultMap">
+		SELECT u.*
+		FROM user u
+		WHERE u.account = '${account}' AND u.password = '${password}'
+		<if test="unionid != null and unionid !='' ">
+			AND u.wechat_union_id ='${unionid}'
+		</if>
 
-  </select>
+	</select>
 
-  <select id="getUsersByType" resultMap="BaseResultMap">
+	<select id="getUsersByType" resultMap="UserInfoResultMap">
     SELECT
-    *
-    from user
+    u.*,
+    a.`name` as agent_name
+    from user AS u
+    LEFT JOIN agent a ON a.id = u.agent
 --     5：客户本身，6：客户的联系人
-    WHERE `user`.role_id = #{type}
+    WHERE u.role_id = #{type}
   </select>
 
-  <select id="selectUsers" resultMap="BaseResultMap">
-    SELECT u.*
-    FROM user u
-    JOIN role r ON r.id = u.role_id
-    LEFT JOIN agent a ON a.id = u.agent
-    where 1=1
-    <if test="userType == 1">
-      AND (r.id = 1 OR r.id = 2 OR r.id = 3 OR r.id = 4)
-    </if>
-    <if test="userType == 2">
-      AND (r.id = 5 OR r.id = 6)
-    </if>
-    <if test="account != null and account != ''">
-      AND u.account LIKE CONCAT('%','${account}','%' )
-    </if>
-    <if test="name != null and name != ''">
-      AND u.name LIKE CONCAT('%','${name}','%' )
-    </if>
-    <if test="roleId != null and roleId > 0">
-      AND u.role_id = ${roleId}
-    </if>
-    <if test="currentUserAgent != null and currentUserAgent != ''">
-      AND u.agent = ${currentUserAgent}
-    </if>
-    <if test="(currentUserAgent == null or currentUserAgent != '') and isAgent and agent != null and agent > 0">
-      AND u.agent = ${agent}
-    </if>
-    <if test="!isAgent">
-      AND u.agent = 0
-    </if>
-    <if test="valid != null and valid != ''">
-      AND u.valid = ${valid}
-    </if>
-  </select>
+	<select id="selectUsers" resultMap="BaseResultMap">
+		SELECT u.*
+		FROM user u
+		JOIN role r ON r.id = u.role_id
+		LEFT JOIN agent a ON a.id = u.agent
+		where 1=1
+		<if test="userType == 1">
+			AND (r.id = 1 OR r.id = 2 OR r.id = 3 OR r.id = 4)
+		</if>
+		<if test="userType == 2">
+			AND (r.id = 5 OR r.id = 6)
+		</if>
+		<if test="account != null and account != ''">
+			AND u.account LIKE CONCAT('%','${account}','%' )
+		</if>
+		<if test="name != null and name != ''">
+			AND u.name LIKE CONCAT('%','${name}','%' )
+		</if>
+		<if test="roleId != null and roleId > 0">
+			AND u.role_id = ${roleId}
+		</if>
+		<if test="currentUserAgent != null and currentUserAgent != ''">
+			AND u.agent = ${currentUserAgent}
+		</if>
+		<if test="(currentUserAgent == null or currentUserAgent != '') and isAgent and agent != null and agent > 0">
+			AND u.agent = ${agent}
+		</if>
+		<if test="!isAgent">
+			AND u.agent = 0
+		</if>
+		<if test="valid != null and valid != ''">
+			AND u.valid = ${valid}
+		</if>
+	</select>
 </mapper>

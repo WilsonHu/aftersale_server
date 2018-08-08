@@ -1,6 +1,5 @@
 package com.eservice.api.web;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.eservice.api.core.Result;
 import com.eservice.api.core.ResultGenerator;
@@ -8,17 +7,15 @@ import com.eservice.api.model.install_record.InstallRecord;
 import com.eservice.api.model.machine.Machine;
 import com.eservice.api.model.machine.MachineBaseRecordInfo;
 import com.eservice.api.model.machine.MachineInfo;
+import com.eservice.api.service.common.CommonUtils;
+import com.eservice.api.service.common.Constant;
 import com.eservice.api.service.impl.InstallRecordServiceImpl;
 import com.eservice.api.service.impl.MachineServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.constraints.NotNull;
@@ -62,12 +59,13 @@ public class MachineController {
                         TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
                         return ResultGenerator.genFailResult("第" + index + "个机器已存在，不能重复绑定！");
                     }
-                    item.setStatus("1");
+                    item.setStatus(com.eservice.api.service.common.Constant.MACHINE_STATUS_BOUND_TO_CUSTOMER);//machine status
                     machineService.save(item);
 
                     InstallRecord ir = new InstallRecord();
+                    ir.setInstallRecordNum(CommonUtils.generateSequenceNo());
                     ir.setMachineNameplate(item.getNameplate());
-                    ir.setInstallStatus("0");
+                    ir.setInstallStatus(Constant.INSTALL_STATUS_NOT_ASSIGN);//install status
                     ir.setCreateTime(new Date());
                     installRecordService.save(ir);
                 } catch (Exception ex) {

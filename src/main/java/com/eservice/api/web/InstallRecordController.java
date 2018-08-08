@@ -8,17 +8,14 @@ import com.eservice.api.model.install_members.InstallMembers;
 import com.eservice.api.model.install_record.InstallRecord;
 import com.eservice.api.model.install_record.InstallRecordInfo;
 import com.eservice.api.model.machine.Machine;
+import com.eservice.api.service.common.CommonUtils;
 import com.eservice.api.service.impl.InstallMembersServiceImpl;
 import com.eservice.api.service.impl.InstallRecordServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.constraints.NotNull;
@@ -41,6 +38,7 @@ public class InstallRecordController {
 
     @PostMapping("/add")
     public Result add(@RequestBody @NotNull InstallRecord installRecord) {
+        installRecord.setInstallRecordNum(CommonUtils.generateSequenceNo());
         installRecordService.save(installRecord);
         return ResultGenerator.genSuccessResult();
     }
