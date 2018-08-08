@@ -21,4 +21,7 @@ public class MaintainCustomerFeedbackServiceImpl extends AbstractService<Maintai
     @Resource
     private MaintainCustomerFeedbackMapper maintainCustomerFeedbackMapper;
 
+    public void saveAndGetID(MaintainCustomerFeedback maintainCustomerFeedback){
+        maintainCustomerFeedbackMapper.saveAndGetID(maintainCustomerFeedback);
+    }
 }
