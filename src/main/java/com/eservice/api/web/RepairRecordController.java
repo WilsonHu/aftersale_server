@@ -23,11 +23,10 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Class Description: xxx
- *
- * @author Wilson Hu
- * @date 2018/08/04.
- */
+* Class Description: xxx
+* @author Wilson Hu
+* @date 2018/08/04.
+*/
 @RestController
 @RequestMapping("/repair/record")
 public class RepairRecordController {
@@ -81,7 +80,6 @@ public class RepairRecordController {
 
     /**
      * 根据条件查询维修信息
-     *
      * @param nameplate
      * @param orderNum
      * @param repairStatus
@@ -98,26 +96,26 @@ public class RepairRecordController {
      */
     @PostMapping("/getRepairRecordInfoList")
     public Result getRepairRecordInfoList(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size,
-                                          String nameplate,
-                                          String orderNum,
-                                          String repairStatus,
-                                          String partsStatus,
-                                          String repairRecordCustomerName,
-                                          String agent,
-                                          String repairChargePersonName,
-                                          String issuePositionName,
-                                          String inWarrantyPeriod,
-                                          String queryStartRepairCreateTime,
-                                          String queryFinishRepairCreateTime,
-                                          String queryStartRepairEndTime,
-                                          String queryFinishRepairEndTime,
-                                          boolean isFuzzy) {
+                                           String nameplate,
+                                           String orderNum,
+                                           String repairStatus,
+//                                           String partsStatus,
+                                           String repairRecordCustomerName,
+                                           String agent,
+                                           String repairChargePersonName,
+                                           String issuePositionName,
+                                           String inWarrantyPeriod,
+                                           String queryStartRepairCreateTime,
+                                           String queryFinishRepairCreateTime,
+                                           String queryStartRepairEndTime,
+                                           String queryFinishRepairEndTime,
+                                           boolean isFuzzy) {
         PageHelper.startPage(page, size);
         List<RepairRecordInfo> list = repairRecordService.getRepairRecordInfoList(
                 nameplate,
                 orderNum,
                 repairStatus,
-                partsStatus,
+//                partsStatus,
                 repairRecordCustomerName,
                 agent,
                 repairChargePersonName,

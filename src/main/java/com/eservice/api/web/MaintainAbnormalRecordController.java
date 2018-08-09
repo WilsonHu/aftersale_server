@@ -26,6 +26,10 @@ public class MaintainAbnormalRecordController {
     @Resource
     private MaintainAbnormalRecordService maintainAbnormalRecordService;
 
+    /**
+     * 新增保养异常记录,多个异常记录需要增加多次。
+     * 在“保养异常”界面每次按确定时调用一次。
+     */
     @PostMapping("/add")
     public Result add(@RequestBody @NotNull MaintainAbnormalRecord maintainAbnormalRecord) {
         maintainAbnormalRecordService.save(maintainAbnormalRecord);

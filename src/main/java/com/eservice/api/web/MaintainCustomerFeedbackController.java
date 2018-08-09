@@ -40,8 +40,8 @@ public class MaintainCustomerFeedbackController {
     private MachineServiceImpl machineService;
 
     /**
-     * ÉÏ´«±£ÑøµÄÓÃ»§ÆÀ¼Û
-     * ¸üĞÂ¶ÔÓ¦µÄ±£Ñø¼ÇÂ¼£¬¸üĞÂ¶ÔÓ¦µÄ»úÆ÷×´Ì¬
+     * ä¸Šä¼ ä¿å…»çš„ç”¨æˆ·è¯„ä»·
+     * æ›´æ–°å¯¹åº”çš„ä¿å…»è®°å½•ï¼Œæ›´æ–°å¯¹åº”çš„æœºå™¨çŠ¶æ€
      */
     @Transactional(rollbackFor = Exception.class)
     @PostMapping("/add")
@@ -52,11 +52,11 @@ public class MaintainCustomerFeedbackController {
             maintainCustomerFeedbackService.saveAndGetID(maintainCustomerFeedback);
 
             /**
-             * ¸üĞÂ¶ÔÓ¦µÄ±£Ñø¼ÇÂ¼
+             * æ›´æ–°å¯¹åº”çš„ä¿å…»è®°å½•
              */
             MaintainRecord maintainRecord = maintainRecordService.findById(Integer.parseInt(maintainRecordId));
             if (maintainRecord == null) {
-                return ResultGenerator.genFailResult("»ñÈ¡±£Ñø¼ÇÂ¼Ê§°Ü");
+                return ResultGenerator.genFailResult("è·å–ä¿å…»è®°å½•å¤±è´¥");
             }
             maintainRecord.setUpdateTime(new Date());
             maintainRecord.setMaintainStatus(Constant.MAINTAIN_STATUS_FINISHED);
@@ -64,14 +64,14 @@ public class MaintainCustomerFeedbackController {
             maintainRecordService.update(maintainRecord);
 
             /**
-             * ¸üĞÂ¶ÔÓ¦µÄ»úÆ÷×´Ì¬
+             * æ›´æ–°å¯¹åº”çš„æœºå™¨çŠ¶æ€
              */
             Machine machine = machineService.findBy("nameplate", maintainRecord.getMachineNameplate());
             machine.setStatus(Constant.MACHINE_STATUS_IN_NORMAL);
             machineService.update(machine);
         } catch (Exception ex) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-            return ResultGenerator.genFailResult("Êı¾İ¸üĞÂ³ö´í£¡" + ex.getMessage());
+            return ResultGenerator.genFailResult("æ•°æ®æ›´æ–°å‡ºé”™ï¼" + ex.getMessage());
         }
         return ResultGenerator.genSuccessResult();
     }

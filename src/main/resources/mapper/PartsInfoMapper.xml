@@ -17,4 +17,32 @@
     <result column="sendback_confirmed_time" jdbcType="TIMESTAMP" property="sendbackConfirmedTime" />
     <result column="sendback_confirmed_person" jdbcType="INTEGER" property="sendbackConfirmedPerson" />
   </resultMap>
+
+  <resultMap id="PartsAllInfoMap" type="com.eservice.api.model.parts_info.PartsAllInfo">
+
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="parts_name" jdbcType="VARCHAR" property="partsName" />
+    <result column="supplier" jdbcType="VARCHAR" property="supplier" />
+    <result column="params" jdbcType="VARCHAR" property="params" />
+    <result column="repair_actual_info_id" jdbcType="INTEGER" property="repairActualInfoId" />
+    <result column="parts_status" jdbcType="VARCHAR" property="partsStatus" />
+    <result column="sendback_tracking_number" jdbcType="VARCHAR" property="sendbackTrackingNumber" />
+    <result column="sendback_tracking_pictrue" jdbcType="VARCHAR" property="sendbackTrackingPictrue" />
+    <result column="sendback_date" jdbcType="DATE" property="sendbackDate" />
+    <result column="sendback_confirmed_time" jdbcType="TIMESTAMP" property="sendbackConfirmedTime" />
+    <result column="sendback_confirmed_person" jdbcType="INTEGER" property="sendbackConfirmedPerson" />
+
+    <result column="sendbackConfirmedPersonName" jdbcType="INTEGER" property="sendbackConfirmedPersonName" />
+  </resultMap>
+
+  <select id="getPartsInfoByRepairRecordId" resultMap="PartsAllInfoMap">
+    SELECT
+    parts_info.*,
+    userOfSendbackConfirmedPerson.`name`  AS sendbackConfirmedPersonName
+    from parts_info
+    LEFT JOIN user as userOfSendbackConfirmedPerson ON userOfSendbackConfirmedPerson.id = parts_info.sendback_confirmed_person
+    LEFT JOIN repair_actual_info as rai ON rai.id = parts_info.repair_actual_info_id
+    LEFT JOIN repair_record as rr ON rr.id = rai.repair_record_id
+    WHERE  rr.id = #{repairRecordId}
+  </select>
 </mapper>

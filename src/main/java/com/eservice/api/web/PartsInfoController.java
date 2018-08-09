@@ -1,8 +1,9 @@
 package com.eservice.api.web;
 import com.eservice.api.core.Result;
 import com.eservice.api.core.ResultGenerator;
+import com.eservice.api.model.parts_info.PartsAllInfo;
 import com.eservice.api.model.parts_info.PartsInfo;
-import com.eservice.api.service.PartsInfoService;
+import com.eservice.api.service.impl.PartsInfoServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,7 +25,7 @@ import java.util.List;
 @RequestMapping("/parts/info")
 public class PartsInfoController {
     @Resource
-    private PartsInfoService partsInfoService;
+    private PartsInfoServiceImpl partsInfoService;
 
     @PostMapping("/add")
     public Result add(@RequestBody @NotNull PartsInfo partsInfo) {
@@ -54,6 +55,19 @@ public class PartsInfoController {
     public Result list(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size) {
         PageHelper.startPage(page, size);
         List<PartsInfo> list = partsInfoService.findAll();
+        PageInfo pageInfo = new PageInfo(list);
+        return ResultGenerator.genSuccessResult(pageInfo);
+    }
+
+    /**
+     * 根据 repair_record_id 查询 配件信息
+     * （RepairRecordInfo中已不包含配件信息）
+     */
+    @PostMapping("/getPartsInfoByRepairRecordId")
+    public Result getPartsInfoByRepairRecordId(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size,
+                                               @RequestParam Integer repairRecordId) {
+        PageHelper.startPage(page, size);
+        List<PartsAllInfo> list = partsInfoService.getPartsInfoByRepairRecordId(repairRecordId);
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
     }
