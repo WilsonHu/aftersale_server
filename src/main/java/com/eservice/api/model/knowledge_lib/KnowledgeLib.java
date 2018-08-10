@@ -26,7 +26,7 @@ public class KnowledgeLib {
     @Column(name = "update_time")
     private Date updateTime;
 
-    private String html;
+    private byte[] html;
 
     /**
      * @return id
@@ -109,14 +109,14 @@ public class KnowledgeLib {
     /**
      * @return html
      */
-    public String getHtml() {
+    public byte[] getHtml() {
         return html;
     }
 
     /**
      * @param html
      */
-    public void setHtml(String html) {
+    public void setHtml(byte[] html) {
         this.html = html;
     }
 }
