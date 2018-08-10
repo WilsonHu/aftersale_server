@@ -153,7 +153,7 @@ public class MachineController {
                                           String query_start_time_install,
                                           String query_finish_time_install,
                                           String machineWhereFrom,
-                                          String installChargePerson,
+//                                          String installChargePerson,
                                           boolean isFuzzy) {
         PageHelper.startPage(page, size);
         List<MachineInfo> list = machineService.getSaledMachineInfoList(nameplate,
@@ -165,7 +165,7 @@ public class MachineController {
                 query_start_time_install,
                 query_finish_time_install,
                 machineWhereFrom,
-                installChargePerson,
+//                installChargePerson,
                 isFuzzy);
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);

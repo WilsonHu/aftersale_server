@@ -17,7 +17,7 @@ public class MachineInfo extends Machine {
     /**
      * 索引转换实际名字,来自 machine.nameplate-->install_record.installChargePerson-->user.name
      */
-    private String installChargePerson;
+//    private String installChargePerson;
 
      /**
      * 实际完成安装时间
@@ -40,13 +40,13 @@ public class MachineInfo extends Machine {
         this.agent = agent;
      }
 
-    public String getInstallChargePerson(){
-        return this.installChargePerson;
-     }
-
-    public void setInstallChargePerson(String installChargePerson){
-         this.installChargePerson = installChargePerson;
-     }
+//    public String getInstallChargePerson(){
+//        return this.installChargePerson;
+//     }
+//
+//    public void setInstallChargePerson(String installChargePerson){
+//         this.installChargePerson = installChargePerson;
+//     }
 
     public Date getInstallActualTime() {
         return installActualTime;

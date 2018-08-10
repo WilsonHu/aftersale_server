@@ -20,7 +20,7 @@ public interface MachineMapper extends Mapper<Machine> {
                                               @Param("query_start_time_install") String query_start_time_install,
                                               @Param("query_finish_time_install") String query_finish_time_install,
                                               @Param("machineWhereFrom") String machineWhereFrom,
-                                              @Param("installChargePerson") String installChargePerson,
+//                                              @Param("installChargePerson") String installChargePerson,
                                               @Param("isFuzzy") boolean isFuzzy);
 
     List<MachineBaseRecordInfo> selectBaseRecordByNameplate(@Param("nameplate") String nameplate);

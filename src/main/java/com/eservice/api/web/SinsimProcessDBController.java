@@ -2,12 +2,10 @@ package com.eservice.api.web;
 
 import com.eservice.api.core.Result;
 import com.eservice.api.core.ResultGenerator;
-import com.eservice.api.model.machine.Machine;
 import com.eservice.api.model.machine.MachineInfo;
 import com.eservice.api.model.machine.MachineInfosInProcessDb;
 import com.eservice.api.model.machine.MachineType;
 import com.eservice.api.service.impl.MachineServiceImpl;
-import com.github.pagehelper.Constant;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +16,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import sun.invoke.empty.Empty;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -75,7 +71,7 @@ public class SinsimProcessDBController {
                         "",
                         "",
                         "",
-                        "",
+//                        "",
                          isFuzzy);
                 MachineInfo machineInfo = null;
                 if (saledMachineList != null && saledMachineList.size() > 0) {

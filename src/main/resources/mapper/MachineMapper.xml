@@ -54,7 +54,7 @@
     <result column="customerName" jdbcType="VARCHAR" property="customerName" />
     <result column="agent_name" jdbcType="VARCHAR" property="agent" />
     <result column="install_actual_time" jdbcType="DATE" property="installActualTime" />
-    <result column="install_charge_person_name" jdbcType="VARCHAR" property="installChargePerson" />
+    <!--<result column="install_charge_person_name" jdbcType="VARCHAR" property="installChargePerson" />-->
   </resultMap>
 
     <resultMap id="MachineBaseRecordInfoResultMap" type="com.eservice.api.model.machine.MachineBaseRecordInfo">
@@ -107,15 +107,15 @@
     u.name as customerName,
     a.name as agent_name,
     m.*, m.id as machineId,
-    ir.install_actual_time,
-    ir.install_charge_person,
-    userInInstallRecord.name as install_charge_person_name
+    ir.install_actual_time
+--     ir.install_charge_person,
+--     userInInstallRecord.name as install_charge_person_name
 
     FROM machine m
     LEFT JOIN user u ON u.id=m.customer
     LEFT JOIN agent a on a.id =u.agent
     LEFT JOIN install_record ir ON ir.machine_nameplate = m.nameplate
-    LEFT JOIN user userInInstallRecord ON userInInstallRecord.id = ir.install_charge_person
+--     LEFT JOIN user userInInstallRecord ON userInInstallRecord.id = ir.install_charge_person
 
     WHERE 1=1
     <if test="isFuzzy == true">
@@ -139,9 +139,9 @@
       <if test="machineWhereFrom != null and machineWhereFrom != ''">
         and m.is_old_machine  like CONCAT('%','${machineWhereFrom}','%' )
       </if>
-      <if test="installChargePerson != null and installChargePerson != ''">
-        and userInInstallRecord.name like CONCAT('%','${installChargePerson}','%' )
-      </if>
+      <!--<if test="installChargePerson != null and installChargePerson != ''">-->
+        <!--and userInInstallRecord.name like CONCAT('%','${installChargePerson}','%' )-->
+      <!--</if>-->
     </if>
     <if test="isFuzzy == false">
       <if test="customerName != null and customerName != ''">
@@ -164,9 +164,9 @@
       <if test="machineWhereFrom != null and machineWhereFrom != ''">
         and m.is_old_machine = '${machineWhereFrom}'
       </if>
-      <if test="installChargePerson != null and installChargePerson != ''">
-        and ir.install_charge_person = '${installChargePerson}'
-      </if>
+      <!--<if test="installChargePerson != null and installChargePerson != ''">-->
+        <!--and ir.install_charge_person = '${installChargePerson}'-->
+      <!--</if>-->
     </if>
 
     <if test="status != null and status != ''">

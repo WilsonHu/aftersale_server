@@ -37,7 +37,7 @@ public class MachineServiceImpl extends AbstractService<Machine> implements Mach
                                                      String query_start_time_install,
                                                      String query_finish_time_install,
                                                      String machineWhereFrom,
-                                                     String installChargePerson,
+//                                                     String installChargePerson,
                                                      boolean isFuzzy) {
         return machineMapper.getSaledMachineInfoList( nameplate,
                 orderNum,
@@ -48,7 +48,7 @@ public class MachineServiceImpl extends AbstractService<Machine> implements Mach
                 query_start_time_install,
                 query_finish_time_install,
                 machineWhereFrom,
-                installChargePerson,
+//                installChargePerson,
                 isFuzzy);
     }
 
