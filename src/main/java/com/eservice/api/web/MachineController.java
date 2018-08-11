@@ -39,6 +39,10 @@ public class MachineController {
 
     @PostMapping("/add")
     public Result add(@RequestBody @NotNull Machine machine) {
+        Machine dbMachine = machineService.findBy("nameplate", machine.getNameplate());
+        if (dbMachine != null) {
+            return ResultGenerator.genFailResult(machine.getNameplate() + "机器已存在，不能重复添加！");
+        }
         machineService.save(machine);
         return ResultGenerator.genSuccessResult();
     }
@@ -88,6 +92,13 @@ public class MachineController {
 
     @PostMapping("/update")
     public Result update(@RequestBody @NotNull Machine machine) {
+        List<MachineInfo> machineList = machineService.getSaledMachineInfoList(machine.getNameplate(), null,
+                null, null, null, null, null, null, null, false);
+        for (Machine info : machineList) {
+            if (info.getId() != machine.getId()) {
+                return ResultGenerator.genFailResult(machine.getNameplate() + "机器已存在,不能修改！");
+            }
+        }
         machineService.update(machine);
         return ResultGenerator.genSuccessResult();
     }
@@ -193,7 +204,7 @@ public class MachineController {
      */
     @PostMapping("/selectBaseRecordByUser")
     public Result selectBaseRecordByUser(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size,
-                                              @RequestParam String userName) {
+                                         @RequestParam String userName) {
         PageHelper.startPage(page, size);
         List<MachineBaseRecordInfo> list = machineService.selectBaseRecordByUser(userName);
         PageInfo pageInfo = new PageInfo(list);
