@@ -1,7 +1,7 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : local
+Source Server         : Local_sinsim
 Source Server Version : 50553
 Source Host           : localhost:3306
 Source Database       : aftersale_db
@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50553
 File Encoding         : 65001
 
-Date: 2018-08-12 10:17:37
+Date: 2018-08-12 14:43:10
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -288,7 +288,7 @@ INSERT INTO `machine` VALUES ('4', 'mph444', 'ddh444', 'htaaa233', 'geo111', '�
 INSERT INTO `machine` VALUES ('5', 'mph777', 'ddh0550', 'th_agent_customer444', 'geo999', '机器地址xxx路', '1', null, '帽子机', '31', '55', '59', '66', '100', null, '合同客户223', '11', '2018-07-11', '0', null);
 INSERT INTO `machine` VALUES ('6', 'mph788', 'ddh0550', 'th_agent_customer444', 'geo999', '机器地址xxx路', '1', null, '帽子机', '31', '55', '59', '66', '100', null, '合同客户223', '11', '2018-07-11', '1', null);
 INSERT INTO `machine` VALUES ('7', 'mph789', 'ddh0550', 'th_agent_customer444', 'geo999', '机器地址xxx路', '1', null, '帽子机', '31', '55', '59', '66', '100', null, '合同客户223', '12', '2018-07-22', '1', null);
-INSERT INTO `machine` VALUES ('8', 'mph--all-data', 'ddh0550', 'th_agent_customer444', 'geottt23.33', '机器地址xxx路11h', '1', null, 'maoziji', '31', '55', '59', '66', '100', null, '合同客户223', '11', '2018-07-22', '0', null);
+INSERT INTO `machine` VALUES ('8', 'mph--all-data', 'ddh0550', 'th_agent_customer444', 'geottt23.33', '机器地址xxx路11h', '5', null, 'maoziji', '31', '55', '59', '66', '100', null, '合同客户223', '11', '2018-07-22', '0', null);
 INSERT INTO `machine` VALUES ('13', '1806004', 'XS-1801109B', 'XS-1801109', null, '', '1', null, '高速双凸轮', '6', '800', '1600', '165', '88+2', null, '绍兴华文电脑刺绣有限公司', '2', '2018-08-31', '0', null);
 INSERT INTO `machine` VALUES ('14', '1806003', 'XS-1801109B', 'XS-1801109', null, '', '1', null, '高速双凸轮', '6', '800', '1600', '165', '88+2', null, '绍兴华文电脑刺绣有限公司', '2', '2018-08-31', '0', null);
 INSERT INTO `machine` VALUES ('17', '1806001', 'XS-1801109A', 'XS-1801109', null, '', '1', null, '高速双凸轮', '4', '800', '1600', '165', '88+2', null, '绍兴华文电脑刺绣有限公司', '7', '2018-08-31', '0', null);
@@ -618,7 +618,7 @@ CREATE TABLE `repair_record` (
   CONSTRAINT `fk_rr_machine_nameplate` FOREIGN KEY (`machine_nameplate`) REFERENCES `machine` (`nameplate`),
   CONSTRAINT `fk_rr_repair_charge_person` FOREIGN KEY (`repair_charge_person`) REFERENCES `user` (`id`),
   CONSTRAINT `fk_rr_repair_request_info` FOREIGN KEY (`repair_request_info`) REFERENCES `repair_request_info` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
 
 -- ----------------------------
 -- Records of repair_record
@@ -631,6 +631,7 @@ INSERT INTO `repair_record` VALUES ('7', null, '8', 'mph2233', '15', '0', '2018-
 INSERT INTO `repair_record` VALUES ('8', null, '8', 'mph555', '16', '0', '2018-07-16', '3', null, '2018-07-25 10:16:18', null, '4', '2018-07-19 13:46:38', null, null);
 INSERT INTO `repair_record` VALUES ('9', null, '9', 'mph777', '17', '1', '2018-07-17', '10', null, '2018-07-26 10:16:07', null, '2', '2018-07-19 13:50:51', null, null);
 INSERT INTO `repair_record` VALUES ('10', null, '14', 'mph789', '18', '1', '2018-07-18', '10', null, '2018-07-26 10:16:07', null, '3', '2018-07-19 13:55:23', null, null);
+INSERT INTO `repair_record` VALUES ('21', null, '1', 'mph--all-data', '29', null, null, null, null, null, null, '0', '2018-08-12 14:38:05', null, null);
 
 -- ----------------------------
 -- Table structure for `repair_request_info`
@@ -648,7 +649,7 @@ CREATE TABLE `repair_request_info` (
   PRIMARY KEY (`id`),
   KEY `fk_rri_contacter` (`customer`),
   CONSTRAINT `fk_rri_customer` FOREIGN KEY (`customer`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of repair_request_info
@@ -671,6 +672,7 @@ INSERT INTO `repair_request_info` VALUES ('15', 'mph333', '[D:/images/repair_req
 INSERT INTO `repair_request_info` VALUES ('16', 'mph333', '[D:/images/repair_req_nameplate/ mph333_REPAIR_REQUEST_NAMEPLATE_IMAGE_2018-07-19-13-46-38_2.png]', '[]', '标题有时会断线0719-2', '内容最近从五月份开始有时候会断线', '[D:/images/repair_req_img/ mph333_REPAIR_REQUEST_IMAGE_2018-07-19-13-46-38_1.png]', '1');
 INSERT INTO `repair_request_info` VALUES ('17', 'mph333', '[D:/images/repair_req_nameplate/ mph333_REPAIR_REQUEST_NAMEPLATE_IMAGE_2018-07-19-13-50-51_2.png]', '[]', '标题有时会断线0719-2', '内容最近从五月份开始有时候会断线', '[D:/images/repair_req_img/ mph333_REPAIR_REQUEST_IMAGE_2018-07-19-13-50-51_1.png]', '1');
 INSERT INTO `repair_request_info` VALUES ('18', 'mph333', '[D:/images/repair_req_nameplate/ mph333_REPAIR_REQUEST_NAMEPLATE_IMAGE_2018-07-19-13-55-23_2.png]', '[]', '标题有时会断线0719-2', '内容最近从五月份开始有时候会断线', '[D:/images/repair_req_img/ mph333_REPAIR_REQUEST_IMAGE_2018-07-19-13-55-23_1.png]', '1');
+INSERT INTO `repair_request_info` VALUES ('29', 'mph--all-data', 'D:/images/repair_req_nameplate/ mph--all-data_REPAIR_REQUEST_NAMEPLATE_IMAGE_2018-08-12-14-38-05_0.png', 'D:/images/repair_req_voice/ mph--all-data_REPAIR_REQUEST_VOICE_2018-08-12-14-38-05_0.mp3', '马达不转0812add', '马达不转2222', '[D:/images/repair_req_img/ mph--all-data_REPAIR_REQUEST_IMAGE_2018-08-12-14-38-05_0.png, D:/images/repair_req_img/ mph--all-data_REPAIR_REQUEST_IMAGE_2018-08-12-14-38-05_1.png, D:/images/repair_req_img/ mph--all-data_REPAIR_REQUEST_IMAGE_2018-08-12-14-38-05_2.png]', '1');
 
 -- ----------------------------
 -- Table structure for `role`

@@ -26,7 +26,7 @@ public class CommonService {
      * @param path      保存文件的总路径
      * @param file      文件
      * @param nameplate 机器的铭牌号
-     * 文件类型包含着文件名称之中，比如
+     * @param fileType 文件类型
      * @param number    表示第几个文件
      * @return 文件路径
      * eg: mph333_REPAIR_REQUEST_IMAGE_2018-07-13-16-17-50_1.png
@@ -34,28 +34,14 @@ public class CommonService {
     public String saveFile(String path,
                            MultipartFile file,
                            @RequestParam(defaultValue = "") String nameplate,
+                           @RequestParam(defaultValue = "") String fileType,
                            @RequestParam(defaultValue = "0") int number) throws IOException {
         String targetFileName = null;
-
-        String fileName = file.getOriginalFilename();
-        String fileType;
-        if(fileName.contains(Constant.REPAIR_REQUEST_VOICE)){
-            fileType = Constant.REPAIR_REQUEST_VOICE;
-        } else if(fileName.contains(Constant.PARTS_SENDBACK_IMAGE)){
-            fileType = Constant.PARTS_SENDBACK_IMAGE;
-        } else if(fileName.contains(Constant.REPAIR_ACTUAL_IMAGE)){
-            fileType = Constant.REPAIR_ACTUAL_IMAGE;
-        } else if(fileName.contains(Constant.REPAIR_REQUEST_IMAGE)){
-            fileType = Constant.REPAIR_REQUEST_IMAGE;
-        } else if(fileName.contains(Constant.REPAIR_REQUEST_NAMEPLATE_IMAGE)){
-            fileType = Constant.REPAIR_REQUEST_NAMEPLATE_IMAGE;
-        } else{
-            System.out.println("======== WRONG file name :  " + fileName );
-            return null;
-        }
         try {
             if (path != null && !file.isEmpty()) {
-                targetFileName = path + formatFileName(fileName, nameplate,fileType, number);
+
+                String fileName = file.getOriginalFilename();
+                targetFileName = path + formatFileName(fileName.replaceAll("/", "-"), nameplate.replaceAll("/", "-"), fileType, number);
                 BufferedOutputStream out = new BufferedOutputStream(
                         new FileOutputStream(new File(targetFileName)));
                 out.write(file.getBytes());
@@ -81,7 +67,6 @@ public class CommonService {
         //指定北京时间
         formatter.setTimeZone(TimeZone.getTimeZone("GMT+8"));
         String dateStr = formatter.format(date);
-
 
         targetFileName = nameplate + "_" + fileType + "_" + dateStr + "_" + number + suffixName;
         return targetFileName;

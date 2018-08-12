@@ -13,15 +13,15 @@ public class Constant {
      * 需要文件中包含下列名称中一个。
      */
     //报修的声音：
-    public static final String REPAIR_REQUEST_VOICE = "REPAIR_REQUEST_VOICE";
+    public static final String FILE_TYPE_REPAIR_REQUEST_VOICE = "REPAIR_REQUEST_VOICE";
     //报修的图片：
-    public static final String REPAIR_REQUEST_IMAGE = "REPAIR_REQUEST_IMAGE";
+    public static final String FILE_TYPE_REPAIR_REQUEST_IMAGE = "REPAIR_REQUEST_IMAGE";
     //维修的图片：
-    public static final String REPAIR_ACTUAL_IMAGE = "REPAIR_ACTUAL_IMAGE";
+    public static final String FILE_TYPE_REPAIR_ACTUAL_IMAGE = "REPAIR_ACTUAL_IMAGE";
     //配件寄回快递图片
-    public static final String PARTS_SENDBACK_IMAGE = "PARTS_SENDBACK_IMAGE";
+    public static final String FILE_TYPE_PARTS_SENDBACK_IMAGE = "PARTS_SENDBACK_IMAGE";
     //报修时提供的铭牌号图片（老机器）
-    public static final String REPAIR_REQUEST_NAMEPLATE_IMAGE = "REPAIR_REQUEST_NAMEPLATE_IMAGE";
+    public static final String FILE_TYPE_REPAIR_REQUEST_NAMEPLATE_IMAGE = "REPAIR_REQUEST_NAMEPLATE_IMAGE";
 
 
     /*
