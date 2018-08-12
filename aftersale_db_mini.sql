@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50553
 File Encoding         : 65001
 
-Date: 2018-08-07 15:17:55
+Date: 2018-08-12 10:17:37
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -186,7 +186,7 @@ CREATE TABLE `issue_position_list` (
 DROP TABLE IF EXISTS `knowledge_lib`;
 CREATE TABLE `knowledge_lib` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `html` longtext NOT NULL,
+  `html` mediumblob NOT NULL,
   `author` varchar(255) DEFAULT NULL COMMENT '文章作者',
   `read_times` varchar(255) NOT NULL COMMENT '阅读次数',
   `create_time` datetime NOT NULL,
@@ -232,10 +232,10 @@ CREATE TABLE `machine` (
   `head_distance` varchar(255) NOT NULL COMMENT '头距',
   `head_num` varchar(255) NOT NULL COMMENT '头数',
   `loadinglist` varchar(255) DEFAULT NULL COMMENT '装车单路径，共用流程管理系统的装车单，老机器允许空',
-  `customer_in_contract` varchar(255) NOT NULL COMMENT '合同里的客户',
+  `customer_in_contract` varchar(255) DEFAULT NULL COMMENT '合同里的客户',
   `customer` int(10) unsigned DEFAULT NULL COMMENT '机器和客户绑定，空则表示未绑定,。通常是和custmer_in_contact是一样的。',
   `facory_date` date DEFAULT NULL COMMENT '出厂日期，老机器允许空',
-  `is_old_machine` varchar(255) NOT NULL COMMENT '0表示不是老机器，1表示老机器（生产部新系统之前生产的机器，不在生产部数据库）',
+  `is_old_machine` varchar(255) NOT NULL COMMENT ' \r\n0：表示生产部数据库出来的机器\r\n1：表示客户报的老机器（生产部新系统之前生产的机器，不在生产部数据库）\r\n2：表示售后主动加入的机器',
   `old_machine_check` varchar(255) DEFAULT NULL COMMENT '老机器审核是否通过，空表示非老机器，0:未通过，1：通过',
   PRIMARY KEY (`id`),
   KEY `contract_num` (`contract_num`),
@@ -550,8 +550,8 @@ INSERT INTO `role` VALUES ('1', '超级管理员', '全局管理', '');
 INSERT INTO `role` VALUES ('2', '管理员', '售后业务管理', null);
 INSERT INTO `role` VALUES ('3', '普通员工', '安装，保养，维修（包括了信胜和客户的）', null);
 INSERT INTO `role` VALUES ('4', '代理商', '代理商', null);
-INSERT INTO `role` VALUES ('5', '客户本身', '权限在客户级别，比如查看客户自己所有机器', null);
-INSERT INTO `role` VALUES ('6', '客户的联系人', '权限在联系人自己级别，比如只能查看联系人自己名下的机器', null);
+INSERT INTO `role` VALUES ('5', '客户', '权限在客户级别，比如查看客户自己所有机器', null);
+INSERT INTO `role` VALUES ('6', '联系人', '权限在联系人自己级别，比如只能查看联系人自己名下的机器', null);
 
 -- ----------------------------
 -- Table structure for `user`
@@ -563,7 +563,7 @@ CREATE TABLE `user` (
   `name` varchar(255) NOT NULL,
   `wechat_union_id` varchar(255) DEFAULT NULL COMMENT '微信unionId，在没授权前是空的。',
   `role_id` int(10) unsigned NOT NULL,
-  `agent` int(10) unsigned DEFAULT NULL COMMENT '代理商,如果是空表示是信胜自己的员工',
+  `agent` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '代理商,如果是空表示是信胜自己的员工',
   `customer_company` int(10) unsigned DEFAULT NULL COMMENT '客户公司',
   `password` varchar(255) NOT NULL,
   `valid` varchar(255) NOT NULL COMMENT '是否在职 ， “1”:在职 “0”:离职',
