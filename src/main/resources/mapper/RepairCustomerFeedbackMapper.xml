@@ -8,14 +8,14 @@
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="customer_mark" jdbcType="VARCHAR" property="customerMark" />
     <result column="customer_suggestion" jdbcType="VARCHAR" property="customerSuggestion" />
-    <result column="customer_repair_result" jdbcType="VARCHAR" property="customerRepairResult" />
+    <result column="create_time" jdbcType="DATE" property="createTime" />
   </resultMap>
 
   <insert id="saveAndGetID" useGeneratedKeys="true" parameterType="com.eservice.api.model.repair_customer_feedback.RepairCustomerFeedback"
           keyProperty="id">
     insert into
-    repair_customer_feedback(customer_mark, customer_suggestion, customer_repair_result)
+    repair_customer_feedback(customer_mark, customer_suggestion, create_time)
     values(
-    #{customerMark},#{customerSuggestion},#{customerRepairResult})
+    #{customerMark},#{customerSuggestion},#{createTime})
   </insert>
 </mapper>

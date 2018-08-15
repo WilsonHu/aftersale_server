@@ -132,6 +132,7 @@ public class RepairRequestInfoController {
             repairRequestInfo1.setVoice(resultPathRequestVoice);
             repairRequestInfo1.setPictures(listResultPathRequestImage.toString());
             repairRequestInfo1.setNameplatePicture(resultPathRequestNameplateImage);
+            repairRequestInfo1.setCreateTime(new Date());
             repairRequestInfoService.saveAndGetID(repairRequestInfo1);
 
             /**

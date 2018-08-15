@@ -13,6 +13,7 @@
     <result column="pictures" jdbcType="VARCHAR" property="pictures" />
     <result column="customer" jdbcType="INTEGER" property="customer" />
     <result column="content" jdbcType="LONGVARCHAR" property="content" />
+    <result column="create_time" jdbcType="DATE" property="createTime" />
   </resultMap>
 
 
@@ -20,9 +21,8 @@
           useGeneratedKeys="true" keyProperty="id">
     insert into
     repair_request_info(
-    nameplate, nameplate_picture, voice, repair_title, content, pictures, customer)
+    nameplate, nameplate_picture, voice, repair_title, content, pictures, customer, create_time)
     values(
-    #{ nameplate},#{ nameplatePicture},#{voice },#{repairTitle },#{content}, #{pictures}, #{customer})
-
-  </insert>
+    #{ nameplate},#{ nameplatePicture},#{voice },#{repairTitle },#{content}, #{pictures}, #{customer},#{createTime})
+ </insert>
 </mapper>

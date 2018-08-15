@@ -84,14 +84,6 @@ public class Constant {
     public static final int REPAIR_IS_FORWARD_YES = 1;
 
     /**
-     * 维修结果（客户选择）
-     * 0：已解决
-     * 1：未解决
-     */
-    public static final String REPAIR_RESULT_FIXED_OK = "Fixed_OK";
-    public static final String REPAIR_RESULT_FIXED_NG = "Fixed_NG";
-    
-    /**
      * 机器状态
      * 0：未绑定，
      * 1：已绑定，

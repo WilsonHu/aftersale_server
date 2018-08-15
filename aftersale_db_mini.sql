@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50553
 File Encoding         : 65001
 
-Date: 2018-08-12 10:17:37
+Date: 2018-08-15 16:03:31
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -443,7 +443,7 @@ CREATE TABLE `repair_customer_feedback` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `customer_mark` varchar(255) NOT NULL COMMENT '客户给的评分',
   `customer_suggestion` varchar(255) NOT NULL COMMENT '客户意见',
-  `customer_repair_result` varchar(255) DEFAULT NULL COMMENT '维修结果。',
+  `create_time` datetime NOT NULL COMMENT '创建时间，也即用户完成评价的时间，维修最后完成时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -522,6 +522,7 @@ CREATE TABLE `repair_request_info` (
   `content` text NOT NULL COMMENT '报修内容',
   `pictures` varchar(1000) DEFAULT NULL COMMENT '报修图片的路径，--客户报修时上传，可以用于经验库里“解决前”的问题照片',
   `customer` int(10) unsigned NOT NULL COMMENT '联系人',
+  `create_time` datetime NOT NULL COMMENT '创建时间，也即用户报修时间',
   PRIMARY KEY (`id`),
   KEY `fk_rri_contacter` (`customer`),
   CONSTRAINT `fk_rri_customer` FOREIGN KEY (`customer`) REFERENCES `user` (`id`)

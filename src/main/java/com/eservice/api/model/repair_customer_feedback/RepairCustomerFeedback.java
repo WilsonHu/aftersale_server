@@ -21,10 +21,10 @@ public class RepairCustomerFeedback {
     private String customerSuggestion;
 
     /**
-     * 维修结果。
+     * 维修结果。不再由客户判定
      */
-    @Column(name = "customer_repair_result")
-    private String customerRepairResult;
+//    @Column(name = "customer_repair_result")
+//    private String customerRepairResult;
 
     /**
      * @return id
@@ -76,21 +76,37 @@ public class RepairCustomerFeedback {
         this.customerSuggestion = customerSuggestion;
     }
 
-    /**
-     * 获取维修结果。
-     *
-     * @return customer_repair_result - 维修结果。
-     */
-    public String getCustomerRepairResult() {
-        return customerRepairResult;
-    }
+//    /**
+//     * 获取维修结果。
+//     *
+//     * @return customer_repair_result - 维修结果。
+//     */
+//    public String getCustomerRepairResult() {
+//        return customerRepairResult;
+//    }
+//
+//    /**
+//     * 设置维修结果。
+//     *
+//     * @param customerRepairResult 维修结果。
+//     */
+//    public void setCustomerRepairResult(String customerRepairResult) {
+//        this.customerRepairResult = customerRepairResult;
+//    }
+
+
 
     /**
-     * 设置维修结果。
-     *
-     * @param customerRepairResult 维修结果。
+     * 创建时间，也即用户完成评价的时间，维修最后完成时间
      */
-    public void setCustomerRepairResult(String customerRepairResult) {
-        this.customerRepairResult = customerRepairResult;
+    @Column(name = "create_time")
+    private Date createTime;
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 }
