@@ -23,10 +23,11 @@ import java.util.Date;
 import java.util.List;
 
 /**
-* Class Description: xxx
-* @author Wilson Hu
-* @date 2018/08/04.
-*/
+ * Class Description: xxx
+ *
+ * @author Wilson Hu
+ * @date 2018/08/04.
+ */
 @RestController
 @RequestMapping("/repair/record")
 public class RepairRecordController {
@@ -80,6 +81,7 @@ public class RepairRecordController {
 
     /**
      * 根据条件查询维修信息
+     *
      * @param nameplate
      * @param orderNum
      * @param repairStatus
@@ -96,20 +98,20 @@ public class RepairRecordController {
      */
     @PostMapping("/getRepairRecordInfoList")
     public Result getRepairRecordInfoList(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size,
-                                           String nameplate,
-                                           String orderNum,
-                                           String repairStatus,
+                                          String nameplate,
+                                          String orderNum,
+                                          String repairStatus,
 //                                           String partsStatus,
-                                           String repairRecordCustomerName,
-                                           String agent,
-                                           String repairChargePersonName,
-                                           String issuePositionName,
-                                           String inWarrantyPeriod,
-                                           String queryStartRepairCreateTime,
-                                           String queryFinishRepairCreateTime,
-                                           String queryStartRepairEndTime,
-                                           String queryFinishRepairEndTime,
-                                           boolean isFuzzy) {
+                                          String repairRecordCustomerName,
+                                          String agent,
+                                          String repairChargePersonName,
+                                          String issuePositionName,
+                                          String inWarrantyPeriod,
+                                          String queryStartRepairCreateTime,
+                                          String queryFinishRepairCreateTime,
+                                          String queryStartRepairEndTime,
+                                          String queryFinishRepairEndTime,
+                                          boolean isFuzzy) {
         PageHelper.startPage(page, size);
         List<RepairRecordInfo> list = repairRecordService.getRepairRecordInfoList(
                 nameplate,
@@ -156,6 +158,65 @@ public class RepairRecordController {
             model.setStatus(com.eservice.api.service.common.Constant.REPAIR_STATUS_SIGNED_TO_REPAIRER);
             repairRecordService.update(model);
             repairMembersService.save(members);
+        } catch (Exception ex) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return ResultGenerator.genFailResult("数据保存出错！" + ex.getMessage());
+        }
+        return ResultGenerator.genSuccessResult();
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @PostMapping("/AssignTaskAgain")
+    public Result AssignTaskAgain(Integer oldId, String repairRecord, String repairMembers) {
+        try {
+            RepairRecord model = JSON.parseObject(repairRecord, RepairRecord.class);
+            List<RepairMembers> members = JSONObject.parseArray(repairMembers, RepairMembers.class);
+            if (model == null || members == null || members.size() < 1) {
+                TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+                return ResultGenerator.genFailResult("数据保存出错！");
+            }
+            model.setCreateTime(new Date());
+            model.setForwardInfo(com.eservice.api.service.common.Constant.REPAIR_IS_FORWARD_NO);
+            model.setStatus(com.eservice.api.service.common.Constant.REPAIR_STATUS_SIGNED_TO_REPAIRER);
+            model.setRepairRecordNum(CommonUtils.generateSequenceNo());
+            repairRecordService.save(model);// add a new record
+            repairMembersService.save(members);
+
+            //update the old record
+            RepairRecord oldRecord = new RepairRecord();
+            oldRecord.setId(oldId);
+            oldRecord.setStatus(com.eservice.api.service.common.Constant.REPAIR_STATUS_REPAIRER_REASSIGN);
+            oldRecord.setUpdateTime(new Date());
+            repairRecordService.update(oldRecord);
+
+        } catch (Exception ex) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return ResultGenerator.genFailResult("数据保存出错！" + ex.getMessage());
+        }
+        return ResultGenerator.genSuccessResult();
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @PostMapping("/AssignTaskForward")
+    public Result AssignTaskForward(Integer oldId, String repairRecord) {
+        try {
+            RepairRecord model = JSON.parseObject(repairRecord, RepairRecord.class);
+            if (model == null || oldId < 0) {
+                TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+                return ResultGenerator.genFailResult("数据保存出错！");
+            }
+            model.setCreateTime(new Date());
+            model.setForwardInfo(com.eservice.api.service.common.Constant.REPAIR_IS_FORWARD_YES);
+            model.setStatus(com.eservice.api.service.common.Constant.REPAIR_STATUS_UNSIGNED_TO_REPAIRER);
+            model.setRepairRecordNum(CommonUtils.generateSequenceNo());
+            repairRecordService.save(model); // add a new record
+
+            //update the old record
+            RepairRecord oldRecord = new RepairRecord();
+            oldRecord.setId(oldId);
+            oldRecord.setStatus(com.eservice.api.service.common.Constant.REPAIR_STATUS_REPAIRER_FORWARD);
+            oldRecord.setUpdateTime(new Date());
+            repairRecordService.update(oldRecord);
         } catch (Exception ex) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return ResultGenerator.genFailResult("数据保存出错！" + ex.getMessage());

@@ -80,6 +80,9 @@ public class Constant {
     public static final String REPAIR_STATUS_REPAIR_OK = "6";
     public static final String REPAIR_STATUS_REPAIR_CUSTOMER_CONFIRMED = "7";
 
+    public static final int REPAIR_IS_FORWARD_NO = 0;
+    public static final int REPAIR_IS_FORWARD_YES = 1;
+
     /**
      * 维修结果（客户选择）
      * 0：已解决
@@ -145,5 +148,7 @@ public class Constant {
     public static final String PARTS_STATUS_WAIT_FOR_SENDBACK = "2";
     public static final String PARTS_STATUS_ALREADY_SENDBACK = "3";
     public static final String PARTS_STATUS_AFTERSALE_CONFIRMED = "4";
+
+
 
 }

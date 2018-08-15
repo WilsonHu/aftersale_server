@@ -1,221 +1,221 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.eservice.api.dao.RepairRecordMapper">
-  <resultMap id="BaseResultMap" type="com.eservice.api.model.repair_record.RepairRecord">
-    <!--
-      WARNING - @mbg.generated
-    -->
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="repair_record_num" jdbcType="VARCHAR" property="repairRecordNum" />
-    <result column="customer" jdbcType="INTEGER" property="customer" />
-    <result column="machine_nameplate" jdbcType="VARCHAR" property="machineNameplate" />
-    <result column="repair_request_info" jdbcType="INTEGER" property="repairRequestInfo" />
-    <result column="in_warranty_period" jdbcType="VARCHAR" property="inWarrantyPeriod" />
-    <result column="repair_plan_date" jdbcType="DATE" property="repairPlanDate" />
-    <result column="repair_charge_person" jdbcType="INTEGER" property="repairChargePerson" />
-    <result column="repair_start_time" jdbcType="TIMESTAMP" property="repairStartTime" />
-    <result column="repair_end_time" jdbcType="TIMESTAMP" property="repairEndTime" />
-    <result column="customer_feedback" jdbcType="INTEGER" property="customerFeedback" />
-    <result column="status" jdbcType="VARCHAR" property="status" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-    <result column="forward_info" jdbcType="INTEGER" property="forwardInfo" />
-  </resultMap>
+	<resultMap id="BaseResultMap" type="com.eservice.api.model.repair_record.RepairRecord">
+		<!--
+		  WARNING - @mbg.generated
+		-->
+		<id column="id" jdbcType="INTEGER" property="id"/>
+		<result column="repair_record_num" jdbcType="VARCHAR" property="repairRecordNum"/>
+		<result column="customer" jdbcType="INTEGER" property="customer"/>
+		<result column="machine_nameplate" jdbcType="VARCHAR" property="machineNameplate"/>
+		<result column="repair_request_info" jdbcType="INTEGER" property="repairRequestInfo"/>
+		<result column="in_warranty_period" jdbcType="VARCHAR" property="inWarrantyPeriod"/>
+		<result column="repair_plan_date" jdbcType="DATE" property="repairPlanDate"/>
+		<result column="repair_charge_person" jdbcType="INTEGER" property="repairChargePerson"/>
+		<result column="repair_start_time" jdbcType="TIMESTAMP" property="repairStartTime"/>
+		<result column="repair_end_time" jdbcType="TIMESTAMP" property="repairEndTime"/>
+		<result column="customer_feedback" jdbcType="INTEGER" property="customerFeedback"/>
+		<result column="status" jdbcType="VARCHAR" property="status"/>
+		<result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+		<result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+		<result column="forward_info" jdbcType="INTEGER" property="forwardInfo"/>
+	</resultMap>
 
-  <resultMap id="RepairRecordInfoMap" type="com.eservice.api.model.repair_record.RepairRecordInfo">
-    <!--
-     WARNING - @mbg.generated
-   -->
-    <id column="repairRecordId" jdbcType="INTEGER" property="id" />
-    <result column="repair_record_num" jdbcType="VARCHAR" property="repairRecordNum" />
-    <result column="customer" jdbcType="INTEGER" property="customer" />
-    <result column="machine_nameplate" jdbcType="VARCHAR" property="machineNameplate" />
-    <result column="repair_request_info" jdbcType="INTEGER" property="repairRequestInfo" />
-    <result column="in_warranty_period" jdbcType="VARCHAR" property="inWarrantyPeriod" />
-    <result column="repair_plan_date" jdbcType="DATE" property="repairPlanDate" />
-    <result column="repair_charge_person" jdbcType="INTEGER" property="repairChargePerson" />
-    <result column="repair_start_time" jdbcType="TIMESTAMP" property="repairStartTime" />
-    <result column="repair_end_time" jdbcType="TIMESTAMP" property="repairEndTime" />
-    <result column="customer_feedback" jdbcType="INTEGER" property="customerFeedback" />
-    <result column="status" jdbcType="VARCHAR" property="status" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-    <result column="forward_info" jdbcType="INTEGER" property="forwardInfo" />
+	<resultMap id="RepairRecordInfoMap" type="com.eservice.api.model.repair_record.RepairRecordInfo">
+		<!--
+		 WARNING - @mbg.generated
+	   -->
+		<id column="repairRecordId" jdbcType="INTEGER" property="id"/>
+		<result column="repair_record_num" jdbcType="VARCHAR" property="repairRecordNum"/>
+		<result column="customer" jdbcType="INTEGER" property="customer"/>
+		<result column="machine_nameplate" jdbcType="VARCHAR" property="machineNameplate"/>
+		<result column="repair_request_info" jdbcType="INTEGER" property="repairRequestInfo"/>
+		<result column="in_warranty_period" jdbcType="VARCHAR" property="inWarrantyPeriod"/>
+		<result column="repair_plan_date" jdbcType="DATE" property="repairPlanDate"/>
+		<result column="repair_charge_person" jdbcType="INTEGER" property="repairChargePerson"/>
+		<result column="repair_start_time" jdbcType="TIMESTAMP" property="repairStartTime"/>
+		<result column="repair_end_time" jdbcType="TIMESTAMP" property="repairEndTime"/>
+		<result column="customer_feedback" jdbcType="INTEGER" property="customerFeedback"/>
+		<result column="status" jdbcType="VARCHAR" property="status"/>
+		<result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+		<result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+		<result column="forward_info" jdbcType="INTEGER" property="forwardInfo"/>
 
-    <result column="order_num" jdbcType="VARCHAR" property="orderNum" />
-    <result column="machineCustomerName" jdbcType="VARCHAR" property="machineCustomerName" />
-    <result column="machineAgentName" jdbcType="VARCHAR" property="machineAgentName" />
-    <result column="facory_date" jdbcType="DATE" property="facoryDate" />
-    <result column="issuePositionName" jdbcType="VARCHAR" property="issuePositionName" />
-    <result column="repairChargePersonName" jdbcType="VARCHAR" property="repairChargePersonName" />
-    <result column="repairChargePersonPhone" jdbcType="VARCHAR" property="repairChargePersonPhone" />
-    <result column="machineCustomerPhone" jdbcType="VARCHAR" property="machineCustomerPhone" />
-    <result column="machineAgentPhone" jdbcType="VARCHAR" property="machineAgentPhone" />
-    <result column="machine_type" jdbcType="VARCHAR" property="machineType" />
-    <result column="needle_num" jdbcType="VARCHAR" property="needleNum" />
-    <result column="head_num" jdbcType="VARCHAR" property="headNum" />
-    <result column="head_distance" jdbcType="VARCHAR" property="headDistance" />
-    <result column="x_distance" jdbcType="VARCHAR" property="xDistance" />
-    <result column="y_distance" jdbcType="VARCHAR" property="yDistance" />
-    <result column="repairRecordCustomerName" jdbcType="VARCHAR" property="customerNameInRepairRecord" />
-    <result column="customerPhoneInRepairRecord" jdbcType="VARCHAR" property="customerPhoneInRepairRecord" />
-    <result column="customerAddressInRepairRecord" jdbcType="VARCHAR" property="customerAddressInRepairRecord" />
+		<result column="order_num" jdbcType="VARCHAR" property="orderNum"/>
+		<result column="machineCustomerName" jdbcType="VARCHAR" property="machineCustomerName"/>
+		<result column="machineAgentName" jdbcType="VARCHAR" property="machineAgentName"/>
+		<result column="facory_date" jdbcType="DATE" property="facoryDate"/>
+		<result column="issuePositionName" jdbcType="VARCHAR" property="issuePositionName"/>
+		<result column="repairChargePersonName" jdbcType="VARCHAR" property="repairChargePersonName"/>
+		<result column="repairChargePersonPhone" jdbcType="VARCHAR" property="repairChargePersonPhone"/>
+		<result column="machineCustomerPhone" jdbcType="VARCHAR" property="machineCustomerPhone"/>
+		<result column="machineAgentPhone" jdbcType="VARCHAR" property="machineAgentPhone"/>
+		<result column="machine_type" jdbcType="VARCHAR" property="machineType"/>
+		<result column="needle_num" jdbcType="VARCHAR" property="needleNum"/>
+		<result column="head_num" jdbcType="VARCHAR" property="headNum"/>
+		<result column="head_distance" jdbcType="VARCHAR" property="headDistance"/>
+		<result column="x_distance" jdbcType="VARCHAR" property="xDistance"/>
+		<result column="y_distance" jdbcType="VARCHAR" property="yDistance"/>
+		<result column="repairRecordCustomerName" jdbcType="VARCHAR" property="customerNameInRepairRecord"/>
+		<result column="customerPhoneInRepairRecord" jdbcType="VARCHAR" property="customerPhoneInRepairRecord"/>
+		<result column="customerAddressInRepairRecord" jdbcType="VARCHAR" property="customerAddressInRepairRecord"/>
 
-    <result column="repairRequestTitle" jdbcType="VARCHAR" property="repairRequestTitle" />
-    <result column="repairRequestContent" jdbcType="VARCHAR" property="repairRequestContent" />
-    <result column="repairRequestVoice" jdbcType="VARCHAR" property="repairRequestVoice" />
-    <result column="repairRequestPictures" jdbcType="VARCHAR" property="repairRequestPictures" />
-    <result column="repairActualIssueDescription" jdbcType="VARCHAR" property="repairActualIssueDescription" />
-    <result column="repairActualMethod" jdbcType="VARCHAR" property="repairActualMethod" />
-    <result column="afterResolvePictures" jdbcType="VARCHAR" property="afterResolvePictures" />
-    <!--<result column="parts_name" jdbcType="VARCHAR" property="partsName" />-->
-    <!--<result column="supplier" jdbcType="VARCHAR" property="partsSupplier" />-->
-    <!--<result column="parts_status" jdbcType="VARCHAR" property="partsStatus" />-->
-    <!--<result column="sendback_tracking_number" jdbcType="VARCHAR" property="sendbackTrackingNumber" />-->
-    <!--<result column="sendback_tracking_pictrue" jdbcType="VARCHAR" property="sendbackTrackingPictrue" />-->
-    <!--<result column="sendback_date" jdbcType="DATE" property="sendbackDate" />-->
-    <!--<result column="sendback_confirmed_time" jdbcType="DATE" property="sendbackConfirmedTime" />-->
-    <!--<result column="sendbackConfirmedPersonName" jdbcType="VARCHAR" property="sendbackConfirmedPersonName" />-->
-    <result column="repairFeedbackCustomerMark" jdbcType="VARCHAR" property="repairFeedbackCustomerMark" />
-    <result column="repairFeedbackCustomerSuggestion" jdbcType="VARCHAR" property="repairFeedbackCustomerSuggestion" />
-    <result column="repairFeedbackRepairResult" jdbcType="VARCHAR" property="repairFeedbackRepairResult" />
-  </resultMap>
-  <select id="selectByNameplate" resultMap="BaseResultMap">
+		<result column="repairRequestTitle" jdbcType="VARCHAR" property="repairRequestTitle"/>
+		<result column="repairRequestContent" jdbcType="VARCHAR" property="repairRequestContent"/>
+		<result column="repairRequestVoice" jdbcType="VARCHAR" property="repairRequestVoice"/>
+		<result column="repairRequestPictures" jdbcType="VARCHAR" property="repairRequestPictures"/>
+		<result column="repairActualIssueDescription" jdbcType="VARCHAR" property="repairActualIssueDescription"/>
+		<result column="repairActualMethod" jdbcType="VARCHAR" property="repairActualMethod"/>
+		<result column="afterResolvePictures" jdbcType="VARCHAR" property="afterResolvePictures"/>
+		<!--<result column="parts_name" jdbcType="VARCHAR" property="partsName" />-->
+		<!--<result column="supplier" jdbcType="VARCHAR" property="partsSupplier" />-->
+		<!--<result column="parts_status" jdbcType="VARCHAR" property="partsStatus" />-->
+		<!--<result column="sendback_tracking_number" jdbcType="VARCHAR" property="sendbackTrackingNumber" />-->
+		<!--<result column="sendback_tracking_pictrue" jdbcType="VARCHAR" property="sendbackTrackingPictrue" />-->
+		<!--<result column="sendback_date" jdbcType="DATE" property="sendbackDate" />-->
+		<!--<result column="sendback_confirmed_time" jdbcType="DATE" property="sendbackConfirmedTime" />-->
+		<!--<result column="sendbackConfirmedPersonName" jdbcType="VARCHAR" property="sendbackConfirmedPersonName" />-->
+		<result column="repairFeedbackCustomerMark" jdbcType="VARCHAR" property="repairFeedbackCustomerMark"/>
+		<result column="repairFeedbackCustomerSuggestion" jdbcType="VARCHAR"
+				property="repairFeedbackCustomerSuggestion"/>
+		<result column="repairFeedbackRepairResult" jdbcType="VARCHAR" property="repairFeedbackRepairResult"/>
+	</resultMap>
+	<select id="selectByNameplate" resultMap="BaseResultMap">
     SELECT *
     FROM  repair_record as rr
     where rr.machine_nameplate='${nameplate}'
   </select>
 
-  <select id="getRepairRecordInfoList" resultMap="RepairRecordInfoMap">
-    SELECT
-    m.order_num,
-    userOfCustomerInMachine.`name` as machineCustomerName,
---     parts_info.*,
---     userOfSendbackConfirmedPerson.name as sendbackConfirmedPersonName,
-    a.name as machineAgentName,
-    m.facory_date,
-    rai.issue_position,
-    ipl.`name` as issuePositionName,
-    userOfRepairChargePerson.`name` as repairChargePersonName,
-    userOfRepairChargePerson.`phone` as repairChargePersonPhone,
-    userOfCustomerInMachine.phone as machineCustomerPhone,
-    a.phone as machineAgentPhone,
-    m.machine_type,m.needle_num,m.head_num,m.head_distance,m.x_distance,m.y_distance,
-    userOfCustomerInRepairRecord.`name` as repairRecordCustomerName, -- 客户方的维修联系人
-    userOfCustomerInRepairRecord.phone as customerPhoneInRepairRecord,
-    userOfCustomerInRepairRecord.address as customerAddressInRepairRecord,
-    rri.repair_title as repairRequestTitle,
-    rri.content as repairRequestContent,
-    rri.voice as repairRequestVoice,
-    rri.pictures as repairRequestPictures,
-    rai.issue_description as repairActualIssueDescription,
-    rai.repair_method as repairActualMethod,
-    rai.after_resolve_pictures as afterResolvePictures,
-    rr.id as repairRecordId,
-    rr.*,
-    rcf.customer_mark as repairFeedbackCustomerMark,
-    rcf.customer_suggestion as repairFeedbackCustomerSuggestion,
-    rcf.customer_repair_result as repairFeedbackRepairResult
+	<select id="getRepairRecordInfoList" resultMap="RepairRecordInfoMap">
+		SELECT
+		m.order_num,
+		userOfCustomerInMachine.`name` as machineCustomerName,
+		-- parts_info.*,
+		-- userOfSendbackConfirmedPerson.name as sendbackConfirmedPersonName,
+		a.name as machineAgentName,
+		m.facory_date,
+		rai.issue_position,
+		ipl.`name` as issuePositionName,
+		userOfRepairChargePerson.`name` as repairChargePersonName,
+		userOfRepairChargePerson.`phone` as repairChargePersonPhone,
+		userOfCustomerInMachine.phone as machineCustomerPhone,
+		a.phone as machineAgentPhone,
+		m.machine_type,m.needle_num,m.head_num,m.head_distance,m.x_distance,m.y_distance,
+		userOfCustomerInRepairRecord.`name` as repairRecordCustomerName, -- 客户方的维修联系人
+		userOfCustomerInRepairRecord.phone as customerPhoneInRepairRecord,
+		userOfCustomerInRepairRecord.address as customerAddressInRepairRecord,
+		rri.repair_title as repairRequestTitle,
+		rri.content as repairRequestContent,
+		rri.voice as repairRequestVoice,
+		rri.pictures as repairRequestPictures,
+		rai.issue_description as repairActualIssueDescription,
+		rai.repair_method as repairActualMethod,
+		rai.after_resolve_pictures as afterResolvePictures,
+		rr.id as repairRecordId,
+		rr.*,
+		rcf.customer_mark as repairFeedbackCustomerMark,
+		rcf.customer_suggestion as repairFeedbackCustomerSuggestion,
+		rcf.customer_repair_result as repairFeedbackRepairResult
 
-    from repair_record as rr
-    LEFT JOIN machine as m ON m.nameplate = rr.machine_nameplate
-    LEFT JOIN `user` as userOfCustomerInMachine ON userOfCustomerInMachine.id = m.customer
-    LEFT JOIN agent as a ON a.id = userOfCustomerInMachine.agent
-    LEFT JOIN repair_actual_info as rai ON rai.repair_record_id = rr.id
-    LEFT JOIN issue_position_list as ipl ON ipl.id = rai.issue_position
-    LEFT JOIN user as userOfRepairChargePerson ON userOfRepairChargePerson.id = rr.repair_charge_person
-    LEFT JOIN user as userOfCustomerInRepairRecord ON userOfCustomerInRepairRecord.id = rr.customer
-    LEFT JOIN repair_request_info as rri ON rri.id = rr.repair_request_info
---     LEFT JOIN parts_info ON parts_info.repair_actual_info_id = rai.id
---     LEFT JOIN user as userOfSendbackConfirmedPerson ON userOfSendbackConfirmedPerson.id = parts_info.sendback_confirmed_person
-    LEFT JOIN repair_customer_feedback as rcf ON rcf.id = rr.customer_feedback
-    WHERE 1=1
-    <if test="isFuzzy == true">
-      <if test="nameplate != null and nameplate != ''">
-        AND m.nameplate like CONCAT('%','${nameplate}','%' )
-      </if>
-      <if test="orderNum != null and orderNum != ''">
-        AND m.order_num like CONCAT('%','${orderNum}','%' )
-      </if>
-      <if test="repairRecordCustomerName != null and repairRecordCustomerName != ''">
-        AND userOfCustomerInRepairRecord.`name` like CONCAT('%','${repairRecordCustomerName}','%' )
-      </if>
-      <if test="agent != null and agent != ''">
-        AND a.`name` like CONCAT('%','${agent}','%' )
-      </if>
-      <if test="repairChargePersonName != null and repairChargePersonName != ''">
-        AND userOfRepairChargePerson.`name` like CONCAT('%','${repairChargePersonName}','%' )
-      </if>
-      <if test="issuePositionName != null and issuePositionName != ''">
-        AND ipl.`name` like CONCAT('%','${issuePositionName}','%' )
-      </if>
+		from repair_record as rr
+		LEFT JOIN machine as m ON m.nameplate = rr.machine_nameplate
+		LEFT JOIN `user` as userOfCustomerInMachine ON userOfCustomerInMachine.id = m.customer
+		LEFT JOIN agent as a ON a.id = userOfCustomerInMachine.agent
+		LEFT JOIN repair_actual_info as rai ON rai.repair_record_id = rr.id
+		LEFT JOIN issue_position_list as ipl ON ipl.id = rai.issue_position
+		LEFT JOIN user as userOfRepairChargePerson ON userOfRepairChargePerson.id = rr.repair_charge_person
+		LEFT JOIN user as userOfCustomerInRepairRecord ON userOfCustomerInRepairRecord.id = rr.customer
+		LEFT JOIN repair_request_info as rri ON rri.id = rr.repair_request_info
+		LEFT JOIN repair_customer_feedback as rcf ON rcf.id = rr.customer_feedback
+		WHERE 1=1
+		<if test="isFuzzy == true">
+			<if test="nameplate != null and nameplate != ''">
+				AND m.nameplate like CONCAT('%','${nameplate}','%' )
+			</if>
+			<if test="orderNum != null and orderNum != ''">
+				AND m.order_num like CONCAT('%','${orderNum}','%' )
+			</if>
+			<if test="repairRecordCustomerName != null and repairRecordCustomerName != ''">
+				AND userOfCustomerInRepairRecord.`name` like CONCAT('%','${repairRecordCustomerName}','%' )
+			</if>
+			<if test="agent != null and agent != ''">
+				AND a.`name` like CONCAT('%','${agent}','%' )
+			</if>
+			<if test="repairChargePersonName != null and repairChargePersonName != ''">
+				AND userOfRepairChargePerson.`name` like CONCAT('%','${repairChargePersonName}','%' )
+			</if>
+			<if test="issuePositionName != null and issuePositionName != ''">
+				AND ipl.`name` like CONCAT('%','${issuePositionName}','%' )
+			</if>
 
-    </if>
-    <if test="isFuzzy== false">
-      <if test="nameplate != null and nameplate != ''">
-        AND m.nameplate = #{nameplate}
-      </if>
-      <if test="orderNum != null and orderNum != ''">
-        AND m.order_num = #{orderNum}
-      </if>
-      <if test="repairRecordCustomerName != null and repairRecordCustomerName != ''">
-        AND userOfCustomerInRepairRecord.`name` = #{repairRecordCustomerName}
-      </if>
-      <if test="agent != null and agent != ''">
-        AND a.`name` = #{agent}
-      </if>
-      <if test="repairChargePersonName != null and repairChargePersonName != ''">
-        AND userOfRepairChargePerson.`name` = #{repairChargePersonName}
-      </if>
-      <if test="issuePositionName != null and issuePositionName != ''">
-        AND ipl.`name` = #{issuePositionName}
-      </if>
-    </if>
+		</if>
+		<if test="isFuzzy== false">
+			<if test="nameplate != null and nameplate != ''">
+				AND m.nameplate = #{nameplate}
+			</if>
+			<if test="orderNum != null and orderNum != ''">
+				AND m.order_num = #{orderNum}
+			</if>
+			<if test="repairRecordCustomerName != null and repairRecordCustomerName != ''">
+				AND userOfCustomerInRepairRecord.`name` = #{repairRecordCustomerName}
+			</if>
+			<if test="agent != null and agent != ''">
+				AND a.`name` = #{agent}
+			</if>
+			<if test="repairChargePersonName != null and repairChargePersonName != ''">
+				AND userOfRepairChargePerson.`name` = #{repairChargePersonName}
+			</if>
+			<if test="issuePositionName != null and issuePositionName != ''">
+				AND ipl.`name` = #{issuePositionName}
+			</if>
+		</if>
 
-    <if test="repairStatus != null and repairStatus != ''">
-      AND rr.status = #{repairStatus}
-    </if>
-    <!--<if test="partsStatus != null and partsStatus != ''">-->
-    <!--AND parts_info.parts_status = #{partsStatus}-->
-    <!--</if>-->
-    <if test="inWarrantyPeriod != null and inWarrantyPeriod != ''">
-      AND rr.in_warranty_period = #{inWarrantyPeriod}
-    </if>
+		<if test="repairStatus != null and repairStatus != ''">
+			AND rr.status = #{repairStatus}
+		</if>
+		<!--<if test="partsStatus != null and partsStatus != ''">-->
+		<!--AND parts_info.parts_status = #{partsStatus}-->
+		<!--</if>-->
+		<if test="inWarrantyPeriod != null and inWarrantyPeriod != ''">
+			AND rr.in_warranty_period = #{inWarrantyPeriod}
+		</if>
 
-    <if test="queryStartRepairCreateTime!=null and queryStartRepairCreateTime != '' ">
-      and DATE_FORMAT( rr.create_time,'%Y-%m-%d %T') &gt;= #{queryStartRepairCreateTime}
-    </if>
-    <if test="queryFinishRepairCreateTime!=null and queryFinishRepairCreateTime != '' ">
-      and DATE_FORMAT( rr.create_time,'%Y-%m-%d %T') &lt;= #{queryFinishRepairCreateTime}
-    </if>
+		<if test="queryStartRepairCreateTime!=null and queryStartRepairCreateTime != '' ">
+			and DATE_FORMAT( rr.create_time,'%Y-%m-%d %T') &gt;= #{queryStartRepairCreateTime}
+		</if>
+		<if test="queryFinishRepairCreateTime!=null and queryFinishRepairCreateTime != '' ">
+			and DATE_FORMAT( rr.create_time,'%Y-%m-%d %T') &lt;= #{queryFinishRepairCreateTime}
+		</if>
 
-    <if test="queryStartRepairEndTime!=null and queryStartRepairEndTime != '' ">
-      and DATE_FORMAT( rr.repair_end_time,'%Y-%m-%d %T') &gt;= #{queryStartRepairEndTime}
-    </if>
-    <if test="queryFinishRepairEndTime!=null and queryFinishRepairEndTime != '' ">
-      and DATE_FORMAT( rr.repair_end_time,'%Y-%m-%d %T') &lt;= #{queryFinishRepairEndTime}
-    </if>
-  </select>
+		<if test="queryStartRepairEndTime!=null and queryStartRepairEndTime != '' ">
+			and DATE_FORMAT( rr.repair_end_time,'%Y-%m-%d %T') &gt;= #{queryStartRepairEndTime}
+		</if>
+		<if test="queryFinishRepairEndTime!=null and queryFinishRepairEndTime != '' ">
+			and DATE_FORMAT( rr.repair_end_time,'%Y-%m-%d %T') &lt;= #{queryFinishRepairEndTime}
+		</if>
+		ORDER BY create_time DESC,update_time DESC
+	</select>
 
-  <select id="selectRepairTaskMachine" resultMap="com.eservice.api.dao.MachineMapper.BaseResultMap">
-    SELECT
-    m.*
-    FROM
-    repair_record as rr
-    LEFT JOIN repair_members as rm ON rm.repair_record_id = rr.id
-    LEFT JOIN user as userOfMembersInRepairRecord ON userOfMembersInRepairRecord.id = rm.user_id
-    LEFT JOIN user as userOfChargeInRepairRecord ON userOfChargeInRepairRecord.id = rr.repair_charge_person
-    LEFT JOIN machine as m ON m.nameplate = rr.machine_nameplate
+	<select id="selectRepairTaskMachine" resultMap="com.eservice.api.dao.MachineMapper.BaseResultMap">
+		SELECT
+		m.*
+		FROM
+		repair_record as rr
+		LEFT JOIN repair_members as rm ON rm.repair_record_id = rr.id
+		LEFT JOIN user as userOfMembersInRepairRecord ON userOfMembersInRepairRecord.id = rm.user_id
+		LEFT JOIN user as userOfChargeInRepairRecord ON userOfChargeInRepairRecord.id = rr.repair_charge_person
+		LEFT JOIN machine as m ON m.nameplate = rr.machine_nameplate
 
-    -- 维修状态 0：未派单，
-    -- 1：已派单（但未接单）,
-    -- 2： 已接受任务，
-    -- 3：维修成功(客户未确认)，
-    -- 4：无法维修，维修被转派（不需要客户确认），
-    -- 5.客户已确认（维修成功）。转派后，前面的维修记录要保留，但是客户只需要看到成功的最后那次记录。
-    where (rr.status = 1 or rr.status = 2 or  rr.status = 3 or rr.status = 4)
-    <if test="userName!=null and userName != '' ">
-      and (userOfMembersInRepairRecord.name = #{userName} or  userOfChargeInRepairRecord.name = #{userName})
-    </if>
-  </select>
+		-- 维修状态 0：未派单，
+		-- 1：已派单（但未接单）,
+		-- 2： 已接受任务，
+		-- 3：维修成功(客户未确认)，
+		-- 4：无法维修，维修被转派（不需要客户确认），
+		-- 5.客户已确认（维修成功）。转派后，前面的维修记录要保留，但是客户只需要看到成功的最后那次记录。
+		where (rr.status = 1 or rr.status = 2 or rr.status = 3 or rr.status = 4)
+		<if test="userName!=null and userName != '' ">
+			and (userOfMembersInRepairRecord.name = #{userName} or userOfChargeInRepairRecord.name = #{userName})
+		</if>
+	</select>
 </mapper>
