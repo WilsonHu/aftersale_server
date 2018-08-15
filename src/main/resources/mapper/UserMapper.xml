@@ -52,14 +52,20 @@
 	</select>
 
 	<select id="getUsersByType" resultMap="UserInfoResultMap">
-    SELECT
-    u.*,
-    a.`name` as agent_name
-    from user AS u
-    LEFT JOIN agent a ON a.id = u.agent
+		SELECT
+		u.*,
+		a.`name` as agent_name
+		from user AS u
+		LEFT JOIN agent a ON a.id = u.agent
 --     5：客户本身，6：客户的联系人
-    WHERE u.role_id = #{type}
-  </select>
+		WHERE 1=1
+		<if test="roleId != null and roleId != ''">
+			and u.role_id = #{roleId}
+		</if>
+		<if test="agentId != null and agentId != ''">
+			and u.agent = #{agentId}
+		</if>
+	</select>
 
 	<select id="selectUsers" resultMap="BaseResultMap">
 		SELECT u.*

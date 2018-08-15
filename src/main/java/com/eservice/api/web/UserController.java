@@ -97,15 +97,14 @@ public class UserController {
 
     /**
      * 根据参数返回该类型的用户
-     * 比如，
-     * 5:返回属性为客户的user
-     * 6:返回属性为客户的联系人的user
+     * 不带参数，则不按该参数过滤
      */
     @PostMapping("/getUsersByType")
     public Result getUsersByType(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size,
-                               @RequestParam( ) String type) {
+                                 String roleId,
+                                 String agentId) {
         PageHelper.startPage(page, size);
-        List<UserInfo> list = userService.getUsersByType(type);
+        List<UserInfo> list = userService.getUsersByType(roleId, agentId);
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
     }
