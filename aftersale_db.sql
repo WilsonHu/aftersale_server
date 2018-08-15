@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50553
 File Encoding         : 65001
 
-Date: 2018-08-15 15:06:49
+Date: 2018-08-15 16:03:31
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -539,30 +539,30 @@ CREATE TABLE `repair_customer_feedback` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `customer_mark` varchar(255) NOT NULL COMMENT '客户给的评分',
   `customer_suggestion` varchar(255) NOT NULL COMMENT '客户意见',
-  `customer_repair_result` varchar(255) DEFAULT NULL COMMENT '维修结果。',
+  `create_time` datetime NOT NULL COMMENT '创建时间，也即用户完成评价的时间，维修最后完成时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of repair_customer_feedback
 -- ----------------------------
-INSERT INTO `repair_customer_feedback` VALUES ('1', '4', '4f满意', 'Fixed_OK');
-INSERT INTO `repair_customer_feedback` VALUES ('2', '5', '5F很满意', 'Fixed_OK');
-INSERT INTO `repair_customer_feedback` VALUES ('3', '5', '5F很满意', 'Fixed_OK');
-INSERT INTO `repair_customer_feedback` VALUES ('4', '5', '5F很满意0719', 'Fixed_OK');
-INSERT INTO `repair_customer_feedback` VALUES ('5', '5', '5F很满意0719', 'Fixed_OK');
-INSERT INTO `repair_customer_feedback` VALUES ('6', '5', '5分很满意0719', 'Fixed_OK');
-INSERT INTO `repair_customer_feedback` VALUES ('7', '5', '5分很满意0719', 'Fixed_OK');
-INSERT INTO `repair_customer_feedback` VALUES ('8', '5', '5分很满意0719', 'Fixed_OK');
-INSERT INTO `repair_customer_feedback` VALUES ('9', '5', '5分很满意0719-0727-a', 'Fixed_OK');
-INSERT INTO `repair_customer_feedback` VALUES ('10', '5', '5分很满意0719-0727-a', 'Fixed_OK');
-INSERT INTO `repair_customer_feedback` VALUES ('11', '5', '5分很满意0719-0727-a', 'Fixed_OK');
-INSERT INTO `repair_customer_feedback` VALUES ('12', '5', '5分很满意0719-0727-a', 'Fixed_OK');
-INSERT INTO `repair_customer_feedback` VALUES ('13', '5', '5分很满意0719-0727-a', '修理OK0727-a');
-INSERT INTO `repair_customer_feedback` VALUES ('14', '5', '5分很满意0719-0727-a', 'Fixed_OK');
-INSERT INTO `repair_customer_feedback` VALUES ('15', '5', '5分很满意0719-0727-a', 'Fixed_OK1222');
-INSERT INTO `repair_customer_feedback` VALUES ('19', '5', '5分很满意0719-0727-a', 'Fixed_OK');
-INSERT INTO `repair_customer_feedback` VALUES ('20', '5', '5分很满意0719-0727-a', 'Fixed_OK');
+INSERT INTO `repair_customer_feedback` VALUES ('1', '4', '4f满意', '0000-00-00 00:00:00');
+INSERT INTO `repair_customer_feedback` VALUES ('2', '5', '5F很满意', '0000-00-00 00:00:00');
+INSERT INTO `repair_customer_feedback` VALUES ('3', '5', '5F很满意', '0000-00-00 00:00:00');
+INSERT INTO `repair_customer_feedback` VALUES ('4', '5', '5F很满意0719', '0000-00-00 00:00:00');
+INSERT INTO `repair_customer_feedback` VALUES ('5', '5', '5F很满意0719', '0000-00-00 00:00:00');
+INSERT INTO `repair_customer_feedback` VALUES ('6', '5', '5分很满意0719', '0000-00-00 00:00:00');
+INSERT INTO `repair_customer_feedback` VALUES ('7', '5', '5分很满意0719', '0000-00-00 00:00:00');
+INSERT INTO `repair_customer_feedback` VALUES ('8', '5', '5分很满意0719', '0000-00-00 00:00:00');
+INSERT INTO `repair_customer_feedback` VALUES ('9', '5', '5分很满意0719-0727-a', '0000-00-00 00:00:00');
+INSERT INTO `repair_customer_feedback` VALUES ('10', '5', '5分很满意0719-0727-a', '0000-00-00 00:00:00');
+INSERT INTO `repair_customer_feedback` VALUES ('11', '5', '5分很满意0719-0727-a', '0000-00-00 00:00:00');
+INSERT INTO `repair_customer_feedback` VALUES ('12', '5', '5分很满意0719-0727-a', '0000-00-00 00:00:00');
+INSERT INTO `repair_customer_feedback` VALUES ('13', '5', '5分很满意0719-0727-a', '0000-00-00 00:00:00');
+INSERT INTO `repair_customer_feedback` VALUES ('14', '5', '5分很满意0719-0727-a', '0000-00-00 00:00:00');
+INSERT INTO `repair_customer_feedback` VALUES ('15', '5', '5分很满意0719-0727-a', '0000-00-00 00:00:00');
+INSERT INTO `repair_customer_feedback` VALUES ('19', '5', '5分很满意0719-0727-a', '0000-00-00 00:00:00');
+INSERT INTO `repair_customer_feedback` VALUES ('20', '5', '5分很满意0719-0727-a', '0000-00-00 00:00:00');
 
 -- ----------------------------
 -- Table structure for `repair_members`
@@ -652,6 +652,7 @@ CREATE TABLE `repair_request_info` (
   `content` text NOT NULL COMMENT '报修内容',
   `pictures` varchar(1000) DEFAULT NULL COMMENT '报修图片的路径，--客户报修时上传，可以用于经验库里“解决前”的问题照片',
   `customer` int(10) unsigned NOT NULL COMMENT '联系人',
+  `create_time` datetime NOT NULL COMMENT '创建时间，也即用户报修时间',
   PRIMARY KEY (`id`),
   KEY `fk_rri_contacter` (`customer`),
   CONSTRAINT `fk_rri_customer` FOREIGN KEY (`customer`) REFERENCES `user` (`id`)
@@ -660,25 +661,25 @@ CREATE TABLE `repair_request_info` (
 -- ----------------------------
 -- Records of repair_request_info
 -- ----------------------------
-INSERT INTO `repair_request_info` VALUES ('1', '', 'mph2233', null, '马达不转', '马达不转2222', null, '1');
-INSERT INTO `repair_request_info` VALUES ('2', 'mph333', '[D:/images/repair_req_nameplate/ mph333_REPAIR_REQUEST_NAMEPLATE_IMAGE_2018-07-13-16-17-50_2.png]', '[D:/images/repair_req_voice/ mph333_REPAIR_REQUEST_VOICE_2018-07-13-16-17-50_3.png]', '标题有时会断线', '内容最近从五月份开始有时候会断线', '[D:/images/repair_req_img/ mph333_REPAIR_REQUEST_IMAGE_2018-07-13-16-17-50_1.png]', '1');
-INSERT INTO `repair_request_info` VALUES ('3', 'mph333', '[D:/images/repair_req_nameplate/ mph333_REPAIR_REQUEST_NAMEPLATE_IMAGE_2018-07-13-16-24-52_2.png]', '[D:/images/repair_req_voice/ mph333_REPAIR_REQUEST_VOICE_2018-07-13-16-24-52_3.png]', '标题有时会断线', '内容最近从五月份开始有时候会断线', '[]', '1');
-INSERT INTO `repair_request_info` VALUES ('4', 'mph333', '[D:/images/repair_req_nameplate/ mph333_REPAIR_REQUEST_NAMEPLATE_IMAGE_2018-07-13-17-06-34_2.png]', '[D:/images/repair_req_voice/ mph333_REPAIR_REQUEST_VOICE_2018-07-13-17-06-34_3.png]', '标题有时会断线', '内容最近从五月份开始有时候会断线', '[]', '1');
-INSERT INTO `repair_request_info` VALUES ('5', 'mph333', '[D:/images/repair_req_nameplate/ mph333_REPAIR_REQUEST_NAMEPLATE_IMAGE_2018-07-19-11-00-07_2.png]', '[]', '标题有时会断线0719', '内容最近从五月份开始有时候会断线', '[D:/images/repair_req_img/ mph333_REPAIR_REQUEST_IMAGE_2018-07-19-11-00-07_1.png]', '1');
-INSERT INTO `repair_request_info` VALUES ('6', 'mph333', '[D:/images/repair_req_nameplate/ mph333_REPAIR_REQUEST_NAMEPLATE_IMAGE_2018-07-19-11-00-16_2.png]', '[]', '标题有时会断线0719', '内容最近从五月份开始有时候会断线', '[D:/images/repair_req_img/ mph333_REPAIR_REQUEST_IMAGE_2018-07-19-11-00-16_1.png]', '1');
-INSERT INTO `repair_request_info` VALUES ('7', 'mph333', '[D:/images/repair_req_nameplate/ mph333_REPAIR_REQUEST_NAMEPLATE_IMAGE_2018-07-19-11-04-40_2.png]', '[]', '标题有时会断线0719', '内容最近从五月份开始有时候会断线', '[D:/images/repair_req_img/ mph333_REPAIR_REQUEST_IMAGE_2018-07-19-11-04-40_1.png]', '1');
-INSERT INTO `repair_request_info` VALUES ('8', 'mph333', '[D:/images/repair_req_nameplate/ mph333_REPAIR_REQUEST_NAMEPLATE_IMAGE_2018-07-19-11-05-54_2.png]', '[]', '标题有时会断线0719', '内容最近从五月份开始有时候会断线', '[D:/images/repair_req_img/ mph333_REPAIR_REQUEST_IMAGE_2018-07-19-11-05-54_1.png]', '1');
-INSERT INTO `repair_request_info` VALUES ('9', 'mph333', '[D:/images/repair_req_nameplate/ mph333_REPAIR_REQUEST_NAMEPLATE_IMAGE_2018-07-19-11-06-01_2.png]', '[]', '标题有时会断线0719', '内容最近从五月份开始有时候会断线', '[D:/images/repair_req_img/ mph333_REPAIR_REQUEST_IMAGE_2018-07-19-11-06-01_1.png]', '1');
-INSERT INTO `repair_request_info` VALUES ('10', 'mph333', '[D:/images/repair_req_nameplate/ mph333_REPAIR_REQUEST_NAMEPLATE_IMAGE_2018-07-19-11-06-35_2.png]', '[D:/images/repair_req_voice/ mph333_REPAIR_REQUEST_VOICE_2018xxxx.mp3]', '标题有时会断线0719', '内容最近从五月份开始有时候会断线', '[D:/images/repair_req_img/ mph333_REPAIR_REQUEST_IMAGE_2018-07-19-11-06-35_1.png]', '1');
-INSERT INTO `repair_request_info` VALUES ('11', 'mph333', '[D:/images/repair_req_nameplate/ mph333_REPAIR_REQUEST_NAMEPLATE_IMAGE_2018-07-19-11-07-25_2.png]', '[D:/images/repair_req_voice/ mph333_REPAIR_REQUEST_VOICE_2018xxxx22.mp3]', '标题有时会断线0719', '内容最近从五月份开始有时候会断线', '[D:/images/repair_req_img/ mph333_REPAIR_REQUEST_IMAGE_2018-07-19-11-07-25_1.png]', '1');
-INSERT INTO `repair_request_info` VALUES ('12', 'mph333', '[D:/images/repair_req_nameplate/ mph333_REPAIR_REQUEST_NAMEPLATE_IMAGE_2018-07-19-11-09-49_2.png]', '[D:/images/repair_req_voice/ mph333_REPAIR_REQUEST_VOICE_2018xxxx33.mp3]', '标题有时会断线0719', '内容最近从五月份开始有时候会断线', '[D:/images/repair_req_img/ mph333_REPAIR_REQUEST_IMAGE_2018-07-19-11-09-49_1.png]', '1');
-INSERT INTO `repair_request_info` VALUES ('13', 'mph333', '[D:/images/repair_req_nameplate/ mph333_REPAIR_REQUEST_NAMEPLATE_IMAGE_2018-07-19-13-41-09_2.png]', '[]', '标题有时会断线0719-2', '内容最近从五月份开始有时候会断线', '[D:/images/repair_req_img/ mph333_REPAIR_REQUEST_IMAGE_2018-07-19-13-41-09_1.png]', '1');
-INSERT INTO `repair_request_info` VALUES ('14', 'mph333', '[D:/images/repair_req_nameplate/ mph333_REPAIR_REQUEST_NAMEPLATE_IMAGE_2018-07-19-13-44-14_2.png]', '[]', '标题有时会断线0719-2', '内容最近从五月份开始有时候会断线', '[D:/images/repair_req_img/ mph333_REPAIR_REQUEST_IMAGE_2018-07-19-13-44-14_1.png]', '1');
-INSERT INTO `repair_request_info` VALUES ('15', 'mph333', '[D:/images/repair_req_nameplate/ mph333_REPAIR_REQUEST_NAMEPLATE_IMAGE_2018-07-19-13-45-23_2.png]', '[]', '标题有时会断线0719-2', '内容最近从五月份开始有时候会断线', '[D:/images/repair_req_img/ mph333_REPAIR_REQUEST_IMAGE_2018-07-19-13-45-23_1.png]', '1');
-INSERT INTO `repair_request_info` VALUES ('16', 'mph333', '[D:/images/repair_req_nameplate/ mph333_REPAIR_REQUEST_NAMEPLATE_IMAGE_2018-07-19-13-46-38_2.png]', '[]', '标题有时会断线0719-2', '内容最近从五月份开始有时候会断线', '[D:/images/repair_req_img/ mph333_REPAIR_REQUEST_IMAGE_2018-07-19-13-46-38_1.png]', '1');
-INSERT INTO `repair_request_info` VALUES ('17', 'mph333', '[D:/images/repair_req_nameplate/ mph333_REPAIR_REQUEST_NAMEPLATE_IMAGE_2018-07-19-13-50-51_2.png]', '[]', '标题有时会断线0719-2', '内容最近从五月份开始有时候会断线', '[D:/images/repair_req_img/ mph333_REPAIR_REQUEST_IMAGE_2018-07-19-13-50-51_1.png]', '1');
-INSERT INTO `repair_request_info` VALUES ('18', 'mph333', '[D:/images/repair_req_nameplate/ mph333_REPAIR_REQUEST_NAMEPLATE_IMAGE_2018-07-19-13-55-23_2.png]', '[]', '标题有时会断线0719-2', '内容最近从五月份开始有时候会断线', '[D:/images/repair_req_img/ mph333_REPAIR_REQUEST_IMAGE_2018-07-19-13-55-23_1.png]', '1');
-INSERT INTO `repair_request_info` VALUES ('29', 'mph--all-data', 'D:/images/repair_req_nameplate/ mph--all-data_REPAIR_REQUEST_NAMEPLATE_IMAGE_2018-08-12-14-38-05_0.png', 'D:/images/repair_req_voice/ mph--all-data_REPAIR_REQUEST_VOICE_2018-08-12-14-38-05_0.mp3', '马达不转0812add', '马达不转2222', '[D:/images/repair_req_img/ mph--all-data_REPAIR_REQUEST_IMAGE_2018-08-12-14-38-05_0.png, D:/images/repair_req_img/ mph--all-data_REPAIR_REQUEST_IMAGE_2018-08-12-14-38-05_1.png, D:/images/repair_req_img/ mph--all-data_REPAIR_REQUEST_IMAGE_2018-08-12-14-38-05_2.png]', '1');
+INSERT INTO `repair_request_info` VALUES ('1', '', 'mph2233', null, '马达不转', '马达不转2222', null, '1', '0000-00-00 00:00:00');
+INSERT INTO `repair_request_info` VALUES ('2', 'mph333', '[D:/images/repair_req_nameplate/ mph333_REPAIR_REQUEST_NAMEPLATE_IMAGE_2018-07-13-16-17-50_2.png]', '[D:/images/repair_req_voice/ mph333_REPAIR_REQUEST_VOICE_2018-07-13-16-17-50_3.png]', '标题有时会断线', '内容最近从五月份开始有时候会断线', '[D:/images/repair_req_img/ mph333_REPAIR_REQUEST_IMAGE_2018-07-13-16-17-50_1.png]', '1', '0000-00-00 00:00:00');
+INSERT INTO `repair_request_info` VALUES ('3', 'mph333', '[D:/images/repair_req_nameplate/ mph333_REPAIR_REQUEST_NAMEPLATE_IMAGE_2018-07-13-16-24-52_2.png]', '[D:/images/repair_req_voice/ mph333_REPAIR_REQUEST_VOICE_2018-07-13-16-24-52_3.png]', '标题有时会断线', '内容最近从五月份开始有时候会断线', '[]', '1', '0000-00-00 00:00:00');
+INSERT INTO `repair_request_info` VALUES ('4', 'mph333', '[D:/images/repair_req_nameplate/ mph333_REPAIR_REQUEST_NAMEPLATE_IMAGE_2018-07-13-17-06-34_2.png]', '[D:/images/repair_req_voice/ mph333_REPAIR_REQUEST_VOICE_2018-07-13-17-06-34_3.png]', '标题有时会断线', '内容最近从五月份开始有时候会断线', '[]', '1', '0000-00-00 00:00:00');
+INSERT INTO `repair_request_info` VALUES ('5', 'mph333', '[D:/images/repair_req_nameplate/ mph333_REPAIR_REQUEST_NAMEPLATE_IMAGE_2018-07-19-11-00-07_2.png]', '[]', '标题有时会断线0719', '内容最近从五月份开始有时候会断线', '[D:/images/repair_req_img/ mph333_REPAIR_REQUEST_IMAGE_2018-07-19-11-00-07_1.png]', '1', '0000-00-00 00:00:00');
+INSERT INTO `repair_request_info` VALUES ('6', 'mph333', '[D:/images/repair_req_nameplate/ mph333_REPAIR_REQUEST_NAMEPLATE_IMAGE_2018-07-19-11-00-16_2.png]', '[]', '标题有时会断线0719', '内容最近从五月份开始有时候会断线', '[D:/images/repair_req_img/ mph333_REPAIR_REQUEST_IMAGE_2018-07-19-11-00-16_1.png]', '1', '0000-00-00 00:00:00');
+INSERT INTO `repair_request_info` VALUES ('7', 'mph333', '[D:/images/repair_req_nameplate/ mph333_REPAIR_REQUEST_NAMEPLATE_IMAGE_2018-07-19-11-04-40_2.png]', '[]', '标题有时会断线0719', '内容最近从五月份开始有时候会断线', '[D:/images/repair_req_img/ mph333_REPAIR_REQUEST_IMAGE_2018-07-19-11-04-40_1.png]', '1', '0000-00-00 00:00:00');
+INSERT INTO `repair_request_info` VALUES ('8', 'mph333', '[D:/images/repair_req_nameplate/ mph333_REPAIR_REQUEST_NAMEPLATE_IMAGE_2018-07-19-11-05-54_2.png]', '[]', '标题有时会断线0719', '内容最近从五月份开始有时候会断线', '[D:/images/repair_req_img/ mph333_REPAIR_REQUEST_IMAGE_2018-07-19-11-05-54_1.png]', '1', '0000-00-00 00:00:00');
+INSERT INTO `repair_request_info` VALUES ('9', 'mph333', '[D:/images/repair_req_nameplate/ mph333_REPAIR_REQUEST_NAMEPLATE_IMAGE_2018-07-19-11-06-01_2.png]', '[]', '标题有时会断线0719', '内容最近从五月份开始有时候会断线', '[D:/images/repair_req_img/ mph333_REPAIR_REQUEST_IMAGE_2018-07-19-11-06-01_1.png]', '1', '0000-00-00 00:00:00');
+INSERT INTO `repair_request_info` VALUES ('10', 'mph333', '[D:/images/repair_req_nameplate/ mph333_REPAIR_REQUEST_NAMEPLATE_IMAGE_2018-07-19-11-06-35_2.png]', '[D:/images/repair_req_voice/ mph333_REPAIR_REQUEST_VOICE_2018xxxx.mp3]', '标题有时会断线0719', '内容最近从五月份开始有时候会断线', '[D:/images/repair_req_img/ mph333_REPAIR_REQUEST_IMAGE_2018-07-19-11-06-35_1.png]', '1', '0000-00-00 00:00:00');
+INSERT INTO `repair_request_info` VALUES ('11', 'mph333', '[D:/images/repair_req_nameplate/ mph333_REPAIR_REQUEST_NAMEPLATE_IMAGE_2018-07-19-11-07-25_2.png]', '[D:/images/repair_req_voice/ mph333_REPAIR_REQUEST_VOICE_2018xxxx22.mp3]', '标题有时会断线0719', '内容最近从五月份开始有时候会断线', '[D:/images/repair_req_img/ mph333_REPAIR_REQUEST_IMAGE_2018-07-19-11-07-25_1.png]', '1', '0000-00-00 00:00:00');
+INSERT INTO `repair_request_info` VALUES ('12', 'mph333', '[D:/images/repair_req_nameplate/ mph333_REPAIR_REQUEST_NAMEPLATE_IMAGE_2018-07-19-11-09-49_2.png]', '[D:/images/repair_req_voice/ mph333_REPAIR_REQUEST_VOICE_2018xxxx33.mp3]', '标题有时会断线0719', '内容最近从五月份开始有时候会断线', '[D:/images/repair_req_img/ mph333_REPAIR_REQUEST_IMAGE_2018-07-19-11-09-49_1.png]', '1', '0000-00-00 00:00:00');
+INSERT INTO `repair_request_info` VALUES ('13', 'mph333', '[D:/images/repair_req_nameplate/ mph333_REPAIR_REQUEST_NAMEPLATE_IMAGE_2018-07-19-13-41-09_2.png]', '[]', '标题有时会断线0719-2', '内容最近从五月份开始有时候会断线', '[D:/images/repair_req_img/ mph333_REPAIR_REQUEST_IMAGE_2018-07-19-13-41-09_1.png]', '1', '0000-00-00 00:00:00');
+INSERT INTO `repair_request_info` VALUES ('14', 'mph333', '[D:/images/repair_req_nameplate/ mph333_REPAIR_REQUEST_NAMEPLATE_IMAGE_2018-07-19-13-44-14_2.png]', '[]', '标题有时会断线0719-2', '内容最近从五月份开始有时候会断线', '[D:/images/repair_req_img/ mph333_REPAIR_REQUEST_IMAGE_2018-07-19-13-44-14_1.png]', '1', '0000-00-00 00:00:00');
+INSERT INTO `repair_request_info` VALUES ('15', 'mph333', '[D:/images/repair_req_nameplate/ mph333_REPAIR_REQUEST_NAMEPLATE_IMAGE_2018-07-19-13-45-23_2.png]', '[]', '标题有时会断线0719-2', '内容最近从五月份开始有时候会断线', '[D:/images/repair_req_img/ mph333_REPAIR_REQUEST_IMAGE_2018-07-19-13-45-23_1.png]', '1', '0000-00-00 00:00:00');
+INSERT INTO `repair_request_info` VALUES ('16', 'mph333', '[D:/images/repair_req_nameplate/ mph333_REPAIR_REQUEST_NAMEPLATE_IMAGE_2018-07-19-13-46-38_2.png]', '[]', '标题有时会断线0719-2', '内容最近从五月份开始有时候会断线', '[D:/images/repair_req_img/ mph333_REPAIR_REQUEST_IMAGE_2018-07-19-13-46-38_1.png]', '1', '0000-00-00 00:00:00');
+INSERT INTO `repair_request_info` VALUES ('17', 'mph333', '[D:/images/repair_req_nameplate/ mph333_REPAIR_REQUEST_NAMEPLATE_IMAGE_2018-07-19-13-50-51_2.png]', '[]', '标题有时会断线0719-2', '内容最近从五月份开始有时候会断线', '[D:/images/repair_req_img/ mph333_REPAIR_REQUEST_IMAGE_2018-07-19-13-50-51_1.png]', '1', '0000-00-00 00:00:00');
+INSERT INTO `repair_request_info` VALUES ('18', 'mph333', '[D:/images/repair_req_nameplate/ mph333_REPAIR_REQUEST_NAMEPLATE_IMAGE_2018-07-19-13-55-23_2.png]', '[]', '标题有时会断线0719-2', '内容最近从五月份开始有时候会断线', '[D:/images/repair_req_img/ mph333_REPAIR_REQUEST_IMAGE_2018-07-19-13-55-23_1.png]', '1', '0000-00-00 00:00:00');
+INSERT INTO `repair_request_info` VALUES ('29', 'mph--all-data', 'D:/images/repair_req_nameplate/ mph--all-data_REPAIR_REQUEST_NAMEPLATE_IMAGE_2018-08-12-14-38-05_0.png', 'D:/images/repair_req_voice/ mph--all-data_REPAIR_REQUEST_VOICE_2018-08-12-14-38-05_0.mp3', '马达不转0812add', '马达不转2222', '[D:/images/repair_req_img/ mph--all-data_REPAIR_REQUEST_IMAGE_2018-08-12-14-38-05_0.png, D:/images/repair_req_img/ mph--all-data_REPAIR_REQUEST_IMAGE_2018-08-12-14-38-05_1.png, D:/images/repair_req_img/ mph--all-data_REPAIR_REQUEST_IMAGE_2018-08-12-14-38-05_2.png]', '1', '0000-00-00 00:00:00');
 
 -- ----------------------------
 -- Table structure for `role`

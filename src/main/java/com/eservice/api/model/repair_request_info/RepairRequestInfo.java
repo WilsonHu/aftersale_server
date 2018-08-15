@@ -184,4 +184,18 @@ public class RepairRequestInfo {
     public void setContent(String content) {
         this.content = content;
     }
+
+    /**
+     * 创建时间，也即用户报修时间
+     */
+    @Column(name = "create_time")
+    private Date createTime;
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
 }

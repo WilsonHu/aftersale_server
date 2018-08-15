@@ -93,4 +93,20 @@ public class RepairCustomerFeedback {
 //    public void setCustomerRepairResult(String customerRepairResult) {
 //        this.customerRepairResult = customerRepairResult;
 //    }
+
+
+
+    /**
+     * 创建时间，也即用户完成评价的时间，维修最后完成时间
+     */
+    @Column(name = "create_time")
+    private Date createTime;
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
 }
