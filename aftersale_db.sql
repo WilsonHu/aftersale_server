@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50553
 File Encoding         : 65001
 
-Date: 2018-08-12 14:43:10
+Date: 2018-08-15 15:06:49
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -478,7 +478,7 @@ CREATE TABLE `parts_info` (
   KEY `fk_pi_sendback_confirmed_person` (`sendback_confirmed_person`),
   CONSTRAINT `fk_pi_repair_actual_info` FOREIGN KEY (`repair_actual_info_id`) REFERENCES `repair_actual_info` (`id`),
   CONSTRAINT `fk_pi_sendback_confirmed_person` FOREIGN KEY (`sendback_confirmed_person`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of parts_info
@@ -491,6 +491,9 @@ INSERT INTO `parts_info` VALUES ('5', '部件333part_C', 'xs', 'ppram', '3', '4'
 INSERT INTO `parts_info` VALUES ('6', '部件666', '部件供应商666', '参数666', '1', '2', '未寄回--无快递单号', null, '0000-00-00', null, null);
 INSERT INTO `parts_info` VALUES ('7', '部件777', '部件供应商777', null, '5', '2', null, null, null, null, null);
 INSERT INTO `parts_info` VALUES ('12', '马达12AB--by-add-with-repair-actual-info0807', '松下--by-add-with-repair-actual-info', 'param123--by-add-with-repair-actual-info0807', '13', '3', 'sf-track-number-111--马达12AB--by-add-with-repair-actual-info', '马达12AB 回寄的照片', '2018-08-01', null, null);
+INSERT INTO `parts_info` VALUES ('19', '上轴部件222-0815add', 'xs', 'pram222-0815add', '20', '3', 'sf-track-number-222-0815add', 'TEST上轴部件222回寄的照片-0815add', '2018-08-01', null, '2');
+INSERT INTO `parts_info` VALUES ('22', '上轴部件222-0815add', 'xs', 'pram222-0815add', '23', '3', 'sf-track-number-222-0815add', 'TEST上轴部件222回寄的照片-0815add', '2018-08-01', null, '2');
+INSERT INTO `parts_info` VALUES ('23', '上轴部件222-0815add', 'xs', 'pram222-0815add', '24', '3', 'sf-track-number-222-0815add', 'TEST上轴部件222回寄的照片-0815add', '2018-08-01', null, '2');
 
 -- ----------------------------
 -- Table structure for `repair_actual_info`
@@ -508,7 +511,7 @@ CREATE TABLE `repair_actual_info` (
   KEY `fk_rai_issue_position` (`issue_position`),
   CONSTRAINT `fk_rai_issue_position` FOREIGN KEY (`issue_position`) REFERENCES `issue_position_list` (`id`),
   CONSTRAINT `fk_rai_repair_record_id` FOREIGN KEY (`repair_record_id`) REFERENCES `repair_record` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of repair_actual_info
@@ -524,6 +527,9 @@ INSERT INTO `repair_actual_info` VALUES ('8', '3', '1', '问题描述,实际发�
 INSERT INTO `repair_actual_info` VALUES ('9', '3', '1', '问题描述,实际发生了xx1111-by-add', '实际维修方法1111-by-add', '维修后的图片路径111ttt-by-add');
 INSERT INTO `repair_actual_info` VALUES ('10', '3', '1', '问题描述,实际发生了xx1111-by-add0807', '实际维修方法1111-by-add', '维修后的图片路径111ttt-by-add0807');
 INSERT INTO `repair_actual_info` VALUES ('13', '3', '1', '问题描述,实际发生了xx1111-by-add0807', '实际维修方法1111-by-add', '维修后的图片路径111ttt-by-add0807');
+INSERT INTO `repair_actual_info` VALUES ('20', '4', '3', '问题描述,实际发生了xx22222--0815add', '实际维修方法22222--0815add', '维修后的图片路径222-0815add');
+INSERT INTO `repair_actual_info` VALUES ('23', '4', '3', '问题描述,实际发生了xx22222--0815add', '实际维修方法22222--0815add', '维修后的图片路径222-0815add');
+INSERT INTO `repair_actual_info` VALUES ('24', '4', '3', '问题描述,实际发生了xx22222--0815add', '实际维修方法22222--0815add', '维修后的图片路径222-0815add');
 
 -- ----------------------------
 -- Table structure for `repair_customer_feedback`
@@ -624,7 +630,7 @@ CREATE TABLE `repair_record` (
 -- Records of repair_record
 -- ----------------------------
 INSERT INTO `repair_record` VALUES ('3', 'xx11', '6', 'mph333', '11', '1', '2018-07-06', '3', '2018-07-24 10:08:45', '2018-07-25 10:08:50', '20', '5', '2018-07-25 10:38:25', '2018-08-08 11:08:45', '1');
-INSERT INTO `repair_record` VALUES ('4', null, '6', 'mph--all-data', '12', '1', '2018-07-06', '4', '2018-07-24 10:37:35', '2018-07-25 10:15:51', '1', '5', '2018-07-19 11:09:49', '2018-07-25 10:38:32', '1');
+INSERT INTO `repair_record` VALUES ('4', null, '6', 'mph--all-data', '12', '1', '2018-07-06', '4', '2018-07-24 10:37:35', '2018-07-25 10:15:51', '1', '3', '2018-07-19 11:09:49', '2018-07-25 10:38:32', '1');
 INSERT INTO `repair_record` VALUES ('5', null, '7', 'mph788', '13', '1', '2018-07-06', '4', null, '2018-07-25 10:15:55', null, '1', '2018-07-19 13:41:09', null, null);
 INSERT INTO `repair_record` VALUES ('6', null, '7', 'mph333', '14', '0', '2018-07-06', '3', null, '2018-07-26 10:15:59', null, '2', '2018-07-19 13:44:14', null, null);
 INSERT INTO `repair_record` VALUES ('7', null, '8', 'mph2233', '15', '0', '2018-07-06', '3', null, '2018-07-26 10:16:03', null, '3', '2018-07-19 13:45:23', null, null);

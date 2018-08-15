@@ -68,16 +68,11 @@ public class RepairCustomerFeedbackController {
             /**
              * 更新对应的机器状态
              * 根据客户的选择“未解决”、“已解决” 来更新相应状态
+             * 更新：维修结果（是否解决问题）不再由客户来认定而是由维修员判定。即客户评价了就确认问题已解决。
              */
             Machine machine = machineService.findBy("nameplate",repairRecord.getMachineNameplate());
-            if(repairCustomerFeedback1.getCustomerRepairResult().equals(Constant.REPAIR_RESULT_FIXED_NG)){
-                machine.setStatus(Constant.MACHINE_STATUS_WAIT_FOR_REPAIR);
-            } else if(repairCustomerFeedback1.getCustomerRepairResult().equals(Constant.REPAIR_RESULT_FIXED_OK)) {
                 machine.setStatus(Constant.MACHINE_STATUS_IN_NORMAL);
-            } else {
-                throw new RuntimeException();
-            }
-            machineService.update(machine);
+                machineService.update(machine);
         } catch (Exception ex) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return ResultGenerator.genFailResult("数据更新出错！" + ex.getMessage());

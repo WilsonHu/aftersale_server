@@ -21,10 +21,10 @@ public class RepairCustomerFeedback {
     private String customerSuggestion;
 
     /**
-     * 维修结果。
+     * 维修结果。不再由客户判定
      */
-    @Column(name = "customer_repair_result")
-    private String customerRepairResult;
+//    @Column(name = "customer_repair_result")
+//    private String customerRepairResult;
 
     /**
      * @return id
@@ -76,21 +76,21 @@ public class RepairCustomerFeedback {
         this.customerSuggestion = customerSuggestion;
     }
 
-    /**
-     * 获取维修结果。
-     *
-     * @return customer_repair_result - 维修结果。
-     */
-    public String getCustomerRepairResult() {
-        return customerRepairResult;
-    }
-
-    /**
-     * 设置维修结果。
-     *
-     * @param customerRepairResult 维修结果。
-     */
-    public void setCustomerRepairResult(String customerRepairResult) {
-        this.customerRepairResult = customerRepairResult;
-    }
+//    /**
+//     * 获取维修结果。
+//     *
+//     * @return customer_repair_result - 维修结果。
+//     */
+//    public String getCustomerRepairResult() {
+//        return customerRepairResult;
+//    }
+//
+//    /**
+//     * 设置维修结果。
+//     *
+//     * @param customerRepairResult 维修结果。
+//     */
+//    public void setCustomerRepairResult(String customerRepairResult) {
+//        this.customerRepairResult = customerRepairResult;
+//    }
 }

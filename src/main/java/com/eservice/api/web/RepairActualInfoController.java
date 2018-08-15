@@ -40,30 +40,41 @@ public class RepairActualInfoController {
 
     /**
      * 在上传（新增）实际维修情况时，也同时上传（新增）了要寄回的配件，并更新record状态
+     * partsInfo: 配件信息
+     * repairResult: 维修结果 3(Constant.REPAIR_STATUS_REPAIR_NG)表示NG,6(Constant.REPAIR_STATUS_REPAIR_OK)表示OK
      */
     @Transactional(rollbackFor = Exception.class)
     @PostMapping("/add")
-    public Result add(@RequestParam String repairActualInfo, @RequestParam String partsInfo) {
+    public Result add(@RequestParam String repairActualInfo,
+                      @RequestParam String partsInfo,
+                      @RequestParam String repairResult) {
         try {
             RepairActualInfo repairActualInfo1 = JSON.parseObject(repairActualInfo, RepairActualInfo.class);
             if( null == repairActualInfo1) {
-                return ResultGenerator.genFailResult("repairActualInfo解析出错！");
+                System.out.println("repairActualInfo解析出错！");
+                throw new RuntimeException();
             }
             repairActualInfoService.saveAndGetID(repairActualInfo1);
 
             PartsInfo partsInfo1 = JSON.parseObject(partsInfo,PartsInfo.class);
             if( null == partsInfo1) {
-                return ResultGenerator.genFailResult("partsInfo 解析出错！");
+                System.out.println("partsInfo 解析出错！");
+                throw new RuntimeException();
             }
             partsInfo1.setRepairActualInfoId(repairActualInfo1.getId());
             partsInfoService.save(partsInfo1);
 
-            RepairRecord repairRecord = repairRecordService.findById(repairActualInfo1.getRepairRecordId());
-            repairRecord.setStatus(Constant.REPAIR_STATUS_REPAIR_OK);
-            repairRecordService.update(repairRecord);
+            if(repairResult.equals(Constant.REPAIR_STATUS_REPAIR_NG) || repairResult.equals(Constant.REPAIR_STATUS_REPAIR_OK)){
+                RepairRecord repairRecord = repairRecordService.findById(repairActualInfo1.getRepairRecordId());
+                repairRecord.setStatus(repairResult);
+                repairRecordService.update(repairRecord);
+            } else {
+                System.out.println("repairResult 值不对！");
+                throw new RuntimeException();
+            }
         } catch (Exception ex) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-            return ResultGenerator.genFailResult("数据更新出错！" + ex.getMessage());
+            return ResultGenerator.genFailResult("/repair/actual/info/add数据更新出错！" + ex.getMessage());
         }
         return ResultGenerator.genSuccessResult();
     }
