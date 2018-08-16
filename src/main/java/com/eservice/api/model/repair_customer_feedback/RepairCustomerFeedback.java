@@ -1,6 +1,7 @@
 package com.eservice.api.model.repair_customer_feedback;
 
 import javax.persistence.*;
+import java.util.*;
 
 @Table(name = "repair_customer_feedback")
 public class RepairCustomerFeedback {

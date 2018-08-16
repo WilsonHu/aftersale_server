@@ -1,6 +1,7 @@
 package com.eservice.api.model.repair_request_info;
 
 import javax.persistence.*;
+import java.util.*;
 
 @Table(name = "repair_request_info")
 public class RepairRequestInfo {
