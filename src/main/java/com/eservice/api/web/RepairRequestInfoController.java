@@ -25,8 +25,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.Resource;
 import javax.validation.constraints.NotNull;
 import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -60,19 +58,66 @@ public class RepairRequestInfoController {
     private String repaiReqImgDir;
 
     /**
-     * 保存相关的铭牌号图片（可以为空），报修语音（可以为空），报修图片（可以为空） 。
-     * 成功之后，增加报修记录.
-     * @param repairRequestInfo
-     * @param fileOfNameplate:铭牌号照片
-     * @param fileOfVoice: 语音文件
-     * @param filesOfRepairRequestPicture:报修图片
+     * 因小程序端一次只能上传一个文件，所以各个文件只能分别单独上传（文件上传还要分类型，就不在add上传了，统一放update了）。
+     * 报修时add生成简单的报修记录，并增加维修记录.更新机器状态.。
+     * （文件则在update里上传，如果上传文件失败，小程序端用户再次点击提交报修只调update，不调add）
      */
     @Transactional(rollbackFor = Exception.class)
     @PostMapping("/add")
-    public Result add(@RequestParam String  repairRequestInfo,
-                      @RequestParam MultipartFile fileOfNameplate,
-                      @RequestParam MultipartFile fileOfVoice,
-                      @RequestParam MultipartFile[] filesOfRepairRequestPicture) {
+    public Result add(@RequestBody @NotNull RepairRequestInfo repairRequestInfo) {
+        try {
+            repairRequestInfoService.saveAndGetID(repairRequestInfo);
+
+            /**
+             * 添加报修记录之后，生成最基本的维修记录
+             */
+            RepairRecord repairRecord1 = new RepairRecord();
+            repairRecord1.setCustomer(repairRequestInfo.getCustomer());
+            repairRecord1.setMachineNameplate(repairRequestInfo.getNameplate());
+            repairRecord1.setStatus(Constant.REPAIR_STATUS_UNSIGNED_TO_REPAIRER);
+            repairRecord1.setRepairRequestInfo(repairRequestInfo.getId());
+            repairRecord1.setCreateTime(new Date());
+            repairRecordService.save(repairRecord1);
+
+            /**
+             * machine 状态置为待修理
+             */
+            Machine machine = machineService.findBy("nameplate",repairRequestInfo.getNameplate());
+            if(machine != null) {
+                machine.setStatus(Constant.MACHINE_STATUS_WAIT_FOR_REPAIR);
+                machineService.update(machine);
+            } else {
+                return ResultGenerator.genFailResult("can not find machine by the nameplate: " + repairRequestInfo.getNameplate());
+            }
+        } catch (Exception ex) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return ResultGenerator.genFailResult("/repair/request/info/add 出错！" + ex.getMessage());
+        }
+        return ResultGenerator.genSuccessResult("repairRequestInfo.id:" + repairRequestInfo.getId());
+    }
+
+    @PostMapping("/delete")
+    public Result delete(@RequestParam Integer id) {
+        repairRequestInfoService.deleteById(id);
+        return ResultGenerator.genSuccessResult();
+    }
+
+    /**
+     * 报修时生成简单的记录，然后在update里把文件一一上传。
+     *
+     * @param repairRequestInfo
+     * @param fileType:上传的文件类型（铭牌号图片，报修语音，报修图片）
+     * @param file:上传的单个文件
+     * @param fileNumber:在上传3张报修图片时，用于区分是第几个图片，其他文件可以默认0。
+     */
+    @Transactional(rollbackFor = Exception.class)
+    @PostMapping("/update")
+    public Result update(@RequestParam String repairRequestInfo,
+                         @RequestParam String fileType,
+                         @RequestParam MultipartFile file,
+                         @RequestParam(defaultValue = "0")Integer fileNumber) {
+
+        String message = null;
         try {
             File dir = new File(repairReqNameplateImgDir);
             if(!dir.exists()){
@@ -94,84 +139,55 @@ public class RepairRequestInfoController {
             String fileNameWithPath;
             String resultPathRequestNameplateImage = null;
             String resultPathRequestVoice = null;
-            List<String> listResultPathRequestImage =  new ArrayList<>();
+            String resultPathRequestImage =  null;
 
-            try {
+            if(fileType.equals(Constant.FILE_TYPE_REPAIR_REQUEST_NAMEPLATE_IMAGE)){
                 //报修铭牌号图片:
-                fileNameWithPath = commonService.saveFile(repairReqNameplateImgDir, fileOfNameplate, nameplate, Constant.FILE_TYPE_REPAIR_REQUEST_NAMEPLATE_IMAGE,0 );
+                fileNameWithPath = commonService.saveFile(repairReqNameplateImgDir, file, nameplate, Constant.FILE_TYPE_REPAIR_REQUEST_NAMEPLATE_IMAGE,0 );
                 if(fileNameWithPath != null){
                     resultPathRequestNameplateImage = fileNameWithPath;
+                    repairRequestInfo1.setNameplatePicture(resultPathRequestNameplateImage);
                 } else {
-                    return ResultGenerator.genFailResult("failed to save file fileOfNameplate, no records saved");
+                    message = "failed to save file fileOfNameplate, no records saved";
+                    throw new RuntimeException();
                 }
+            } else if(fileType.equals(Constant.FILE_TYPE_REPAIR_REQUEST_VOICE)){
                 //报修语音:
-                fileNameWithPath = commonService.saveFile(repairReqVoiceDir, fileOfVoice, nameplate, Constant.FILE_TYPE_REPAIR_REQUEST_VOICE, 0 );
+                fileNameWithPath = commonService.saveFile(repairReqVoiceDir, file, nameplate, Constant.FILE_TYPE_REPAIR_REQUEST_VOICE, 0 );
                 if(fileNameWithPath != null){
                     resultPathRequestVoice = fileNameWithPath;
+                    repairRequestInfo1.setVoice(resultPathRequestVoice);
                 } else {
-                    return ResultGenerator.genFailResult("failed to save file fileOfVoice, no records saved");
+                    message = "failed to save file fileOfVoice, no records saved";
+                    throw new RuntimeException();
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
 
-            //报修图片
-            for(int i=0; i<filesOfRepairRequestPicture.length; i++) {
-                try {  //报修图片:
-                    fileNameWithPath = commonService.saveFile(repaiReqImgDir, filesOfRepairRequestPicture[i], nameplate,Constant.FILE_TYPE_REPAIR_REQUEST_IMAGE, i );
-                    if(fileNameWithPath != null){
-                        listResultPathRequestImage.add(fileNameWithPath);
-                    } else {
-                        return ResultGenerator.genFailResult("failed to save file filesOfRepairRequestPicture, no records saved"  );
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
+            }else if(fileType.equals(Constant.FILE_TYPE_REPAIR_REQUEST_IMAGE)){
+                //报修图片:
+                fileNameWithPath = commonService.saveFile(repaiReqImgDir, file, nameplate,Constant.FILE_TYPE_REPAIR_REQUEST_IMAGE, fileNumber );
+                if(fileNameWithPath != null){
+                    resultPathRequestImage = fileNameWithPath;
+                    /**
+                     * 多张报修图片
+                     */
+                    String oldPicturesPath = repairRequestInfo1.getPictures();
+                    repairRequestInfo1.setPictures(oldPicturesPath +";" + resultPathRequestImage);
+                } else {
+                    message = "failed to save file filesOfRepairRequestPicture, no records saved";
+                    throw new RuntimeException();
                 }
-            }
-
-            repairRequestInfo1.setVoice(resultPathRequestVoice);
-            repairRequestInfo1.setPictures(listResultPathRequestImage.toString());
-            repairRequestInfo1.setNameplatePicture(resultPathRequestNameplateImage);
-            repairRequestInfo1.setCreateTime(new Date());
-            repairRequestInfoService.saveAndGetID(repairRequestInfo1);
-
-            /**
-             * 添加报修记录之后，要生成最基本的维修记录
-             */
-            RepairRecord repairRecord1 = new RepairRecord();
-            repairRecord1.setCustomer(repairRequestInfo1.getCustomer());
-            repairRecord1.setMachineNameplate(repairRequestInfo1.getNameplate());
-            repairRecord1.setStatus(Constant.REPAIR_STATUS_UNSIGNED_TO_REPAIRER);
-            repairRecord1.setRepairRequestInfo(repairRequestInfo1.getId());
-            repairRecord1.setCreateTime(new Date());
-            repairRecordService.save(repairRecord1);
-
-            /**
-             * machine 状态置为待修理
-             */
-            Machine machine = machineService.findBy("nameplate",repairRequestInfo1.getNameplate());
-            if(machine != null) {
-                machine.setStatus(Constant.MACHINE_STATUS_WAIT_FOR_REPAIR);
-                machineService.update(machine);
             } else {
-                return ResultGenerator.genFailResult("can not find machine by the nameplate: " + repairRequestInfo1.getNameplate());
+                message = "未知的文件类型";
+                throw new RuntimeException();
             }
+
+            repairRequestInfo1.setCreateTime(new Date());
+            repairRequestInfoService.update(repairRequestInfo1);
+
         } catch (Exception ex) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-            return ResultGenerator.genFailResult(ex.getMessage());
+            return ResultGenerator.genFailResult(ex.getMessage() +"," + message);
         }
-        return ResultGenerator.genSuccessResult();
-    }
-
-    @PostMapping("/delete")
-    public Result delete(@RequestParam Integer id) {
-        repairRequestInfoService.deleteById(id);
-        return ResultGenerator.genSuccessResult();
-    }
-
-    @PostMapping("/update")
-    public Result update(@RequestBody @NotNull RepairRequestInfo repairRequestInfo) {
-        repairRequestInfoService.update(repairRequestInfo);
         return ResultGenerator.genSuccessResult();
     }
 

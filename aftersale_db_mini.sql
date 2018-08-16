@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50553
 File Encoding         : 65001
 
-Date: 2018-08-15 16:03:31
+Date: 2018-08-16 15:01:55
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -477,7 +477,7 @@ DROP TABLE IF EXISTS `repair_record`;
 CREATE TABLE `repair_record` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID号',
   `repair_record_num` varchar(255) DEFAULT NULL COMMENT '维修单编号，备用',
-  `customer` int(10) unsigned NOT NULL COMMENT '联系人,',
+  `customer` int(10) unsigned DEFAULT NULL COMMENT '联系人,',
   `machine_nameplate` varchar(255) NOT NULL COMMENT '机器编号',
   `repair_request_info` int(10) unsigned NOT NULL COMMENT '用户发起报修信息，一次报修可以有多个维修记录。',
   `in_warranty_period` varchar(255) DEFAULT NULL COMMENT '1：在保修期内，0：保修期已过， 在派单时指定。',
@@ -522,7 +522,7 @@ CREATE TABLE `repair_request_info` (
   `content` text NOT NULL COMMENT '报修内容',
   `pictures` varchar(1000) DEFAULT NULL COMMENT '报修图片的路径，--客户报修时上传，可以用于经验库里“解决前”的问题照片',
   `customer` int(10) unsigned NOT NULL COMMENT '联系人',
-  `create_time` datetime NOT NULL COMMENT '创建时间，也即用户报修时间',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间，也即用户报修时间',
   PRIMARY KEY (`id`),
   KEY `fk_rri_contacter` (`customer`),
   CONSTRAINT `fk_rri_customer` FOREIGN KEY (`customer`) REFERENCES `user` (`id`)
