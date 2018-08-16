@@ -18,7 +18,6 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -64,36 +63,38 @@ public class RepairRequestInfoController {
      */
     @Transactional(rollbackFor = Exception.class)
     @PostMapping("/add")
-    public Result add(@RequestBody @NotNull RepairRequestInfo repairRequestInfo) {
+    public Result add(@RequestParam String repairRequestInfo) {
+
+        RepairRequestInfo repairRequestInfo1 = JSON.parseObject(repairRequestInfo,RepairRequestInfo.class);
         try {
-            repairRequestInfoService.saveAndGetID(repairRequestInfo);
+            repairRequestInfoService.saveAndGetID(repairRequestInfo1);
 
             /**
              * 添加报修记录之后，生成最基本的维修记录
              */
             RepairRecord repairRecord1 = new RepairRecord();
-            repairRecord1.setCustomer(repairRequestInfo.getCustomer());
-            repairRecord1.setMachineNameplate(repairRequestInfo.getNameplate());
+            repairRecord1.setCustomer(repairRequestInfo1.getCustomer());
+            repairRecord1.setMachineNameplate(repairRequestInfo1.getNameplate());
             repairRecord1.setStatus(Constant.REPAIR_STATUS_UNSIGNED_TO_REPAIRER);
-            repairRecord1.setRepairRequestInfo(repairRequestInfo.getId());
+            repairRecord1.setRepairRequestInfo(repairRequestInfo1.getId());
             repairRecord1.setCreateTime(new Date());
             repairRecordService.save(repairRecord1);
 
             /**
              * machine 状态置为待修理
              */
-            Machine machine = machineService.findBy("nameplate",repairRequestInfo.getNameplate());
+            Machine machine = machineService.findBy("nameplate",repairRequestInfo1.getNameplate());
             if(machine != null) {
                 machine.setStatus(Constant.MACHINE_STATUS_WAIT_FOR_REPAIR);
                 machineService.update(machine);
             } else {
-                return ResultGenerator.genFailResult("can not find machine by the nameplate: " + repairRequestInfo.getNameplate());
+                return ResultGenerator.genFailResult("can not find machine by the nameplate: " + repairRequestInfo1.getNameplate());
             }
         } catch (Exception ex) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return ResultGenerator.genFailResult("/repair/request/info/add 出错！" + ex.getMessage());
         }
-        return ResultGenerator.genSuccessResult("repairRequestInfo.id:" + repairRequestInfo.getId());
+        return ResultGenerator.genSuccessResult("repairRequestInfo.id:" + repairRequestInfo1.getId());
     }
 
     @PostMapping("/delete")
