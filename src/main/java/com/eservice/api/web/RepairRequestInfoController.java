@@ -92,9 +92,9 @@ public class RepairRequestInfoController {
             }
         } catch (Exception ex) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-            return ResultGenerator.genFailResult("/repair/request/info/add 出错！" + ex.getMessage());
+            return ResultGenerator.genFailResult("添加报修信息出错！" + ex.getMessage());
         }
-        return ResultGenerator.genSuccessResult("repairRequestInfo.id:" + repairRequestInfo1.getId());
+        return ResultGenerator.genSuccessResult(repairRequestInfo1.getId());
     }
 
     @PostMapping("/delete")

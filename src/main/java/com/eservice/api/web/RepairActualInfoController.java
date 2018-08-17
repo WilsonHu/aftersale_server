@@ -74,7 +74,7 @@ public class RepairActualInfoController {
             }
         } catch (Exception ex) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-            return ResultGenerator.genFailResult("/repair/actual/info/add数据更新出错！" + ex.getMessage());
+            return ResultGenerator.genFailResult("添加实际维修信息出错！" + ex.getMessage());
         }
         return ResultGenerator.genSuccessResult();
     }
