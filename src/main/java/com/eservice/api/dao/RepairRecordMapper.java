@@ -28,4 +28,8 @@ public interface RepairRecordMapper extends Mapper<RepairRecord> {
                                                    @Param("isFuzzy")boolean isFuzzy);
 
     List<Machine> selectRepairTaskMachine(@Param("userName")String userName);
+	
+    List<RepairRecord> selectRepairRecordByRepairRequestId(@Param("repairRequestInfoId")String repairRequestInfoId);
+    
+	RepairRecord selectRepairRecordInRequesting(@Param("repairRequestInfoId")String repairRequestInfoId);
 }

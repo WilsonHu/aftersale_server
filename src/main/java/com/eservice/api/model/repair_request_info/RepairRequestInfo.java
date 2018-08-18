@@ -199,4 +199,32 @@ public class RepairRequestInfo {
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
+
+    /**
+     * 要上传的文件总数，add时通过参数指明
+     */
+    @Column(name = "upload_files_amount")
+    private String uploadFilesAmount;
+
+    public String getUploadFilesAmount() {
+        return uploadFilesAmount;
+    }
+
+    public void setUploadFilesAmount(String uploadFilesAmount) {
+        this.uploadFilesAmount = uploadFilesAmount;
+    }
+
+    /**
+     * 已上传成功的文件的数量
+     */
+    @Column(name = "already_uploaded_files_number")
+    private String alreadyUploadedFilesNumber;
+
+    public String getAlreadyUploadedFilesNumber() {
+        return alreadyUploadedFilesNumber;
+    }
+
+    public void setAlreadyUploadedFilesNumber(String alreadyUploadedFilesNumber) {
+        this.alreadyUploadedFilesNumber = alreadyUploadedFilesNumber;
+    }
 }

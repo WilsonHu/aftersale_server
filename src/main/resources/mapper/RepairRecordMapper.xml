@@ -115,8 +115,7 @@
 		rr.id as repairRecordId,
 		rr.*,
 		rcf.customer_mark as repairFeedbackCustomerMark,
-		rcf.customer_suggestion as repairFeedbackCustomerSuggestion,
-		rcf.customer_repair_result as repairFeedbackRepairResult
+		rcf.customer_suggestion as repairFeedbackCustomerSuggestion
 
 		from repair_record as rr
 		LEFT JOIN machine as m ON m.nameplate = rr.machine_nameplate
@@ -217,5 +216,23 @@
 		<if test="userName!=null and userName != '' ">
 			and (userOfMembersInRepairRecord.name = #{userName} or userOfChargeInRepairRecord.name = #{userName})
 		</if>
+	</select>
+
+	<select id="selectRepairRecordByRepairRequestId" resultMap="BaseResultMap">
+		SELECT *
+		FROM
+		repair_record as rr
+		where
+		rr.repair_request_info = #{repairRequestInfoId}
+	</select>
+
+	<select id="selectRepairRecordInRequesting" resultMap="BaseResultMap">
+		SELECT *
+		FROM
+		repair_record as rr
+		where
+		rr.`status` = 0
+		and
+		rr.repair_request_info = #{repairRequestInfoId}
 	</select>
 </mapper>

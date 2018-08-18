@@ -14,6 +14,9 @@
     <result column="customer" jdbcType="INTEGER" property="customer" />
     <result column="content" jdbcType="LONGVARCHAR" property="content" />
     <result column="create_time" jdbcType="DATE" property="createTime" />
+    <result column="upload_files_amount" jdbcType="VARCHAR" property="uploadFilesAmount" />
+    <result column="already_uploaded_files_number" jdbcType="VARCHAR" property="alreadyUploadedFilesNumber" />
+
   </resultMap>
 
 
@@ -21,8 +24,16 @@
           useGeneratedKeys="true" keyProperty="id">
     insert into
     repair_request_info(
-    nameplate, nameplate_picture, voice, repair_title, content, pictures, customer, create_time)
+    nameplate, nameplate_picture, voice, repair_title, content, pictures, customer, create_time,upload_files_amount,already_uploaded_files_number)
     values(
-    #{ nameplate},#{ nameplatePicture},#{voice },#{repairTitle },#{content}, #{pictures}, #{customer},#{createTime})
+    #{ nameplate},#{ nameplatePicture},#{voice },#{repairTitle },#{content}, #{pictures}, #{customer},#{createTime},#{uploadFilesAmount},#{alreadyUploadedFilesNumber})
  </insert>
+
+  <select id="getRecordsInRequesting" resultMap="BaseResultMap">
+    select *
+    from repair_request_info as rri
+    where rri.already_uploaded_files_number != rri.upload_files_amount
+    and rri.nameplate = #{nameplate}
+  </select>
+
 </mapper>

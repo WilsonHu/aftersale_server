@@ -63,4 +63,12 @@ public class RepairRecordServiceImpl extends AbstractService<RepairRecord> imple
         return repairRecordMapper.selectRepairTaskMachine(userName);
     }
 
+    public List<RepairRecord> selectRepairRecordByRepairRequestId(String repairRequestInfoId){
+        return repairRecordMapper.selectRepairRecordByRepairRequestId(repairRequestInfoId);
+    }
+
+    public RepairRecord selectRepairRecordInRequesting(String repairRequestInfoId){
+        return repairRecordMapper.selectRepairRecordInRequesting(repairRequestInfoId);
+    }
+
 }

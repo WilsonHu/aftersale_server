@@ -223,4 +223,28 @@ public class RepairRecordController {
         }
         return ResultGenerator.genSuccessResult();
     }
+
+    /**
+     * 根据报修记录id返回维修记录
+     */
+    @PostMapping("/selectRepairRecordByRepairRequestId")
+    public Result selectRepairRecordByRepairRequestId(@RequestParam(defaultValue = "0") Integer page,
+                                                     @RequestParam(defaultValue = "0") Integer size,
+                                                     @RequestParam String repairRequestInfoId) {
+        PageHelper.startPage(page, size);
+        List<RepairRecord> list = repairRecordService.selectRepairRecordByRepairRequestId(repairRequestInfoId);
+        PageInfo pageInfo = new PageInfo(list);
+        return ResultGenerator.genSuccessResult(pageInfo);
+    }
+
+    /**
+     * 根据报修记录id返回状态为"提交报修中"的维修记录
+     * 每次添加报修时，都会删除旧的报修记录，一个报修id只会有一个"提交报修中"的维修记录
+     */
+    @PostMapping("/selectRepairRecordInRequesting")
+    public Result selectRepairRecordInRequesting(@RequestParam String repairRequestInfoId) {
+        RepairRecord repairRecord1 = repairRecordService.selectRepairRecordInRequesting(repairRequestInfoId);
+        return ResultGenerator.genSuccessResult(repairRecord1);
+    }
+
 }

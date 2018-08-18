@@ -62,23 +62,25 @@ public class Constant {
 
     /**
      * 维修状态
-     * 0：未派单，
-     * 1：已派单（但未接单）,
-     * 2：已接受（进行中，可以再派），
-     * 3：失败，(可以 再派，代理商可以 转派)
-     * 4：已再派，
-     * 5：已转派，
-     * 6：已完成(客户未确认)，
-     * 7. 客户确认（维修成功）。转派后，前面的维修记录要保留，但是客户只需要看到成功的最后那次记录。
+     * 0: 报修进行中（报修过程中，文件上传没完成等情况）
+     * 1：未派单，
+     * 2：已派单（但未接单）,
+     * 3：已接受（进行中，可以再派），
+     * 4：失败，(可以 再派，代理商可以 转派)
+     * 5：已再派，
+     * 6：已转派，
+     * 7：已完成(客户未确认)，
+     * 8. 客户确认（维修成功）。转派后，前面的维修记录要保留，但是客户只需要看到成功的最后那次记录。
      */
-    public static final String REPAIR_STATUS_UNSIGNED_TO_REPAIRER = "0";
-    public static final String REPAIR_STATUS_SIGNED_TO_REPAIRER = "1";
-    public static final String REPAIR_STATUS_REPAIRER_ACCEPTED = "2";
-    public static final String REPAIR_STATUS_REPAIR_NG = "3";
-    public static final String REPAIR_STATUS_REPAIRER_REASSIGN = "4";
-    public static final String REPAIR_STATUS_REPAIRER_FORWARD = "5";
-    public static final String REPAIR_STATUS_REPAIR_OK = "6";
-    public static final String REPAIR_STATUS_REPAIR_CUSTOMER_CONFIRMED = "7";
+    public static final String REPAIR_STATUS_IN_REQUESTING = "0";
+    public static final String REPAIR_STATUS_UNSIGNED_TO_REPAIRER = "1";
+    public static final String REPAIR_STATUS_SIGNED_TO_REPAIRER = "2";
+    public static final String REPAIR_STATUS_REPAIRER_ACCEPTED = "3";
+    public static final String REPAIR_STATUS_REPAIR_NG = "4";
+    public static final String REPAIR_STATUS_REPAIRER_REASSIGN = "5";
+    public static final String REPAIR_STATUS_REPAIRER_FORWARD = "6";
+    public static final String REPAIR_STATUS_REPAIR_OK = "7";
+    public static final String REPAIR_STATUS_REPAIR_CUSTOMER_CONFIRMED = "8";
 
     public static final int REPAIR_IS_FORWARD_NO = 0;
     public static final int REPAIR_IS_FORWARD_YES = 1;

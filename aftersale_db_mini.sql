@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50553
 File Encoding         : 65001
 
-Date: 2018-08-16 15:01:55
+Date: 2018-08-18 14:22:53
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -523,6 +523,8 @@ CREATE TABLE `repair_request_info` (
   `pictures` varchar(1000) DEFAULT NULL COMMENT '报修图片的路径，--客户报修时上传，可以用于经验库里“解决前”的问题照片',
   `customer` int(10) unsigned NOT NULL COMMENT '联系人',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间，也即用户报修时间',
+  `upload_files_amount` varchar(255) NOT NULL DEFAULT '0' COMMENT '要上传的文件总数，add时通过参数指明 ',
+  `already_uploaded_files_number` varchar(255) NOT NULL DEFAULT '0' COMMENT '已上传成功的文件的数量',
   PRIMARY KEY (`id`),
   KEY `fk_rri_contacter` (`customer`),
   CONSTRAINT `fk_rri_customer` FOREIGN KEY (`customer`) REFERENCES `user` (`id`)
