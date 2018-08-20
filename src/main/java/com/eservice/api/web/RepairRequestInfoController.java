@@ -139,6 +139,7 @@ public class RepairRequestInfoController {
                          @RequestParam MultipartFile file,
                          @RequestParam(defaultValue = "0")Integer fileNumber) {
         String message = null;
+        RepairRequestInfo repairRequestInfo1 = null;
         try {
             File dir = new File(repairReqNameplateImgDir);
             if(!dir.exists()){
@@ -152,7 +153,7 @@ public class RepairRequestInfoController {
             if(!dir.exists()){
                 dir.mkdir();
             }
-            RepairRequestInfo repairRequestInfo1 = JSON.parseObject(repairRequestInfo,RepairRequestInfo.class);
+            repairRequestInfo1 = JSON.parseObject(repairRequestInfo,RepairRequestInfo.class);
             if(Integer.parseInt(repairRequestInfo1.getAlreadyUploadedFilesNumber()) >= Integer.parseInt(repairRequestInfo1.getUploadFilesAmount())){
                 message = "已上传文件数>= 应上传文件总数";
                 throw new RuntimeException();
@@ -252,7 +253,7 @@ public class RepairRequestInfoController {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return ResultGenerator.genFailResult(ex.getMessage() +"," + message);
         }
-        return ResultGenerator.genSuccessResult();
+        return ResultGenerator.genSuccessResult(repairRequestInfo1);
     }
 
     @PostMapping("/detail")
