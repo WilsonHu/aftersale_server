@@ -102,9 +102,10 @@ public class UserController {
     @PostMapping("/getUsersByType")
     public Result getUsersByType(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size,
                                  String roleId,
-                                 String agentId) {
+                                 String agentId,
+                                 String customerCompany) {
         PageHelper.startPage(page, size);
-        List<UserInfo> list = userService.getUsersByType(roleId, agentId);
+        List<UserInfo> list = userService.getUsersByType(roleId, agentId, customerCompany);
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
     }

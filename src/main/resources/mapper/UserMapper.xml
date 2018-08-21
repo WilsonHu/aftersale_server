@@ -65,6 +65,9 @@
 		<if test="agentId != null and agentId != ''">
 			and u.agent = #{agentId}
 		</if>
+		<if test="customerCompany != null and customerCompany != ''">
+			and u.customer_company = #{customerCompany}
+		</if>
 	</select>
 
 	<select id="selectUsers" resultMap="BaseResultMap">

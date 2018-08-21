@@ -13,7 +13,7 @@ public interface UserMapper extends Mapper<User> {
 
     User requestLogin(@Param("account")String account, @Param("password")String password, @Param("unionid")String unionid);
 
-    List<UserInfo> getUsersByType(@Param("roleId")String roleId, @Param("agentId")String agentId);
+    List<UserInfo> getUsersByType(@Param("roleId")String roleId, @Param("agentId")String agentId, @Param("customerCompany")String customerCompany);
 
     List<User> selectUsers(@Param("currentUserAgent")Integer currentUserAgent, @Param("account")String account, @Param("name")String name, @Param("roleId")Integer roleId,
                            @Param("isAgent")Boolean isAgent, @Param("agent")Integer agent, @Param("valid")String valid,@Param("userType")Integer userType);
