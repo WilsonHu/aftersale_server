@@ -103,6 +103,16 @@ public class Constant {
     public static final String MACHINE_STATUS_WAIT_FOR_REPAIR = "5";
     public static final String MACHINE_STATUS_WAIT_FOR_CHECK = "6";
 
+    /**
+     * 机器类型
+     * 0：表示生产部数据库出来的机器
+     * 1：表示客户报的老机器（生产部新系统之前生产的机器，不在生产部数据库）
+     * 2：表示售后主动加入的机器，比如非信胜的机器。
+     */
+    public static final String MACHINE_TYPE_FROM_PRODUCTION_DEPARTMENT = "0";
+    public static final String MACHINE_TYPE_OLD = "1";
+    public static final String MACHINE_TYPE_AFTERSALES_ADD = "2";
+
     /*
      保养状态
       0：待分配，

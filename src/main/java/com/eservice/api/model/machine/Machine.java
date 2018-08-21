@@ -106,7 +106,9 @@ public class Machine {
     private Date facoryDate;
 
     /**
-     * 0表示不是老机器，1表示老机器（生产部新系统之前生产的机器，不在生产部数据库）
+     * 0：表示生产部数据库出来的机器
+     * 1：表示客户报的老机器（生产部新系统之前生产的机器，不在生产部数据库）
+     * 2：表示售后主动加入的机器。
      */
     @Column(name = "is_old_machine")
     private String isOldMachine;
@@ -437,20 +439,10 @@ public class Machine {
         this.facoryDate = facoryDate;
     }
 
-    /**
-     * 获取0表示不是老机器，1表示老机器（生产部新系统之前生产的机器，不在生产部数据库）
-     *
-     * @return is_old_machine - 0表示不是老机器，1表示老机器（生产部新系统之前生产的机器，不在生产部数据库）
-     */
     public String getIsOldMachine() {
         return isOldMachine;
     }
 
-    /**
-     * 设置0表示不是老机器，1表示老机器（生产部新系统之前生产的机器，不在生产部数据库）
-     *
-     * @param isOldMachine 0表示不是老机器，1表示老机器（生产部新系统之前生产的机器，不在生产部数据库）
-     */
     public void setIsOldMachine(String isOldMachine) {
         this.isOldMachine = isOldMachine;
     }

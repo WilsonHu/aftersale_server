@@ -118,12 +118,19 @@ public class MachineController {
     }
 
     /*
-     *根据铭牌号返回机器
+     *根据铭牌号返回机器，如果是老机器则提示老机器
      */
     @PostMapping("/selectByNameplate")
     public Result selectByNameplate(@RequestParam String nameplate) {
         Machine machine = machineService.findBy("nameplate", nameplate);
-        return ResultGenerator.genSuccessResult(machine);
+        if( machine == null){
+            return ResultGenerator.genFailResult("can not find machine by the nameplate " + nameplate);
+        }
+        if( machine.getIsOldMachine().equals(Constant.MACHINE_TYPE_OLD) ) {
+            return ResultGenerator.genSuccessResult(nameplate + "is old machine");
+        } else {
+            return ResultGenerator.genSuccessResult(machine);
+        }
     }
 
     /*
