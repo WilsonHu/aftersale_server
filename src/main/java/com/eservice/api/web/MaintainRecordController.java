@@ -1,27 +1,29 @@
 package com.eservice.api.web;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.eservice.api.core.Result;
 import com.eservice.api.core.ResultGenerator;
-import com.eservice.api.model.maintain_members.MaintainMembers;
 import com.eservice.api.model.machine.Machine;
+import com.eservice.api.model.maintain_lib.MaintainLib;
+import com.eservice.api.model.maintain_members.MaintainMembers;
 import com.eservice.api.model.maintain_record.MaintainRecord;
 import com.eservice.api.model.maintain_record.MaintainRecordInfo;
+import com.eservice.api.service.common.MaintainContentData;
+import com.eservice.api.service.common.MaintainData;
+import com.eservice.api.service.impl.MaintainLibServiceImpl;
 import com.eservice.api.service.impl.MaintainMembersServiceImpl;
 import com.eservice.api.service.impl.MaintainRecordServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -38,10 +40,40 @@ public class MaintainRecordController {
     private MaintainRecordServiceImpl maintainRecordService;
     @Resource
     private MaintainMembersServiceImpl maintainMembersService;
+    @Resource
+    private MaintainLibServiceImpl maintainLibService;
 
+    private String generateMaintainInfo(String libName) {
+        String result = "";
+        List<MaintainData> maintainDataList = new ArrayList<MaintainData>();
+        List<MaintainLib> libList = maintainLibService.selectLibList("1", libName);//查出所有子项内容
+        for (MaintainLib libData : libList) {
+            boolean isFound = false;
+            MaintainContentData contentData = new MaintainContentData();
+            contentData.setContent(libData.getMaintainContent());
+            for (MaintainData item : maintainDataList) {
+                if (item.getMaintainType() == libData.getMaintainType()) {
+                    if (item.getContentList() != null) {
+                        item.getContentList().add(contentData);
+                    }
+                    isFound = true;
+                }
+            }
+            if (!isFound) {
+                MaintainData data = new MaintainData();
+                data.setMaintainType(libData.getMaintainType());
+                data.setContentList(new ArrayList<MaintainContentData>());
+                data.getContentList().add(contentData);
+                maintainDataList.add(data);
+            }
+        }
+        result = JSONArray.toJSONString(maintainDataList);
+        return result;
+    }
 
     @PostMapping("/add")
     public Result add(@RequestBody @NotNull MaintainRecord maintainRecord) {
+        maintainRecord.setMaintainInfo(generateMaintainInfo(maintainRecord.getMaintainLibName()));
         maintainRecordService.save(maintainRecord);
         return ResultGenerator.genSuccessResult();
     }
@@ -54,6 +86,7 @@ public class MaintainRecordController {
 
     @PostMapping("/update")
     public Result update(@RequestBody @NotNull MaintainRecord maintainRecord) {
+        maintainRecord.setMaintainInfo(generateMaintainInfo(maintainRecord.getMaintainLibName()));
         maintainRecordService.update(maintainRecord);
         return ResultGenerator.genSuccessResult();
     }
