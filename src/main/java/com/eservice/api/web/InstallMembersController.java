@@ -2,6 +2,7 @@ package com.eservice.api.web;
 import com.eservice.api.core.Result;
 import com.eservice.api.core.ResultGenerator;
 import com.eservice.api.model.install_members.InstallMembers;
+import com.eservice.api.model.user.User;
 import com.eservice.api.service.InstallMembersService;
 import com.eservice.api.service.impl.InstallMembersServiceImpl;
 import com.github.pagehelper.PageHelper;
@@ -25,7 +26,7 @@ import java.util.List;
 @RequestMapping("/install/members")
 public class InstallMembersController {
     @Resource
-    private InstallMembersService installMembersService;
+    private InstallMembersServiceImpl installMembersService;
 
     @PostMapping("/add")
     public Result add(@RequestBody @NotNull InstallMembers installMembers) {
@@ -55,6 +56,18 @@ public class InstallMembersController {
     public Result list(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size) {
         PageHelper.startPage(page, size);
         List<InstallMembers> list = installMembersService.findAll();
+        PageInfo pageInfo = new PageInfo(list);
+        return ResultGenerator.genSuccessResult(pageInfo);
+    }
+
+    /**
+     * 根据RecordId查询安装成员
+     */
+    @PostMapping("/getMembersByInstallRecordId")
+    public Result getMembersByInstallRecordId(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size,
+                                               @RequestParam String installRecordId) {
+        PageHelper.startPage(page, size);
+        List<User> list = installMembersService.getMembersByInstallRecordId(installRecordId);
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
     }

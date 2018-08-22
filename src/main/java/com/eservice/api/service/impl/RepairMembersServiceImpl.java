@@ -2,12 +2,14 @@ package com.eservice.api.service.impl;
 
 import com.eservice.api.dao.RepairMembersMapper;
 import com.eservice.api.model.repair_members.RepairMembers;
+import com.eservice.api.model.user.User;
 import com.eservice.api.service.RepairMembersService;
 import com.eservice.api.core.AbstractService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 
 /**
@@ -21,4 +23,7 @@ public class RepairMembersServiceImpl extends AbstractService<RepairMembers> imp
     @Resource
     private RepairMembersMapper repairMembersMapper;
 
+    public List<User> getMembersByRepairRecordId(String repairRecordId){
+        return repairMembersMapper.getMembersByRepairRecordId(repairRecordId);
+    }
 }

@@ -9,4 +9,15 @@
     <result column="install_record_id" jdbcType="INTEGER" property="installRecordId" />
     <result column="user_id" jdbcType="INTEGER" property="userId" />
   </resultMap>
+
+  <select id="getMembersByInstallRecordId" resultMap="com.eservice.api.dao.UserMapper.BaseResultMap">
+    SELECT
+    `user`.*
+    FROM
+    install_members as im
+    LEFT JOIN install_record as ir ON ir.id = im.install_record_id
+    LEFT JOIN user ON im.user_id = `user`.id
+    where ir.id = #{installRecordId}
+  </select>
+
 </mapper>

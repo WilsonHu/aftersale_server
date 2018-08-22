@@ -2,7 +2,8 @@ package com.eservice.api.web;
 import com.eservice.api.core.Result;
 import com.eservice.api.core.ResultGenerator;
 import com.eservice.api.model.repair_members.RepairMembers;
-import com.eservice.api.service.RepairMembersService;
+import com.eservice.api.model.user.User;
+import com.eservice.api.service.impl.RepairMembersServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,7 +25,7 @@ import java.util.List;
 @RequestMapping("/repair/members")
 public class RepairMembersController {
     @Resource
-    private RepairMembersService repairMembersService;
+    private RepairMembersServiceImpl repairMembersService;
 
     @PostMapping("/add")
     public Result add(@RequestBody @NotNull RepairMembers repairMembers) {
@@ -54,6 +55,18 @@ public class RepairMembersController {
     public Result list(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size) {
         PageHelper.startPage(page, size);
         List<RepairMembers> list = repairMembersService.findAll();
+        PageInfo pageInfo = new PageInfo(list);
+        return ResultGenerator.genSuccessResult(pageInfo);
+    }
+
+    /**
+     * 根据RecordId查询维修成员
+     */
+    @PostMapping("/getMembersByRepairRecordId")
+    public Result getMembersByRepairRecordId(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size,
+                                              @RequestParam String repairRecordId) {
+        PageHelper.startPage(page, size);
+        List<User> list = repairMembersService.getMembersByRepairRecordId(repairRecordId);
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
     }

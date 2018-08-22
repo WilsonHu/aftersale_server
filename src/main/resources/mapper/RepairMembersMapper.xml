@@ -9,4 +9,14 @@
     <result column="repair_record_id" jdbcType="INTEGER" property="repairRecordId" />
     <result column="user_id" jdbcType="INTEGER" property="userId" />
   </resultMap>
+
+  <select id="getMembersByRepairRecordId" resultMap="com.eservice.api.dao.UserMapper.BaseResultMap">
+    SELECT
+    `user`.*
+    FROM
+    repair_members as rm
+    LEFT JOIN repair_record as rr ON rr.id = rm.repair_record_id
+    LEFT JOIN user ON rm.user_id = `user`.id
+    where rr.id = #{repairRecordId}
+  </select>
 </mapper>

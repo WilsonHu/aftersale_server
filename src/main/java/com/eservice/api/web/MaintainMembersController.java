@@ -59,9 +59,9 @@ public class MaintainMembersController {
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
     }
-    
+
     /**
-     * 根据RecordId查询保养成员
+     * 鏍规嵁RecordId鏌ヨ淇濆吇鎴愬憳
      */
     @PostMapping("/getMembersByMaintainRecordId")
     public Result getMembersByMaintainRecordId(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size,
