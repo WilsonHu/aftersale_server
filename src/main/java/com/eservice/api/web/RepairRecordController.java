@@ -134,13 +134,13 @@ public class RepairRecordController {
     }
 
     /**
-     * 根据用户(无论是负责人还是维修成员)返回他的维修待处理机器，以及维修状态和维修记录ID
+     * 根据用户(无论是负责人还是维修成员)返回他的维修待处理 任务
      */
-    @PostMapping("/selectRepairTaskMachine")
-    public Result selectRepairTaskMachine(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size,
+    @PostMapping("/selectRepairTaskByUser")
+    public Result selectRepairTaskByUser(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size,
                                           @RequestParam String userName) {
         PageHelper.startPage(page, size);
-        List<MachineBaseRecordInfo> list = repairRecordService.selectRepairTaskMachine(userName);
+        List<RepairRecordInfo> list = repairRecordService.selectRepairTaskByUser(userName);
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
     }

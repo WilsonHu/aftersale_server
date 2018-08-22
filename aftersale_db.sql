@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50553
 File Encoding         : 65001
 
-Date: 2018-08-18 14:22:53
+Date: 2018-08-22 11:08:12
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -184,15 +184,16 @@ CREATE TABLE `install_record` (
   KEY `fk_ir_maintain_charge_person` (`install_charge_person`),
   KEY `fk_ir_customer_feedback` (`customer_feedback`),
   CONSTRAINT `fk_ir_machine_nameplate` FOREIGN KEY (`machine_nameplate`) REFERENCES `machine` (`nameplate`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of install_record
 -- ----------------------------
-INSERT INTO `install_record` VALUES ('1', 'aaa', '2018-07-11', '2018-07-11 14:27:13', 'mph2233', 'an安装ok', '2', '1', '1', 'ins info aaaa', '0000-00-00 00:00:00', null, '9');
-INSERT INTO `install_record` VALUES ('2', 'abbb', '2018-07-16', '2018-07-16 15:03:24', 'mph2233', 'okkk', '2', '2', '5', 'info4444', '0000-00-00 00:00:00', null, '8');
-INSERT INTO `install_record` VALUES ('9', null, '2018-08-06', null, '1806004', null, '3', '6', '3', null, '2018-08-05 14:17:18', '2018-08-07 18:11:17', '7');
+INSERT INTO `install_record` VALUES ('1', 'aaa', '2018-07-11', '2018-07-11 14:27:13', 'mph2233', 'an安装ok', '4', '1', '1', 'ins info aaaa', '0000-00-00 00:00:00', null, '9');
+INSERT INTO `install_record` VALUES ('2', 'abbb', '2018-07-16', '2018-07-16 15:03:24', 'mph2233', 'okkk', '4', '2', '5', 'info4444', '0000-00-00 00:00:00', null, '8');
+INSERT INTO `install_record` VALUES ('9', null, '2018-08-06', null, '1806004', null, '4', '6', '3', null, '2018-08-05 14:17:18', '2018-08-07 18:11:17', '7');
 INSERT INTO `install_record` VALUES ('10', null, null, null, '1806003', null, '0', null, null, null, '2018-08-05 14:17:24', null, null);
+INSERT INTO `install_record` VALUES ('11', null, '2018-08-21', '2018-08-21 16:52:08', 'mph--all-data', '', '3', null, null, null, null, null, '7');
 
 -- ----------------------------
 -- Table structure for `issue_position_list`
@@ -591,7 +592,7 @@ INSERT INTO `repair_members` VALUES ('4', '4', '3');
 INSERT INTO `repair_members` VALUES ('5', '4', '4');
 INSERT INTO `repair_members` VALUES ('6', '5', '4');
 INSERT INTO `repair_members` VALUES ('7', '6', '4');
-INSERT INTO `repair_members` VALUES ('8', '7', '3');
+INSERT INTO `repair_members` VALUES ('8', '7', '4');
 
 -- ----------------------------
 -- Table structure for `repair_record`
@@ -688,7 +689,7 @@ INSERT INTO `repair_request_info` VALUES ('16', 'mph333', '[D:/images/repair_req
 INSERT INTO `repair_request_info` VALUES ('17', 'mph333', '[D:/images/repair_req_nameplate/ mph333_REPAIR_REQUEST_NAMEPLATE_IMAGE_2018-07-19-13-50-51_2.png]', '[]', '标题有时会断线0719-2', '内容最近从五月份开始有时候会断线', '[D:/images/repair_req_img/ mph333_REPAIR_REQUEST_IMAGE_2018-07-19-13-50-51_1.png]', '1', '0000-00-00 00:00:00', '', '');
 INSERT INTO `repair_request_info` VALUES ('18', 'mph333', '[D:/images/repair_req_nameplate/ mph333_REPAIR_REQUEST_NAMEPLATE_IMAGE_2018-07-19-13-55-23_2.png]', '[]', '标题有时会断线0719-2', '内容最近从五月份开始有时候会断线', '[D:/images/repair_req_img/ mph333_REPAIR_REQUEST_IMAGE_2018-07-19-13-55-23_1.png]', '1', '0000-00-00 00:00:00', '', '');
 INSERT INTO `repair_request_info` VALUES ('29', 'mph--all-data', 'D:/images/repair_req_nameplate/ mph--all-data_REPAIR_REQUEST_NAMEPLATE_IMAGE_2018-08-12-14-38-05_0.png', 'D:/images/repair_req_voice/ mph--all-data_REPAIR_REQUEST_VOICE_2018-08-12-14-38-05_0.mp3', '马达不转0812add', '马达不转2222', '[D:/images/repair_req_img/ mph--all-data_REPAIR_REQUEST_IMAGE_2018-08-12-14-38-05_0.png, D:/images/repair_req_img/ mph--all-data_REPAIR_REQUEST_IMAGE_2018-08-12-14-38-05_1.png, D:/images/repair_req_img/ mph--all-data_REPAIR_REQUEST_IMAGE_2018-08-12-14-38-05_2.png]', '1', '0000-00-00 00:00:00', '', '');
-INSERT INTO `repair_request_info` VALUES ('47', 'mph--all-data', 'D:/images/repair_req_nameplate/ mph--all-data_FILE_TYPE_REPAIR_REQUEST_NAMEPLATE_IMAGE_2018-08-18-11-30-18_0.png', 'D:/images/repair_req_voice/ mph--all-data_FILE_TYPE_REPAIR_REQUEST_VOICE_2018-08-18-11-34-47_0.mp3', '马达不转0818add', '马达不转222--0818add', 'D:/images/repair_req_img/ mph--all-data_FILE_TYPE_REPAIR_REQUEST_IMAGE_2018-08-16-14-40-21_0.png;D:/images/repair_req_img/ mph--all-data_FILE_TYPE_REPAIR_REQUEST_IMAGE_2018-08-18-11-37-56_0.png;D:/images/repair_req_img/ mph--all-data_FILE_TYPE_REPAIR_REQUEST_IMAGE_2018-08-18-14-12-22_0.png', '1', '2018-08-16 14:40:55', '5', '5');
+INSERT INTO `repair_request_info` VALUES ('47', 'mph--all-data', 'D:/images/repair_req_nameplate/ mph--all-data_FILE_TYPE_REPAIR_REQUEST_NAMEPLATE_IMAGE_2018-08-18-11-30-18_0.png', 'D:/images/repair_req_voice/ mph--all-data_FILE_TYPE_REPAIR_REQUEST_VOICE_2018-08-18-11-34-47_0.mp3', '马达不转0818add', '马达不转222--0818add', 'D:/images/repair_req_img/ mph--all-data_FILE_TYPE_REPAIR_REQUEST_IMAGE_2018-08-16-14-40-21_0.png;D:/images/repair_req_img/ mph--all-data_FILE_TYPE_REPAIR_REQUEST_IMAGE_2018-08-18-11-37-56_0.png;D:/images/repair_req_img/ mph--all-data_FILE_TYPE_REPAIR_REQUEST_IMAGE_2018-08-20-10-23-42_0.png', '1', '2018-08-16 14:40:55', '5', '5');
 
 -- ----------------------------
 -- Table structure for `role`
@@ -743,12 +744,12 @@ INSERT INTO `user` VALUES ('2', 'admin_in_aftersale', 'admin_in_aftersale', null
 INSERT INTO `user` VALUES ('3', 'repairPerson_zhansan', 'repairPerson_zhansan', '', '3', '1', '0', 'sinsim', '1', 'repairPerson_zhansan的电话13455556633', '0000-00-00 00:00:00', '客户地址zhangsan3333');
 INSERT INTO `user` VALUES ('4', 'repairPerson_lisi', 'repairPerson_lisi', '', '3', '2', '0', 'sinsim', '1', 'repairPerson_lisi1的电话3455556666', '0000-00-00 00:00:00', '客户地址Lisi444');
 INSERT INTO `user` VALUES ('5', 'agent444', 'agent444', null, '4', '2', '0', 'sinsim', '1', 'agent444的电话444', '0000-00-00 00:00:00', '客户地址agent444');
-INSERT INTO `user` VALUES ('6', 'kehu1', 'kehu1', null, '5', '2', '0', 'sinsim', '1', 'kehu1的的电话xxxx', '0000-00-00 00:00:00', '客户地址kehu1');
-INSERT INTO `user` VALUES ('7', 'kehu2', 'kehu2', null, '5', '1', '0', 'sinsim', '1', 'kehu2的的电话xxxx', '0000-00-00 00:00:00', '客户地址kehu2');
-INSERT INTO `user` VALUES ('8', 'kehu_Lxr1', 'kehu_Lxr1', null, '6', '1', '0', 'sinsim', '1', 'kehu_Lxr1的的电话xxxx', '0000-00-00 00:00:00', '客户地址kehu_Lxr1');
-INSERT INTO `user` VALUES ('9', 'kehu_Lxr2', 'kehu_Lxr2', null, '6', '1', '0', 'sinsim', '1', 'kehu_Lxr2的的电话xxxx', '0000-00-00 00:00:00', '客户地址kehu_Lxr2');
+INSERT INTO `user` VALUES ('6', 'kehu1', 'kehu1', null, '5', '2', '1', 'sinsim', '1', 'kehu1的的电话xxxx', '0000-00-00 00:00:00', '客户地址kehu1');
+INSERT INTO `user` VALUES ('7', 'kehu2', 'kehu2', null, '5', '1', '1', 'sinsim', '1', 'kehu2的的电话xxxx', '0000-00-00 00:00:00', '客户地址kehu2');
+INSERT INTO `user` VALUES ('8', 'kehu_Lxr1', 'kehu_Lxr1', null, '6', '1', '2', 'sinsim', '1', 'kehu_Lxr1的的电话xxxx', '0000-00-00 00:00:00', '客户地址kehu_Lxr1');
+INSERT INTO `user` VALUES ('9', 'kehu_Lxr2', 'kehu_Lxr2', null, '6', '1', '2', 'sinsim', '1', 'kehu_Lxr2的的电话xxxx', '0000-00-00 00:00:00', '客户地址kehu_Lxr2');
 INSERT INTO `user` VALUES ('10', 'repairPerson_wangwu', 'repairPerson_wangwu', null, '3', '1', '0', 'sinsim', '1', 'repairPerson_wangwu的电话yyyy', '0000-00-00 00:00:00', '客户地址wangwu5555');
-INSERT INTO `user` VALUES ('11', 'kehu3_w_agent', 'kehu3_w_agent', null, '5', '2', '0', 'sinsim', '1', 'kehu3_w_agent的电话zzz', '0000-00-00 00:00:00', '客户地址kehu3_w_agent3333');
-INSERT INTO `user` VALUES ('12', 'kehu4_w_agent', 'kehu4_w_agent', null, '5', '1', '0', 'sinsim', '1', 'kehu4_w_agent的电话www4444', '0000-00-00 00:00:00', '客户地址kehu4_w_agent4444444');
-INSERT INTO `user` VALUES ('13', 'repairPerson13', 'repairPerson13', null, '3', '0', null, 'sinsim', '', 'repairPerson13-phone333', '0000-00-00 00:00:00', null);
-INSERT INTO `user` VALUES ('14', 'user14', 'user14', null, '3', '0', '0', 'sinsim', '1', 'user14-phone123', '0000-00-00 00:00:00', null);
+INSERT INTO `user` VALUES ('11', 'kehu3_w_agent', 'kehu3_w_agent', null, '5', '2', '3', 'sinsim', '1', 'kehu3_w_agent的电话zzz', '0000-00-00 00:00:00', '客户地址kehu3_w_agent3333');
+INSERT INTO `user` VALUES ('12', 'kehu4_w_agent', 'kehu4_w_agent', null, '5', '1', '3', 'sinsim', '1', 'kehu4_w_agent的电话www4444', '0000-00-00 00:00:00', '客户地址kehu4_w_agent4444444');
+INSERT INTO `user` VALUES ('13', 'repairPerson13', 'repairPerson13', null, '3', '0', '0', 'sinsim', '', 'repairPerson13-phone333', '0000-00-00 00:00:00', null);
+INSERT INTO `user` VALUES ('14', 'user14', 'user14', null, '3', '0', '4', 'sinsim', '1', 'user14-phone123', '0000-00-00 00:00:00', null);

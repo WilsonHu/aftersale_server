@@ -27,7 +27,7 @@ public interface RepairRecordMapper extends Mapper<RepairRecord> {
                                                    @Param("queryFinishRepairEndTime")String queryFinishRepairEndTime,
                                                    @Param("isFuzzy")boolean isFuzzy);
 
-    List<MachineBaseRecordInfo> selectRepairTaskMachine(@Param("userName")String userName);
+    List<RepairRecordInfo> selectRepairTaskByUser(@Param("userName")String userName);
 	
     List<RepairRecord> selectRepairRecordByRepairRequestId(@Param("repairRequestInfoId")String repairRequestInfoId);
     
