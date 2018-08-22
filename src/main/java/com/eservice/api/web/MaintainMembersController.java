@@ -2,7 +2,9 @@ package com.eservice.api.web;
 import com.eservice.api.core.Result;
 import com.eservice.api.core.ResultGenerator;
 import com.eservice.api.model.maintain_members.MaintainMembers;
+import com.eservice.api.model.user.User;
 import com.eservice.api.service.MaintainMembersService;
+import com.eservice.api.service.impl.MaintainMembersServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,7 +26,7 @@ import java.util.List;
 @RequestMapping("/maintain/members")
 public class MaintainMembersController {
     @Resource
-    private MaintainMembersService maintainMembersService;
+    private MaintainMembersServiceImpl maintainMembersService;
 
     @PostMapping("/add")
     public Result add(@RequestBody @NotNull MaintainMembers maintainMembers) {
@@ -57,4 +59,17 @@ public class MaintainMembersController {
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
     }
+    
+    /**
+     * 根据RecordId查询保养成员
+     */
+    @PostMapping("/getMembersByMaintainRecordId")
+    public Result getMembersByMaintainRecordId(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size,
+                                               @RequestParam String maintainRecordId) {
+        PageHelper.startPage(page, size);
+        List<User> list = maintainMembersService.getMembersByMaintainRecordId(maintainRecordId);
+        PageInfo pageInfo = new PageInfo(list);
+        return ResultGenerator.genSuccessResult(pageInfo);
+    }
+
 }
