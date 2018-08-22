@@ -32,4 +32,5 @@ public interface RepairRecordMapper extends Mapper<RepairRecord> {
     List<RepairRecord> selectRepairRecordByRepairRequestId(@Param("repairRequestInfoId")String repairRequestInfoId);
     
 	RepairRecord selectRepairRecordInRequesting(@Param("repairRequestInfoId")String repairRequestInfoId);
+    RepairRecord selectRepairRecordByPartsInfoId(@Param("partsInfoId")String partsInfoId);
 }

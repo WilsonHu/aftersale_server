@@ -15,8 +15,7 @@
     `user`.*
     FROM
     maintain_members as mm
-    LEFT JOIN maintain_record as mr ON mr.id = mm.maintain_record_id
     LEFT JOIN user ON mm.user_id = `user`.id
-    where mr.id = #{maintainRecordId}
+    where mm.maintain_record_id = #{maintainRecordId}
   </select>
 </mapper>

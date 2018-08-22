@@ -247,5 +247,14 @@ public class RepairRecordController {
         RepairRecord repairRecord1 = repairRecordService.selectRepairRecordInRequesting(repairRequestInfoId);
         return ResultGenerator.genSuccessResult(repairRecord1);
     }
+    
+    /**
+     * 根据配件信息ID，查询维修记录
+     */
+    @PostMapping("/selectRepairRecordByPartsInfoId")
+    public Result selectRepairRecordByPartsInfoId(@RequestParam String partsInfoId) {
+        RepairRecord repairRecord1 = repairRecordService.selectRepairRecordByPartsInfoId(partsInfoId);
+        return ResultGenerator.genSuccessResult(repairRecord1);
+    }
 
 }

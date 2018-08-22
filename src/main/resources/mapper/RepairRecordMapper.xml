@@ -241,4 +241,14 @@
 		and
 		rr.repair_request_info = #{repairRequestInfoId}
 	</select>
+
+	<select id="selectRepairRecordByPartsInfoId" resultMap="BaseResultMap">
+		SELECT
+		rr.*
+		FROM parts_info AS pi
+		LEFT JOIN repair_actual_info as rac ON rac.id = pi.repair_actual_info_id
+		LEFT JOIN repair_record as rr ON rr.id = rac.repair_record_id
+		where pi.id = #{partsInfoId}
+	</select>
+
 </mapper>

@@ -15,8 +15,7 @@
     `user`.*
     FROM
     repair_members as rm
-    LEFT JOIN repair_record as rr ON rr.id = rm.repair_record_id
     LEFT JOIN user ON rm.user_id = `user`.id
-    where rr.id = #{repairRecordId}
+    where rm.repair_record_id = #{repairRecordId}
   </select>
 </mapper>

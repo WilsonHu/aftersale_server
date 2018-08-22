@@ -15,9 +15,8 @@
     `user`.*
     FROM
     install_members as im
-    LEFT JOIN install_record as ir ON ir.id = im.install_record_id
     LEFT JOIN user ON im.user_id = `user`.id
-    where ir.id = #{installRecordId}
+    where im.install_record_id = #{installRecordId}
   </select>
 
 </mapper>
