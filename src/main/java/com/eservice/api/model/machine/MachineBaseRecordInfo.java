@@ -40,14 +40,6 @@ public class MachineBaseRecordInfo extends Machine {
 
     private String repairStatus;
 
-    public String getInstallChargePerson() {
-        return this.installChargePersonName;
-    }
-
-    public void setInstallChargePerson(String installChargePersonName) {
-        this.installChargePersonName = installChargePersonName;
-    }
-
     public Date getInstallActualTime() {
         return installActualTime;
     }
@@ -80,7 +72,7 @@ public class MachineBaseRecordInfo extends Machine {
         this.maintainDateActual = maintainDateActual;
     }
 
-    public String getInstallChargePersonName(String installChargePersonName) {
+    public String getInstallChargePersonName() {
         return this.installChargePersonName;
     }
 
@@ -132,5 +124,44 @@ public class MachineBaseRecordInfo extends Machine {
 
     public String getPartsStatus() {
         return partsStatus;
+    }
+
+    /**
+     * 维修记录的ID
+     */
+    private Integer repairRecordId;
+
+    public Integer getRepairRecordId() {
+        return repairRecordId;
+    }
+
+    public void setRepairRecordId(Integer repairRecordId) {
+        this.repairRecordId = repairRecordId;
+    }
+
+    /**
+     * 安装记录的ID
+     */
+    private Integer installRecordId;
+
+    public void setInstallRecordId(Integer installRecordId) {
+        this.installRecordId = installRecordId;
+    }
+
+    public Integer getInstallRecordId() {
+        return installRecordId;
+    }
+
+    /**
+     * 保养记录的ID
+     */
+    private Integer maintainRecordId;
+
+    public void setMaintainRecordId(Integer maintainRecordId) {
+        this.maintainRecordId = maintainRecordId;
+    }
+
+    public Integer getMaintainRecordId() {
+        return maintainRecordId;
     }
 }

@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.eservice.api.core.Result;
 import com.eservice.api.core.ResultGenerator;
 import com.eservice.api.model.machine.Machine;
+import com.eservice.api.model.machine.MachineBaseRecordInfo;
 import com.eservice.api.model.repair_members.RepairMembers;
 import com.eservice.api.model.repair_record.RepairRecord;
 import com.eservice.api.model.repair_record.RepairRecordInfo;
@@ -133,13 +134,13 @@ public class RepairRecordController {
     }
 
     /**
-     * 根据用户(无论是负责人还是维修成员)返回他的维修待处理机器
+     * 根据用户(无论是负责人还是维修成员)返回他的维修待处理机器，以及维修状态和维修记录ID
      */
     @PostMapping("/selectRepairTaskMachine")
     public Result selectRepairTaskMachine(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size,
                                           @RequestParam String userName) {
         PageHelper.startPage(page, size);
-        List<Machine> list = repairRecordService.selectRepairTaskMachine(userName);
+        List<MachineBaseRecordInfo> list = repairRecordService.selectRepairTaskMachine(userName);
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
     }

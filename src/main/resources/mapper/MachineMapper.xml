@@ -92,7 +92,9 @@
         <result column="repair_charge_person_name" jdbcType="VARCHAR" property="repairChargePersonName" />
         <result column="repair_status" jdbcType="VARCHAR" property="repairStatus" />
         <result column="parts_status" jdbcType="VARCHAR" property="partsStatus" />
-
+        <result column="installRecordId" jdbcType="VARCHAR" property="installRecordId" />
+        <result column="maintainRecordId" jdbcType="VARCHAR" property="maintainRecordId" />
+        <result column="repairRecordId" jdbcType="VARCHAR" property="repairRecordId" />
     </resultMap>
 
     <select id="selectByAccount" resultMap="BaseResultMap">
@@ -204,6 +206,10 @@
             userInRepairRecord.`name` AS repair_charge_person_name,
             rr.`status` AS repair_status,
             parts_info.parts_status
+--             ,
+-- 			ir.id as installRecordId,
+-- 			mr.id as maintainRecordId,
+-- 			rr.id as repairRecordId
         FROM
             machine AS m
         LEFT JOIN install_record AS ir ON ir.machine_nameplate = m.nameplate
@@ -242,6 +248,10 @@
             userInRepairRecord.`name` AS repair_charge_person_name,
             rr.`status` AS repair_status,
             parts_info.parts_status
+--         ,
+--             ir.id as installRecordId,
+--             mr.id as maintainRecordId,
+--             rr.id as repairRecordId
         FROM machine as m
         LEFT JOIN install_record as ir on ir.machine_nameplate = m.nameplate
         LEFT JOIN maintain_record as mr on mr.machine_nameplate = m.nameplate

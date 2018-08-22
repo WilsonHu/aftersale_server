@@ -196,8 +196,9 @@
 		ORDER BY create_time DESC,update_time DESC
 	</select>
 
-	<select id="selectRepairTaskMachine" resultMap="com.eservice.api.dao.MachineMapper.BaseResultMap">
+	<select id="selectRepairTaskMachine" resultMap="com.eservice.api.dao.MachineMapper.MachineBaseRecordInfoResultMap">
 		SELECT
+		rr.id as repairRecordId,
 		m.*
 		FROM
 		repair_record as rr

@@ -1,7 +1,7 @@
 package com.eservice.api.service.impl;
 
 import com.eservice.api.dao.RepairRecordMapper;
-import com.eservice.api.model.machine.Machine;
+import com.eservice.api.model.machine.MachineBaseRecordInfo;
 import com.eservice.api.model.repair_record.RepairRecord;
 import com.eservice.api.model.repair_record.RepairRecordInfo;
 import com.eservice.api.service.RepairRecordService;
@@ -59,7 +59,7 @@ public class RepairRecordServiceImpl extends AbstractService<RepairRecord> imple
 
     }
 
-    public List<Machine> selectRepairTaskMachine(String userName){
+    public List<MachineBaseRecordInfo> selectRepairTaskMachine(String userName){
         return repairRecordMapper.selectRepairTaskMachine(userName);
     }
 
