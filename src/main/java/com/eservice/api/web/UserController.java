@@ -2,6 +2,7 @@ package com.eservice.api.web;
 
 import com.eservice.api.core.Result;
 import com.eservice.api.core.ResultGenerator;
+import com.eservice.api.model.user.StaffInfo;
 import com.eservice.api.model.user.User;
 import com.eservice.api.model.user.UserInfo;
 import com.eservice.api.service.impl.UserServiceImpl;
@@ -106,6 +107,19 @@ public class UserController {
                                  String customerCompany) {
         PageHelper.startPage(page, size);
         List<UserInfo> list = userService.getUsersByType(roleId, agentId, customerCompany);
+        PageInfo pageInfo = new PageInfo(list);
+        return ResultGenerator.genSuccessResult(pageInfo);
+    }
+
+    /**
+     * 根据参数返回该类型的用户
+     * 不带参数，则不按该参数过滤
+     */
+    @PostMapping("/getStaffByParam")
+    public Result getStaffByParam(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size,
+                                 String agentId) {
+        PageHelper.startPage(page, size);
+        List<StaffInfo> list = userService.getStaffByParam(agentId);
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
     }

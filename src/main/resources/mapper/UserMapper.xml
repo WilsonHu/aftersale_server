@@ -37,6 +37,32 @@
 
 		<result column="agent_name" jdbcType="VARCHAR" property="agentName"/>
 	</resultMap>
+
+	<resultMap id="StaffInfoResultMap" type="com.eservice.api.model.user.StaffInfo">
+		<!--
+		  WARNING - @mbg.generated
+		-->
+		<id column="id" jdbcType="INTEGER" property="id"/>
+		<result column="account" jdbcType="VARCHAR" property="account"/>
+		<result column="name" jdbcType="VARCHAR" property="name"/>
+		<result column="wechat_union_id" jdbcType="VARCHAR" property="wechatUnionId"/>
+		<result column="role_id" jdbcType="INTEGER" property="roleId"/>
+		<result column="agent" jdbcType="INTEGER" property="agent"/>
+		<result column="password" jdbcType="VARCHAR" property="password"/>
+		<result column="valid" jdbcType="VARCHAR" property="valid"/>
+		<result column="phone" jdbcType="VARCHAR" property="phone"/>
+		<result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+		<result column="customer_company" jdbcType="INTEGER" property="customerCompany"/>
+		<result column="address" jdbcType="VARCHAR" property="address"/>
+		<result column="agent_name" jdbcType="VARCHAR" property="agentName"/>
+
+		<result column="install_task_count" jdbcType="INTEGER" property="installTaskCount"/>
+		<result column="maintain_task_count" jdbcType="INTEGER" property="maintainTaskCount"/>
+		<result column="repair_task_count" jdbcType="INTEGER" property="repairTaskCount"/>
+		<result column="total_task_count" jdbcType="INTEGER" property="totalTaskCount"/>
+
+	</resultMap>
+
 	<select id="selectByAccount" resultMap="BaseResultMap">
          select * from user  where account=#{account}
     </select>
@@ -57,7 +83,7 @@
 		a.`name` as agent_name
 		from user AS u
 		LEFT JOIN agent a ON a.id = u.agent
---     5：客户本身，6：客户的联系人
+		-- 5：客户本身，6：客户的联系人
 		WHERE 1=1
 		<if test="roleId != null and roleId != ''">
 			and u.role_id = #{roleId}
@@ -102,6 +128,63 @@
 		</if>
 		<if test="valid != null and valid != ''">
 			AND u.valid = ${valid}
+		</if>
+	</select>
+
+	<!--查询员工数据，附带当前任务数字段-->
+	<select id="getStaffByParam" resultMap="StaffInfoResultMap">
+		SELECT
+		u.*,
+		a.`name` as agent_name,
+		IFNULL(install_task.install_task_count,0) AS install_task_count,
+		IFNULL(maintain_task.maintain_task_count,0) AS maintain_task_count,
+		IFNULL(repair_task.repair_task_count,0) AS repair_task_count,
+
+		CONCAT(IFNULL(install_task.install_task_count,0)+IFNULL(maintain_task.maintain_task_count,0)+IFNULL(repair_task.repair_task_count,0)) as total_task_count
+		FROM `user` AS u
+		LEFT JOIN agent a ON a.id = u.agent
+		LEFT JOIN
+		(SELECT
+		count(*) as install_task_count,
+		u.`name`,
+		im.user_id
+		FROM install_members im
+		LEFT JOIN install_record ir on im.install_record_id=ir.id
+		LEFT JOIN `user` u on u.id=im.user_id
+		WHERE ir.install_status &lt; 4 AND ir.install_status &gt; 1
+		GROUP BY im.user_id
+		) as install_task
+		ON u.id=install_task.user_id
+
+		LEFT JOIN
+		(SELECT
+		count(*) as maintain_task_count,
+		u.name,
+		mm.user_id
+		FROM maintain_members mm
+		LEFT JOIN maintain_record mr on mm.maintain_record_id=mr.id
+		LEFT JOIN `user` u on u.id=mm.user_id
+		WHERE mr.maintain_status &lt; 4 AND mr.maintain_status &gt; 1
+		GROUP BY mm.user_id
+		) as maintain_task
+		ON u.id=maintain_task.user_id
+
+		LEFT JOIN
+		(SELECT
+		count(*) as repair_task_count,
+		u.`name`,
+		rm.user_id
+		FROM repair_members rm
+		LEFT JOIN repair_record rr on rm.repair_record_id=rr.id
+		LEFT JOIN `user` u on u.id=rm.user_id
+		WHERE rr.`status` &lt; 8 AND rr.`status`&gt; 2
+		GROUP BY rm.user_id
+		) as repair_task
+		ON u.id=repair_task.user_id
+
+		WHERE 1=1 AND u.role_id=3
+		<if test="agentId != null and agentId != ''">
+			AND u.agent = #{agentId}
 		</if>
 	</select>
 </mapper>

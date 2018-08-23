@@ -2,6 +2,7 @@ package com.eservice.api.service.impl;
 
 import com.eservice.api.core.AbstractService;
 import com.eservice.api.dao.UserMapper;
+import com.eservice.api.model.user.StaffInfo;
 import com.eservice.api.model.user.User;
 import com.eservice.api.model.user.UserInfo;
 import com.eservice.api.service.UserService;
@@ -49,4 +50,9 @@ public class UserServiceImpl extends AbstractService<User> implements UserServic
     public List<User> selectUsers(Integer currentUserAgent, String account, String name, Integer roleId, Boolean isAgent, Integer agent, String valid, Integer userType) {
         return userMapper.selectUsers(currentUserAgent, account, name, roleId, isAgent, agent, valid, userType);
     }
- }
+
+    public List<StaffInfo> getStaffByParam(String agentId)
+    {
+        return userMapper.getStaffByParam(agentId);
+    }
+  }
