@@ -122,7 +122,47 @@ public class PartsInfoController {
     }
 
     /**
-     * 配件信息的查询方法： 共用 getRepairRecordInfoList(...)
+     *  配件信息的查询方法：
+     *
+     * @param nameplate 配件归属的机器的铭牌号
+     * @param partsName 配件名称
+     * @param customerNameInMachine 配件归属的机器的客户名称
+     * @param repairChargePersonName 配件维修的负责人
+     * @param supplier 配件的供应商
+     * @param partsStatus 配件状态  1: 无需回寄，其他表示需要寄回(具体 2：未寄回，3：已寄回（待确认），4：已确认)
+     * @param sendbackTrackingNumber 寄回配件的快递单号
+     * @param sendbackConfirmedPerson 配件寄回后信胜确认收到的确认人
+     *                                
+     * TODO: queryStartSendbackConfirmedTime 查询有问题，其他类似地方时间查询也有问题待改
      */
+    @PostMapping("/getPartsInfoList")
+    public Result getPartsInfoList(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size,
+                                   String nameplate,
+                                   String partsName,
+                                   String customerNameInMachine,
+                                   String repairChargePersonName,
+                                   String queryStartSendbackConfirmedTime,
+                                   String queryFinishSendbackConfirmedTime,
+                                   String supplier,
+                                   String partsStatus,
+                                   String sendbackTrackingNumber,
+                                   String sendbackConfirmedPerson,
+                                   boolean isFuzzy) {
+        PageHelper.startPage(page, size);
+        List<PartsAllInfo> list = partsInfoService.getPartsInfoList(
+                nameplate,
+                partsName,
+                customerNameInMachine,
+                repairChargePersonName,
+                queryStartSendbackConfirmedTime,
+                queryFinishSendbackConfirmedTime,
+                supplier,
+                partsStatus,
+                sendbackTrackingNumber,
+                sendbackConfirmedPerson,
+                isFuzzy);
+        PageInfo pageInfo = new PageInfo(list);
+        return ResultGenerator.genSuccessResult(pageInfo);
+    }
 
 }

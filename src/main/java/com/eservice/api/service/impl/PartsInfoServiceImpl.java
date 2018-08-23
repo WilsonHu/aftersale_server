@@ -26,4 +26,28 @@ public class PartsInfoServiceImpl extends AbstractService<PartsInfo> implements 
     public List<PartsAllInfo> getPartsInfoByRepairRecordId(Integer repairRecordId){
         return partsInfoMapper.getPartsInfoByRepairRecordId(repairRecordId);
     }
+
+    public List<PartsAllInfo> getPartsInfoList( String nameplate,
+                                                String partsName,
+                                                String customerNameInMachine,
+                                                String repairChargePersonName,
+                                                String queryStartSendbackConfirmedTime,
+                                                String queryFinishSendbackConfirmedTime,
+                                                String supplier,
+                                                String partsStatus,
+                                                String sendbackTrackingNumber,
+                                                String sendbackConfirmedPerson,
+                                                boolean isFuzzy){
+        return partsInfoMapper.getPartsInfoList(nameplate,
+                partsName,
+                customerNameInMachine,
+                repairChargePersonName,
+                queryStartSendbackConfirmedTime,
+                queryFinishSendbackConfirmedTime,
+                supplier,
+                partsStatus,
+                sendbackTrackingNumber,
+                sendbackConfirmedPerson,
+                isFuzzy);
+    }
 }

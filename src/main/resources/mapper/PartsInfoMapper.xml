@@ -45,4 +45,78 @@
     LEFT JOIN repair_record as rr ON rr.id = rai.repair_record_id
     WHERE  rr.id = #{repairRecordId}
   </select>
+
+  <select id="getPartsInfoList" resultMap="PartsAllInfoMap">
+    SELECT
+    parts_info.*,
+    userOfSendbackConfirmedPerson.`name`  AS sendbackConfirmedPersonName
+    from parts_info
+    LEFT JOIN `user` AS userOfSendbackConfirmedPerson ON userOfSendbackConfirmedPerson.id = parts_info.sendback_confirmed_person
+    LEFT JOIN repair_actual_info AS rai ON rai.id = parts_info.repair_actual_info_id
+    LEFT JOIN repair_record AS rr ON rr.id = rai.repair_record_id
+    LEFT JOIN machine AS m ON m.nameplate = rr.machine_nameplate
+    LEFT JOIN `user`  AS userOfMachineCustomer ON userOfMachineCustomer.id = m.customer
+    LEFT JOIN `user`  AS userOfRepairChargePerson ON userOfRepairChargePerson.id = rr.repair_charge_person
+    WHERE 1=1
+    <if test="isFuzzy == true">
+      <if test="nameplate != null and nameplate != ''">
+        AND m.nameplate like CONCAT('%','${nameplate}','%' )
+      </if>
+      <if test="partsName != null and partsName != ''">
+        AND parts_info.parts_name like CONCAT('%','${partsName}','%' )
+      </if>
+      <if test="customerNameInMachine != null and customerNameInMachine != ''">
+        AND userOfMachineCustomer.`name` like CONCAT('%','${customerNameInMachine}','%' )
+      </if>
+      <if test="repairChargePersonName != null and repairChargePersonName != ''">
+        AND userOfRepairChargePerson.`name` like CONCAT('%','${repairChargePersonName}','%' )
+      </if>
+      <if test="supplier != null and supplier != ''">
+        AND parts_info.supplier like CONCAT('%','${supplier}','%' )
+      </if>
+      <if test="sendbackConfirmedPerson != null and sendbackConfirmedPerson != ''">
+        AND userOfSendbackConfirmedPerson.name like CONCAT('%','${sendbackConfirmedPerson}','%' )
+      </if>
+      <if test="sendbackTrackingNumber != null and sendbackTrackingNumber != ''">
+        AND parts_info.sendback_tracking_number like CONCAT('%','${sendbackTrackingNumber}','%' )
+      </if>
+    </if>
+
+    <if test="isFuzzy== false">
+      <if test="nameplate != null and nameplate != ''">
+        AND m.nameplate = #{nameplate}
+      </if>
+      <if test="partsName != null and partsName != ''">
+        AND parts_info.parts_name = #{partsName}
+      </if>
+      <if test="customerNameInMachine != null and customerNameInMachine != ''">
+        AND userOfMachineCustomer.`name` = #{customerNameInMachine}
+      </if>
+      <if test="repairChargePersonName != null and repairChargePersonName != ''">
+        AND userOfRepairChargePerson.`name` = #{repairChargePersonName}
+      </if>
+      <if test="supplier != null and supplier != ''">
+        AND parts_info.supplier = #{supplier}
+      </if>
+      <if test="sendbackConfirmedPerson != null and sendbackConfirmedPerson != ''">
+        AND userOfSendbackConfirmedPerson.name = #{sendbackConfirmedPerson}
+      </if>
+      <if test="sendbackTrackingNumber != null and sendbackTrackingNumber != ''">
+        AND parts_info.sendback_tracking_number = #{sendbackTrackingNumber}
+      </if>
+    </if>
+
+    <if test="partsStatus != null and partsStatus != ''">
+      AND parts_info.parts_status = #{partsStatus}
+    </if>
+    <if test="queryStartSendbackConfirmedTime!=null and queryStartSendbackConfirmedTime != '' ">
+      and DATE_FORMAT( parts_info.sendback_confirmed_time,'%Y-%m-%d %T') &gt;= #{queryStartSendbackConfirmedTime}
+    </if>
+    <if test="queryFinishSendbackConfirmedTime!=null and queryFinishSendbackConfirmedTime != '' ">
+      and DATE_FORMAT( parts_info.sendback_confirmed_time,'%Y-%m-%d %T') &lt;= #{queryFinishSendbackConfirmedTime}
+    </if>
+
+    ORDER BY parts_info.sendback_confirmed_time DESC
+  </select>
+
 </mapper>
