@@ -46,6 +46,32 @@ public class RepairRecordInfo extends RepairRecord {
     }
 
     /**
+     * 代理商ID号
+     */
+    private String machineAgentId;
+
+    public String getMachineAgentId() {
+        return machineAgentId;
+    }
+
+    public void setMachineAgentId(String machineAgentId) {
+        this.machineAgentId = machineAgentId;
+    }
+
+    /**
+     * 客户的公司ID
+     */
+    private String machineCustomerCompanyId;
+
+    public String getMachineCustomerCompanyId() {
+        return machineCustomerCompanyId;
+    }
+
+    public void setMachineCustomerCompanyId(String machineCustomerCompanyId) {
+        this.machineCustomerCompanyId = machineCustomerCompanyId;
+    }
+
+    /**
      * 出厂日期（就是发货日期），老机器允许空
      */
     @Column(name = "facory_date")
