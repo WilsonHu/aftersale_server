@@ -1,19 +1,25 @@
 package com.eservice.api.web;
+import com.alibaba.fastjson.JSON;
 import com.eservice.api.core.Result;
 import com.eservice.api.core.ResultGenerator;
 import com.eservice.api.model.parts_info.PartsAllInfo;
 import com.eservice.api.model.parts_info.PartsInfo;
+import com.eservice.api.service.common.CommonService;
+import com.eservice.api.service.common.Constant;
 import com.eservice.api.service.impl.PartsInfoServiceImpl;
+import com.eservice.api.service.impl.RepairRecordServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.validation.constraints.NotNull;
+import java.io.File;
 import java.util.List;
 
 /**
@@ -27,11 +33,23 @@ public class PartsInfoController {
     @Resource
     private PartsInfoServiceImpl partsInfoService;
 
-    @PostMapping("/add")
-    public Result add(@RequestBody @NotNull PartsInfo partsInfo) {
-        partsInfoService.save(partsInfo);
-        return ResultGenerator.genSuccessResult();
-    }
+    @Resource
+    private CommonService commonService;
+
+    @Resource
+    private RepairRecordServiceImpl repairRecordService;
+
+    @Value("${parts_info_img_dir}")
+    private String partsInfoImgDir;
+
+    /**
+     * 配件信息 是在repair_actual_info.add维修员提交记录时一并创建，客户在提交配件回厂信息时更新图片和快递单号。
+     */
+//    @PostMapping("/add")
+//    public Result add(@RequestBody @NotNull PartsInfo partsInfo) {
+//        partsInfoService.save(partsInfo);
+//        return ResultGenerator.genSuccessResult();
+//    }
 
     @PostMapping("/delete")
     public Result delete(@RequestParam Integer id) {
@@ -39,10 +57,41 @@ public class PartsInfoController {
         return ResultGenerator.genSuccessResult();
     }
 
+    /**
+     * 客户在提交配件回厂信息时更新图片和快递单号。
+     */
     @PostMapping("/update")
-    public Result update(@RequestBody @NotNull PartsInfo partsInfo) {
-        partsInfoService.update(partsInfo);
-        return ResultGenerator.genSuccessResult();
+    public Result update(@RequestParam String partsInfo,
+                         @RequestParam MultipartFile file ) {
+        String message = null;
+        String fileNameWithPath = null;
+        String nameplate = null;
+        PartsInfo partsInfo1 = null;
+        try {
+            File dir = new File(partsInfoImgDir);
+            if (!dir.exists()) {
+                dir.mkdir();
+            }
+
+            partsInfo1 = JSON.parseObject(partsInfo, PartsInfo.class);
+            if (partsInfo1 != null) {
+                nameplate = repairRecordService.selectRepairRecordByPartsInfoId(partsInfo1.getId().toString()).getMachineNameplate();
+                fileNameWithPath = commonService.saveFile(partsInfoImgDir, file, nameplate, Constant.FILE_TYPE_PARTS_SENDBACK_IMAGE, 0);
+                if (fileNameWithPath != null) {
+                    partsInfo1.setSendbackTrackingPictrue(fileNameWithPath);
+                } else {
+                    message = "failed to save file sendbackTrackingPictrue, no records saved";
+                    throw new RuntimeException();
+                }
+                partsInfoService.update(partsInfo1);
+            }
+        } catch (Exception ex) {
+            return ResultGenerator.genFailResult(ex.getMessage() +"," + message);
+        }
+        /**
+         * 把更新成功的配件信息返回
+         */
+        return ResultGenerator.genSuccessResult(partsInfo1);
     }
 
     @PostMapping("/detail")

@@ -47,13 +47,13 @@ public class RepairRequestInfoController {
     @Resource
     private CommonService commonService;
 
-    @Value("${Repair_req_nameplate_img}")
+    @Value("${repair_req_nameplate_img}")
     private String repairReqNameplateImgDir;
 
-    @Value("${Repair_req_voice}")
+    @Value("${repair_req_voice}")
     private String repairReqVoiceDir;
 
-    @Value("${Repair_req_img}")
+    @Value("${repair_req_img}")
     private String repaiReqImgDir;
 
     /**

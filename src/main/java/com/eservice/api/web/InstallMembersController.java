@@ -61,7 +61,7 @@ public class InstallMembersController {
     }
 
     /**
-     * 根据RecordId查询安装成员
+     * 鏍规嵁RecordId鏌ヨ瀹夎鎴愬憳
      */
     @PostMapping("/getMembersByInstallRecordId")
     public Result getMembersByInstallRecordId(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size,
