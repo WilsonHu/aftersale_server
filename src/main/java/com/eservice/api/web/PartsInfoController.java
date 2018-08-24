@@ -4,6 +4,7 @@ import com.eservice.api.core.Result;
 import com.eservice.api.core.ResultGenerator;
 import com.eservice.api.model.parts_info.PartsAllInfo;
 import com.eservice.api.model.parts_info.PartsInfo;
+import com.eservice.api.model.parts_info.PartsInfoWithRepairRecordInfo;
 import com.eservice.api.service.common.CommonService;
 import com.eservice.api.service.common.Constant;
 import com.eservice.api.service.impl.PartsInfoServiceImpl;
@@ -133,7 +134,7 @@ public class PartsInfoController {
      * @param sendbackTrackingNumber 寄回配件的快递单号
      * @param sendbackConfirmedPerson 配件寄回后信胜确认收到的确认人
      *                                
-     * TODO: queryStartSendbackConfirmedTime 查询有问题，其他类似地方时间查询也有问题待改
+     * 注: 时间查询的输入格式应该为类似"2018-08-01 17:26:10",其他地方的时间查询也一样。
      */
     @PostMapping("/getPartsInfoList")
     public Result getPartsInfoList(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size,
@@ -161,6 +162,19 @@ public class PartsInfoController {
                 sendbackTrackingNumber,
                 sendbackConfirmedPerson,
                 isFuzzy);
+        PageInfo pageInfo = new PageInfo(list);
+        return ResultGenerator.genSuccessResult(pageInfo);
+    }
+
+    /**
+     * 根据用户名查询该用户负责的维修的待寄回（包括已寄回还等待信胜确认）的配件及相关维修信息
+     * userName：客户方的维修联系人名字
+     */
+    @PostMapping("/getPartsInfoTaskByUserName")
+    public Result getPartsInfoTaskByUserName(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size,
+                                         @RequestParam String userName) {
+        PageHelper.startPage(page, size);
+        List<PartsInfoWithRepairRecordInfo> list = partsInfoService.getPartsInfoTaskByUserName(userName);
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
     }

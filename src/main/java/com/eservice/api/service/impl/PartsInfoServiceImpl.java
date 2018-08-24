@@ -3,6 +3,7 @@ package com.eservice.api.service.impl;
 import com.eservice.api.dao.PartsInfoMapper;
 import com.eservice.api.model.parts_info.PartsAllInfo;
 import com.eservice.api.model.parts_info.PartsInfo;
+import com.eservice.api.model.parts_info.PartsInfoWithRepairRecordInfo;
 import com.eservice.api.service.PartsInfoService;
 import com.eservice.api.core.AbstractService;
 import org.springframework.stereotype.Service;
@@ -49,5 +50,9 @@ public class PartsInfoServiceImpl extends AbstractService<PartsInfo> implements 
                 sendbackTrackingNumber,
                 sendbackConfirmedPerson,
                 isFuzzy);
+    }
+
+    public List<PartsInfoWithRepairRecordInfo> getPartsInfoTaskByUserName(String userName){
+        return partsInfoMapper.getPartsInfoTaskByUserName(userName);
     }
 }

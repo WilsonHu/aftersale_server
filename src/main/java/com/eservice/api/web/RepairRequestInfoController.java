@@ -202,7 +202,11 @@ public class RepairRequestInfoController {
                      * 多张报修图片
                      */
                     String oldPicturesPath = repairRequestInfo1.getPictures();
-                    repairRequestInfo1.setPictures(oldPicturesPath +";" + resultPathRequestImage);
+                    if(oldPicturesPath.isEmpty()){
+                        repairRequestInfo1.setPictures(resultPathRequestImage);
+                    } else {
+                        repairRequestInfo1.setPictures(oldPicturesPath +"," + resultPathRequestImage);
+                    }
                 } else {
                     message = "failed to save file filesOfRepairRequestPicture, no records saved";
                     throw new RuntimeException();

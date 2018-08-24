@@ -35,6 +35,70 @@
     <result column="sendbackConfirmedPersonName" jdbcType="INTEGER" property="sendbackConfirmedPersonName" />
   </resultMap>
 
+
+  <resultMap id="PartsInfoWithRepairRecordInfoMap" type="com.eservice.api.model.parts_info.PartsInfoWithRepairRecordInfo">
+    <!--
+     WARNING - @mbg.generated
+   -->
+    <id column="repairRecordId" jdbcType="INTEGER" property="id"/>
+    <result column="repair_record_num" jdbcType="VARCHAR" property="repairRecordNum"/>
+    <result column="customer" jdbcType="INTEGER" property="customer"/>
+    <result column="machine_nameplate" jdbcType="VARCHAR" property="machineNameplate"/>
+    <result column="repair_request_info" jdbcType="INTEGER" property="repairRequestInfo"/>
+    <result column="in_warranty_period" jdbcType="VARCHAR" property="inWarrantyPeriod"/>
+    <result column="repair_plan_date" jdbcType="DATE" property="repairPlanDate"/>
+    <result column="repair_charge_person" jdbcType="INTEGER" property="repairChargePerson"/>
+    <result column="repair_start_time" jdbcType="TIMESTAMP" property="repairStartTime"/>
+    <result column="repair_end_time" jdbcType="TIMESTAMP" property="repairEndTime"/>
+    <result column="customer_feedback" jdbcType="INTEGER" property="customerFeedback"/>
+    <result column="status" jdbcType="VARCHAR" property="status"/>
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    <result column="forward_info" jdbcType="INTEGER" property="forwardInfo"/>
+
+    <result column="order_num" jdbcType="VARCHAR" property="orderNum"/>
+    <result column="machineCustomerName" jdbcType="VARCHAR" property="machineCustomerName"/>
+    <result column="machineAgentName" jdbcType="VARCHAR" property="machineAgentName"/>
+    <result column="facory_date" jdbcType="DATE" property="facoryDate"/>
+    <result column="issuePositionName" jdbcType="VARCHAR" property="issuePositionName"/>
+    <result column="repairChargePersonName" jdbcType="VARCHAR" property="repairChargePersonName"/>
+    <result column="repairChargePersonPhone" jdbcType="VARCHAR" property="repairChargePersonPhone"/>
+    <result column="machineCustomerPhone" jdbcType="VARCHAR" property="machineCustomerPhone"/>
+    <result column="machineAgentPhone" jdbcType="VARCHAR" property="machineAgentPhone"/>
+    <result column="machine_type" jdbcType="VARCHAR" property="machineType"/>
+    <result column="needle_num" jdbcType="VARCHAR" property="needleNum"/>
+    <result column="head_num" jdbcType="VARCHAR" property="headNum"/>
+    <result column="head_distance" jdbcType="VARCHAR" property="headDistance"/>
+    <result column="x_distance" jdbcType="VARCHAR" property="xDistance"/>
+    <result column="y_distance" jdbcType="VARCHAR" property="yDistance"/>
+    <result column="repairRecordCustomerName" jdbcType="VARCHAR" property="customerNameInRepairRecord"/>
+    <result column="customerPhoneInRepairRecord" jdbcType="VARCHAR" property="customerPhoneInRepairRecord"/>
+    <result column="customerAddressInRepairRecord" jdbcType="VARCHAR" property="customerAddressInRepairRecord"/>
+
+    <result column="repairRequestTitle" jdbcType="VARCHAR" property="repairRequestTitle"/>
+    <result column="repairRequestContent" jdbcType="VARCHAR" property="repairRequestContent"/>
+    <result column="repairRequestVoice" jdbcType="VARCHAR" property="repairRequestVoice"/>
+    <result column="repairRequestPictures" jdbcType="VARCHAR" property="repairRequestPictures"/>
+    <result column="repairActualIssueDescription" jdbcType="VARCHAR" property="repairActualIssueDescription"/>
+    <result column="repairActualMethod" jdbcType="VARCHAR" property="repairActualMethod"/>
+    <result column="afterResolvePictures" jdbcType="VARCHAR" property="afterResolvePictures"/>
+    <!--partsInfo start-->
+    <result column="parts_name" jdbcType="VARCHAR" property="partsName" />
+    <result column="supplier" jdbcType="VARCHAR" property="partsSupplier" />
+    <result column="parts_status" jdbcType="VARCHAR" property="partsStatus" />
+    <result column="sendback_tracking_number" jdbcType="VARCHAR" property="sendbackTrackingNumber" />
+    <result column="sendback_tracking_pictrue" jdbcType="VARCHAR" property="sendbackTrackingPictrue" />
+    <result column="sendback_date" jdbcType="DATE" property="sendbackDate" />
+    <result column="sendback_confirmed_time" jdbcType="DATE" property="sendbackConfirmedTime" />
+    <result column="sendbackConfirmedPersonName" jdbcType="VARCHAR" property="sendbackConfirmedPersonName" />
+    <!--partsInfo end-->
+    <result column="repairFeedbackCustomerMark" jdbcType="VARCHAR" property="repairFeedbackCustomerMark"/>
+    <result column="repairFeedbackCustomerSuggestion" jdbcType="VARCHAR" property="repairFeedbackCustomerSuggestion"/>
+    <result column="repairFeedbackRepairResult" jdbcType="VARCHAR" property="repairFeedbackRepairResult"/>
+    <result column="machineAgentId" jdbcType="VARCHAR" property="machineAgentId"/>
+    <result column="machineCustomerCompanyId" jdbcType="VARCHAR" property="machineCustomerCompanyId"/>
+  </resultMap>
+
   <select id="getPartsInfoByRepairRecordId" resultMap="PartsAllInfoMap">
     SELECT
     parts_info.*,
@@ -117,6 +181,56 @@
     </if>
 
     ORDER BY parts_info.sendback_confirmed_time DESC
+  </select>
+
+  <select id="getPartsInfoTaskByUserName" resultMap="PartsInfoWithRepairRecordInfoMap">
+    SELECT
+    m.order_num,
+    userOfCustomerInMachine.`name` as machineCustomerName,
+    parts_info.*,
+    userOfSendbackConfirmedPerson.name as sendbackConfirmedPersonName,
+    a.name as machineAgentName,
+    m.facory_date,
+    rai.issue_position,
+    ipl.`name` as issuePositionName,
+    userOfRepairChargePerson.`name` as repairChargePersonName,
+    userOfRepairChargePerson.`phone` as repairChargePersonPhone,
+    userOfCustomerInMachine.phone as machineCustomerPhone,
+    userOfCustomerInMachine.agent as machineAgentId,                      -- 机器的客户的代理商的ID号
+    userOfCustomerInMachine.customer_company as machineCustomerCompanyId, -- 机器的客户的公司的ID号
+    a.phone as machineAgentPhone,
+    m.machine_type,m.needle_num,m.head_num,m.head_distance,m.x_distance,m.y_distance,
+    userOfCustomerInRepairRecord.`name` as repairRecordCustomerName, -- 客户方的维修联系人
+    userOfCustomerInRepairRecord.phone as customerPhoneInRepairRecord,
+    userOfCustomerInRepairRecord.address as customerAddressInRepairRecord,
+    rri.repair_title as repairRequestTitle,
+    rri.content as repairRequestContent,
+    rri.voice as repairRequestVoice,
+    rri.pictures as repairRequestPictures,
+    rai.issue_description as repairActualIssueDescription,
+    rai.repair_method as repairActualMethod,
+    rai.after_resolve_pictures as afterResolvePictures,
+    rr.id as repairRecordId,
+    rr.*,
+    rcf.customer_mark as repairFeedbackCustomerMark,
+    rcf.customer_suggestion as repairFeedbackCustomerSuggestion
+
+    from repair_record as rr
+    LEFT JOIN machine as m ON m.nameplate = rr.machine_nameplate
+    LEFT JOIN `user` as userOfCustomerInMachine ON userOfCustomerInMachine.id = m.customer
+    LEFT JOIN agent as a ON a.id = userOfCustomerInMachine.agent
+    LEFT JOIN repair_actual_info as rai ON rai.repair_record_id = rr.id
+    LEFT JOIN issue_position_list as ipl ON ipl.id = rai.issue_position
+    LEFT JOIN user as userOfRepairChargePerson ON userOfRepairChargePerson.id = rr.repair_charge_person
+    LEFT JOIN user as userOfCustomerInRepairRecord ON userOfCustomerInRepairRecord.id = rr.customer
+    LEFT JOIN repair_request_info as rri ON rri.id = rr.repair_request_info
+    LEFT JOIN repair_customer_feedback as rcf ON rcf.id = rr.customer_feedback
+    LEFT JOIN parts_info ON parts_info.repair_actual_info_id = rai.id
+    LEFT JOIN user AS userOfSendbackConfirmedPerson ON userOfSendbackConfirmedPerson.id = parts_info.sendback_confirmed_person
+    WHERE 1=1
+    --  1: 无需回寄，其他表示需要寄回(具体 2：未寄回，3：已寄回（待确认），4：已确认)
+    AND (parts_info.parts_status = '2' or parts_info.parts_status = '3')
+    AND userOfCustomerInRepairRecord.`name` = #{userName}
   </select>
 
 </mapper>

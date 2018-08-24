@@ -3,6 +3,7 @@ package com.eservice.api.dao;
 import com.eservice.api.core.Mapper;
 import com.eservice.api.model.parts_info.PartsAllInfo;
 import com.eservice.api.model.parts_info.PartsInfo;
+import com.eservice.api.model.parts_info.PartsInfoWithRepairRecordInfo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -21,4 +22,6 @@ public interface PartsInfoMapper extends Mapper<PartsInfo> {
                                         @Param("sendbackTrackingNumber")String sendbackTrackingNumber,
                                         @Param("sendbackConfirmedPerson")String sendbackConfirmedPerson,
                                         @Param("isFuzzy")boolean isFuzzy);
+
+    List<PartsInfoWithRepairRecordInfo> getPartsInfoTaskByUserName(@Param("userName")String userName);
 }
