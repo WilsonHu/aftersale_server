@@ -183,6 +183,9 @@
 		<if test="inWarrantyPeriod != null and inWarrantyPeriod != ''">
 			AND rr.in_warranty_period = #{inWarrantyPeriod}
 		</if>
+		<if test="repairRecordId != null and repairRecordId != ''">
+			AND rr.id = #{repairRecordId}
+		</if>
 
 		<if test="queryStartRepairCreateTime!=null and queryStartRepairCreateTime != '' ">
 			and DATE_FORMAT( rr.create_time,'%Y-%m-%d %T') &gt;= #{queryStartRepairCreateTime}

@@ -95,6 +95,7 @@ public class RepairRecordController {
      * @param queryFinishRepairCreateTime --报修时间 结束点
      * @param queryStartRepairEndTime     -- 维修完成时间 查询起点
      * @param queryFinishRepairEndTime    -- 维修完成时间 查询终点
+     * @param repairRecordId
      * @param isFuzzy
      */
     @PostMapping("/getRepairRecordInfoList")
@@ -112,6 +113,7 @@ public class RepairRecordController {
                                           String queryFinishRepairCreateTime,
                                           String queryStartRepairEndTime,
                                           String queryFinishRepairEndTime,
+                                          String repairRecordId,
                                           boolean isFuzzy) {
         PageHelper.startPage(page, size);
         List<RepairRecordInfo> list = repairRecordService.getRepairRecordInfoList(
@@ -128,6 +130,7 @@ public class RepairRecordController {
                 queryFinishRepairCreateTime,
                 queryStartRepairEndTime,
                 queryFinishRepairEndTime,
+                repairRecordId,
                 isFuzzy);
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);

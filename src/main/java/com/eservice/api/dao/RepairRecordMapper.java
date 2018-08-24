@@ -25,6 +25,7 @@ public interface RepairRecordMapper extends Mapper<RepairRecord> {
                                                    @Param("queryFinishRepairCreateTime")String queryFinishRepairCreateTime,
                                                    @Param("queryStartRepairEndTime")String queryStartRepairEndTime,
                                                    @Param("queryFinishRepairEndTime")String queryFinishRepairEndTime,
+                                                   @Param("repairRecordId")String repairRecordId,
                                                    @Param("isFuzzy")boolean isFuzzy);
 
     List<RepairRecordInfo> selectRepairTaskByUser(@Param("userName")String userName);
