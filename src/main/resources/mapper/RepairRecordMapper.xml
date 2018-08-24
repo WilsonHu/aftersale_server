@@ -102,8 +102,8 @@
 		userOfRepairChargePerson.`name` as repairChargePersonName,
 		userOfRepairChargePerson.`phone` as repairChargePersonPhone,
 		userOfCustomerInMachine.phone as machineCustomerPhone,
-		cc.id AS machineCustomerCompanyId,
-		a.id as machineAgentId,
+		userOfCustomerInMachine.agent as machineAgentId,                      -- 机器的客户的代理商的ID号
+		userOfCustomerInMachine.customer_company as machineCustomerCompanyId, -- 机器的客户的公司的ID号
 		a.phone as machineAgentPhone,
 		m.machine_type,m.needle_num,m.head_num,m.head_distance,m.x_distance,m.y_distance,
 		userOfCustomerInRepairRecord.`name` as repairRecordCustomerName, -- 客户方的维修联系人
@@ -125,7 +125,6 @@
 		LEFT JOIN machine as m ON m.nameplate = rr.machine_nameplate
 		LEFT JOIN `user` as userOfCustomerInMachine ON userOfCustomerInMachine.id = m.customer
 		LEFT JOIN agent as a ON a.id = userOfCustomerInMachine.agent
-		LEFT JOIN customer_company as cc ON cc.id = userOfCustomerInMachine.customer_company
 		LEFT JOIN repair_actual_info as rai ON rai.repair_record_id = rr.id
 		LEFT JOIN issue_position_list as ipl ON ipl.id = rai.issue_position
 		LEFT JOIN user as userOfRepairChargePerson ON userOfRepairChargePerson.id = rr.repair_charge_person

@@ -60,6 +60,8 @@
       <result column="agent_phone" jdbcType="VARCHAR" property="machineAgentPhone" />
       <result column="maintainFeedbackCustomerMark" jdbcType="VARCHAR" property="maintainFeedbackCustomerMark" />
       <result column="maintainFeedbackCustomerSuggestion" jdbcType="VARCHAR" property="maintainFeedbackCustomerSuggestion" />
+      <result column="machineAgentId" jdbcType="VARCHAR" property="machineAgentId"/>
+      <result column="machineCustomerCompanyId" jdbcType="VARCHAR" property="machineCustomerCompanyId"/>
 
   </resultMap>
 
@@ -73,6 +75,8 @@
       SELECT
       userOfCustomerInMachine.name as machineCustomerName,
       userOfCustomerInMachine.phone as machineCustomerPhone,
+      userOfCustomerInMachine.agent as machineAgentId,
+      userOfCustomerInMachine.customer_company as machineCustomerCompanyId,
       a.name as agent_name,
       a.phone as agent_phone,
       mr.*,

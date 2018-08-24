@@ -200,6 +200,32 @@ public class MaintainRecordInfo extends MaintainRecord {
     }
 
 
+    /**
+     * 代理商ID号
+     */
+    private String machineAgentId;
+
+    public String getMachineAgentId() {
+        return machineAgentId;
+    }
+
+    public void setMachineAgentId(String machineAgentId) {
+        this.machineAgentId = machineAgentId;
+    }
+
+    /**
+     * 客户的公司ID
+     */
+    private String machineCustomerCompanyId;
+
+    public String getMachineCustomerCompanyId() {
+        return machineCustomerCompanyId;
+    }
+
+    public void setMachineCustomerCompanyId(String machineCustomerCompanyId) {
+        this.machineCustomerCompanyId = machineCustomerCompanyId;
+    }
+
     public String getMachineCustomerName() {
         return machineCustomerName;
     }

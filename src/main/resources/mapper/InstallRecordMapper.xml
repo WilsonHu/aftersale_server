@@ -68,7 +68,8 @@
     <result column="installChargePersonPhone" jdbcType="VARCHAR" property="installChargePersonPhone" />
     <result column="installFeedbackCustomerMark" jdbcType="VARCHAR" property="installFeedbackCustomerMark" />
     <result column="installFeedbackCustomerSuggestion" jdbcType="VARCHAR" property="installFeedbackCustomerSuggestion" />
-
+    <result column="machineAgentId" jdbcType="VARCHAR" property="machineAgentId" />
+    <result column="machineCustomerCompanyId" jdbcType="VARCHAR" property="machineCustomerCompanyId" />
   </resultMap>
 
   <select id="selectByNameplate" resultMap="BaseResultMap">
@@ -114,10 +115,12 @@
   <select id="getInstallRecordInfoList" resultMap="InstallRecordInfoMap">
     SELECT
     ir.*,
-    userOfCustomerInMachine.name AS machineCustomerName,    -- 机器的客户的名称
-    userOfCustomerInMachine.phone AS machineCustomerPhone,  -- 机器的客户的电话
-    agentOfCustomerInMachine.`name` AS machineAgentName,    -- 机器的客户的代理商的名称
-    agentOfCustomerInMachine.phone AS machineAgentPhone,    -- 机器的客户的代理商的电话
+    userOfCustomerInMachine.name AS machineCustomerName,                  -- 机器的客户的名称
+    userOfCustomerInMachine.phone AS machineCustomerPhone,                -- 机器的客户的电话
+    userOfCustomerInMachine.agent as machineAgentId,                      -- 机器的客户的代理商的ID号
+    userOfCustomerInMachine.customer_company as machineCustomerCompanyId, -- 机器的客户的公司的ID号
+    agentOfCustomerInMachine.`name` AS machineAgentName,                  -- 机器的客户的代理商的名称
+    agentOfCustomerInMachine.phone AS machineAgentPhone,                  -- 机器的客户的代理商的电话
     m.facory_date,
     m.nameplate,
     m.machine_type,
