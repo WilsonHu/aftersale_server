@@ -25,7 +25,7 @@
       <!--
         WARNING - @mbg.generated
       -->
-      <id column="id" jdbcType="INTEGER" property="id" />
+      <id column="maintainRecordId" jdbcType="INTEGER" property="id" />
       <result column="machine_nameplate" jdbcType="VARCHAR" property="machineNameplate" />
       <result column="maintain_lib_name" jdbcType="VARCHAR" property="maintainLibName" />
       <result column="maintain_date_plan" jdbcType="DATE" property="maintainDatePlan" />
@@ -52,7 +52,7 @@
       <result column="customerPhoneInMaintainRecord" jdbcType="VARCHAR" property="customerPhoneInMaintainRecord" />
       <result column="order_num" jdbcType="VARCHAR" property="orderNum" />
       <result column="facory_date" jdbcType="DATE" property="facoryDate" />
-      <result column="maintain_charge_person_name" jdbcType="VARCHAR" property="maintainChargePersonName" />
+      <result column="maintainChargePersonName" jdbcType="VARCHAR" property="maintainChargePersonName" />
       <result column="maintainChargePersonPhone" jdbcType="VARCHAR" property="maintainChargePersonPhone" />
       <result column="machineCustomerName" jdbcType="VARCHAR" property="machineCustomerName" />
       <result column="machineCustomerPhone" jdbcType="VARCHAR" property="machineCustomerPhone" />
@@ -167,9 +167,12 @@
     ORDER By mr.maintain_date_actual DESC
   </select>
 
-    <select id="selectMaintainTaskMachine" resultMap="com.eservice.api.dao.MachineMapper.BaseResultMap">
+    <select id="selectMaintainTaskByUser" resultMap="MaintainRecordInfoMap">
         SELECT
-        mr.`maintain_status`,
+        mr.*,
+        mr.id as maintainRecordId,
+        userOfMembersInMaintainRecord.`name` as maintainMembersPersonName,
+        userOfChargeInMaintainRecord.`name` as maintainChargePersonName,
         m.*
         FROM
         maintain_record as mr

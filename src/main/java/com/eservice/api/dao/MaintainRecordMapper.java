@@ -23,5 +23,5 @@ public interface MaintainRecordMapper extends Mapper<MaintainRecord> {
                                                        @Param("query_finish_time_maintain")String query_finish_time_maintain,
                                                        @Param("isFuzzy")boolean isFuzzy);
 
-    List<Machine> selectMaintainTaskMachine(@Param("userName") String userName);
+    List<MaintainRecordInfo> selectMaintainTaskByUser(@Param("userName") String userName);
 }

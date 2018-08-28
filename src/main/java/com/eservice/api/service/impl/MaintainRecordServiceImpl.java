@@ -51,7 +51,7 @@ public class MaintainRecordServiceImpl extends AbstractService<MaintainRecord> i
                 isFuzzy);
     }
 
-    public List<Machine> selectMaintainTaskMachine(String userName){
-        return maintainRecordMapper.selectMaintainTaskMachine(userName);
+    public List<MaintainRecordInfo> selectMaintainTaskByUser(String userName){
+        return maintainRecordMapper.selectMaintainTaskByUser(userName);
     }
 }

@@ -158,13 +158,14 @@ public class MaintainRecordController {
     }
 
     /**
-     * 根据用户(无论是负责人还是保养成员)返回他的保养待处理机器,如果用户为空则返回所有待处理的保养相关的机器。
+     * 根据用户(无论是负责人还是保养成员)返回他的保养待处理 任务,如果用户为空则返回所有待处理的保养任务。
+     * TODO: 确认是否重复数据问题
      */
-    @PostMapping("/selectMaintainTaskMachine")
+    @PostMapping("/selectMaintainTaskByUser")
     public Result selectMaintainTaskMachine(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size,
                                             @RequestParam String userName) {
         PageHelper.startPage(page, size);
-        List<Machine> list = maintainRecordService.selectMaintainTaskMachine(userName);
+        List<MaintainRecordInfo> list = maintainRecordService.selectMaintainTaskByUser(userName);
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
     }
