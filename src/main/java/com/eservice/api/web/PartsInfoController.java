@@ -167,7 +167,7 @@ public class PartsInfoController {
     }
 
     /**
-     * 根据用户名查询该用户负责的维修的待寄回（包括已寄回还等待信胜确认）的配件及相关维修信息
+     * 根据用户名查询该用户负责的维修的待寄回任务（包括已寄回还等待信胜确认）的配件及相关维修信息
      * userName：客户方的维修联系人名字
      */
     @PostMapping("/getPartsInfoTaskByUserName")

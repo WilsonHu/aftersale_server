@@ -7,10 +7,12 @@ import com.eservice.api.model.install_record.InstallRecord;
 import com.eservice.api.model.machine.Machine;
 import com.eservice.api.model.machine.MachineBaseRecordInfo;
 import com.eservice.api.model.machine.MachineInfo;
+import com.eservice.api.model.user.User;
 import com.eservice.api.service.common.CommonUtils;
 import com.eservice.api.service.common.Constant;
 import com.eservice.api.service.impl.InstallRecordServiceImpl;
 import com.eservice.api.service.impl.MachineServiceImpl;
+import com.eservice.api.service.impl.UserServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,6 +35,9 @@ import java.util.List;
 public class MachineController {
     @Resource
     private MachineServiceImpl machineService;
+    
+    @Resource
+    private UserServiceImpl userService;
 
     @Resource
     private InstallRecordServiceImpl installRecordService;
@@ -118,16 +123,26 @@ public class MachineController {
     }
 
     /*
-     *根据铭牌号返回机器，如果是老机器则提示老机器
+     *根据铭牌号返回该用户名下的机器，如果是老机器则提示老机器
      */
-    @PostMapping("/selectByNameplate")
-    public Result selectByNameplate(@RequestParam String nameplate) {
+    @PostMapping("/selectByNameplateAndUserAccount")
+    public Result selectByNameplateAndUserAccount(@RequestParam String nameplate,
+                                    @RequestParam String userAccount) {
         Machine machine = machineService.findBy("nameplate", nameplate);
         if( machine == null){
             return ResultGenerator.genFailResult("can not find machine by the nameplate " + nameplate);
         }
+
+        /**
+         * 只能查询自己归属的公司的机器
+         */
+        User customerOfMachine = userService.findById(machine.getCustomer());
+        if(! customerOfMachine.getAccount().equals(userAccount)){
+            return ResultGenerator.genFailResult("This machine " + nameplate + "is NOT belong to " + userAccount);
+        }
+
         if( machine.getIsOldMachine().equals(Constant.MACHINE_TYPE_OLD) ) {
-            return ResultGenerator.genSuccessResult(nameplate + "is old machine");
+            return ResultGenerator.genSuccessResult( "oldMachine");
         } else {
             return ResultGenerator.genSuccessResult(machine);
         }
