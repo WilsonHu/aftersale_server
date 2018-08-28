@@ -129,8 +129,11 @@ public class MachineController {
     public Result selectByNameplateAndUserAccount(@RequestParam String nameplate,
                                     @RequestParam String userAccount) {
         Machine machine = machineService.findBy("nameplate", nameplate);
+        /**
+         * 找不到这个铭牌号，当作老机器。
+         */
         if( machine == null){
-            return ResultGenerator.genFailResult("can not find machine by the nameplate " + nameplate);
+            return ResultGenerator.genFailResult("oldMachine");
         }
 
         /**
@@ -138,14 +141,17 @@ public class MachineController {
          */
         User customerOfMachine = userService.findById(machine.getCustomer());
         if(! customerOfMachine.getAccount().equals(userAccount)){
-            return ResultGenerator.genFailResult("This machine " + nameplate + "is NOT belong to " + userAccount);
+            return ResultGenerator.genFailResult("notYourMachine");
         }
 
-        if( machine.getIsOldMachine().equals(Constant.MACHINE_TYPE_OLD) ) {
-            return ResultGenerator.genSuccessResult( "oldMachine");
-        } else {
+        /**
+         *  已经标识过的老机器，需要返回机器信息，用户不需要重新申报老机器
+         */
+//        if( machine.getIsOldMachine().equals(Constant.MACHINE_TYPE_OLD) ) {
+//            return ResultGenerator.genSuccessResult( "oldMachine");
+//        } else {
             return ResultGenerator.genSuccessResult(machine);
-        }
+//        }
     }
 
     /*
