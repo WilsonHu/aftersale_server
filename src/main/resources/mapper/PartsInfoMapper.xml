@@ -91,6 +91,8 @@
     <result column="sendback_date" jdbcType="DATE" property="sendbackDate" />
     <result column="sendback_confirmed_time" jdbcType="DATE" property="sendbackConfirmedTime" />
     <result column="sendbackConfirmedPersonName" jdbcType="VARCHAR" property="sendbackConfirmedPersonName" />
+    <result column="repair_actual_info_id" jdbcType="VARCHAR" property="repairActualInfoId" />
+    <result column="partsInfoId" jdbcType="VARCHAR" property="partsInfoId" />
     <!--partsInfo end-->
     <result column="repairFeedbackCustomerMark" jdbcType="VARCHAR" property="repairFeedbackCustomerMark"/>
     <result column="repairFeedbackCustomerSuggestion" jdbcType="VARCHAR" property="repairFeedbackCustomerSuggestion"/>
@@ -187,6 +189,7 @@
     SELECT
     m.order_num,
     userOfCustomerInMachine.`name` as machineCustomerName,
+    parts_info.id as partsInfoId,
     parts_info.*,
     userOfSendbackConfirmedPerson.name as sendbackConfirmedPersonName,
     a.name as machineAgentName,

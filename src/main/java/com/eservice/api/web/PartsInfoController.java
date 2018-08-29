@@ -59,7 +59,7 @@ public class PartsInfoController {
     }
 
     /**
-     * 客户在提交配件回厂信息时更新图片和快递单号。
+     * 客户在提交配件回厂信息时更新快递图片和快递单号。
      */
     @PostMapping("/update")
     public Result update(@RequestParam String partsInfo,

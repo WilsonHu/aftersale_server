@@ -36,7 +36,7 @@ public class PartsInfoWithRepairRecordInfo extends RepairRecordInfo {
     /**
      * 配件状态
      */
-    public String partsStatus;
+    private String partsStatus;
 
     public String getPartsStatus() {
         return partsStatus;
@@ -98,7 +98,7 @@ public class PartsInfoWithRepairRecordInfo extends RepairRecordInfo {
     /**
      * 回寄后，确认收到的人的名称
      */
-    public String  sendbackConfirmedPersonName;
+    private String  sendbackConfirmedPersonName;
 
     public void setSendbackConfirmedPersonName(String sendbackConfirmedPersonName) {
         this.sendbackConfirmedPersonName = sendbackConfirmedPersonName;
@@ -106,6 +106,26 @@ public class PartsInfoWithRepairRecordInfo extends RepairRecordInfo {
 
     public String getSendbackConfirmedPersonName() {
         return sendbackConfirmedPersonName;
+    }
+
+    private String partsInfoId;
+
+    public String getPartsInfoId() {
+        return partsInfoId;
+    }
+
+    public void setPartsInfoId(String partsInfoId) {
+        this.partsInfoId = partsInfoId;
+    }
+
+    private String repairActualInfoId;
+
+    public String getRepairActualInfoId() {
+        return repairActualInfoId;
+    }
+
+    public void setRepairActualInfoId(String repairActualInfoId) {
+        this.repairActualInfoId = repairActualInfoId;
     }
 
 }

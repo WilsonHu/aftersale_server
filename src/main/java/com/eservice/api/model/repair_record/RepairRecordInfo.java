@@ -329,7 +329,6 @@ public class RepairRecordInfo extends RepairRecord {
         this.repairActualMethod = repairActualMethod;
     }
 
-
     /**
      * 实际维修的处理方法
      */
