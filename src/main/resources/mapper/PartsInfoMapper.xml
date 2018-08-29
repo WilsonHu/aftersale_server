@@ -32,7 +32,9 @@
     <result column="sendback_confirmed_time" jdbcType="TIMESTAMP" property="sendbackConfirmedTime" />
     <result column="sendback_confirmed_person" jdbcType="INTEGER" property="sendbackConfirmedPerson" />
 
-    <result column="sendbackConfirmedPersonName" jdbcType="INTEGER" property="sendbackConfirmedPersonName" />
+    <result column="sendbackConfirmedPersonName" jdbcType="VARCHAR" property="sendbackConfirmedPersonName" />
+    <result column="repairChargePersonName" jdbcType="VARCHAR" property="repairChargePersonName" />
+    <result column="customerNameInRepairRecord" jdbcType="VARCHAR" property="customerNameInRepairRecord" />
   </resultMap>
 
 
@@ -115,14 +117,17 @@
   <select id="getPartsInfoList" resultMap="PartsAllInfoMap">
     SELECT
     parts_info.*,
-    userOfSendbackConfirmedPerson.`name`  AS sendbackConfirmedPersonName
+    userOfSendbackConfirmedPerson.`name`  AS sendbackConfirmedPersonName,
+    userOfRepairChargePerson.`name` AS repairChargePersonName,
+    userOfCustomerInRepairRecord.`name` AS customerNameInRepairRecord
     from parts_info
     LEFT JOIN `user` AS userOfSendbackConfirmedPerson ON userOfSendbackConfirmedPerson.id = parts_info.sendback_confirmed_person
     LEFT JOIN repair_actual_info AS rai ON rai.id = parts_info.repair_actual_info_id
     LEFT JOIN repair_record AS rr ON rr.id = rai.repair_record_id
     LEFT JOIN machine AS m ON m.nameplate = rr.machine_nameplate
-    LEFT JOIN `user`  AS userOfMachineCustomer ON userOfMachineCustomer.id = m.customer
-    LEFT JOIN `user`  AS userOfRepairChargePerson ON userOfRepairChargePerson.id = rr.repair_charge_person
+    LEFT JOIN `user` AS userOfMachineCustomer ON userOfMachineCustomer.id = m.customer
+    LEFT JOIN `user` AS userOfRepairChargePerson ON userOfRepairChargePerson.id = rr.repair_charge_person
+    LEFT JOIN `user` AS userOfCustomerInRepairRecord ON userOfCustomerInRepairRecord.id = rr.customer
     WHERE 1=1
     <if test="isFuzzy == true">
       <if test="nameplate != null and nameplate != ''">

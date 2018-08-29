@@ -41,7 +41,7 @@ public class RepairActualInfoController {
     /**
      * 在上传（新增）实际维修情况时，也同时上传（新增）了要寄回的配件，并更新record状态
      * partsInfoList: 配件信息，可以多个配件
-     * repairResult: 维修结果 3(Constant.REPAIR_STATUS_REPAIR_NG)表示NG,6(Constant.REPAIR_STATUS_REPAIR_OK)表示OK
+     * repairResult: 维修结果 4(Constant.REPAIR_STATUS_REPAIR_NG)表示NG,7(Constant.REPAIR_STATUS_REPAIR_OK)表示OK
      */
     @Transactional(rollbackFor = Exception.class)
     @PostMapping("/add")
