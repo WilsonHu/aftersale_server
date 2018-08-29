@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -28,6 +29,7 @@ public class AgentController {
 
     @PostMapping("/add")
     public Result add(@RequestBody @NotNull Agent agent) {
+        agent.setCreateTime(new Date());
         agentService.save(agent);
         return ResultGenerator.genSuccessResult();
     }
