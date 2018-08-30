@@ -11,4 +11,16 @@
     <result column="address" jdbcType="VARCHAR" property="address" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
   </resultMap>
+  <select id="findByName" resultMap="BaseResultMap">
+    select * from agent  where 1=1
+
+    <if test="name != null and name != ''">
+      <if test="isFuzzy == false">
+        AND  name=#{name}
+      </if>
+      <if test="isFuzzy == true">
+        AND  name LIKE CONCAT('%','${name}','%' )
+      </if>
+    </if>
+  </select>
 </mapper>

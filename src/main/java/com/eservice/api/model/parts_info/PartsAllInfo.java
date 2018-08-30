@@ -1,8 +1,5 @@
 package com.eservice.api.model.parts_info;
 
-import javax.persistence.*;
-import java.util.Date;
-
 public class PartsAllInfo extends PartsInfo {
 
     private String sendbackConfirmedPersonName;
