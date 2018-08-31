@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 
 /**
@@ -25,4 +26,7 @@ public class RepairActualInfoServiceImpl extends AbstractService<RepairActualInf
         repairActualInfoMapper.saveAndGetID(repairActualInfo);
     }
 
+    public List<RepairActualInfo> getRepairActualInfoInUpdating(String repairRecordId){
+        return repairActualInfoMapper.getRepairActualInfoInUpdating(repairRecordId);
+    }
 }

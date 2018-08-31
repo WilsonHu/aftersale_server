@@ -30,6 +30,7 @@ public class CommonService {
      * @param number    表示第几个文件
      * @return 文件路径
      * eg: mph333_REPAIR_REQUEST_IMAGE_2018-07-13-16-17-50_1.png
+     * TODO:保存的文件，名称多了一个空格待查
      */
     public String saveFile(String path,
                            MultipartFile file,

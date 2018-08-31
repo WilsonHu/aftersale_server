@@ -1,5 +1,6 @@
 package com.eservice.api.model.parts_info;
 
+
 public class PartsAllInfo extends PartsInfo {
 
     private String sendbackConfirmedPersonName;
@@ -13,7 +14,7 @@ public class PartsAllInfo extends PartsInfo {
     }
 
     /**
-     * Î¬ĞŞ¸ºÔğÈË
+     * ç»´ä¿®è´Ÿè´£äºº
      */
     private String repairChargePersonName;
 
@@ -26,7 +27,7 @@ public class PartsAllInfo extends PartsInfo {
     }
 
     /**
-     * ¸Ã´ÎÎ¬ĞŞµÄÎ¬ĞŞÁªÏµÈË
+     * è¯¥æ¬¡ç»´ä¿®çš„ç»´ä¿®è”ç³»äºº
      */
     private String customerNameInRepairRecord;
 

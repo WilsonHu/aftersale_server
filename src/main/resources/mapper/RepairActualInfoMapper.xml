@@ -11,13 +11,26 @@
     <result column="after_resolve_pictures" jdbcType="VARCHAR" property="afterResolvePictures" />
     <result column="issue_description" jdbcType="LONGVARCHAR" property="issueDescription" />
     <result column="repair_method" jdbcType="LONGVARCHAR" property="repairMethod" />
+    <result column="upload_files_amount" jdbcType="VARCHAR" property="uploadFilesAmount" />
+    <result column="already_uploaded_files_number" jdbcType="VARCHAR" property="alreadyUploadedFilesNumber" />
   </resultMap>
 
   <insert id="saveAndGetID" useGeneratedKeys="true" parameterType="com.eservice.api.model.repair_actual_info.RepairActualInfo"
           keyProperty="id">
   insert into
-  repair_actual_info(repair_record_id, issue_position, issue_description, repair_method, after_resolve_pictures)
+  repair_actual_info(repair_record_id, issue_position, issue_description, repair_method, after_resolve_pictures, upload_files_amount, already_uploaded_files_number)
   values(
-  #{repairRecordId},#{issuePosition}, #{issueDescription}, #{repairMethod}, #{afterResolvePictures})
+  #{repairRecordId},#{issuePosition}, #{issueDescription}, #{repairMethod}, #{afterResolvePictures},#{uploadFilesAmount},#{alreadyUploadedFilesNumber})
   </insert>
+
+  <select id="getRepairActualInfoInUpdating" resultMap="BaseResultMap">
+  SELECT
+    *
+    FROM
+    repair_actual_info as rai
+    LEFT JOIN repair_record as rr on rr.id = rai.repair_record_id
+    where
+      rai.repair_record_id = #{repairRecordId}
+      AND rai.upload_files_amount != rai.already_uploaded_files_number
+  </select>
 </mapper>

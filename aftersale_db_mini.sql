@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50553
 File Encoding         : 65001
 
-Date: 2018-08-18 14:22:53
+Date: 2018-08-31 09:35:54
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -423,7 +423,9 @@ CREATE TABLE `repair_actual_info` (
   `issue_position` int(10) unsigned NOT NULL COMMENT '维修部位',
   `issue_description` text NOT NULL COMMENT '实际维修中的“故障描述”, 也用于“经验库”中的“问题描述”',
   `repair_method` text NOT NULL COMMENT '实际维修中的“处理方法”',
-  `after_resolve_pictures` varchar(255) DEFAULT NULL COMMENT '解决后的照片（保存文件路径）',
+  `after_resolve_pictures` varchar(1000) DEFAULT NULL COMMENT '解决后的照片（保存文件路径）',
+  `upload_files_amount` varchar(255) NOT NULL DEFAULT '0' COMMENT '要上传的文件总数，add时通过参数指明',
+  `already_uploaded_files_number` varchar(255) NOT NULL DEFAULT '0' COMMENT '已上传成功的文件的数量',
   PRIMARY KEY (`id`),
   KEY `fk_rai_repair_record_id` (`repair_record_id`),
   KEY `fk_rai_issue_position` (`issue_position`),

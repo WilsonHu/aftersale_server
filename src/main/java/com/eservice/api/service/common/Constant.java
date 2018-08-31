@@ -22,6 +22,8 @@ public class Constant {
     public static final String FILE_TYPE_PARTS_SENDBACK_IMAGE = "FILE_TYPE_PARTS_SENDBACK_IMAGE";
     //报修时提供的铭牌号图片（老机器）
     public static final String FILE_TYPE_REPAIR_REQUEST_NAMEPLATE_IMAGE = "FILE_TYPE_REPAIR_REQUEST_NAMEPLATE_IMAGE";
+    //维修完成时提交的照片
+    public static final String FILE_TYPE_REPAIR_ACTUAL_INFO_IMAGE = "FILE_TYPE_REPAIR_ACTUAL_INFO_IMAGE";
 
 
     /*

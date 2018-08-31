@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50553
 File Encoding         : 65001
 
-Date: 2018-08-22 11:08:12
+Date: 2018-08-31 09:35:54
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -152,13 +152,14 @@ CREATE TABLE `install_members` (
   KEY `fk_user_id` (`user_id`),
   CONSTRAINT `fk_install_record_id` FOREIGN KEY (`install_record_id`) REFERENCES `install_record` (`id`),
   CONSTRAINT `fk_user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of install_members
 -- ----------------------------
 INSERT INTO `install_members` VALUES ('7', '9', '3');
 INSERT INTO `install_members` VALUES ('8', '9', '4');
+INSERT INTO `install_members` VALUES ('9', '1', '4');
 
 -- ----------------------------
 -- Table structure for `install_record`
@@ -289,7 +290,7 @@ INSERT INTO `machine` VALUES ('4', 'mph444', 'ddh444', 'htaaa233', 'geo111', '�
 INSERT INTO `machine` VALUES ('5', 'mph777', 'ddh0550', 'th_agent_customer444', 'geo999', '机器地址xxx路', '1', null, '帽子机', '31', '55', '59', '66', '100', null, '合同客户223', '11', '2018-07-11', '0', null);
 INSERT INTO `machine` VALUES ('6', 'mph788', 'ddh0550', 'th_agent_customer444', 'geo999', '机器地址xxx路', '1', null, '帽子机', '31', '55', '59', '66', '100', null, '合同客户223', '11', '2018-07-11', '1', null);
 INSERT INTO `machine` VALUES ('7', 'mph789', 'ddh0550', 'th_agent_customer444', 'geo999', '机器地址xxx路', '1', null, '帽子机', '31', '55', '59', '66', '100', null, '合同客户223', '12', '2018-07-22', '1', null);
-INSERT INTO `machine` VALUES ('8', 'mph--all-data', 'ddh0550', 'th_agent_customer444', 'geottt23.33', '机器地址xxx路11h', '5', null, 'maoziji', '31', '55', '59', '66', '100', null, '合同客户223', '11', '2018-07-22', '0', null);
+INSERT INTO `machine` VALUES ('8', 'mph--all-data', 'ddh0550', 'th_agent_customer444', 'geottt23.33', '机器地址xxx路11h', '3', null, 'maoziji', '31', '55', '59', '66', '100', null, '合同客户223', '11', '2018-07-22', '0', null);
 INSERT INTO `machine` VALUES ('13', '1806004', 'XS-1801109B', 'XS-1801109', null, '', '1', null, '高速双凸轮', '6', '800', '1600', '165', '88+2', null, '绍兴华文电脑刺绣有限公司', '2', '2018-08-31', '0', null);
 INSERT INTO `machine` VALUES ('14', '1806003', 'XS-1801109B', 'XS-1801109', null, '', '1', null, '高速双凸轮', '6', '800', '1600', '165', '88+2', null, '绍兴华文电脑刺绣有限公司', '2', '2018-08-31', '0', null);
 INSERT INTO `machine` VALUES ('17', '1806001', 'XS-1801109A', 'XS-1801109', null, '', '1', null, '高速双凸轮', '4', '800', '1600', '165', '88+2', null, '绍兴华文电脑刺绣有限公司', '7', '2018-08-31', '0', null);
@@ -383,7 +384,7 @@ INSERT INTO `maintain_members` VALUES ('1', '1', '3');
 INSERT INTO `maintain_members` VALUES ('2', '1', '4');
 INSERT INTO `maintain_members` VALUES ('3', '2', '3');
 INSERT INTO `maintain_members` VALUES ('4', '3', '3');
-INSERT INTO `maintain_members` VALUES ('5', '4', '4');
+INSERT INTO `maintain_members` VALUES ('5', '4', '5');
 INSERT INTO `maintain_members` VALUES ('6', '4', '14');
 
 -- ----------------------------
@@ -479,22 +480,13 @@ CREATE TABLE `parts_info` (
   KEY `fk_pi_sendback_confirmed_person` (`sendback_confirmed_person`),
   CONSTRAINT `fk_pi_repair_actual_info` FOREIGN KEY (`repair_actual_info_id`) REFERENCES `repair_actual_info` (`id`),
   CONSTRAINT `fk_pi_sendback_confirmed_person` FOREIGN KEY (`sendback_confirmed_person`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=48 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of parts_info
 -- ----------------------------
-INSERT INTO `parts_info` VALUES ('1', '马达12AB', '松下', 'param123', '1', '3', 'sf-track-number-111--马达12AB', '马达12AB 回寄的照片', '2018-08-01', null, null);
-INSERT INTO `parts_info` VALUES ('2', '上轴部件222', 'xs', 'pram222', '2', '3', 'sf-track-number-222', 'TEST上轴部件222回寄的照片', '2018-08-01', null, null);
-INSERT INTO `parts_info` VALUES ('3', '部件333part_A', 'xs', 'param33', '3', '4', 'sf-track-number-333-部件333--part_A', 'TEST部件333part_A-回寄的照片', '2018-07-31', '2018-08-01 17:24:43', '2');
-INSERT INTO `parts_info` VALUES ('4', '部件333part_B', 'xs', 'ppp', '3', '4', 'sf-track-number-333-部件333part_B', null, '2018-07-31', '2018-08-01 17:26:10', '1');
-INSERT INTO `parts_info` VALUES ('5', '部件333part_C', 'xs', 'ppram', '3', '4', 'sf-track-number-333--部件333part_C', null, '2018-07-31', '2018-08-01 17:26:10', '2');
-INSERT INTO `parts_info` VALUES ('6', '部件666', '部件供应商666', '参数666', '1', '2', '未寄回--无快递单号', null, '0000-00-00', null, null);
-INSERT INTO `parts_info` VALUES ('7', '部件777', '部件供应商777', null, '5', '2', null, null, null, null, null);
-INSERT INTO `parts_info` VALUES ('12', '马达12AB--by-add-with-repair-actual-info0807', '松下--by-add-with-repair-actual-info', 'param123--by-add-with-repair-actual-info0807', '13', '3', 'sf-track-number-111--马达12AB--by-add-with-repair-actual-info', '马达12AB 回寄的照片', '2018-08-01', null, null);
-INSERT INTO `parts_info` VALUES ('19', '上轴部件222-0815add', 'xs', 'pram222-0815add', '20', '3', 'sf-track-number-222-0815add', 'TEST上轴部件222回寄的照片-0815add', '2018-08-01', null, '2');
-INSERT INTO `parts_info` VALUES ('22', '上轴部件222-0815add', 'xs', 'pram222-0815add', '23', '3', 'sf-track-number-222-0815add', 'TEST上轴部件222回寄的照片-0815add', '2018-08-01', null, '2');
-INSERT INTO `parts_info` VALUES ('23', '上轴部件222-0815add', 'xs', 'pram222-0815add', '24', '3', 'sf-track-number-222-0815add', 'TEST上轴部件222回寄的照片-0815add', '2018-08-01', null, '2');
+INSERT INTO `parts_info` VALUES ('46', '上轴部件222-0831add-part1', 'xs', 'pram222-0831add', '39', '3', null, null, null, null, null);
+INSERT INTO `parts_info` VALUES ('47', '上轴部件222-0831add-part2', 'xs', 'pram222-0831add', '39', '3', null, null, null, null, null);
 
 -- ----------------------------
 -- Table structure for `repair_actual_info`
@@ -506,31 +498,20 @@ CREATE TABLE `repair_actual_info` (
   `issue_position` int(10) unsigned NOT NULL COMMENT '维修部位',
   `issue_description` text NOT NULL COMMENT '实际维修中的“故障描述”, 也用于“经验库”中的“问题描述”',
   `repair_method` text NOT NULL COMMENT '实际维修中的“处理方法”',
-  `after_resolve_pictures` varchar(255) DEFAULT NULL COMMENT '解决后的照片（保存文件路径）',
+  `after_resolve_pictures` varchar(1000) DEFAULT NULL COMMENT '解决后的照片（保存文件路径）',
+  `upload_files_amount` varchar(255) NOT NULL DEFAULT '0' COMMENT '要上传的文件总数，add时通过参数指明',
+  `already_uploaded_files_number` varchar(255) NOT NULL DEFAULT '0' COMMENT '已上传成功的文件的数量',
   PRIMARY KEY (`id`),
   KEY `fk_rai_repair_record_id` (`repair_record_id`),
   KEY `fk_rai_issue_position` (`issue_position`),
   CONSTRAINT `fk_rai_issue_position` FOREIGN KEY (`issue_position`) REFERENCES `issue_position_list` (`id`),
   CONSTRAINT `fk_rai_repair_record_id` FOREIGN KEY (`repair_record_id`) REFERENCES `repair_record` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of repair_actual_info
 -- ----------------------------
-INSERT INTO `repair_actual_info` VALUES ('1', '3', '1', '问题描述,实际发生了xx11111---try-update', '实际维修方法1111', '维修后的图片路径111');
-INSERT INTO `repair_actual_info` VALUES ('2', '4', '3', '问题描述,实际发生了xx22222', '实际维修方法22222', '维修后的图片路径222');
-INSERT INTO `repair_actual_info` VALUES ('3', '5', '2', '问题描述,实际发生了xx3333', '实际维修方法3333', '维修后的图片路径333');
-INSERT INTO `repair_actual_info` VALUES ('4', '6', '1', '问题描述,实际发生了xx4444', '实际维修方法4444', '维修后的图片路径444');
-INSERT INTO `repair_actual_info` VALUES ('5', '10', '3', '问题描述,实际发生了xx55555', '实际维修方法5555', null);
-INSERT INTO `repair_actual_info` VALUES ('6', '3', '1', '问题描述,实际发生了xx1111-by-add', '实际维修方法1111-by-add', '维修后的图片路径111ttt-by-add');
-INSERT INTO `repair_actual_info` VALUES ('7', '3', '1', '问题描述,实际发生了xx1111-by-add', '实际维修方法1111-by-add', '维修后的图片路径111ttt-by-add');
-INSERT INTO `repair_actual_info` VALUES ('8', '3', '1', '问题描述,实际发生了xx1111-by-add', '实际维修方法1111-by-add', '维修后的图片路径111ttt-by-add');
-INSERT INTO `repair_actual_info` VALUES ('9', '3', '1', '问题描述,实际发生了xx1111-by-add', '实际维修方法1111-by-add', '维修后的图片路径111ttt-by-add');
-INSERT INTO `repair_actual_info` VALUES ('10', '3', '1', '问题描述,实际发生了xx1111-by-add0807', '实际维修方法1111-by-add', '维修后的图片路径111ttt-by-add0807');
-INSERT INTO `repair_actual_info` VALUES ('13', '3', '1', '问题描述,实际发生了xx1111-by-add0807', '实际维修方法1111-by-add', '维修后的图片路径111ttt-by-add0807');
-INSERT INTO `repair_actual_info` VALUES ('20', '4', '3', '问题描述,实际发生了xx22222--0815add', '实际维修方法22222--0815add', '维修后的图片路径222-0815add');
-INSERT INTO `repair_actual_info` VALUES ('23', '4', '3', '问题描述,实际发生了xx22222--0815add', '实际维修方法22222--0815add', '维修后的图片路径222-0815add');
-INSERT INTO `repair_actual_info` VALUES ('24', '4', '3', '问题描述,实际发生了xx22222--0815add', '实际维修方法22222--0815add', '维修后的图片路径222-0815add');
+INSERT INTO `repair_actual_info` VALUES ('39', '4', '2', '问题描述,实际发生了xx22222--0831add', '实际维修方法22222--0831add', 'D:/images/repair_actual_info_img/ mph--all-data_FILE_TYPE_REPAIR_ACTUAL_INFO_IMAGE_2018-08-31-09-14-12_1.png,D:/images/repair_actual_info_img/ mph--all-data_FILE_TYPE_REPAIR_ACTUAL_INFO_IMAGE_2018-08-31-09-18-14_2.png,D:/images/repair_actual_info_img/ mph--all-data_FILE_TYPE_REPAIR_ACTUAL_INFO_IMAGE_2018-08-31-09-21-10_2.png', '3', '3');
 
 -- ----------------------------
 -- Table structure for `repair_customer_feedback`
@@ -627,13 +608,13 @@ CREATE TABLE `repair_record` (
   CONSTRAINT `fk_rr_machine_nameplate` FOREIGN KEY (`machine_nameplate`) REFERENCES `machine` (`nameplate`),
   CONSTRAINT `fk_rr_repair_charge_person` FOREIGN KEY (`repair_charge_person`) REFERENCES `user` (`id`),
   CONSTRAINT `fk_rr_repair_request_info` FOREIGN KEY (`repair_request_info`) REFERENCES `repair_request_info` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB AUTO_INCREMENT=48 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
 
 -- ----------------------------
 -- Records of repair_record
 -- ----------------------------
 INSERT INTO `repair_record` VALUES ('3', 'xx11', '6', 'mph333', '11', '1', '2018-07-06', '3', '2018-07-24 10:08:45', '2018-07-25 10:08:50', '20', '5', '2018-07-25 10:38:25', '2018-08-08 11:08:45', '1');
-INSERT INTO `repair_record` VALUES ('4', null, '6', 'mph--all-data', '12', '1', '2018-07-06', '4', '2018-07-24 10:37:35', '2018-07-25 10:15:51', '1', '5', '2018-07-19 11:09:49', '2018-07-25 10:38:32', '1');
+INSERT INTO `repair_record` VALUES ('4', null, '6', 'mph--all-data', '12', '1', '2018-07-06', '4', '2018-07-24 10:37:35', '2018-08-31 09:21:10', '1', '7', '2018-07-19 11:09:49', '2018-07-25 10:38:32', '1');
 INSERT INTO `repair_record` VALUES ('5', null, '7', 'mph788', '13', '1', '2018-07-06', '4', null, '2018-07-25 10:15:55', null, '1', '2018-07-19 13:41:09', null, null);
 INSERT INTO `repair_record` VALUES ('6', null, '7', 'mph333', '14', '0', '2018-07-06', '3', null, '2018-07-26 10:15:59', null, '2', '2018-07-19 13:44:14', null, null);
 INSERT INTO `repair_record` VALUES ('7', null, '8', 'mph2233', '15', '0', '2018-07-06', '3', null, '2018-07-26 10:16:03', null, '4', '2018-07-19 13:45:23', '2018-08-15 13:15:08', null);
@@ -645,6 +626,7 @@ INSERT INTO `repair_record` VALUES ('22', '2018081513062700000', '6', 'mph2233',
 INSERT INTO `repair_record` VALUES ('23', '2018081513150800000', '6', 'mph2233', '15', '1', '2018-08-25', '4', null, null, null, '5', '2018-08-15 13:15:08', '2018-08-15 17:20:11', null);
 INSERT INTO `repair_record` VALUES ('24', '2018081513350700000', '6', 'mph789', '18', '0', '2018-08-25', '4', null, null, '1', '1', '2018-08-15 13:34:52', null, null);
 INSERT INTO `repair_record` VALUES ('46', null, '1', 'mph--all-data', '47', null, null, null, null, null, null, '1', '2018-08-18 11:16:51', null, null);
+INSERT INTO `repair_record` VALUES ('47', null, '1', 'mph--all-data', '48', null, null, null, null, null, null, '0', '2018-08-24 11:06:34', null, null);
 
 -- ----------------------------
 -- Table structure for `repair_request_info`
@@ -665,7 +647,7 @@ CREATE TABLE `repair_request_info` (
   PRIMARY KEY (`id`),
   KEY `fk_rri_contacter` (`customer`),
   CONSTRAINT `fk_rri_customer` FOREIGN KEY (`customer`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=48 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=49 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of repair_request_info
@@ -690,6 +672,7 @@ INSERT INTO `repair_request_info` VALUES ('17', 'mph333', '[D:/images/repair_req
 INSERT INTO `repair_request_info` VALUES ('18', 'mph333', '[D:/images/repair_req_nameplate/ mph333_REPAIR_REQUEST_NAMEPLATE_IMAGE_2018-07-19-13-55-23_2.png]', '[]', '标题有时会断线0719-2', '内容最近从五月份开始有时候会断线', '[D:/images/repair_req_img/ mph333_REPAIR_REQUEST_IMAGE_2018-07-19-13-55-23_1.png]', '1', '0000-00-00 00:00:00', '', '');
 INSERT INTO `repair_request_info` VALUES ('29', 'mph--all-data', 'D:/images/repair_req_nameplate/ mph--all-data_REPAIR_REQUEST_NAMEPLATE_IMAGE_2018-08-12-14-38-05_0.png', 'D:/images/repair_req_voice/ mph--all-data_REPAIR_REQUEST_VOICE_2018-08-12-14-38-05_0.mp3', '马达不转0812add', '马达不转2222', '[D:/images/repair_req_img/ mph--all-data_REPAIR_REQUEST_IMAGE_2018-08-12-14-38-05_0.png, D:/images/repair_req_img/ mph--all-data_REPAIR_REQUEST_IMAGE_2018-08-12-14-38-05_1.png, D:/images/repair_req_img/ mph--all-data_REPAIR_REQUEST_IMAGE_2018-08-12-14-38-05_2.png]', '1', '0000-00-00 00:00:00', '', '');
 INSERT INTO `repair_request_info` VALUES ('47', 'mph--all-data', 'D:/images/repair_req_nameplate/ mph--all-data_FILE_TYPE_REPAIR_REQUEST_NAMEPLATE_IMAGE_2018-08-18-11-30-18_0.png', 'D:/images/repair_req_voice/ mph--all-data_FILE_TYPE_REPAIR_REQUEST_VOICE_2018-08-18-11-34-47_0.mp3', '马达不转0818add', '马达不转222--0818add', 'D:/images/repair_req_img/ mph--all-data_FILE_TYPE_REPAIR_REQUEST_IMAGE_2018-08-16-14-40-21_0.png;D:/images/repair_req_img/ mph--all-data_FILE_TYPE_REPAIR_REQUEST_IMAGE_2018-08-18-11-37-56_0.png;D:/images/repair_req_img/ mph--all-data_FILE_TYPE_REPAIR_REQUEST_IMAGE_2018-08-20-10-23-42_0.png', '1', '2018-08-16 14:40:55', '5', '5');
+INSERT INTO `repair_request_info` VALUES ('48', 'mph--all-data', '', '', '马达不转0824add', '马达不转222--0824add', 'D:/images/repair_req_img/ mph--all-data_FILE_TYPE_REPAIR_REQUEST_IMAGE_2018-08-24-11-09-50_0.png,D:/images/repair_req_img/ mph--all-data_FILE_TYPE_REPAIR_REQUEST_IMAGE_2018-08-24-11-10-33_0.png,D:/images/repair_req_img/ mph--all-data_FILE_TYPE_REPAIR_REQUEST_IMAGE_2018-08-24-11-11-34_0.png', '1', '2018-08-16 14:40:55', '5', '3');
 
 -- ----------------------------
 -- Table structure for `role`
