@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.Resource;
 import javax.validation.constraints.NotNull;
 import java.io.File;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -56,8 +57,9 @@ public class PartsInfoController {
         return ResultGenerator.genSuccessResult();
     }
 
-    @PostMapping("/updateInfo")
-    public Result updateInfo(@RequestBody @NotNull PartsInfo partsInfo) {
+    @PostMapping("/updateStatus")
+    public Result updateStatus(@RequestBody @NotNull PartsInfo partsInfo) {
+        partsInfo.setSendbackConfirmedTime(new Date());
         partsInfoService.update(partsInfo);
         return ResultGenerator.genSuccessResult();
     }
