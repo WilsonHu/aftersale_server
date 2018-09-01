@@ -1,4 +1,5 @@
 package com.eservice.api.web;
+
 import com.alibaba.fastjson.JSON;
 import com.eservice.api.core.Result;
 import com.eservice.api.core.ResultGenerator;
@@ -12,10 +13,7 @@ import com.eservice.api.service.impl.RepairRecordServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
@@ -24,10 +22,11 @@ import java.io.File;
 import java.util.List;
 
 /**
-* Class Description: xxx
-* @author Wilson Hu
-* @date 2018/08/04.
-*/
+ * Class Description: xxx
+ *
+ * @author Wilson Hu
+ * @date 2018/08/04.
+ */
 @RestController
 @RequestMapping("/parts/info")
 public class PartsInfoController {
@@ -51,10 +50,15 @@ public class PartsInfoController {
 //        partsInfoService.save(partsInfo);
 //        return ResultGenerator.genSuccessResult();
 //    }
-
     @PostMapping("/delete")
     public Result delete(@RequestParam Integer id) {
         partsInfoService.deleteById(id);
+        return ResultGenerator.genSuccessResult();
+    }
+
+    @PostMapping("/updateInfo")
+    public Result updateInfo(@RequestBody @NotNull PartsInfo partsInfo) {
+        partsInfoService.update(partsInfo);
         return ResultGenerator.genSuccessResult();
     }
 
@@ -63,7 +67,7 @@ public class PartsInfoController {
      */
     @PostMapping("/update")
     public Result update(@RequestParam String partsInfo,
-                         @RequestParam MultipartFile file ) {
+                         @RequestParam MultipartFile file) {
         String message = null;
         String fileNameWithPath = null;
         String nameplate = null;
@@ -87,7 +91,7 @@ public class PartsInfoController {
                 partsInfoService.update(partsInfo1);
             }
         } catch (Exception ex) {
-            return ResultGenerator.genFailResult(ex.getMessage() +"," + message);
+            return ResultGenerator.genFailResult(ex.getMessage() + "," + message);
         }
         /**
          * 把更新成功的配件信息返回
@@ -123,18 +127,18 @@ public class PartsInfoController {
     }
 
     /**
-     *  配件信息的查询方法：
+     * 配件信息的查询方法：
      *
-     * @param nameplate 配件归属的机器的铭牌号
-     * @param partsName 配件名称
-     * @param customerNameInMachine 配件归属的机器的客户名称
-     * @param repairChargePersonName 配件维修的负责人
-     * @param supplier 配件的供应商
-     * @param partsStatus 配件状态  1: 无需回寄，其他表示需要寄回(具体 2：未寄回，3：已寄回（待确认），4：已确认)
-     * @param sendbackTrackingNumber 寄回配件的快递单号
+     * @param nameplate               配件归属的机器的铭牌号
+     * @param partsName               配件名称
+     * @param customerNameInMachine   配件归属的机器的客户名称
+     * @param repairChargePersonName  配件维修的负责人
+     * @param supplier                配件的供应商
+     * @param partsStatus             配件状态  1: 无需回寄，其他表示需要寄回(具体 2：未寄回，3：已寄回（待确认），4：已确认)
+     * @param sendbackTrackingNumber  寄回配件的快递单号
      * @param sendbackConfirmedPerson 配件寄回后信胜确认收到的确认人
-     *                                
-     * 注: 时间查询的输入格式应该为类似"2018-08-01 17:26:10",其他地方的时间查询也一样。
+     *                                <p>
+     *                                注: 时间查询的输入格式应该为类似"2018-08-01 17:26:10",其他地方的时间查询也一样。
      */
     @PostMapping("/getPartsInfoList")
     public Result getPartsInfoList(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size,
@@ -172,7 +176,7 @@ public class PartsInfoController {
      */
     @PostMapping("/getPartsInfoTaskByUserName")
     public Result getPartsInfoTaskByUserName(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size,
-                                         @RequestParam String userName) {
+                                             @RequestParam String userName) {
         PageHelper.startPage(page, size);
         List<PartsInfoWithRepairRecordInfo> list = partsInfoService.getPartsInfoTaskByUserName(userName);
         PageInfo pageInfo = new PageInfo(list);
