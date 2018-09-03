@@ -63,8 +63,8 @@ public class InstallRecordServiceImpl extends AbstractService<InstallRecord> imp
                 isFuzzy);
     }
 
-    public List<Machine> selectInstallTaskMachine(String userName){
-        return installRecordMapper.selectInstallTaskMachine(userName);
+    public List<InstallRecordInfo> selectInstallTaskByUser(String userName){
+        return installRecordMapper.selectInstallTaskByUser(userName);
     }
 
 }

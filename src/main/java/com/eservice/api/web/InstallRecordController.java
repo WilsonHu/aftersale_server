@@ -149,12 +149,13 @@ public class InstallRecordController {
 
     /**
      * 根据用户(无论是负责人还是安装成员)返回他的安装待处理机器,如果用户为空则返回所有待处理的安装相关的机器。
+     *  TODO: 确认是否重复数据问题 ---应该是假数据本身问题，待后面真实数据再确认一次。
      */
-    @PostMapping("/selectInstallTaskMachine")
-    public Result selectInstallTaskMachine(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size,
+    @PostMapping("/selectInstallTaskByUser")
+    public Result selectInstallTaskByUser(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size,
                                            @RequestParam String userName) {
         PageHelper.startPage(page, size);
-        List<Machine> list = installRecordService.selectInstallTaskMachine(userName);
+        List<InstallRecordInfo> list = installRecordService.selectInstallTaskByUser(userName);
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
     }

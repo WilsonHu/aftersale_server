@@ -229,7 +229,7 @@ public class RepairActualInfoController {
     }
 
     /**
-     * 根据 repair_actual_info_id 查询该机器进行中的repairActualInfo记录(上传进行中或者失败了导致应上传的文件总数和已上传的文件数不相等)
+     * 根据 repairRecordId 查询该机器进行中的repairActualInfo记录(上传进行中或者失败了导致应上传的文件总数和已上传的文件数不相等)
      */
     @PostMapping("/getRepairActualInfoInUpdating")
     public Result getRepairActualInfoInUpdating(@RequestParam(defaultValue = "0") Integer page,

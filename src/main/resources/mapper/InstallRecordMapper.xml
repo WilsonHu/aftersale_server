@@ -20,13 +20,11 @@
     <result column="install_info" jdbcType="LONGVARCHAR" property="installInfo" />
   </resultMap>
 
-
   <resultMap id="InstallRecordInfoMap" type="com.eservice.api.model.install_record.InstallRecordInfo">
     <!--
       WARNING - @mbg.generated
     -->
-
-    <id column="id" jdbcType="INTEGER" property="id" />
+    <id column="installRecordId" jdbcType="INTEGER" property="id" />
     <result column="install_record_num" jdbcType="VARCHAR" property="installRecordNum" />
     <result column="install_plan_date" jdbcType="DATE" property="installPlanDate" />
     <result column="install_actual_time" jdbcType="TIMESTAMP" property="installActualTime" />
@@ -80,6 +78,7 @@
 
   <select id="getInstallDetail" resultMap="InstallRecordInfoMap">
    SELECT
+    ir.id as installRecordId,
     ir.*,
     userOfCustomerInMachine.name AS machineCustomerName,    -- 机器的客户的名称
     userOfCustomerInMachine.phone AS machineCustomerPhone,  -- 机器的客户的电话
@@ -114,6 +113,7 @@
 
   <select id="getInstallRecordInfoList" resultMap="InstallRecordInfoMap">
     SELECT
+    ir.id  as installRecordId,
     ir.*,
     userOfCustomerInMachine.name AS machineCustomerName,                  -- 机器的客户的名称
     userOfCustomerInMachine.phone AS machineCustomerPhone,                -- 机器的客户的电话
@@ -214,8 +214,10 @@
     ORDER By ir.install_actual_time DESC,ir.install_plan_date DESC, m.facory_date DESC
   </select>
 
-  <select id="selectInstallTaskMachine" resultMap="com.eservice.api.dao.MachineMapper.BaseResultMap">
+  <select id="selectInstallTaskByUser" resultMap="com.eservice.api.dao.InstallRecordMapper.InstallRecordInfoMap">
     SELECT
+    ir.install_status,
+    ir.id as installRecordId,
     m.*
     FROM
     install_record as ir
@@ -223,8 +225,13 @@
     LEFT JOIN user as userOfMembersInInstallRecord ON userOfMembersInInstallRecord.id = im.user_id
     LEFT JOIN user as userOfChargeInInstallRecord ON userOfChargeInInstallRecord.id = ir.install_charge_person
     LEFT JOIN machine as m ON m.nameplate = ir.machine_nameplate
-    -- 安装状态，0：已分配安装(但未接单）；1：已接受任务（不用驳回，如果有异议，电话沟通后可以重新派单）； 2：安装OK(客户未确认); 3：安装NG(如果用不到这个就不用）4：客户已确认
-    where (ir.install_status = 0 or ir.install_status = 1 or  ir.install_status = 2 or ir.install_status = 3)
+--     安装状态，
+--     0：待分配，
+--     1：已分配(但未接单）
+--     2：已接受
+--     3：完成(客户未确认)，
+--     4：已确认
+    where (ir.install_status = 1 or ir.install_status = 2 or  ir.install_status = 3 )
     <if test="userName!=null and userName != '' ">
       and (userOfMembersInInstallRecord.name = #{userName} or  userOfChargeInInstallRecord.name = #{userName})
     </if>

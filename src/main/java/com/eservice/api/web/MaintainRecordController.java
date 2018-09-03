@@ -159,10 +159,10 @@ public class MaintainRecordController {
 
     /**
      * 根据用户(无论是负责人还是保养成员)返回他的保养待处理 任务,如果用户为空则返回所有待处理的保养任务。
-     * TODO: 确认是否重复数据问题
+     * TODO: 确认是否重复数据问题 ---应该是假数据本身问题，待后面真实数据再确认一次。
      */
     @PostMapping("/selectMaintainTaskByUser")
-    public Result selectMaintainTaskMachine(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size,
+    public Result selectMaintainTaskByUser(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size,
                                             @RequestParam String userName) {
         PageHelper.startPage(page, size);
         List<MaintainRecordInfo> list = maintainRecordService.selectMaintainTaskByUser(userName);

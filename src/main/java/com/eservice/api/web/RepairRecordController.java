@@ -138,6 +138,7 @@ public class RepairRecordController {
 
     /**
      * 根据用户(无论是负责人还是维修成员)返回他的维修待处理 任务
+     * TODO: 确认是否重复数据问题 ---应该是假数据本身问题，待后面真实数据再确认一次。
      */
     @PostMapping("/selectRepairTaskByUser")
     public Result selectRepairTaskByUser(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size,

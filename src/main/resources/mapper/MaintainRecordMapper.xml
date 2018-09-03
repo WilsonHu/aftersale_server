@@ -79,6 +79,7 @@
       userOfCustomerInMachine.customer_company as machineCustomerCompanyId,
       a.name as agent_name,
       a.phone as agent_phone,
+      mr.id as maintainRecordId,
       mr.*,
       m.facory_date,
       m.nameplate,

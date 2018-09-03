@@ -37,7 +37,7 @@
 		<result column="repair_start_time" jdbcType="TIMESTAMP" property="repairStartTime"/>
 		<result column="repair_end_time" jdbcType="TIMESTAMP" property="repairEndTime"/>
 		<result column="customer_feedback" jdbcType="INTEGER" property="customerFeedback"/>
-		<result column="status" jdbcType="VARCHAR" property="status"/>
+		<result column="repairStatus" jdbcType="VARCHAR" property="status"/>
 		<result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
 		<result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
 		<result column="forward_info" jdbcType="INTEGER" property="forwardInfo"/>
@@ -206,7 +206,7 @@
 	<select id="selectRepairTaskByUser" resultMap="RepairRecordInfoMap">
 		SELECT
 		rr.id as repairRecordId,
-		rr.*,
+		rr.`status` as repairStatus,
 		m.*
 		FROM
 		repair_record as rr
