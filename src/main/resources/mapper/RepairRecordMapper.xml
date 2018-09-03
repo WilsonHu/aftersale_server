@@ -207,6 +207,7 @@
 		SELECT
 		rr.id as repairRecordId,
 		rr.`status` as repairStatus,
+		rr.machine_nameplate,
 		m.*
 		FROM
 		repair_record as rr

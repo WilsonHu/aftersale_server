@@ -218,6 +218,7 @@
     SELECT
     ir.install_status,
     ir.id as installRecordId,
+    ir.machine_nameplate,
     m.*
     FROM
     install_record as ir
