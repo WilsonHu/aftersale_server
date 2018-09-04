@@ -108,64 +108,68 @@
       LEFT JOIN user userOfMaintainChargePerson ON userOfMaintainChargePerson.id = mr.maintain_charge_person
       LEFT JOIN user as userOfCustomerInMaintainRecord ON userOfCustomerInMaintainRecord.id = mr.customer
       LEFT JOIN maintain_customer_feedback as mcf ON mcf.id = mr.customer_feedback
-    WHERE 1 = 1
-    <if test="isFuzzy == true">
-      <if test="customerName != null and customerName != ''">
---         AND customerName like CONCAT('%','${customerName}','%' )
-        AND userOfCustomerInMachine.name like CONCAT('%','${customerName}','%' )
+      WHERE 1 = 1
+      <if test="isFuzzy == true">
+          <if test="customerName != null and customerName != ''">
+              --         AND customerName like CONCAT('%','${customerName}','%' )
+              AND userOfCustomerInMachine.name like CONCAT('%','${customerName}','%' )
+          </if>
+          <if test="agent != null and agent != ''">
+              --         AND agent_name like CONCAT('%','${agent}','%' )
+              AND a.name like CONCAT('%','${agent}','%' )
+          </if>
+          <if test="nameplate != null and nameplate != ''">
+              and m.nameplate like CONCAT('%','${nameplate}','%' )
+          </if>
+          <if test="orderNum != null and orderNum != ''">
+              and m.order_num like CONCAT('%','${orderNum}','%' )
+          </if>
+          <if test="machineType != null and machineType != ''">
+              and m.machine_type like CONCAT('%','${machineType}','%' )
+          </if>
+          <if test="maintainChargePerson != null and maintainChargePerson != ''">
+              --         and mr.maintain_charge_person like CONCAT('%','${maintainChargePerson}','%' )
+              and userInMaintainRecord.name like CONCAT('%','${maintainChargePerson}','%' )
+          </if>
       </if>
-      <if test="agent != null and agent != ''">
---         AND agent_name like CONCAT('%','${agent}','%' )
-        AND a.name like CONCAT('%','${agent}','%' )
-      </if>
-      <if test="nameplate != null and nameplate != ''">
-        and m.nameplate like CONCAT('%','${nameplate}','%' )
-      </if>
-      <if test="orderNum != null and orderNum != ''">
-        and m.order_num like CONCAT('%','${orderNum}','%' )
-      </if>
-      <if test="machineType != null and machineType != ''">
-        and m.machine_type like CONCAT('%','${machineType}','%' )
-      </if>
-      <if test="maintainChargePerson != null and maintainChargePerson != ''">
---         and mr.maintain_charge_person like CONCAT('%','${maintainChargePerson}','%' )
-          and userInMaintainRecord.name like CONCAT('%','${maintainChargePerson}','%' )
-      </if>
-    </if>
 
-    <if test="isFuzzy == false">
-      <if test="customerName != null and customerName != ''">
---         AND customerName = '${customerName}'
-        AND userOfCustomerInMachine.name = '${customerName}'
+      <if test="isFuzzy == false">
+          <if test="customerName != null and customerName != ''">
+              --         AND customerName = '${customerName}'
+              AND userOfCustomerInMachine.name = '${customerName}'
+          </if>
+          <if test="agent != null and agent != ''">
+              --         AND agent_name = '${agent}'
+              AND a.name = '${agent}'
+          </if>
+          <if test="nameplate != null and nameplate != ''">
+              and m.nameplate = '${nameplate}'
+          </if>
+          <if test="orderNum != null and orderNum != ''">
+              and m.order_num = '${orderNum}'
+          </if>
+          <if test="machineType != null and machineType != ''">
+              and m.machine_type = '${machineType}'
+          </if>
+          <if test="maintainChargePerson != null and maintainChargePerson != ''">
+              and mr.maintain_charge_person = '${maintainChargePerson}'
+          </if>
       </if>
-      <if test="agent != null and agent != ''">
---         AND agent_name = '${agent}'
-        AND a.name = '${agent}'
-      </if>
-      <if test="nameplate != null and nameplate != ''">
-        and m.nameplate = '${nameplate}'
-      </if>
-      <if test="orderNum != null and orderNum != ''">
-        and m.order_num = '${orderNum}'
-      </if>
-      <if test="machineType != null and machineType != ''">
-        and m.machine_type = '${machineType}'
-      </if>
-      <if test="maintainChargePerson != null and maintainChargePerson != ''">
-        and mr.maintain_charge_person = '${maintainChargePerson}'
-      </if>
-    </if>
 
-    <if test="maintainStatus != null and maintainStatus != ''">
-      and mr.maintain_status = #{maintainStatus}
-    </if>
-    <if test="query_start_time_maintain!=null and query_start_time_maintain != '' ">
-      and DATE_FORMAT(maintain_date_actual,'%Y-%m-%d') &gt;= #{query_start_time_maintain}
-    </if>
-    <if test="query_finish_time_maintain!=null and query_finish_time_maintain != '' ">
-      and DATE_FORMAT(maintain_date_actual,'%Y-%m-%d') &lt;= #{query_finish_time_maintain}
-    </if>
-    ORDER By mr.maintain_date_actual DESC
+      <if test="maintainStatus != null and maintainStatus != ''">
+          and mr.maintain_status = #{maintainStatus}
+      </if>
+      <if test="query_start_time_maintain!=null and query_start_time_maintain != '' ">
+          and DATE_FORMAT(maintain_date_actual,'%Y-%m-%d') &gt;= #{query_start_time_maintain}
+      </if>
+      <if test="query_finish_time_maintain!=null and query_finish_time_maintain != '' ">
+          and DATE_FORMAT(maintain_date_actual,'%Y-%m-%d') &lt;= #{query_finish_time_maintain}
+      </if>
+      <if test="maintainRecordId != null and maintainRecordId != ''">
+          and mr.id = #{maintainRecordId}
+      </if>
+
+      ORDER By mr.maintain_date_actual DESC
   </select>
 
     <select id="selectMaintainTaskByUser" resultMap="MaintainRecordInfoMap">

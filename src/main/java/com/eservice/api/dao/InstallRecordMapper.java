@@ -28,6 +28,7 @@ public interface InstallRecordMapper extends Mapper<InstallRecord> {
                                                      @Param("query_finish_facory_date")String query_finish_facory_date,
                                                      @Param("query_start_install_actual_time")String query_start_install_actual_time,
                                                      @Param("query_finish_install_actual_time")String query_finish_install_actual_time,
+                                                     @Param("installRecordId")String installRecordId,
                                                      @Param("isFuzzy")boolean isFuzzy);
 
     List<InstallRecordInfo> selectInstallTaskByUser(@Param("userName") String userName);

@@ -126,6 +126,7 @@ public class InstallRecordController {
                                            String query_finish_facory_date,
                                            String query_start_install_actual_time,
                                            String query_finish_install_actual_time,
+                                           String installRecordId,
                                            boolean isFuzzy) {
         PageHelper.startPage(page, size);
         List<InstallRecordInfo> list = installRecordService.getInstallRecordInfoList(
@@ -142,6 +143,7 @@ public class InstallRecordController {
                 query_finish_facory_date,
                 query_start_install_actual_time,
                 query_finish_install_actual_time,
+                installRecordId,
                 isFuzzy);
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);

@@ -37,6 +37,7 @@ public class MaintainRecordServiceImpl extends AbstractService<MaintainRecord> i
                                                                String maintainChargePerson,
                                                                String query_start_time_maintain,
                                                                String query_finish_time_maintain,
+                                                               String maintainRecordId,
                                                                boolean isFuzzy){
         return maintainRecordMapper.getMaintainRecordInfoList(
                 nameplate,
@@ -48,6 +49,7 @@ public class MaintainRecordServiceImpl extends AbstractService<MaintainRecord> i
                 maintainChargePerson,
                 query_start_time_maintain,
                 query_finish_time_maintain,
+                maintainRecordId,
                 isFuzzy);
     }
 

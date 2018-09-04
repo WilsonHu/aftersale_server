@@ -140,6 +140,7 @@ public class MaintainRecordController {
                                             String maintainChargePerson,
                                             String query_start_time_maintain,
                                             String query_finish_time_maintain,
+                                            String maintainRecordId,
                                             boolean isFuzzy) {
         PageHelper.startPage(page, size);
         List<MaintainRecordInfo> list = maintainRecordService.getMaintainRecordInfoList(
@@ -152,6 +153,7 @@ public class MaintainRecordController {
                 maintainChargePerson,
                 query_start_time_maintain,
                 query_finish_time_maintain,
+                maintainRecordId,
                 isFuzzy);
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);

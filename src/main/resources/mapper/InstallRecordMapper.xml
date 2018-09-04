@@ -211,6 +211,10 @@
       and DATE_FORMAT( ir.install_actual_time,'%Y-%m-%d %T') &lt;= #{query_finish_install_actual_time}
     </if>
 
+    <if test="installRecordId != null and installRecordId != ''">
+      AND ir.id = '${installRecordId}'
+    </if>
+
     ORDER By ir.install_actual_time DESC,ir.install_plan_date DESC, m.facory_date DESC
   </select>
 
