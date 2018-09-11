@@ -89,7 +89,7 @@ public class RepairRecordController {
      * @param repairRecordCustomerName    -- 维修记录中的客户联系人，不是machine的customerName
      * @param agent                       -- 机器的代理商的名称
      * @param repairChargePersonName      -- 维修员负责人
-     * @param issuePositionName
+     * @param issuePositionId             -- 问题部位ID,只要包含有该ID号的记录就会被返回
      * @param inWarrantyPeriod
      * @param queryStartRepairCreateTime  -- 报修时间 查询起点
      * @param queryFinishRepairCreateTime --报修时间 结束点
@@ -107,7 +107,7 @@ public class RepairRecordController {
                                           String repairRecordCustomerName,
                                           String agent,
                                           String repairChargePersonName,
-                                          String issuePositionName,
+                                          String issuePositionId,
                                           String inWarrantyPeriod,
                                           String queryStartRepairCreateTime,
                                           String queryFinishRepairCreateTime,
@@ -124,7 +124,7 @@ public class RepairRecordController {
                 repairRecordCustomerName,
                 agent,
                 repairChargePersonName,
-                issuePositionName,
+                issuePositionId,
                 inWarrantyPeriod,
                 queryStartRepairCreateTime,
                 queryFinishRepairCreateTime,

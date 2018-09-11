@@ -2,6 +2,7 @@ package com.eservice.api.model.repair_record;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 public class RepairRecordInfo extends RepairRecord {
 
@@ -87,16 +88,16 @@ public class RepairRecordInfo extends RepairRecord {
     }
 
     /**
-     * 故障部位，来自于repair_actual_info.issue_position
+     * 故障部位ID列表,具体名称由前台解析
      */
-    private String issuePositionName;
+    private String issuePositionList;
 
-    public String getIssuePositionName() {
-        return issuePositionName;
+    public String getIssuePositionList() {
+        return issuePositionList;
     }
 
-    public void setIssuePositionName(String issuePositionName){
-        this.issuePositionName = issuePositionName;
+    public void setIssuePositionList(String issuePositionNameList){
+        this.issuePositionList = issuePositionNameList;
     }
 
     /**

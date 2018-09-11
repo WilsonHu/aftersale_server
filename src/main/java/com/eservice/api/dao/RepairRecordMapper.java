@@ -19,7 +19,7 @@ public interface RepairRecordMapper extends Mapper<RepairRecord> {
                                                    @Param("repairRecordCustomerName")String repairRecordCustomerName,
                                                    @Param("agent")String agent,
                                                    @Param("repairChargePersonName")String repairChargePersonName,
-                                                   @Param("issuePositionName")String issuePositionName,
+                                                   @Param("issuePositionId")String issuePositionId,
                                                    @Param("inWarrantyPeriod")String inWarrantyPeriod,
                                                    @Param("queryStartRepairCreateTime")String queryStartRepairCreateTime,
                                                    @Param("queryFinishRepairCreateTime")String queryFinishRepairCreateTime,

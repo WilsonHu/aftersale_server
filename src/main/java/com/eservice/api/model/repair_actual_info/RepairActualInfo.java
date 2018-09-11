@@ -15,10 +15,10 @@ public class RepairActualInfo {
     private Integer repairRecordId;
 
     /**
-     * 维修部位
+     * 维修部位ID号列表，部位间用逗号隔开
      */
     @Column(name = "issue_position")
-    private Integer issuePosition;
+    private String issuePosition;
 
     /**
      * 解决后的照片（保存文件路径）
@@ -71,20 +71,20 @@ public class RepairActualInfo {
     }
 
     /**
-     * 获取维修部位
+     * 获取维修部位列表
      *
-     * @return issue_position - 维修部位
+     * @return issue_position - 维修部位列表
      */
-    public Integer getIssuePosition() {
+    public String getIssuePosition() {
         return issuePosition;
     }
 
     /**
-     * 设置维修部位
+     * 设置维修部位列表
      *
-     * @param issuePosition 维修部位
+     * @param issuePosition 维修部位列表
      */
-    public void setIssuePosition(Integer issuePosition) {
+    public void setIssuePosition(String issuePosition) {
         this.issuePosition = issuePosition;
     }
 

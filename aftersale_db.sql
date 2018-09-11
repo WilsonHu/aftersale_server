@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50553
 File Encoding         : 65001
 
-Date: 2018-08-31 09:35:54
+Date: 2018-09-11 14:59:21
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -125,19 +125,48 @@ CREATE TABLE `install_lib` (
   `install_content` text COMMENT '安装验收的内容',
   PRIMARY KEY (`id`),
   KEY `fk_ii_install_lib` (`install_lib_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of install_lib
 -- ----------------------------
-INSERT INTO `install_lib` VALUES ('1', '0', 'aaa', null);
-INSERT INTO `install_lib` VALUES ('2', '1', 'aaa', 'dfsssssssssssssssssssssssssssssssssssfdsf');
-INSERT INTO `install_lib` VALUES ('4', '1', 'aaa', 'eetertre');
-INSERT INTO `install_lib` VALUES ('6', '1', 'aaa', 'sddfgf');
-INSERT INTO `install_lib` VALUES ('23', '0', 'bbb', null);
-INSERT INTO `install_lib` VALUES ('24', '1', 'bbb', 'sdfdsfdsa');
-INSERT INTO `install_lib` VALUES ('25', '1', 'bbb', 'fsdgfgfdfd');
-INSERT INTO `install_lib` VALUES ('26', '1', 'bbb', 'asdsdfsd');
+INSERT INTO `install_lib` VALUES ('2', '0', '基础项', null);
+INSERT INTO `install_lib` VALUES ('3', '1', '基础项', '电源电压A');
+INSERT INTO `install_lib` VALUES ('4', '1', '基础项', '电源电压B');
+INSERT INTO `install_lib` VALUES ('5', '1', '基础项', '电源电压C');
+INSERT INTO `install_lib` VALUES ('6', '1', '基础项', '单相电压');
+INSERT INTO `install_lib` VALUES ('7', '1', '基础项', '接地情况');
+INSERT INTO `install_lib` VALUES ('8', '1', '基础项', '机器水平');
+INSERT INTO `install_lib` VALUES ('9', '1', '基础项', '台板支撑');
+INSERT INTO `install_lib` VALUES ('10', '0', '平绣', null);
+INSERT INTO `install_lib` VALUES ('11', '1', '平绣', '1.机器摆放至预定位置，安装底脚盘，调整机器水平，清洁机器。');
+INSERT INTO `install_lib` VALUES ('12', '1', '平绣', '2.与客户清点工具箱内配件。');
+INSERT INTO `install_lib` VALUES ('13', '1', '平绣', '3.关闭机器及外接的电源开关，区分火线、零线、地线，相应接线。');
+INSERT INTO `install_lib` VALUES ('14', '1', '平绣', '4.检查每一个机头的伞齿轮间隙。');
+INSERT INTO `install_lib` VALUES ('15', '1', '平绣', '5.测试换色，无卡滞。针与针板孔的位置在中心，压脚高度1~1.5mm。');
+INSERT INTO `install_lib` VALUES ('16', '1', '平绣', '6.移动框架，并检查限位开关是否正常。（增加横档必须重新调整限位开关位置）					\n');
+INSERT INTO `install_lib` VALUES ('17', '1', '平绣', '7.测试按钮开关、拉杆开关、勾、剪、扣，断线报警等各项基本功能。					');
+INSERT INTO `install_lib` VALUES ('18', '1', '平绣', '8.主轴点动，查看主轴运转是否正常，停车位置是否在100°。					');
+INSERT INTO `install_lib` VALUES ('19', '1', '平绣', '9.测试主轴转速，对旋梭、针杆、主动轴加注白油。');
+INSERT INTO `install_lib` VALUES ('20', '1', '平绣', '10.机架、线架无较大震动;轴罩盖，传动箱、皮带、主轴无较大异响。');
+INSERT INTO `install_lib` VALUES ('21', '1', '平绣', '11.对每个针位进行点动、针停下位操作，压脚针杆无抖动。');
+INSERT INTO `install_lib` VALUES ('22', '1', '平绣', '12.机器两头、中间打开针板，查看针位深浅、旋梭间隙，根据实际情况进行调整。');
+INSERT INTO `install_lib` VALUES ('23', '1', '平绣', '13.有雕孔刀机型，查看刀棱方向、高度、头距是否一致。');
+INSERT INTO `install_lib` VALUES ('24', '1', '平绣', '14.调整底面线张力。');
+INSERT INTO `install_lib` VALUES ('25', '1', '平绣', '15.U盘输入花样，上调试布并调试。');
+INSERT INTO `install_lib` VALUES ('26', '1', '平绣', '16.对客户的领班、机修工，进行机器操作、加油、简单维修进行指导。');
+INSERT INTO `install_lib` VALUES ('27', '0', '特种装置', null);
+INSERT INTO `install_lib` VALUES ('28', '1', '特种装置', '1.接好气路，调整过滤器气压，解开金片、绳绣装置机械锁。');
+INSERT INTO `install_lib` VALUES ('29', '1', '特种装置', '2.同时升降所有金片、绳绣装置，应升降一致，无撞击、迟缓。');
+INSERT INTO `install_lib` VALUES ('30', '1', '特种装置', '3.装上相应规格金片、绳线调试，金片无尾及漏片。绳绣平整、无漏针。');
+INSERT INTO `install_lib` VALUES ('31', '1', '特种装置', '4.对客户领班、机修工，对装置维修，金片规格改装、绳绣粗细调整，进行指导。');
+INSERT INTO `install_lib` VALUES ('32', '0', '毛巾绣机型', null);
+INSERT INTO `install_lib` VALUES ('33', '1', '毛巾绣机型', '1.查看主轴位置35°，换色箱位置正常再开机。');
+INSERT INTO `install_lib` VALUES ('34', '1', '毛巾绣机型', '2.机头升降无异响，针高位置一致，针高最低点针离针板2mm。');
+INSERT INTO `install_lib` VALUES ('35', '1', '毛巾绣机型', '3.松线电机、换色、剪线电机测试，位置准确，无异响、卡顿。');
+INSERT INTO `install_lib` VALUES ('36', '1', '毛巾绣机型', '4.原点、穿线点无偏差。调整线的张力，挑线簧弹力。');
+INSERT INTO `install_lib` VALUES ('37', '1', '毛巾绣机型', '5.链式绣无毛线、漏线。毛巾高度一致，无倾斜，剪线正常。');
+INSERT INTO `install_lib` VALUES ('38', '1', '毛巾绣机型', '6.对客户领班、机修工，日常线毛清理、机器设置、维修进行指导。');
 
 -- ----------------------------
 -- Table structure for `install_members`
@@ -192,9 +221,9 @@ CREATE TABLE `install_record` (
 -- ----------------------------
 INSERT INTO `install_record` VALUES ('1', 'aaa', '2018-07-11', '2018-07-11 14:27:13', 'mph2233', 'an安装ok', '4', '1', '1', 'ins info aaaa', '0000-00-00 00:00:00', null, '9');
 INSERT INTO `install_record` VALUES ('2', 'abbb', '2018-07-16', '2018-07-16 15:03:24', 'mph2233', 'okkk', '4', '2', '5', 'info4444', '0000-00-00 00:00:00', null, '8');
-INSERT INTO `install_record` VALUES ('9', null, '2018-08-06', null, '1806004', null, '4', '6', '3', null, '2018-08-05 14:17:18', '2018-08-07 18:11:17', '7');
+INSERT INTO `install_record` VALUES ('9', null, '2018-08-06', null, '1806004', null, '1', '6', '3', null, '2018-08-05 14:17:18', '2018-08-07 18:11:17', '7');
 INSERT INTO `install_record` VALUES ('10', null, null, null, '1806003', null, '0', null, null, null, '2018-08-05 14:17:24', null, null);
-INSERT INTO `install_record` VALUES ('11', null, '2018-08-21', '2018-08-21 16:52:08', 'mph--all-data', '', '3', null, null, null, null, null, '7');
+INSERT INTO `install_record` VALUES ('11', null, '2018-08-21', '2018-08-21 16:52:08', 'mph--all-data', '', '3', null, '5', null, null, null, '7');
 
 -- ----------------------------
 -- Table structure for `issue_position_list`
@@ -350,17 +379,91 @@ CREATE TABLE `maintain_lib` (
   PRIMARY KEY (`id`),
   KEY `fk_mi_maintain_lib` (`maintain_lib_name`) USING BTREE,
   KEY `fk_mi_maintain_type` (`maintain_type`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=84 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of maintain_lib
 -- ----------------------------
-INSERT INTO `maintain_lib` VALUES ('2', 'y54yrt', '0', null);
-INSERT INTO `maintain_lib` VALUES ('3', 'aaa', '0', null);
-INSERT INTO `maintain_lib` VALUES ('5', 'aaa', '1', 'dsfdsfdsfdsfdsafasdfdasfasd');
-INSERT INTO `maintain_lib` VALUES ('6', 'aaa', '1', 'sdfsdfsdfasd');
-INSERT INTO `maintain_lib` VALUES ('7', 'bbbb', '0', null);
-INSERT INTO `maintain_lib` VALUES ('8', 'bbbb', '1', 'cccccc');
+INSERT INTO `maintain_lib` VALUES ('4', '保养一期', '0', null);
+INSERT INTO `maintain_lib` VALUES ('5', '保养一期', '1', '用风枪清除机身表面以及夹线器、压脚、中导轨、装置、旋梭、剪线刀、前后驱动等部位附着的线毛、灰尘。');
+INSERT INTO `maintain_lib` VALUES ('6', '保养一期', '2', '给针杆、主动轴、一号销、旋梭轴、旋梭加注适量白油；给Y前后、X驱动导轨及滑车轴承加注适量润滑脂。');
+INSERT INTO `maintain_lib` VALUES ('7', '保养一期', '3', '1.检查中间脚盘是否正常');
+INSERT INTO `maintain_lib` VALUES ('8', '保养一期', '3', '2. 检查主轴皮带、上下轴同步带的张力和位置，带轮螺丝是否有松动；');
+INSERT INTO `maintain_lib` VALUES ('9', '保养一期', '3', '3. 检查最低点角度（172°/178°高速±2°）是否正确；');
+INSERT INTO `maintain_lib` VALUES ('10', '保养一期', '3', '4. 检查主轴转动应活络、运行平稳、停车位置准确；');
+INSERT INTO `maintain_lib` VALUES ('11', '保养一期', '3', '5. 检查大连杆是否润滑良好，大连杆是否有磨损；');
+INSERT INTO `maintain_lib` VALUES ('12', '保养一期', '3', '6. 检查100度时跳线杆高度一致，换色轻松准确；');
+INSERT INTO `maintain_lib` VALUES ('13', '保养一期', '3', '7. 检查针杆架间隙，是否有松动；');
+INSERT INTO `maintain_lib` VALUES ('14', '保养一期', '3', '8. 检查针杆压下时针杆的上下间隙是否正常；');
+INSERT INTO `maintain_lib` VALUES ('15', '保养一期', '3', '9. 检查针下位时与针板孔的左右位置是否居中');
+INSERT INTO `maintain_lib` VALUES ('16', '保养一期', '3', '10. 检查针板孔是否有毛刺；');
+INSERT INTO `maintain_lib` VALUES ('17', '保养一期', '3', '11. 检查压脚是否变形、高度（0.5-1.5mm）是否准确');
+INSERT INTO `maintain_lib` VALUES ('18', '保养一期', '3', '12. 检查旋梭轴轴向窜动无明显间隙');
+INSERT INTO `maintain_lib` VALUES ('19', '保养一期', '3', '13. 检查伞齿轮间隙范围0.1～0.15mm');
+INSERT INTO `maintain_lib` VALUES ('20', '保养一期', '3', '14. 检查剪线动定刀压线簧部件是否完好，位置是否正确，切线工作是否正常；');
+INSERT INTO `maintain_lib` VALUES ('21', '保养一期', '3', '15. 检查扣线部件是否完好，位置是否正确，扣线工作是否正常；');
+INSERT INTO `maintain_lib` VALUES ('22', '保养一期', '3', '16. 检查勾线机构部件是否完好，位置是否正确，勾线工作是否正常；');
+INSERT INTO `maintain_lib` VALUES ('23', '保养一期', '3', '17. 检查金片装置调整位置是否准确，工作是否正常');
+INSERT INTO `maintain_lib` VALUES ('24', '保养一期', '3', '18. 检查X、Y同步带张力');
+INSERT INTO `maintain_lib` VALUES ('25', '保养一期', '3', '19. 检查X、Y伺服电机皮带张力');
+INSERT INTO `maintain_lib` VALUES ('26', '保养一期', '3', '20. 检查X、Y绣框间隙是否正常，轴承、型材是否有磨损');
+INSERT INTO `maintain_lib` VALUES ('27', '保养一期', '3', '21. 检查毛毡是否磨损，绣框是否与台板摩擦（标准2mm）');
+INSERT INTO `maintain_lib` VALUES ('28', '保养一期', '3', '22. 检查台板、防尘板是否平整');
+INSERT INTO `maintain_lib` VALUES ('29', '保养一期', '3', '23. 检查移框时无卡顿、无杂音；');
+INSERT INTO `maintain_lib` VALUES ('30', '保养二期', '0', null);
+INSERT INTO `maintain_lib` VALUES ('31', '保养二期', '1', '用风枪清除机身表面以及夹线器、压脚、中导轨、装置、旋梭、剪线刀、前后驱动等部位附着的线毛、灰尘；');
+INSERT INTO `maintain_lib` VALUES ('32', '保养二期', '2', '给针杆、主动轴、一号销、旋梭轴、旋梭加注适量白油；给伞齿轮、Y前后导轨、X驱动导轨及滑车轴承加注适量润滑脂；');
+INSERT INTO `maintain_lib` VALUES ('33', '保养二期', '3', '1.检查中间脚盘是否正常');
+INSERT INTO `maintain_lib` VALUES ('34', '保养二期', '3', '2. 检查主轴皮带、上下轴同步带的张力和位置，带轮螺丝是否有松动；');
+INSERT INTO `maintain_lib` VALUES ('35', '保养二期', '3', '3. 检查最低点角度（172°/178°高速±2°）是否正确；');
+INSERT INTO `maintain_lib` VALUES ('36', '保养二期', '3', '4. 检查主轴转动应活络、运行平稳、停车位置准确；');
+INSERT INTO `maintain_lib` VALUES ('37', '保养二期', '3', '5. 检查大连杆是否润滑良好，大连杆是否有磨损');
+INSERT INTO `maintain_lib` VALUES ('38', '保养二期', '3', '6. 检查100度时跳线杆高度一致，换色轻松准确；');
+INSERT INTO `maintain_lib` VALUES ('39', '保养二期', '3', '7. 检查针杆架间隙，是否有松动；');
+INSERT INTO `maintain_lib` VALUES ('40', '保养二期', '3', '8. 检查针杆压下时针杆的上下间隙是否正常；');
+INSERT INTO `maintain_lib` VALUES ('41', '保养二期', '3', '9. 检查针下位时与针板孔的左右位置是否居中');
+INSERT INTO `maintain_lib` VALUES ('42', '保养二期', '3', '10. 检查针板孔是否有毛刺；');
+INSERT INTO `maintain_lib` VALUES ('43', '保养二期', '3', '11. 检查压脚是否变形、高度（0.5-1.5mm）是否准确');
+INSERT INTO `maintain_lib` VALUES ('44', '保养二期', '3', '12. 检查旋梭轴轴向窜动无明显间隙');
+INSERT INTO `maintain_lib` VALUES ('45', '保养二期', '3', '13. 检查伞齿轮间隙范围0.1～0.15mm');
+INSERT INTO `maintain_lib` VALUES ('46', '保养二期', '3', '14.检查并调整针与旋梭的位置，针位高低用夹具定位，间隙0.1～0.3mm。');
+INSERT INTO `maintain_lib` VALUES ('47', '保养二期', '3', '15. 检查剪线动定刀压线簧部件是否完好，位置是否正确，切线工作是否正常；');
+INSERT INTO `maintain_lib` VALUES ('48', '保养二期', '3', '16. 检查扣线部件是否完好，位置是否正确，扣线工作是否正常；');
+INSERT INTO `maintain_lib` VALUES ('49', '保养二期', '3', '17. 检查勾线机构部件是否完好，位置是否正确，勾线工作是否正常；');
+INSERT INTO `maintain_lib` VALUES ('50', '保养二期', '3', '18. 检查金片装置调整位置是否准确，工作是否正常');
+INSERT INTO `maintain_lib` VALUES ('51', '保养二期', '3', '19. 检查X、Y同步带张力');
+INSERT INTO `maintain_lib` VALUES ('52', '保养二期', '3', '20. 检查X、Y伺服电机皮带张力');
+INSERT INTO `maintain_lib` VALUES ('53', '保养二期', '3', '21. 检查X、Y绣框间隙是否正常，轴承、型材是否有磨损');
+INSERT INTO `maintain_lib` VALUES ('54', '保养二期', '3', '22. 检查毛毡是否磨损，绣框是否与台板摩擦（标准2mm）');
+INSERT INTO `maintain_lib` VALUES ('55', '保养二期', '3', '23. 检查台板、防尘板是否平整');
+INSERT INTO `maintain_lib` VALUES ('56', '保养二期', '3', '24. 检查移框时无卡顿、无杂音；');
+INSERT INTO `maintain_lib` VALUES ('57', '保养三期', '0', null);
+INSERT INTO `maintain_lib` VALUES ('58', '保养三期', '1', '用风枪清除机身表面以及夹线器、压脚、中导轨、装置、旋梭、剪线刀、前后驱动等部位附着的线毛、灰尘。');
+INSERT INTO `maintain_lib` VALUES ('59', '保养三期', '2', '给针杆、主动轴、一号销、旋梭轴、旋梭加注适量白油；给伞齿轮、大连杆、Y前后导轨、X驱动导轨及滑车轴承加注适量润滑脂。');
+INSERT INTO `maintain_lib` VALUES ('60', '保养三期', '3', '1.检查中间脚盘是否正常');
+INSERT INTO `maintain_lib` VALUES ('61', '保养三期', '3', '2. 检查主轴皮带、上下轴同步带的张力和位置，带轮螺丝是否有松动；');
+INSERT INTO `maintain_lib` VALUES ('62', '保养三期', '3', '3. 检查最低点角度（172°/178°高速±2°）是否正确；');
+INSERT INTO `maintain_lib` VALUES ('63', '保养三期', '3', '4. 检查主轴转动应活络、运行平稳、停车位置准确；');
+INSERT INTO `maintain_lib` VALUES ('64', '保养三期', '3', '5. 检查大连杆是否润滑良好，大连杆是否有磨损；');
+INSERT INTO `maintain_lib` VALUES ('65', '保养三期', '3', '6. 检查100度时跳线杆高度一致，换色轻松准确；');
+INSERT INTO `maintain_lib` VALUES ('66', '保养三期', '3', '7. 检查针杆架间隙，是否有松动；');
+INSERT INTO `maintain_lib` VALUES ('67', '保养三期', '3', '8. 检查针杆压下时针杆的上下间隙是否正常；');
+INSERT INTO `maintain_lib` VALUES ('68', '保养三期', '3', '9. 检查针下位时与针板孔的左右位置是否居中');
+INSERT INTO `maintain_lib` VALUES ('69', '保养三期', '3', '10. 检查针板孔是否有毛刺；');
+INSERT INTO `maintain_lib` VALUES ('70', '保养三期', '3', '11. 检查压脚是否变形、高度（0.5-1.5mm）是否准确');
+INSERT INTO `maintain_lib` VALUES ('71', '保养三期', '3', '12. 检查旋梭轴轴向窜动无明显间隙');
+INSERT INTO `maintain_lib` VALUES ('72', '保养三期', '3', '13. 检查伞齿轮间隙范围0.1～0.15mm');
+INSERT INTO `maintain_lib` VALUES ('73', '保养三期', '3', '14.检查并调整针与旋梭的位置，针位高低用夹具定位，间隙0.1～0.3mm。');
+INSERT INTO `maintain_lib` VALUES ('74', '保养三期', '3', '15. 检查剪线动定刀压线簧部件是否完好，位置是否正确，切线工作是否正常；');
+INSERT INTO `maintain_lib` VALUES ('75', '保养三期', '3', '16. 检查扣线部件是否完好，位置是否正确，扣线工作是否正常；');
+INSERT INTO `maintain_lib` VALUES ('76', '保养三期', '3', '17. 检查勾线机构部件是否完好，位置是否正确，勾线工作是否正常；');
+INSERT INTO `maintain_lib` VALUES ('77', '保养三期', '3', '18. 检查金片装置调整位置是否准确，工作是否正常');
+INSERT INTO `maintain_lib` VALUES ('78', '保养三期', '3', '19. 检查X、Y同步带张力');
+INSERT INTO `maintain_lib` VALUES ('79', '保养三期', '3', '20. 检查X、Y伺服电机皮带张力');
+INSERT INTO `maintain_lib` VALUES ('80', '保养三期', '3', '21. 检查X、Y绣框间隙是否正常，轴承、型材是否有磨损');
+INSERT INTO `maintain_lib` VALUES ('81', '保养三期', '3', '22. 检查毛毡是否磨损，绣框是否与台板摩擦（标准2mm）');
+INSERT INTO `maintain_lib` VALUES ('82', '保养三期', '3', '23. 检查台板、防尘板是否平整');
+INSERT INTO `maintain_lib` VALUES ('83', '保养三期', '3', '24. 检查移框时无卡顿、无杂音；');
 
 -- ----------------------------
 -- Table structure for `maintain_members`
@@ -495,7 +598,7 @@ DROP TABLE IF EXISTS `repair_actual_info`;
 CREATE TABLE `repair_actual_info` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `repair_record_id` int(10) unsigned NOT NULL COMMENT '对应的维修记录，一次报修可以有多个实际维修',
-  `issue_position` int(10) unsigned NOT NULL COMMENT '维修部位',
+  `issue_position` varchar(255) NOT NULL COMMENT '维修部位ID号，多个部位时用逗号隔开',
   `issue_description` text NOT NULL COMMENT '实际维修中的“故障描述”, 也用于“经验库”中的“问题描述”',
   `repair_method` text NOT NULL COMMENT '实际维修中的“处理方法”',
   `after_resolve_pictures` varchar(1000) DEFAULT NULL COMMENT '解决后的照片（保存文件路径）',
@@ -504,14 +607,22 @@ CREATE TABLE `repair_actual_info` (
   PRIMARY KEY (`id`),
   KEY `fk_rai_repair_record_id` (`repair_record_id`),
   KEY `fk_rai_issue_position` (`issue_position`),
-  CONSTRAINT `fk_rai_issue_position` FOREIGN KEY (`issue_position`) REFERENCES `issue_position_list` (`id`),
   CONSTRAINT `fk_rai_repair_record_id` FOREIGN KEY (`repair_record_id`) REFERENCES `repair_record` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of repair_actual_info
 -- ----------------------------
-INSERT INTO `repair_actual_info` VALUES ('39', '4', '2', '问题描述,实际发生了xx22222--0831add', '实际维修方法22222--0831add', 'D:/images/repair_actual_info_img/ mph--all-data_FILE_TYPE_REPAIR_ACTUAL_INFO_IMAGE_2018-08-31-09-14-12_1.png,D:/images/repair_actual_info_img/ mph--all-data_FILE_TYPE_REPAIR_ACTUAL_INFO_IMAGE_2018-08-31-09-18-14_2.png,D:/images/repair_actual_info_img/ mph--all-data_FILE_TYPE_REPAIR_ACTUAL_INFO_IMAGE_2018-08-31-09-21-10_2.png', '3', '3');
+INSERT INTO `repair_actual_info` VALUES ('1', '4', '3,5,6', '3在开头desss', 'rrrrrrr', null, '0', '0');
+INSERT INTO `repair_actual_info` VALUES ('2', '4', '3', '3单独', 'rrrr', null, '0', '0');
+INSERT INTO `repair_actual_info` VALUES ('3', '4', '1,3', '3在结尾desss', 'rrrrrmm', null, '0', '0');
+INSERT INTO `repair_actual_info` VALUES ('39', '4', '2,3,4,11,12,13,22', '3在中间，问题描述,实际发生了xx22222--0831add', '实际维修方法22222--0831add', 'D:/images/repair_actual_info_img/ mph--all-data_FILE_TYPE_REPAIR_ACTUAL_INFO_IMAGE_2018-08-31-09-14-12_1.png,D:/images/repair_actual_info_img/ mph--all-data_FILE_TYPE_REPAIR_ACTUAL_INFO_IMAGE_2018-08-31-09-18-14_2.png,D:/images/repair_actual_info_img/ mph--all-data_FILE_TYPE_REPAIR_ACTUAL_INFO_IMAGE_2018-08-31-09-21-10_2.png', '3', '3');
+INSERT INTO `repair_actual_info` VALUES ('40', '4', '2', '没有3，ddddss', 'rrrrrmethd', null, '0', '0');
+INSERT INTO `repair_actual_info` VALUES ('41', '4', '1', '没有3，desss', 'rr', null, '0', '0');
+INSERT INTO `repair_actual_info` VALUES ('42', '4', '5,13', '没有3，但是有13des', 'rrr', null, '0', '0');
+INSERT INTO `repair_actual_info` VALUES ('43', '4', '13', '没有3，但是有13des', 'rrrraaa', null, '0', '0');
+INSERT INTO `repair_actual_info` VALUES ('44', '4', '13,14', '没有3，但是有13des', 'rrrbbb', null, '0', '0');
+INSERT INTO `repair_actual_info` VALUES ('45', '4', '30', '没有3，但是有30des', 'rr333', null, '0', '0');
 
 -- ----------------------------
 -- Table structure for `repair_customer_feedback`
@@ -573,7 +684,7 @@ INSERT INTO `repair_members` VALUES ('4', '4', '3');
 INSERT INTO `repair_members` VALUES ('5', '4', '4');
 INSERT INTO `repair_members` VALUES ('6', '5', '4');
 INSERT INTO `repair_members` VALUES ('7', '6', '4');
-INSERT INTO `repair_members` VALUES ('8', '7', '4');
+INSERT INTO `repair_members` VALUES ('8', '7', '14');
 
 -- ----------------------------
 -- Table structure for `repair_record`

@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50553
 File Encoding         : 65001
 
-Date: 2018-09-05 09:19:49
+Date: 2018-09-11 14:59:21
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -537,7 +537,7 @@ DROP TABLE IF EXISTS `repair_actual_info`;
 CREATE TABLE `repair_actual_info` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `repair_record_id` int(10) unsigned NOT NULL COMMENT '对应的维修记录，一次报修可以有多个实际维修',
-  `issue_position` int(10) unsigned NOT NULL COMMENT '维修部位',
+  `issue_position` varchar(255) NOT NULL COMMENT '维修部位ID号，多个部位时用逗号隔开',
   `issue_description` text NOT NULL COMMENT '实际维修中的“故障描述”, 也用于“经验库”中的“问题描述”',
   `repair_method` text NOT NULL COMMENT '实际维修中的“处理方法”',
   `after_resolve_pictures` varchar(1000) DEFAULT NULL COMMENT '解决后的照片（保存文件路径）',
@@ -546,7 +546,6 @@ CREATE TABLE `repair_actual_info` (
   PRIMARY KEY (`id`),
   KEY `fk_rai_repair_record_id` (`repair_record_id`),
   KEY `fk_rai_issue_position` (`issue_position`),
-  CONSTRAINT `fk_rai_issue_position` FOREIGN KEY (`issue_position`) REFERENCES `issue_position_list` (`id`),
   CONSTRAINT `fk_rai_repair_record_id` FOREIGN KEY (`repair_record_id`) REFERENCES `repair_record` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

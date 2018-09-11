@@ -62,7 +62,7 @@
     <result column="machineCustomerName" jdbcType="VARCHAR" property="machineCustomerName"/>
     <result column="machineAgentName" jdbcType="VARCHAR" property="machineAgentName"/>
     <result column="facory_date" jdbcType="DATE" property="facoryDate"/>
-    <result column="issuePositionName" jdbcType="VARCHAR" property="issuePositionName"/>
+    <result column="issuePositionList" jdbcType="VARCHAR" property="issuePositionList"/>
     <result column="repairChargePersonName" jdbcType="VARCHAR" property="repairChargePersonName"/>
     <result column="repairChargePersonPhone" jdbcType="VARCHAR" property="repairChargePersonPhone"/>
     <result column="machineCustomerPhone" jdbcType="VARCHAR" property="machineCustomerPhone"/>
@@ -199,8 +199,7 @@
     userOfSendbackConfirmedPerson.name as sendbackConfirmedPersonName,
     a.name as machineAgentName,
     m.facory_date,
-    rai.issue_position,
-    ipl.`name` as issuePositionName,
+    rai.issue_position as issuePositionList,
     userOfRepairChargePerson.`name` as repairChargePersonName,
     userOfRepairChargePerson.`phone` as repairChargePersonPhone,
     userOfCustomerInMachine.phone as machineCustomerPhone,
@@ -228,7 +227,7 @@
     LEFT JOIN `user` as userOfCustomerInMachine ON userOfCustomerInMachine.id = m.customer
     LEFT JOIN agent as a ON a.id = userOfCustomerInMachine.agent
     LEFT JOIN repair_actual_info as rai ON rai.repair_record_id = rr.id
-    LEFT JOIN issue_position_list as ipl ON ipl.id = rai.issue_position
+--     LEFT JOIN issue_position_list as ipl ON ipl.id = rai.issue_position
     LEFT JOIN user as userOfRepairChargePerson ON userOfRepairChargePerson.id = rr.repair_charge_person
     LEFT JOIN user as userOfCustomerInRepairRecord ON userOfCustomerInRepairRecord.id = rr.customer
     LEFT JOIN repair_request_info as rri ON rri.id = rr.repair_request_info
