@@ -64,7 +64,7 @@ public class RepairActualInfoController {
     @Transactional(rollbackFor = Exception.class)
     @PostMapping("/add")
     public Result add(@RequestParam String repairActualInfo,
-                      @RequestParam List<String> partsInfoList) {
+                      @RequestParam List<PartsInfo> partsInfoList) {
         String message = null;
         RepairActualInfo repairActualInfo1 = JSON.parseObject(repairActualInfo, RepairActualInfo.class);
 
@@ -100,14 +100,15 @@ public class RepairActualInfoController {
             repairActualInfoService.saveAndGetID(repairActualInfo1);
 
             PartsInfo partsInfo1 = null;
-            for(int i=0; i<partsInfoList.size(); i++){
-                partsInfo1 = JSON.parseObject( partsInfoList.get(i), PartsInfo.class);
-                if( null == partsInfo1) {
-                    message = " partsInfo 解析出错！" ;
-                    throw new RuntimeException();
-                }
-                partsInfo1.setRepairActualInfoId(repairActualInfo1.getId());
-                partsInfoService.save(partsInfo1);
+            for(PartsInfo partsInfoX: partsInfoList){
+//                partsInfo1 = JSON.parseObject( partsInfoList.get(i), PartsInfo.class);
+//                partsInfo1 = partsInfoList.get(i);
+//                if( null == partsInfo1) {
+//                    message = " partsInfo 解析出错！" ;
+//                    throw new RuntimeException();
+//                }
+                partsInfoX.setRepairActualInfoId(repairActualInfo1.getId());
+                partsInfoService.save(partsInfoX);
             }
         } catch (Exception ex) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
