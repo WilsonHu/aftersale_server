@@ -1,10 +1,19 @@
 package com.eservice.api.model.repair_record;
 
-import javax.persistence.*;
+import javax.persistence.Column;
 import java.util.Date;
-import java.util.List;
 
 public class RepairRecordInfo extends RepairRecord {
+
+    public String getRepairActualInfoId() {
+        return repairActualInfoId;
+    }
+
+    public void setRepairActualInfoId(String repairActualInfoId) {
+        this.repairActualInfoId = repairActualInfoId;
+    }
+
+    private String repairActualInfoId;
 
     /**
      * 对应的订单号,来自sinsim_db.machine_order.order_num

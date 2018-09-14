@@ -1,7 +1,6 @@
 package com.eservice.api.dao;
 
 import com.eservice.api.core.Mapper;
-import com.eservice.api.model.machine.MachineBaseRecordInfo;
 import com.eservice.api.model.repair_record.RepairRecord;
 import com.eservice.api.model.repair_record.RepairRecordInfo;
 import org.apache.ibatis.annotations.Param;
@@ -26,6 +25,7 @@ public interface RepairRecordMapper extends Mapper<RepairRecord> {
                                                    @Param("queryStartRepairEndTime")String queryStartRepairEndTime,
                                                    @Param("queryFinishRepairEndTime")String queryFinishRepairEndTime,
                                                    @Param("repairRecordId")String repairRecordId,
+                                                   @Param("repairActualInfoId") String repairActualInfoId,
                                                    @Param("isFuzzy")boolean isFuzzy);
 
     List<RepairRecordInfo> selectRepairTaskByUser(@Param("userName")String userName);

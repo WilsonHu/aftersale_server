@@ -114,6 +114,7 @@ public class RepairRecordController {
                                           String queryStartRepairEndTime,
                                           String queryFinishRepairEndTime,
                                           String repairRecordId,
+                                          String repairActualInfoId,
                                           boolean isFuzzy) {
         PageHelper.startPage(page, size);
         List<RepairRecordInfo> list = repairRecordService.getRepairRecordInfoList(
@@ -131,6 +132,7 @@ public class RepairRecordController {
                 queryStartRepairEndTime,
                 queryFinishRepairEndTime,
                 repairRecordId,
+                repairActualInfoId,
                 isFuzzy);
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);

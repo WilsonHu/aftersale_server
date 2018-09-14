@@ -2,7 +2,6 @@ package com.eservice.api.model.parts_info;
 
 import com.eservice.api.model.repair_record.RepairRecordInfo;
 
-import javax.persistence.Column;
 import java.util.Date;
 
 public class PartsInfoWithRepairRecordInfo extends RepairRecordInfo {
@@ -118,14 +117,14 @@ public class PartsInfoWithRepairRecordInfo extends RepairRecordInfo {
         this.partsInfoId = partsInfoId;
     }
 
-    private String repairActualInfoId;
-
-    public String getRepairActualInfoId() {
-        return repairActualInfoId;
-    }
-
-    public void setRepairActualInfoId(String repairActualInfoId) {
-        this.repairActualInfoId = repairActualInfoId;
-    }
+//    private String repairActualInfoId;
+//
+//    public String getRepairActualInfoId() {
+//        return repairActualInfoId;
+//    }
+//
+//    public void setRepairActualInfoId(String repairActualInfoId) {
+//        this.repairActualInfoId = repairActualInfoId;
+//    }
 
 }

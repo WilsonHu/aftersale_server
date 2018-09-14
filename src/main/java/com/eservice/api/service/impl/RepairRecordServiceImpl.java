@@ -41,6 +41,7 @@ public class RepairRecordServiceImpl extends AbstractService<RepairRecord> imple
                                                            String queryStartRepairEndTime,
                                                            String queryFinishRepairEndTime,
                                                            String repairRecordId,
+                                                           String repairActualInfoId,
                                                            boolean isFuzzy){
         return repairRecordMapper.getRepairRecordInfoList(
                 nameplate,
@@ -57,6 +58,7 @@ public class RepairRecordServiceImpl extends AbstractService<RepairRecord> imple
                 queryStartRepairEndTime,
                 queryFinishRepairEndTime,
                 repairRecordId,
+                repairActualInfoId,
                 isFuzzy);
 
     }

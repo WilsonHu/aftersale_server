@@ -82,6 +82,7 @@
 		<result column="repairFeedbackRepairResult" jdbcType="VARCHAR" property="repairFeedbackRepairResult"/>
 		<result column="machineAgentId" jdbcType="VARCHAR" property="machineAgentId"/>
 		<result column="machineCustomerCompanyId" jdbcType="VARCHAR" property="machineCustomerCompanyId"/>
+		<result column="repairActualInfoId" jdbcType="VARCHAR" property="repairActualInfoId"/>
 	</resultMap>
 	<select id="selectByNameplate" resultMap="BaseResultMap">
     SELECT *
@@ -113,6 +114,7 @@
 		rri.content as repairRequestContent,
 		rri.voice as repairRequestVoice,
 		rri.pictures as repairRequestPictures,
+		rai.id as repairActualInfoId,
 		rai.issue_description as repairActualIssueDescription,
 		rai.repair_method as repairActualMethod,
 		rai.after_resolve_pictures as afterResolvePictures,
@@ -194,6 +196,9 @@
 		</if>
 		<if test="repairRecordId != null and repairRecordId != ''">
 			AND rr.id = #{repairRecordId}
+		</if>
+		<if test="repairActualInfoId != null and repairActualInfoId != ''">
+			AND rai.id = #{repairActualInfoId}
 		</if>
 
 		<if test="queryStartRepairCreateTime!=null and queryStartRepairCreateTime != '' ">
