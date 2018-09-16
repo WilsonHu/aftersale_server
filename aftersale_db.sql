@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50553
 File Encoding         : 65001
 
-Date: 2018-09-11 14:59:21
+Date: 2018-09-16 14:32:47
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -583,13 +583,15 @@ CREATE TABLE `parts_info` (
   KEY `fk_pi_sendback_confirmed_person` (`sendback_confirmed_person`),
   CONSTRAINT `fk_pi_repair_actual_info` FOREIGN KEY (`repair_actual_info_id`) REFERENCES `repair_actual_info` (`id`),
   CONSTRAINT `fk_pi_sendback_confirmed_person` FOREIGN KEY (`sendback_confirmed_person`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=48 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=58 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of parts_info
 -- ----------------------------
-INSERT INTO `parts_info` VALUES ('46', '上轴部件222-0831add-part1', 'xs', 'pram222-0831add', '39', '3', null, null, null, null, null);
-INSERT INTO `parts_info` VALUES ('47', '上轴部件222-0831add-part2', 'xs', 'pram222-0831add', '39', '3', null, null, null, null, null);
+INSERT INTO `parts_info` VALUES ('54', '上轴部件222-add-part-byBody-0916', 'xs', 'pram222-add-byBody-0916', '55', '3', null, null, null, null, null);
+INSERT INTO `parts_info` VALUES ('55', '上轴部件nnnnnnnn-add-part-byBody-0916-test1-only-one-part', 'xs', 'pramsssss-add-byBody-0916-test1-only-one-part', '56', '3', null, null, null, null, null);
+INSERT INTO `parts_info` VALUES ('56', '上轴部件nnnnnnnn-add-part-byBody-0916-test2-two-parts-1', 'xs', 'pramsssss-add-byBody-0916-test2-two-parts-1', '57', '3', null, null, null, null, null);
+INSERT INTO `parts_info` VALUES ('57', '上轴部件nnnnnnnn-add-part-byBody-0916-test2-two-parts-2', 'xs', 'pramsssss-add-byBody-0916-test2-only-two-parts-2', '57', '3', null, null, null, null, null);
 
 -- ----------------------------
 -- Table structure for `repair_actual_info`
@@ -608,7 +610,7 @@ CREATE TABLE `repair_actual_info` (
   KEY `fk_rai_repair_record_id` (`repair_record_id`),
   KEY `fk_rai_issue_position` (`issue_position`),
   CONSTRAINT `fk_rai_repair_record_id` FOREIGN KEY (`repair_record_id`) REFERENCES `repair_record` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=58 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of repair_actual_info
@@ -623,6 +625,9 @@ INSERT INTO `repair_actual_info` VALUES ('42', '4', '5,13', '没有3，但是有
 INSERT INTO `repair_actual_info` VALUES ('43', '4', '13', '没有3，但是有13des', 'rrrraaa', null, '0', '0');
 INSERT INTO `repair_actual_info` VALUES ('44', '4', '13,14', '没有3，但是有13des', 'rrrbbb', null, '0', '0');
 INSERT INTO `repair_actual_info` VALUES ('45', '4', '30', '没有3，但是有30des', 'rr333', null, '0', '0');
+INSERT INTO `repair_actual_info` VALUES ('55', '4', '2', '问题描述,实际发生了xx22222--0916add-byBody--updated', '实际维修方法22222--0916add-byBody-updated', 'D:/images/repair_actual_info_img/ mph--all-data_FILE_TYPE_REPAIR_ACTUAL_INFO_IMAGE_2018-09-16-11-43-18_1.png,D:/images/repair_actual_info_img/ mph--all-data_FILE_TYPE_REPAIR_ACTUAL_INFO_IMAGE_2018-09-16-11-45-59_1.png,D:/images/repair_actual_info_img/ mph--all-data_FILE_TYPE_REPAIR_ACTUAL_INFO_IMAGE_2018-09-16-11-50-19_2.png', '3', '3');
+INSERT INTO `repair_actual_info` VALUES ('56', '4', '2', '问题描述,实际发生了xx22222--0916add-byBody--updated-test1-only-one-part', '实际维修方法--0916add-byBody-updatedtest1-only-one-part', 'D:/images/repair_actual_info_img/ mph--all-data_FILE_TYPE_REPAIR_ACTUAL_INFO_IMAGE_2018-09-16-13-52-23_1.png,D:/images/repair_actual_info_img/ mph--all-data_FILE_TYPE_REPAIR_ACTUAL_INFO_IMAGE_2018-09-16-13-56-12_2.png,D:/images/repair_actual_info_img/ mph--all-data_FILE_TYPE_REPAIR_ACTUAL_INFO_IMAGE_2018-09-16-13-59-10_3.png', '3', '3');
+INSERT INTO `repair_actual_info` VALUES ('57', '4', '2', '问题描述,实际发生了xx22222--0916add-byBody--updated-test1-only-one-part', '实际维修方法--0916add-byBody-updatedtest1-only-one-part', 'D:/images/repair_actual_info_img/ mph--all-data_FILE_TYPE_REPAIR_ACTUAL_INFO_IMAGE_2018-09-16-14-20-10_1.png,D:/images/repair_actual_info_img/ mph--all-data_FILE_TYPE_REPAIR_ACTUAL_INFO_IMAGE_2018-09-16-14-24-51_1.png,D:/images/repair_actual_info_img/ mph--all-data_FILE_TYPE_REPAIR_ACTUAL_INFO_IMAGE_2018-09-16-14-27-51_3.png', '3', '3');
 
 -- ----------------------------
 -- Table structure for `repair_customer_feedback`
@@ -725,7 +730,7 @@ CREATE TABLE `repair_record` (
 -- Records of repair_record
 -- ----------------------------
 INSERT INTO `repair_record` VALUES ('3', 'xx11', '6', 'mph333', '11', '1', '2018-07-06', '3', '2018-07-24 10:08:45', '2018-07-25 10:08:50', '20', '5', '2018-07-25 10:38:25', '2018-08-08 11:08:45', '1');
-INSERT INTO `repair_record` VALUES ('4', null, '6', 'mph--all-data', '12', '1', '2018-07-06', '4', '2018-07-24 10:37:35', '2018-08-31 09:21:10', '1', '7', '2018-07-19 11:09:49', '2018-07-25 10:38:32', '1');
+INSERT INTO `repair_record` VALUES ('4', null, '6', 'mph--all-data', '12', '1', '2018-07-06', '4', '2018-07-24 10:37:35', '2018-09-16 14:27:51', '1', '7', '2018-07-19 11:09:49', '2018-07-25 10:38:32', '1');
 INSERT INTO `repair_record` VALUES ('5', null, '7', 'mph788', '13', '1', '2018-07-06', '4', null, '2018-07-25 10:15:55', null, '1', '2018-07-19 13:41:09', null, null);
 INSERT INTO `repair_record` VALUES ('6', null, '7', 'mph333', '14', '0', '2018-07-06', '3', null, '2018-07-26 10:15:59', null, '2', '2018-07-19 13:44:14', null, null);
 INSERT INTO `repair_record` VALUES ('7', null, '8', 'mph2233', '15', '0', '2018-07-06', '3', null, '2018-07-26 10:16:03', null, '4', '2018-07-19 13:45:23', '2018-08-15 13:15:08', null);

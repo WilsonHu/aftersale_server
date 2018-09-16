@@ -6,6 +6,7 @@ import com.eservice.api.model.machine.Machine;
 import com.eservice.api.model.parts_info.PartsAllInfo;
 import com.eservice.api.model.parts_info.PartsInfo;
 import com.eservice.api.model.repair_actual_info.RepairActualInfo;
+import com.eservice.api.model.repair_actual_info.RepairActualInfoWithPartsInfo;
 import com.eservice.api.model.repair_record.RepairRecord;
 import com.eservice.api.service.common.CommonService;
 import com.eservice.api.service.common.Constant;
@@ -18,10 +19,7 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
@@ -63,17 +61,29 @@ public class RepairActualInfoController {
      */
     @Transactional(rollbackFor = Exception.class)
     @PostMapping("/add")
-    public Result add(@RequestParam String repairActualInfo,
-                      @RequestParam List<String> partsInfoList) {
+    public Result add(@RequestBody RepairActualInfoWithPartsInfo repairActualInfoWithPartsInfo){
         String message = null;
-        RepairActualInfo repairActualInfo1 = JSON.parseObject(repairActualInfo, RepairActualInfo.class);
+        RepairActualInfo repairActualInfo1 = repairActualInfoWithPartsInfo.getRepairActualInfo();
+        PartsInfo partsInfo1 = null;
+        List<PartsInfo> partsInfoList = repairActualInfoWithPartsInfo.getPartsInfoList();
 
         try {
+            if( null == repairActualInfo1) {
+                message = " repairActualInfo 获取失败！";
+                throw new RuntimeException();
+            }
+            if( null == partsInfoList) {
+                message = " partsInfoList 获取失败！";
+                throw new RuntimeException();
+            }
+
             /**
              * 如果有失败的情况，要把对应的配件信息删除，再删除该 repairActualInfo，
              * 然后全新增加repairActualInfo和配件信息。
              */
-            List<RepairActualInfo> repairActualInfoInUpdating = repairActualInfoService.getRepairActualInfoInUpdating(repairActualInfo1.getRepairRecordId().toString());
+            List<RepairActualInfo> repairActualInfoInUpdating;
+            repairActualInfoService.getRepairActualInfoInUpdating(repairActualInfo1.getRepairRecordId().toString());
+            repairActualInfoInUpdating = repairActualInfoService.getRepairActualInfoInUpdating(repairActualInfo1.getRepairRecordId().toString());
             for(RepairActualInfo repairActualInfoInUpdatingX: repairActualInfoInUpdating ){
                 if(repairActualInfoInUpdatingX != null){
                     /**
@@ -93,17 +103,12 @@ public class RepairActualInfoController {
                 }
             }
 
-            if( null == repairActualInfo1) {
-                message = " repairActualInfo解析出错！";
-                throw new RuntimeException();
-            }
             repairActualInfoService.saveAndGetID(repairActualInfo1);
 
-            PartsInfo partsInfo1 = null;
             for(int i=0; i<partsInfoList.size(); i++){
-                partsInfo1 = JSON.parseObject( partsInfoList.get(i), PartsInfo.class);
+                partsInfo1 = partsInfoList.get(i);
                 if( null == partsInfo1) {
-                    message = " partsInfo 解析出错！" ;
+                    message = " partsInfo 出错！" ;
                     throw new RuntimeException();
                 }
                 partsInfo1.setRepairActualInfoId(repairActualInfo1.getId());
@@ -169,7 +174,7 @@ public class RepairActualInfoController {
                  * 多张维修图片
                  */
                 String oldPicturesPath = repairActualInfo1.getAfterResolvePictures();
-                if(oldPicturesPath.isEmpty()){
+                if(oldPicturesPath == null || oldPicturesPath.isEmpty()){
                     repairActualInfo1.setAfterResolvePictures(resultPathRepairActualImage);
                 } else {
                     repairActualInfo1.setAfterResolvePictures(oldPicturesPath +"," + resultPathRepairActualImage);
