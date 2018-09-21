@@ -32,6 +32,7 @@ public class UserController {
             return ResultGenerator.genFailResult("用户名已存在！");
         }
         user.setPassword("password");
+        user.setValid("1");
         user.setCreateTime(new Date());
         userService.save(user);
         return ResultGenerator.genSuccessResult();

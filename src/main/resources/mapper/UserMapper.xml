@@ -15,7 +15,7 @@
 		<result column="valid" jdbcType="VARCHAR" property="valid"/>
 		<result column="phone" jdbcType="VARCHAR" property="phone"/>
 		<result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
-		<result column="customer_company" jdbcType="INTEGER" property="customerCompany"/>
+		<result column="customer_company" jdbcType="VARCHAR" property="customerCompany"/>
 		<result column="address" jdbcType="VARCHAR" property="address"/>
 	</resultMap>
 	<resultMap id="UserInfoResultMap" type="com.eservice.api.model.user.UserInfo">
@@ -32,7 +32,7 @@
 		<result column="valid" jdbcType="VARCHAR" property="valid"/>
 		<result column="phone" jdbcType="VARCHAR" property="phone"/>
 		<result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
-		<result column="customer_company" jdbcType="INTEGER" property="customerCompany"/>
+		<result column="customer_company" jdbcType="VARCHAR" property="customerCompany"/>
 		<result column="address" jdbcType="VARCHAR" property="address"/>
 
 		<result column="agent_name" jdbcType="VARCHAR" property="agentName"/>
@@ -52,7 +52,7 @@
 		<result column="valid" jdbcType="VARCHAR" property="valid"/>
 		<result column="phone" jdbcType="VARCHAR" property="phone"/>
 		<result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
-		<result column="customer_company" jdbcType="INTEGER" property="customerCompany"/>
+		<result column="customer_company" jdbcType="VARCHAR" property="customerCompany"/>
 		<result column="address" jdbcType="VARCHAR" property="address"/>
 		<result column="agent_name" jdbcType="VARCHAR" property="agentName"/>
 

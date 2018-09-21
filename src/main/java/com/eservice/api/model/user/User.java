@@ -242,13 +242,13 @@ public class User implements UserDetails{
     /**
      * 该用户所属公司名称，对于没有公司的用户，可以直接用用户自己名称。
      */
-    private Integer customerCompany;
+    private String customerCompany;
 
-    public void setCustomerCompany(Integer customerCompany) {
+    public void setCustomerCompany(String customerCompany) {
         this.customerCompany = customerCompany;
     }
 
-    public Integer getCustomerCompany() {
+    public String getCustomerCompany() {
         return customerCompany;
     }
 
