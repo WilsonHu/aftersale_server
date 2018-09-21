@@ -46,8 +46,8 @@ public class SinsimProcessDBController {
                 "left join machine_order mo on mo.id=m.order_id " +
                 "left join machine_type mt on mt.id=m.machine_type " +
                 "left join contract c on c.id = mo.contract_id" +
-                " where m.status='" + com.eservice.api.service.common.Constant.MACHINE_INITIAL + "' ";
-        //需要查询原生产库中完成的机器，由于数据没有，先用默认值,有数据了再改回来MACHINE_INSTALLED TODO,
+                " where m.status='" + com.eservice.api.service.common.Constant.MACHINE_INSTALLED + "' ";
+        //需要查询原生产库中完成的机器
         String fuzzyFormat = isFuzzy ? "%" : "";
         String fuzzyKey = isFuzzy ? " like " : "=";
         if (orderNum != null && orderNum.length() > 0) {
