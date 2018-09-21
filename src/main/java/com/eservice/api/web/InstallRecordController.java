@@ -1,14 +1,17 @@
 package com.eservice.api.web;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.eservice.api.core.Result;
 import com.eservice.api.core.ResultGenerator;
+import com.eservice.api.model.install_lib.InstallLib;
 import com.eservice.api.model.install_members.InstallMembers;
 import com.eservice.api.model.install_record.InstallRecord;
 import com.eservice.api.model.install_record.InstallRecordInfo;
-import com.eservice.api.model.machine.Machine;
 import com.eservice.api.service.common.CommonUtils;
+import com.eservice.api.service.common.InstallInfoJsonData;
+import com.eservice.api.service.impl.InstallLibServiceImpl;
 import com.eservice.api.service.impl.InstallMembersServiceImpl;
 import com.eservice.api.service.impl.InstallRecordServiceImpl;
 import com.github.pagehelper.PageHelper;
@@ -19,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -35,6 +39,9 @@ public class InstallRecordController {
     private InstallRecordServiceImpl installRecordService;
     @Resource
     private InstallMembersServiceImpl installMembersService;
+
+    @Resource
+    private InstallLibServiceImpl installLibService;
 
     @PostMapping("/add")
     public Result add(@RequestBody @NotNull InstallRecord installRecord) {
@@ -151,11 +158,11 @@ public class InstallRecordController {
 
     /**
      * 根据用户(无论是负责人还是安装成员)返回他的安装待处理机器,如果用户为空则返回所有待处理的安装相关的机器。
-     *  TODO: 确认是否重复数据问题 ---应该是假数据本身问题，待后面真实数据再确认一次。
+     * TODO: 确认是否重复数据问题 ---应该是假数据本身问题，待后面真实数据再确认一次。
      */
     @PostMapping("/selectInstallTaskByUser")
     public Result selectInstallTaskByUser(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size,
-                                           @RequestParam String userName) {
+                                          @RequestParam String userName) {
         PageHelper.startPage(page, size);
         List<InstallRecordInfo> list = installRecordService.selectInstallTaskByUser(userName);
         PageInfo pageInfo = new PageInfo(list);
@@ -183,4 +190,36 @@ public class InstallRecordController {
         }
         return ResultGenerator.genSuccessResult();
     }
+
+    @PostMapping("/updateInstallInfo")
+    public Result updateInstallInfo(String installRecord, String installLibName) {
+        InstallRecord model = JSON.parseObject(installRecord, InstallRecord.class);
+        if (model == null || installLibName == null) {
+            return ResultGenerator.genFailResult("参数错误！");
+        }
+        List<InstallLib> list = installLibService.selectLibList("1", installLibName);
+        List<InstallLib> baseList = new ArrayList<InstallLib>();
+        if (installLibName != "基础项") {
+            baseList = installLibService.selectLibList("1", "基础项");
+        }
+        if (baseList.size() > 0) {
+            list.addAll(baseList);
+        }
+        List<InstallInfoJsonData> installInfoList = new ArrayList<InstallInfoJsonData>();
+        for (InstallLib item : list) {
+            InstallInfoJsonData info = new InstallInfoJsonData();
+            if (info.getIs_base_lib() == "0") {
+                continue;
+            }
+            info.setInstall_content(item.getInstallContent());
+            info.setInstall_lib_name(item.getInstallLibName());
+            info.setIs_base_lib(item.getIsBaseLib());
+            info.setInstall_value("");
+            installInfoList.add(info);
+        }
+        model.setInstallInfo(JSONArray.toJSONString(installInfoList));
+        installRecordService.update(model);
+        return ResultGenerator.genSuccessResult();
+    }
+
 }
