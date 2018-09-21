@@ -194,6 +194,16 @@ public class InstallRecordInfo extends InstallRecord {
     private String customerPhoneInInstallRecord;
 
 
+    public String getMachineCustomerId() {
+        return machineCustomerId;
+    }
+
+    public void setMachineCustomerId(String machineCustomerId) {
+        this.machineCustomerId = machineCustomerId;
+    }
+
+    private String machineCustomerId;
+
     /**
      * 调试员
      */

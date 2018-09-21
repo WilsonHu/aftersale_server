@@ -44,6 +44,7 @@
 
 		<result column="order_num" jdbcType="VARCHAR" property="orderNum"/>
 		<result column="machineCustomerName" jdbcType="VARCHAR" property="machineCustomerName"/>
+		<result column="machineCustomerId" jdbcType="VARCHAR" property="machineCustomerId"/>
 		<result column="machineAgentName" jdbcType="VARCHAR" property="machineAgentName"/>
 		<result column="facory_date" jdbcType="DATE" property="facoryDate"/>
 		<result column="issuePositionList" jdbcType="VARCHAR" property="issuePositionList"/>
@@ -94,6 +95,7 @@
 		SELECT
 		m.order_num,
 		userOfCustomerInMachine.`name` as machineCustomerName,
+		userOfCustomerInMachine.id AS machineCustomerId,
 		-- parts_info.*,
 		-- userOfSendbackConfirmedPerson.name as sendbackConfirmedPersonName,
 		a.name as machineAgentName,

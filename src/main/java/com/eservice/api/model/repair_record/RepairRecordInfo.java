@@ -29,6 +29,16 @@ public class RepairRecordInfo extends RepairRecord {
         this.orderNum = orderNum;
     }
 
+    public String getMachineCustomerId() {
+        return machineCustomerId;
+    }
+
+    public void setMachineCustomerId(String machineCustomerId) {
+        this.machineCustomerId = machineCustomerId;
+    }
+
+    private String machineCustomerId;
+
     /**
      * customer索引转换实际名字,来自 machine.customer-->user.name
      */

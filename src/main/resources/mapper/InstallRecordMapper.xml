@@ -58,6 +58,7 @@
     <!--<result column="old_machine_check" jdbcType="VARCHAR" property="oldMachineCheck" />-->
 
     <result column="machineCustomerName" jdbcType="VARCHAR" property="machineCustomerName" />
+    <result column="machineCustomerId" jdbcType="VARCHAR" property="machineCustomerId" />
     <result column="installRecordCustomerName" jdbcType="VARCHAR" property="customerInInstallRecord" />
     <result column="machineCustomerPhone" jdbcType="VARCHAR" property="machineCustomerPhone" />
     <result column="machineAgentName" jdbcType="VARCHAR" property="machineAgentName" />
@@ -81,6 +82,7 @@
     ir.id as installRecordId,
     ir.*,
     userOfCustomerInMachine.name AS machineCustomerName,    -- 机器的客户的名称
+    userOfCustomerInMachine.id AS machineCustomerId,
     userOfCustomerInMachine.phone AS machineCustomerPhone,  -- 机器的客户的电话
     agentOfCustomerInMachine.`name` AS machineAgentName,    -- 机器的客户的代理商的名称
     agentOfCustomerInMachine.phone AS machineAgentPhone,    -- 机器的客户的代理商的电话
@@ -116,6 +118,7 @@
     ir.id  as installRecordId,
     ir.*,
     userOfCustomerInMachine.name AS machineCustomerName,                  -- 机器的客户的名称
+    userOfCustomerInMachine.id AS machineCustomerId,
     userOfCustomerInMachine.phone AS machineCustomerPhone,                -- 机器的客户的电话
     userOfCustomerInMachine.agent as machineAgentId,                      -- 机器的客户的代理商的ID号
     userOfCustomerInMachine.customer_company as machineCustomerCompanyId, -- 机器的客户的公司的ID号

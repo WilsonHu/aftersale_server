@@ -55,6 +55,7 @@
       <result column="maintainChargePersonName" jdbcType="VARCHAR" property="maintainChargePersonName" />
       <result column="maintainChargePersonPhone" jdbcType="VARCHAR" property="maintainChargePersonPhone" />
       <result column="machineCustomerName" jdbcType="VARCHAR" property="machineCustomerName" />
+      <result column="machineCustomerId" jdbcType="VARCHAR" property="machineCustomerId" />
       <result column="machineCustomerPhone" jdbcType="VARCHAR" property="machineCustomerPhone" />
       <result column="agent_name" jdbcType="VARCHAR" property="machineAgentName" />
       <result column="agent_phone" jdbcType="VARCHAR" property="machineAgentPhone" />
@@ -74,6 +75,7 @@
   <select id="getMaintainRecordInfoList" resultMap="MaintainRecordInfoMap">
       SELECT
       userOfCustomerInMachine.name as machineCustomerName,
+      userOfCustomerInMachine.id as machineCustomerId,
       userOfCustomerInMachine.phone as machineCustomerPhone,
       userOfCustomerInMachine.agent as machineAgentId,
       userOfCustomerInMachine.customer_company as machineCustomerCompanyId,
