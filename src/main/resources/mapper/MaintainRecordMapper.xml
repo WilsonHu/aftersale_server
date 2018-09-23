@@ -97,7 +97,7 @@
       userOfCustomerInMaintainRecord.address as customerAddressInMaintainRecord,
       userOfCustomerInMaintainRecord.name  as customerNameInMaintainRecord,
       userOfCustomerInMaintainRecord.phone as customerPhoneInMaintainRecord,
-      userOfMaintainChargePerson.name AS maintain_charge_person_name,
+      userOfMaintainChargePerson.name AS maintainChargePersonName,
       userOfMaintainChargePerson.phone as maintainChargePersonPhone,
       mcf.customer_mark as maintainFeedbackCustomerMark,
       mcf.customer_suggestion as maintainFeedbackCustomerSuggestion

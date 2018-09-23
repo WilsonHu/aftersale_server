@@ -5,11 +5,11 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.eservice.api.core.Result;
 import com.eservice.api.core.ResultGenerator;
-import com.eservice.api.model.machine.Machine;
 import com.eservice.api.model.maintain_lib.MaintainLib;
 import com.eservice.api.model.maintain_members.MaintainMembers;
 import com.eservice.api.model.maintain_record.MaintainRecord;
 import com.eservice.api.model.maintain_record.MaintainRecordInfo;
+import com.eservice.api.model.user.User;
 import com.eservice.api.service.common.MaintainContentData;
 import com.eservice.api.service.common.MaintainData;
 import com.eservice.api.service.impl.MaintainLibServiceImpl;
@@ -165,7 +165,7 @@ public class MaintainRecordController {
      */
     @PostMapping("/selectMaintainTaskByUser")
     public Result selectMaintainTaskByUser(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size,
-                                            @RequestParam String userName) {
+                                           @RequestParam String userName) {
         PageHelper.startPage(page, size);
         List<MaintainRecordInfo> list = maintainRecordService.selectMaintainTaskByUser(userName);
         PageInfo pageInfo = new PageInfo(list);
@@ -186,6 +186,15 @@ public class MaintainRecordController {
             model.setUpdateTime(new Date());
             model.setMaintainStatus(com.eservice.api.service.common.Constant.MAINTAIN_STATUS_ASSIGNED);
             maintainRecordService.update(model);
+            List<User> list = maintainMembersService.getMembersByMaintainRecordId(model.getId().toString());
+            for (User u : list) {
+                for (MaintainMembers m : members) {
+                    if (m.getUserId() == u.getId()) {
+                        members.remove(m);
+                        break;
+                    }
+                }
+            }
             maintainMembersService.save(members);
         } catch (Exception ex) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();

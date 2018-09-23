@@ -4,11 +4,10 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.eservice.api.core.Result;
 import com.eservice.api.core.ResultGenerator;
-import com.eservice.api.model.machine.Machine;
-import com.eservice.api.model.machine.MachineBaseRecordInfo;
 import com.eservice.api.model.repair_members.RepairMembers;
 import com.eservice.api.model.repair_record.RepairRecord;
 import com.eservice.api.model.repair_record.RepairRecordInfo;
+import com.eservice.api.model.user.User;
 import com.eservice.api.service.common.CommonUtils;
 import com.eservice.api.service.impl.RepairMembersServiceImpl;
 import com.eservice.api.service.impl.RepairRecordServiceImpl;
@@ -164,6 +163,15 @@ public class RepairRecordController {
             model.setUpdateTime(new Date());
             model.setStatus(com.eservice.api.service.common.Constant.REPAIR_STATUS_SIGNED_TO_REPAIRER);
             repairRecordService.update(model);
+            List<User> list = repairMembersService.getMembersByRepairRecordId(model.getId().toString());
+            for (User u : list) {
+                for (RepairMembers m : members) {
+                    if (m.getUserId() == u.getId()) {
+                        members.remove(m);
+                        break;
+                    }
+                }
+            }
             repairMembersService.save(members);
         } catch (Exception ex) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
@@ -187,6 +195,15 @@ public class RepairRecordController {
             model.setStatus(com.eservice.api.service.common.Constant.REPAIR_STATUS_SIGNED_TO_REPAIRER);
             model.setRepairRecordNum(CommonUtils.generateSequenceNo());
             repairRecordService.save(model);// add a new record
+            List<User> list = repairMembersService.getMembersByRepairRecordId(model.getId().toString());
+            for (User u : list) {
+                for (RepairMembers m : members) {
+                    if (m.getUserId() == u.getId()) {
+                        members.remove(m);
+                        break;
+                    }
+                }
+            }
             repairMembersService.save(members);
 
             //update the old record
