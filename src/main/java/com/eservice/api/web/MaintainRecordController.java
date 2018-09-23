@@ -195,7 +195,9 @@ public class MaintainRecordController {
                     }
                 }
             }
-            maintainMembersService.save(members);
+            if (members.size() > 0) {
+                maintainMembersService.save(members);
+            }
         } catch (Exception ex) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return ResultGenerator.genFailResult("数据保存出错！" + ex.getMessage());

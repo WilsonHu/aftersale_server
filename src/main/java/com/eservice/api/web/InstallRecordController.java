@@ -193,7 +193,9 @@ public class InstallRecordController {
                     }
                 }
             }
-            installMembersService.save(members);
+            if (members.size() > 0) {
+                installMembersService.save(members);
+            }
         } catch (Exception ex) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return ResultGenerator.genFailResult("数据保存出错！" + ex.getMessage());

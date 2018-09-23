@@ -143,7 +143,7 @@ public class RepairRecordController {
      */
     @PostMapping("/selectRepairTaskByUser")
     public Result selectRepairTaskByUser(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size,
-                                          @RequestParam String userName) {
+                                         @RequestParam String userName) {
         PageHelper.startPage(page, size);
         List<RepairRecordInfo> list = repairRecordService.selectRepairTaskByUser(userName);
         PageInfo pageInfo = new PageInfo(list);
@@ -172,7 +172,9 @@ public class RepairRecordController {
                     }
                 }
             }
-            repairMembersService.save(members);
+            if (members.size() > 0) {
+                repairMembersService.save(members);
+            }
         } catch (Exception ex) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return ResultGenerator.genFailResult("数据保存出错！" + ex.getMessage());
@@ -204,8 +206,9 @@ public class RepairRecordController {
                     }
                 }
             }
-            repairMembersService.save(members);
-
+            if (members.size() > 0) {
+                repairMembersService.save(members);
+            }
             //update the old record
             RepairRecord oldRecord = new RepairRecord();
             oldRecord.setId(oldId);
@@ -253,8 +256,8 @@ public class RepairRecordController {
      */
     @PostMapping("/selectRepairRecordByRepairRequestId")
     public Result selectRepairRecordByRepairRequestId(@RequestParam(defaultValue = "0") Integer page,
-                                                     @RequestParam(defaultValue = "0") Integer size,
-                                                     @RequestParam String repairRequestInfoId) {
+                                                      @RequestParam(defaultValue = "0") Integer size,
+                                                      @RequestParam String repairRequestInfoId) {
         PageHelper.startPage(page, size);
         List<RepairRecord> list = repairRecordService.selectRepairRecordByRepairRequestId(repairRequestInfoId);
         PageInfo pageInfo = new PageInfo(list);
@@ -270,7 +273,7 @@ public class RepairRecordController {
         RepairRecord repairRecord1 = repairRecordService.selectRepairRecordInRequesting(repairRequestInfoId);
         return ResultGenerator.genSuccessResult(repairRecord1);
     }
-    
+
     /**
      * 根据配件信息ID，查询维修记录
      */
