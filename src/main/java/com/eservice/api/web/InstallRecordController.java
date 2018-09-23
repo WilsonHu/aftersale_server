@@ -9,6 +9,7 @@ import com.eservice.api.model.install_lib.InstallLib;
 import com.eservice.api.model.install_members.InstallMembers;
 import com.eservice.api.model.install_record.InstallRecord;
 import com.eservice.api.model.install_record.InstallRecordInfo;
+import com.eservice.api.model.user.User;
 import com.eservice.api.service.common.CommonUtils;
 import com.eservice.api.service.common.InstallInfoJsonData;
 import com.eservice.api.service.impl.InstallLibServiceImpl;
@@ -183,6 +184,15 @@ public class InstallRecordController {
             model.setUpdateTime(new Date());
             model.setInstallStatus(com.eservice.api.service.common.Constant.INSTALL_STATUS_ASSIGNED);
             installRecordService.update(model);
+            List<User> list = installMembersService.getMembersByInstallRecordId(model.getId().toString());
+            for (User u : list) {
+                for (InstallMembers m : members) {
+                    if (m.getUserId() == u.getId()) {
+                        members.remove(m);
+                        break;
+                    }
+                }
+            }
             installMembersService.save(members);
         } catch (Exception ex) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
