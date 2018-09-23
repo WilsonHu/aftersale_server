@@ -1,5 +1,7 @@
 package com.eservice.api.web;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.eservice.api.core.Result;
 import com.eservice.api.core.ResultGenerator;
 import com.eservice.api.model.user.StaffInfo;
@@ -8,12 +10,18 @@ import com.eservice.api.model.user.UserInfo;
 import com.eservice.api.service.impl.UserServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
-import java.util.List;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.*;
 
 /**
 * Class Description: xxx
@@ -25,6 +33,18 @@ import java.util.List;
 public class UserController {
     @Resource
     private UserServiceImpl userService;
+
+    @Value("${wx.wxspAppid}")
+    private String wxspAppid;
+
+    @Value("${wx.wxspSecret}")
+    private String wxspSecret;
+
+    @Value("${wx.grant_type}")
+    private String wxGrant_type;
+
+    @Value("${wx.requestUrl}")
+    private String wxRequestUrl;
 
     @PostMapping("/addStaff")
     public Result addStaff(@RequestBody @NotNull User user) {
@@ -125,4 +145,97 @@ public class UserController {
         return ResultGenerator.genSuccessResult(pageInfo);
     }
 
+    @PostMapping("/getUnionId")
+    public Result getUnionId(@RequestParam(defaultValue = "0") String account,
+                             @RequestParam(defaultValue = "0") String password,
+                             @RequestParam(defaultValue = "0") String jsCode) {
+
+        if(account == null || "".equals(account)) {
+            return ResultGenerator.genFailResult("账号不能为空！");
+        } else if(password == null || "".equals(password)) {
+            return ResultGenerator.genFailResult("密码不能为空！");
+        }else {
+            User user  = userService.requestLogin(account, password,null);
+            if(user == null) {
+                return ResultGenerator.genFailResult("账号/密码/unionid 不正确！");
+            }else {
+
+                Map<String, String> requestUrlParam = new HashMap<String, String>();
+                requestUrlParam.put("appid",wxspAppid);
+                requestUrlParam.put("secret",wxspSecret);
+                /**
+                 * 小程序调用wx.login返回的jsCode
+                 */
+                requestUrlParam.put("js_code", jsCode);
+                requestUrlParam.put("grant_type", wxGrant_type);
+
+                JSONObject jsonObject = JSON.parseObject(sendPost(wxRequestUrl, requestUrlParam));
+                return ResultGenerator.genSuccessResult(jsonObject);
+            }
+        }
+    }
+
+    /**
+     * 向指定 URL 发送POST方法的请求
+     *
+     * @param url 发送请求的 URL
+     * @return 所代表远程资源的响应结果
+     */
+    public static String sendPost(String url, Map<String, ?> paramMap) {
+        PrintWriter out = null;
+        BufferedReader in = null;
+        String result = "";
+        String param = "";
+        Iterator<String> it = paramMap.keySet().iterator();
+        String message = null;
+
+        while (it.hasNext()) {
+            String key = it.next();
+            param += key + "=" + paramMap.get(key) + "&";
+        }
+
+        try {
+            URL realUrl = new URL(url);
+            // 打开和URL之间的连接
+            URLConnection conn = realUrl.openConnection();
+            // 设置通用的请求属性
+            conn.setRequestProperty("accept", "*/*");
+            conn.setRequestProperty("connection", "Keep-Alive");
+            conn.setRequestProperty("Accept-Charset", "utf-8");
+            conn.setRequestProperty("user-agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1;SV1)");
+            // 发送POST请求必须设置如下两行
+            conn.setDoOutput(true);
+            conn.setDoInput(true);
+            // 获取URLConnection对象对应的输出流
+            out = new PrintWriter(conn.getOutputStream());
+            // 发送请求参数
+            out.print(param);
+            // flush输出流的缓冲
+            out.flush();
+            // 定义BufferedReader输入流来读取URL的响应
+            in = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
+            String line;
+            while ((line = in.readLine()) != null) {
+                result += line;
+            }
+        } catch (Exception e) {
+            System.out.print(e.getMessage());
+            message = "sendPost error, " + e.getMessage();
+            return  message;
+        }
+        //使用finally块来关闭输出流、输入流
+        finally {
+            try {
+                if (out != null) {
+                    out.close();
+                }
+                if (in != null) {
+                    in.close();
+                }
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return result;
+    }
 }
