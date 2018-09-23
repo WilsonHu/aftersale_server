@@ -60,4 +60,8 @@ public class MachineServiceImpl extends AbstractService<Machine> implements Mach
         return machineMapper.selectBaseRecordByUser(userName);
     }
 
+    public List<Machine> selectMachineByNameplate(String nameplate){
+        return machineMapper.selectMachineByNameplate(nameplate);
+    }
+
 }

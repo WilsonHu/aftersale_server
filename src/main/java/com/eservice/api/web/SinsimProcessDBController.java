@@ -2,6 +2,7 @@ package com.eservice.api.web;
 
 import com.eservice.api.core.Result;
 import com.eservice.api.core.ResultGenerator;
+import com.eservice.api.model.machine.Machine;
 import com.eservice.api.model.machine.MachineInfo;
 import com.eservice.api.model.machine.MachineInfosInProcessDb;
 import com.eservice.api.model.machine.MachineType;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -37,16 +39,38 @@ public class SinsimProcessDBController {
     @Qualifier("DataSourceSinsimProcessDbTemplate")
     private JdbcTemplate dataSourceSinsimProcessDbTemplate;
 
+    /**
+     * 根据条件查询未绑定到客户的机器
+     */
     @PostMapping("/getMachineList")
-    public Result getMachineList(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size, String orderNum, String nameplate, boolean isFuzzy) {
+    public Result getMachineList(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size,
+                                 String orderNum, String nameplate, boolean isFuzzy) {
 
-        //PageHelper.startPage(page, size);
+        List<Machine> boundMachineList = machineService.findAll();
+        List<String> boundMachineNameplateList = new ArrayList<>();
+        for(Machine item: boundMachineList){
+            boundMachineNameplateList.add(item.getNameplate());
+        }
+
+        /**
+         * 合成字符串 "nameplate111","nameplate222","nameplate333"...
+         */
+        String nameplateOfBoundMachineInOneString = null;
+        for(String  item: boundMachineNameplateList){
+            if(nameplateOfBoundMachineInOneString == null){
+                nameplateOfBoundMachineInOneString = "\"" + item + "\"";
+            } else {
+                nameplateOfBoundMachineInOneString = nameplateOfBoundMachineInOneString + "," + "\"" + item + "\"" ;
+            }
+        }
+
         String query = " select m.*,mo.needle_num,mo.head_num,mo.head_distance,mo.x_distance,mo.y_distance,mo.order_num, mt.name as machine_type_name,c.contract_num,c.customer_name" +
                 " from  machine m " +
                 "left join machine_order mo on mo.id=m.order_id " +
                 "left join machine_type mt on mt.id=m.machine_type " +
-                "left join contract c on c.id = mo.contract_id" +
-                " where m.status='" + com.eservice.api.service.common.Constant.MACHINE_INSTALLED + "' ";
+                "left join contract c on c.id = mo.contract_id " +
+                "where m.status='" + com.eservice.api.service.common.Constant.MACHINE_INSTALLED + "' " +
+                "and m.nameplate NOT IN (" + nameplateOfBoundMachineInOneString + ")";
         //需要查询原生产库中完成的机器
         String fuzzyFormat = isFuzzy ? "%" : "";
         String fuzzyKey = isFuzzy ? " like " : "=";

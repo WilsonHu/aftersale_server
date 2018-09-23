@@ -25,4 +25,6 @@ public interface MachineMapper extends Mapper<Machine> {
 
     List<MachineBaseRecordInfo> selectBaseRecordByNameplate(@Param("nameplate") String nameplate);
     List<MachineBaseRecordInfo> selectBaseRecordByUser(@Param("userName") String userName);
+
+    List<Machine> selectMachineByNameplate(@Param("nameplate") String nameplate);
 }

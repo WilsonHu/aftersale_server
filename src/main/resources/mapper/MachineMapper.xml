@@ -279,4 +279,9 @@
         order by mr.maintain_date_actual desc,  rr.repair_end_time desc,ir.install_actual_time desc
     </select>
 
+    <select id="selectMachineByNameplate" resultMap="BaseResultMap">
+        SELECT *
+        from machine m
+        where m.nameplate = #{nameplate}
+    </select>
 </mapper>
