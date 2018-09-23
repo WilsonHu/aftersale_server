@@ -238,4 +238,17 @@ public class MachineController {
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
     }
+
+    /**
+     *  根据铭牌号查询机器
+     *  （考虑要到效率所以不使用 getSaledMachineInfoList，暂时未用到，先保留着）
+     */
+    @PostMapping("/selectMachineByNameplate")
+    public Result selectMachineByNameplate(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size,
+                                         @RequestParam String nameplate) {
+        PageHelper.startPage(page, size);
+        List<Machine> list = machineService.selectMachineByNameplate(nameplate);
+        PageInfo pageInfo = new PageInfo(list);
+        return ResultGenerator.genSuccessResult(pageInfo);
+    }
 }
