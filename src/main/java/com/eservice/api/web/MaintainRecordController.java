@@ -73,7 +73,7 @@ public class MaintainRecordController {
 
     @PostMapping("/add")
     public Result add(@RequestBody @NotNull MaintainRecord maintainRecord) {
-        maintainRecord.setMaintainInfo(generateMaintainInfo(maintainRecord.getMaintainLibName()));
+        //maintainRecord.setMaintainInfo(generateMaintainInfo(maintainRecord.getMaintainLibName()));
         maintainRecordService.save(maintainRecord);
         return ResultGenerator.genSuccessResult();
     }
@@ -86,6 +86,12 @@ public class MaintainRecordController {
 
     @PostMapping("/update")
     public Result update(@RequestBody @NotNull MaintainRecord maintainRecord) {
+        maintainRecordService.update(maintainRecord);
+        return ResultGenerator.genSuccessResult();
+    }
+
+    @PostMapping("/updateMaintainInfo")
+    public Result updateMaintainInfo(@RequestBody @NotNull MaintainRecord maintainRecord) {
         maintainRecord.setMaintainInfo(generateMaintainInfo(maintainRecord.getMaintainLibName()));
         maintainRecordService.update(maintainRecord);
         return ResultGenerator.genSuccessResult();
