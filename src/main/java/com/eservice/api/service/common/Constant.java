@@ -155,4 +155,16 @@ public class Constant {
     public static final String PARTS_STATUS_ALREADY_SENDBACK = "3";
     public static final String PARTS_STATUS_AFTERSALE_CONFIRMED = "4";
 
+    /**
+     * 微信code2Session返回值
+     * -1	系统繁忙，此时请开发者稍候再试
+     * 0	请求成功
+     * 40029	code 无效
+     * 45011	频率限制，每个用户每分钟100次
+     */
+    public static final String WX_ERRORCODE_BUSY = "-1";
+    public static final String WX_ERRORCODE_SUCCESS = "0";
+    public static final String WX_ERRORCODE_INVALID_JS_CODE = "40029";
+    public static final String WX_ERRORCODE_FREQ_LIMIT = "45011";
+
 }

@@ -145,11 +145,19 @@ public class UserController {
         return ResultGenerator.genSuccessResult(pageInfo);
     }
 
-    @PostMapping("/getUnionId")
-    public Result getUnionId(@RequestParam(defaultValue = "0") String account,
+    /**
+     * 根据用户登陆，向腾讯服务器获取unionId并保存，再返回用户信息（包括unionId）。
+     * @param account
+     * @param password
+     * @param jsCode
+     * @return
+     */
+    @PostMapping("/loginGetUnionIdAndSave")
+    public Result loginGetUnionIdAndSave(@RequestParam(defaultValue = "0") String account,
                              @RequestParam(defaultValue = "0") String password,
                              @RequestParam(defaultValue = "0") String jsCode) {
 
+        String message = null;
         if(account == null || "".equals(account)) {
             return ResultGenerator.genFailResult("账号不能为空！");
         } else if(password == null || "".equals(password)) {
@@ -168,9 +176,28 @@ public class UserController {
                  */
                 requestUrlParam.put("js_code", jsCode);
                 requestUrlParam.put("grant_type", wxGrant_type);
+                String respondStr = sendPost(wxRequestUrl, requestUrlParam);
+                JSONObject jsonObject = JSON.parseObject(respondStr);
 
-                JSONObject jsonObject = JSON.parseObject(sendPost(wxRequestUrl, requestUrlParam));
-                return ResultGenerator.genSuccessResult(jsonObject);
+                if(jsonObject == null){
+                    return ResultGenerator.genFailResult("jsonObj null, " + respondStr);
+                }
+                System.out.print("respondStr: " + respondStr );
+
+                String unionId = (String) jsonObject.get("unionid");
+                if(unionId != null){
+                    user.setWechatUnionId(unionId);
+                    userService.save(user);
+                    return ResultGenerator.genSuccessResult("account:" +user.getAccount() +
+                    ",name:" + user.getName() +
+                    ",id:" + user.getId());
+                } else {
+                    /**
+                     * 没有unionId（需要用户先关注公众号）
+                     */
+                    message = "no unionId included in respond";
+                    return ResultGenerator.genSuccessResult(message);
+                }
             }
         }
     }
