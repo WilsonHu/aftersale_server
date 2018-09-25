@@ -7,6 +7,7 @@ import com.eservice.api.core.ResultGenerator;
 import com.eservice.api.model.user.StaffInfo;
 import com.eservice.api.model.user.User;
 import com.eservice.api.model.user.UserInfo;
+import com.eservice.api.service.common.CommonService;
 import com.eservice.api.service.impl.UserServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -14,13 +15,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import javax.validation.constraints.NotNull;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.URL;
-import java.net.URLConnection;
+import javax.validation.constraints.NotNull; 
 import java.util.*;
 
 /**
@@ -45,6 +40,9 @@ public class UserController {
 
     @Value("${wx.requestUrl}")
     private String wxRequestUrl;
+
+    @Resource
+    private CommonService commonService;
 
     @PostMapping("/addStaff")
     public Result addStaff(@RequestBody @NotNull User user) {
@@ -176,7 +174,7 @@ public class UserController {
                  */
                 requestUrlParam.put("js_code", jsCode);
                 requestUrlParam.put("grant_type", wxGrant_type);
-                String respondStr = sendPost(wxRequestUrl, requestUrlParam);
+                String respondStr = commonService.sendPost(wxRequestUrl, requestUrlParam);
                 JSONObject jsonObject = JSON.parseObject(respondStr);
 
                 if(jsonObject == null){
@@ -188,81 +186,53 @@ public class UserController {
                 if(unionId != null){
                     user.setWechatUnionId(unionId);
                     userService.save(user);
-                    return ResultGenerator.genSuccessResult("account:" +user.getAccount() +
-                    ",name:" + user.getName() +
-                    ",id:" + user.getId());
+                    return ResultGenerator.genSuccessResult("account:" +user.getAccount() + ",name:" + user.getName() + ",id:" + user.getId());
                 } else {
                     /**
                      * 没有unionId（需要用户先关注公众号）
                      */
                     message = "no unionId included in respond";
-                    return ResultGenerator.genSuccessResult(message);
+                    return ResultGenerator.genFailResult(message);
                 }
             }
         }
     }
 
     /**
-     * 向指定 URL 发送POST方法的请求
-     *
-     * @param url 发送请求的 URL
-     * @return 所代表远程资源的响应结果
+     * 根据js_code去微信的服务器请求unionID，
+     * 如果得到的unionId已经存在我们数据库里面，返回该用户信息
+     * @param jsCode
+     * @return
      */
-    public static String sendPost(String url, Map<String, ?> paramMap) {
-        PrintWriter out = null;
-        BufferedReader in = null;
-        String result = "";
-        String param = "";
-        Iterator<String> it = paramMap.keySet().iterator();
+    @PostMapping("/getUsersByJsCode")
+    public Result getUsersByJsCode(@RequestParam String jsCode ) {
         String message = null;
+        Map<String, String> requestUrlParam = new HashMap<String, String>();
+        requestUrlParam.put("appid",wxspAppid);
+        requestUrlParam.put("secret",wxspSecret);
+        requestUrlParam.put("js_code", jsCode);
+        requestUrlParam.put("grant_type", wxGrant_type);
 
-        while (it.hasNext()) {
-            String key = it.next();
-            param += key + "=" + paramMap.get(key) + "&";
+        String respondStr = commonService.sendPost(wxRequestUrl, requestUrlParam);
+        JSONObject jsonObject = JSON.parseObject(respondStr);
+
+        if(jsonObject == null){
+            return ResultGenerator.genFailResult("jsonObj null, " + respondStr);
+        }
+        System.out.print("respondStr: " + respondStr );
+
+        String unionId = (String) jsonObject.get("unionid");
+        if(unionId != null){
+            User user = userService.findBy("wechat_union_id", unionId);
+            if(user != null){
+                return ResultGenerator.genSuccessResult("account:" +user.getAccount() + ",name:" + user.getName() + ",id:" + user.getId());
+            } else{
+                return ResultGenerator.genFailResult("No user found by the js_code");
+            }
+        } else {
+            message = "no unionId included in respond";
+            return ResultGenerator.genFailResult(message);
         }
 
-        try {
-            URL realUrl = new URL(url);
-            // 打开和URL之间的连接
-            URLConnection conn = realUrl.openConnection();
-            // 设置通用的请求属性
-            conn.setRequestProperty("accept", "*/*");
-            conn.setRequestProperty("connection", "Keep-Alive");
-            conn.setRequestProperty("Accept-Charset", "utf-8");
-            conn.setRequestProperty("user-agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1;SV1)");
-            // 发送POST请求必须设置如下两行
-            conn.setDoOutput(true);
-            conn.setDoInput(true);
-            // 获取URLConnection对象对应的输出流
-            out = new PrintWriter(conn.getOutputStream());
-            // 发送请求参数
-            out.print(param);
-            // flush输出流的缓冲
-            out.flush();
-            // 定义BufferedReader输入流来读取URL的响应
-            in = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
-            String line;
-            while ((line = in.readLine()) != null) {
-                result += line;
-            }
-        } catch (Exception e) {
-            System.out.print(e.getMessage());
-            message = "sendPost error, " + e.getMessage();
-            return  message;
-        }
-        //使用finally块来关闭输出流、输入流
-        finally {
-            try {
-                if (out != null) {
-                    out.close();
-                }
-                if (in != null) {
-                    in.close();
-                }
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
-        }
-        return result;
     }
 }

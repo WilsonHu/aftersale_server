@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50547
 File Encoding         : 65001
 
-Date: 2018-09-21 18:25:14
+Date: 2018-09-25 14:25:07
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -461,7 +461,7 @@ DROP TABLE IF EXISTS `maintain_record`;
 CREATE TABLE `maintain_record` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID号',
   `machine_nameplate` varchar(255) NOT NULL COMMENT '机器铭牌号，以此为依据查询机型信息,客户能看到的也是这个铭牌号',
-  `maintain_lib_name` varchar(255) NOT NULL COMMENT '1：一期，2：二期，3：三期保养',
+  `maintain_lib_name` varchar(255) DEFAULT NULL COMMENT '1：一期，2：二期，3：三期保养',
   `maintain_date_plan` date DEFAULT NULL,
   `maintain_date_actual` date DEFAULT NULL COMMENT '实际保养日期',
   `maintain_charge_person` int(10) unsigned DEFAULT NULL COMMENT '保养人员',
