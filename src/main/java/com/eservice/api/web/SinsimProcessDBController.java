@@ -78,7 +78,7 @@ public class SinsimProcessDBController {
             query += " AND mo.order_num " + fuzzyKey + " '" + fuzzyFormat + orderNum + fuzzyFormat + "'";
         }
         if (nameplate != null && nameplate.length() > 0) {
-            query += " AND mo.nameplate " + fuzzyKey + " '" + fuzzyFormat + nameplate + fuzzyFormat + "'";
+            query += " AND m.nameplate " + fuzzyKey + " '" + fuzzyFormat + nameplate + fuzzyFormat + "'";
         }
 
         List<MachineInfosInProcessDb> list = dataSourceSinsimProcessDbTemplate.query(query, new BeanPropertyRowMapper(MachineInfosInProcessDb.class));
