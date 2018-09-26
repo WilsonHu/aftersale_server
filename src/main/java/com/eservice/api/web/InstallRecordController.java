@@ -106,7 +106,7 @@ public class InstallRecordController {
      * @param nameplate
      * @param orderNum
      * @param machineType
-     * @param agent                            代理商名称
+     * @param agent                            代理商名称, 不同代理商可以传入不同名字，代理商只看到自己的数据。
      * @param installStatus                    安装状态，0：已分配安装(但未接单）；1：已接受任务（不用驳回，如果有异议，电话沟通后可以重新派单）； 2：安装OK(客户未确认); 3：安装NG(如果用不到这个就不用）4：客户已确认
      * @param installRecordCustomerName        记录中的customerName，不是machine的customerName
      * @param installChargePersonName          安装工负责人名字
@@ -116,6 +116,7 @@ public class InstallRecordController {
      * @param query_finish_facory_date
      * @param query_start_install_actual_time
      * @param query_finish_install_actual_time
+     * @param machineCustomerName              机器的客户的名称
      * @param isFuzzy
      * @return
      */
@@ -135,6 +136,7 @@ public class InstallRecordController {
                                            String query_start_install_actual_time,
                                            String query_finish_install_actual_time,
                                            String installRecordId,
+                                           String machineCustomerName,
                                            boolean isFuzzy) {
         PageHelper.startPage(page, size);
         List<InstallRecordInfo> list = installRecordService.getInstallRecordInfoList(
@@ -152,6 +154,7 @@ public class InstallRecordController {
                 query_start_install_actual_time,
                 query_finish_install_actual_time,
                 installRecordId,
+                machineCustomerName,
                 isFuzzy);
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);

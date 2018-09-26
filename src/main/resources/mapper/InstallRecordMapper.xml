@@ -166,7 +166,10 @@
         AND userOfCustomerInInstallRecord.`name`   like CONCAT('%','${installRecordCustomerName}','%' )
       </if>
       <if test="installChargePersonName != null and installChargePersonName != ''">
-        AND userOfChargePersonInInstallRecord.`name`   like CONCAT('%','${installChargePersonName}','%' )
+        AND userOfChargePersonInInstallRecord.`name` like CONCAT('%','${installChargePersonName}','%' )
+      </if>
+      <if test="machineCustomerName != null and machineCustomerName != ''">
+        AND userOfCustomerInMachine.`name` like CONCAT('%','${machineCustomerName}','%' )
       </if>
     </if>
     <if test="isFuzzy== false">
@@ -187,6 +190,9 @@
       </if>
       <if test="installChargePersonName != null and installChargePersonName != ''">
         AND userOfChargePersonInInstallRecord.`name` = '${installChargePersonName}'
+      </if>
+      <if test="machineCustomerName != null and machineCustomerName != ''">
+        AND userOfCustomerInMachine.`name` = '${machineCustomerName}'
       </if>
     </if>
 
