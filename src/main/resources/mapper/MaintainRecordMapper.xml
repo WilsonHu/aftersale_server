@@ -170,6 +170,11 @@
       <if test="maintainRecordId != null and maintainRecordId != ''">
           and mr.id = #{maintainRecordId}
       </if>
+      <if test="noneAgent != null and noneAgent != ''">
+          <if test="noneAgent == true">
+              AND a.name is NULL
+          </if>
+      </if>
 
       ORDER By mr.maintain_date_actual DESC
   </select>

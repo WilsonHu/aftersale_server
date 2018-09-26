@@ -143,6 +143,7 @@ public class MaintainRecordController {
      * @param maintainChargePerson       保养员负责人
      * @param query_start_time_maintain
      * @param query_finish_time_maintain
+     * @param noneAgent                  传入true:查询agent为空的，即查询xs自己保养的。传入false或者不传入该参数，则查询所有
      * @param isFuzzy
      * @return
      */
@@ -158,6 +159,7 @@ public class MaintainRecordController {
                                             String query_start_time_maintain,
                                             String query_finish_time_maintain,
                                             String maintainRecordId,
+                                            boolean noneAgent,
                                             boolean isFuzzy) {
         PageHelper.startPage(page, size);
         List<MaintainRecordInfo> list = maintainRecordService.getMaintainRecordInfoList(
@@ -171,6 +173,7 @@ public class MaintainRecordController {
                 query_start_time_maintain,
                 query_finish_time_maintain,
                 maintainRecordId,
+                noneAgent,
                 isFuzzy);
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
