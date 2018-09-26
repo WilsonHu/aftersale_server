@@ -78,6 +78,17 @@ public class MaintainRecordController {
         return ResultGenerator.genSuccessResult();
     }
 
+    @PostMapping("/addList")
+    public Result addList(String maintainRecordList) {
+        List<MaintainRecord> recordList = JSONObject.parseArray(maintainRecordList, MaintainRecord.class);
+        for (MaintainRecord mr : recordList) {
+            mr.setCreateTime(new Date());
+        }
+        maintainRecordService.save(recordList);
+        return ResultGenerator.genSuccessResult();
+    }
+
+
     @PostMapping("/delete")
     public Result delete(@RequestParam Integer id) {
         maintainRecordService.deleteById(id);
