@@ -174,7 +174,7 @@ public class MachineController {
      * @param nameplate
      * @param orderNum
      * @param machineType
-     * @param agent
+     * @param agent                     不同代理商可以传入不同名字，代理商只看到自己的数据。
      * @param status
      * @param customerName              下面都是查询实际发生的时间/日期
      * @param query_start_time_install

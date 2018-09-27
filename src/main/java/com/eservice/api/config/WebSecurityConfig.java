@@ -38,6 +38,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 // We filter the api/login requests
                 .addFilterBefore(new JWTLoginFilter("/login", authenticationManager()),
                         UsernamePasswordAuthenticationFilter.class)
+                /**
+                 * 小程序登陆也返回JWT
+                 */
+                .addFilterBefore(new JWTLoginFilter("/user/loginGetUnionIdAndSave", authenticationManager()),
+                        UsernamePasswordAuthenticationFilter.class)
                 // And filter other requests to check the presence of JWT in header
                 ///添加自定义的过滤器: JWT过滤器
                 .addFilterBefore(new JWTAuthenticationFilter(),

@@ -86,7 +86,7 @@ public class RepairRecordController {
      * @param orderNum
      * @param repairStatus
      * @param repairRecordCustomerName    -- 维修记录中的客户联系人，不是machine的customerName
-     * @param agent                       -- 机器的代理商的名称
+     * @param agent                       -- 机器的代理商的名称，不同代理商可以传入不同名字，代理商只看到自己的数据。
      * @param repairChargePersonName      -- 维修员负责人
      * @param issuePositionId             -- 问题部位ID,只要包含有该ID号的记录就会被返回
      * @param inWarrantyPeriod
@@ -139,7 +139,8 @@ public class RepairRecordController {
 
     /**
      * 根据用户(无论是负责人还是维修成员)返回他的维修待处理 任务
-     * TODO: 确认是否重复数据问题 ---应该是假数据本身问题，待后面真实数据再确认一次。
+     * 确实返回“重复”数据， 是因为没有用到repairMember，算上repairMember是不重复的。
+     * 维修成员也必须看到维修任务，由前端对“重复”数据进行去重。
      */
     @PostMapping("/selectRepairTaskByUser")
     public Result selectRepairTaskByUser(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size,

@@ -189,9 +189,9 @@ public class UserController {
                     return ResultGenerator.genSuccessResult("account:" +user.getAccount() + ",name:" + user.getName() + ",id:" + user.getId());
                 } else {
                     /**
-                     * 没有unionId（需要用户先关注公众号）
+                     * 没有unionId（需要用户先关注公众号）,直接返回具体信息是为了小程序方便。
                      */
-                    message = "no unionId included in respond";
+                    message = "请先关注公众号";
                     return ResultGenerator.genFailResult(message);
                 }
             }

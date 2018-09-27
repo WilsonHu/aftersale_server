@@ -136,7 +136,7 @@ public class MaintainRecordController {
      *
      * @param nameplate
      * @param orderNum
-     * @param agent                      -- 代理商名称
+     * @param agent                      -- 代理商名称，不同代理商可以传入不同名字，代理商只看到自己的数据。
      * @param maintainStatus
      * @param customerName               保养的客户联系人名称
      * @param machineType
