@@ -131,7 +131,7 @@
           </if>
           <if test="maintainChargePerson != null and maintainChargePerson != ''">
               --         and mr.maintain_charge_person like CONCAT('%','${maintainChargePerson}','%' )
-              and userInMaintainRecord.name like CONCAT('%','${maintainChargePerson}','%' )
+              and userOfMaintainChargePerson.name like CONCAT('%','${maintainChargePerson}','%' )
           </if>
       </if>
 
@@ -154,7 +154,7 @@
               and m.machine_type = '${machineType}'
           </if>
           <if test="maintainChargePerson != null and maintainChargePerson != ''">
-              and mr.maintain_charge_person = '${maintainChargePerson}'
+              and userOfMaintainChargePerson.name = '${maintainChargePerson}'
           </if>
       </if>
 
