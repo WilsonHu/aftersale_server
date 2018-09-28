@@ -217,7 +217,8 @@ public class InstallRecordController {
             if (installLibName != baseName) {
                 List<InstallLib> liblist = installLibService.selectLibList("1", baseName);
                 if (liblist != null && liblist.size() > 0) {
-                    list.addAll(liblist);
+                    liblist.addAll(list);
+                    list = liblist;
                 }
             }
             List<InstallInfoJsonData> installInfoList = new ArrayList<InstallInfoJsonData>();
@@ -232,12 +233,13 @@ public class InstallRecordController {
                 info.setInstall_value("");
                 installInfoList.add(info);
             }
+            list.clear();
+            list = null;
             model.setInstallInfo(JSONArray.toJSONString(installInfoList));
             installRecordService.update(model);
         } catch (Exception e) {
 
         }
-
         return ResultGenerator.genSuccessResult();
     }
 
