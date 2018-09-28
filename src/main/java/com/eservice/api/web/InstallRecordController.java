@@ -207,33 +207,37 @@ public class InstallRecordController {
     }
 
     @PostMapping("/updateInstallInfo")
-    public Result updateInstallInfo(String installRecord, String installLibName) {
+    public Result updateInstallInfo(String installRecord, String installLibName, String baseName) {
         InstallRecord model = JSON.parseObject(installRecord, InstallRecord.class);
         if (model == null || installLibName == null) {
             return ResultGenerator.genFailResult("参数错误！");
         }
-        List<InstallLib> list = installLibService.selectLibList("1", installLibName);
-        List<InstallLib> baseList = new ArrayList<InstallLib>();
-        if (installLibName != "基础项") {
-            baseList = installLibService.selectLibList("1", "基础项");
-        }
-        if (baseList.size() > 0) {
-            list.addAll(baseList);
-        }
-        List<InstallInfoJsonData> installInfoList = new ArrayList<InstallInfoJsonData>();
-        for (InstallLib item : list) {
-            InstallInfoJsonData info = new InstallInfoJsonData();
-            if (info.getIs_base_lib() == "0") {
-                continue;
+        try {
+            List<InstallLib> list = installLibService.selectLibList("1", installLibName);
+            if (installLibName != baseName) {
+                List<InstallLib> liblist = installLibService.selectLibList("1", baseName);
+                if (liblist != null && liblist.size() > 0) {
+                    list.addAll(liblist);
+                }
             }
-            info.setInstall_content(item.getInstallContent());
-            info.setInstall_lib_name(item.getInstallLibName());
-            info.setIs_base_lib(item.getIsBaseLib());
-            info.setInstall_value("");
-            installInfoList.add(info);
+            List<InstallInfoJsonData> installInfoList = new ArrayList<InstallInfoJsonData>();
+            for (InstallLib item : list) {
+                InstallInfoJsonData info = new InstallInfoJsonData();
+                if (info.getIs_base_lib() == "0") {
+                    continue;
+                }
+                info.setInstall_content(item.getInstallContent());
+                info.setInstall_lib_name(item.getInstallLibName());
+                info.setIs_base_lib(item.getIsBaseLib());
+                info.setInstall_value("");
+                installInfoList.add(info);
+            }
+            model.setInstallInfo(JSONArray.toJSONString(installInfoList));
+            installRecordService.update(model);
+        } catch (Exception e) {
+
         }
-        model.setInstallInfo(JSONArray.toJSONString(installInfoList));
-        installRecordService.update(model);
+
         return ResultGenerator.genSuccessResult();
     }
 

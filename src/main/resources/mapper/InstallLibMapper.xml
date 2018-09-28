@@ -17,7 +17,7 @@
 			and is_base_lib=#{isBaseLib}
 		</if>
 		<if test="installLibName != null and installLibName != ''">
-			and install_lib_name=#{installLibName}
+			and install_lib_name='${installLibName}'
 		</if>
 	</select>
 
@@ -27,7 +27,7 @@
 			and is_base_lib=#{isBaseLib}
 		</if>
 		<if test="installLibName != null and installLibName != ''">
-			and install_lib_name=#{installLibName}
+			and install_lib_name='${installLibName}'
 		</if>
 	</delete>
 </mapper>
