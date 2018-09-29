@@ -147,7 +147,12 @@
 				AND userOfCustomerInRepairRecord.`name` like CONCAT('%','${repairRecordCustomerName}','%' )
 			</if>
 			<if test="agent != null and agent != ''">
-				AND a.`name` like CONCAT('%','${agent}','%' )
+				<if test = "isAgent == true">
+					AND a.name = '${agent}'
+				</if>
+				<if test="isAgent == false || isAgent == null || isAgent == ''">
+					AND a.`name` like CONCAT('%','${agent}','%' )
+				</if>
 			</if>
 			<if test="repairChargePersonName != null and repairChargePersonName != ''">
 				AND userOfRepairChargePerson.`name` like CONCAT('%','${repairChargePersonName}','%' )

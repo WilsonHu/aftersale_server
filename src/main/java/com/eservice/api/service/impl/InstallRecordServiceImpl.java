@@ -47,6 +47,7 @@ public class InstallRecordServiceImpl extends AbstractService<InstallRecord> imp
                                                             String query_finish_install_actual_time,
                                                             String installRecordId,
                                                             String machineCustomerName,
+                                                            boolean isAgent,
                                                             boolean isFuzzy) {
         return installRecordMapper.getInstallRecordInfoList(
                 nameplate,
@@ -64,6 +65,7 @@ public class InstallRecordServiceImpl extends AbstractService<InstallRecord> imp
                 query_finish_install_actual_time,
                 installRecordId,
                 machineCustomerName,
+                isAgent,
                 isFuzzy);
     }
 

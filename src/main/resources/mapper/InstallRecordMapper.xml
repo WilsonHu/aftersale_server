@@ -160,7 +160,12 @@
         AND m.machine_type like CONCAT('%','${machineType}','%' )
       </if>
       <if test="agent != null and agent != ''">
-        AND agentOfCustomerInMachine.`name`  like CONCAT('%','${agent}','%' )
+        <if test = "isAgent == true">
+          AND agentOfCustomerInMachine.name = '${agent}'
+        </if>
+        <if test="isAgent == false || isAgent == null || isAgent == ''">
+          AND agentOfCustomerInMachine.name like CONCAT('%','${agent}','%' )
+        </if>
       </if>
       <if test="installRecordCustomerName != null and installRecordCustomerName != ''">
         AND userOfCustomerInInstallRecord.`name`   like CONCAT('%','${installRecordCustomerName}','%' )

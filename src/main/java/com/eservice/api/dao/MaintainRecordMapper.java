@@ -22,7 +22,7 @@ public interface MaintainRecordMapper extends Mapper<MaintainRecord> {
                                                        @Param("query_start_time_maintain")String query_start_time_maintain,
                                                        @Param("query_finish_time_maintain")String query_finish_time_maintain,
                                                        @Param("maintainRecordId")String maintainRecordId,
-                                                       @Param("noneAgent")boolean noneAgent,
+                                                       @Param("isAgent")boolean isAgent,
                                                        @Param("isFuzzy")boolean isFuzzy);
 
     List<MaintainRecordInfo> selectMaintainTaskByUser(@Param("userName") String userName);

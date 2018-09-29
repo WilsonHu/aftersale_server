@@ -136,14 +136,15 @@ public class MaintainRecordController {
      *
      * @param nameplate
      * @param orderNum
-     * @param agent                      -- 代理商名称，不同代理商可以传入不同名字，代理商只看到自己的数据。
+     * @param agent                      -- 代理商名称，不同代理商可以传入不同名字，配合isAgent代理商只看到自己的数据。
      * @param maintainStatus
      * @param customerName               保养的客户联系人名称
      * @param machineType
      * @param maintainChargePerson       保养员负责人
      * @param query_start_time_maintain
      * @param query_finish_time_maintain
-     * @param noneAgent                  传入true:查询agent为空的，即查询xs自己保养的。传入false或者不传入该参数，则查询所有
+     * @param isAgent                  传入true表示是代理商只查询: 精确查询agent （即使isFuzzy为true）
+     *                                 （代理商在查询时指定isFuzzy为false是可以精确查询,但是代理商模糊查询时需要此参数）
      * @param isFuzzy
      * @return
      */
@@ -159,7 +160,7 @@ public class MaintainRecordController {
                                             String query_start_time_maintain,
                                             String query_finish_time_maintain,
                                             String maintainRecordId,
-                                            boolean noneAgent,
+                                            boolean isAgent,
                                             boolean isFuzzy) {
         PageHelper.startPage(page, size);
         List<MaintainRecordInfo> list = maintainRecordService.getMaintainRecordInfoList(
@@ -173,7 +174,7 @@ public class MaintainRecordController {
                 query_start_time_maintain,
                 query_finish_time_maintain,
                 maintainRecordId,
-                noneAgent,
+                isAgent,
                 isFuzzy);
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);

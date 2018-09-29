@@ -86,7 +86,7 @@ public class RepairRecordController {
      * @param orderNum
      * @param repairStatus
      * @param repairRecordCustomerName    -- 维修记录中的客户联系人，不是machine的customerName
-     * @param agent                       -- 机器的代理商的名称，不同代理商可以传入不同名字，代理商只看到自己的数据。
+     * @param agent                       -- 机器的代理商的名称，不同代理商可以传入不同名字，配合isAgent代理商只看到自己的数据。
      * @param repairChargePersonName      -- 维修员负责人
      * @param issuePositionId             -- 问题部位ID,只要包含有该ID号的记录就会被返回
      * @param inWarrantyPeriod
@@ -95,6 +95,8 @@ public class RepairRecordController {
      * @param queryStartRepairEndTime     -- 维修完成时间 查询起点
      * @param queryFinishRepairEndTime    -- 维修完成时间 查询终点
      * @param repairRecordId
+     * @param isAgent                  传入true表示是代理商只查询: 精确查询agent （即使isFuzzy为true）
+     *                                 （代理商在查询时指定isFuzzy为false是可以精确查询,但是代理商模糊查询时需要此参数）
      * @param isFuzzy
      */
     @PostMapping("/getRepairRecordInfoList")
@@ -114,6 +116,7 @@ public class RepairRecordController {
                                           String queryFinishRepairEndTime,
                                           String repairRecordId,
                                           String repairActualInfoId,
+                                          boolean isAgent,
                                           boolean isFuzzy) {
         PageHelper.startPage(page, size);
         List<RepairRecordInfo> list = repairRecordService.getRepairRecordInfoList(
@@ -132,6 +135,7 @@ public class RepairRecordController {
                 queryFinishRepairEndTime,
                 repairRecordId,
                 repairActualInfoId,
+                isAgent,
                 isFuzzy);
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);

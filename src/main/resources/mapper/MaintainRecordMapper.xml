@@ -117,8 +117,12 @@
               AND userOfCustomerInMachine.name like CONCAT('%','${customerName}','%' )
           </if>
           <if test="agent != null and agent != ''">
-              --         AND agent_name like CONCAT('%','${agent}','%' )
-              AND a.name like CONCAT('%','${agent}','%' )
+              <if test = "isAgent == true">
+                  AND a.name = '${agent}'
+              </if>
+              <if test="isAgent == false || isAgent == null || isAgent == ''">
+                  AND a.name like CONCAT('%','${agent}','%' )
+              </if>
           </if>
           <if test="nameplate != null and nameplate != ''">
               and m.nameplate like CONCAT('%','${nameplate}','%' )
@@ -169,11 +173,6 @@
       </if>
       <if test="maintainRecordId != null and maintainRecordId != ''">
           and mr.id = #{maintainRecordId}
-      </if>
-      <if test="noneAgent != null and noneAgent != ''">
-          <if test="noneAgent == true">
-              AND a.name is NULL
-          </if>
       </if>
 
       ORDER By mr.maintain_date_actual DESC
