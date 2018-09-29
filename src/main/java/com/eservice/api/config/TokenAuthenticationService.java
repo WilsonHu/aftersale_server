@@ -1,7 +1,6 @@
 package com.eservice.api.config;
 
 
-import com.alibaba.fastjson.JSON;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -36,6 +35,7 @@ class TokenAuthenticationService {
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATIONTIME))
                 .signWith(SignatureAlgorithm.HS512, SECRET)
                 .compact();
+        res.setCharacterEncoding("UTF-8");
         res.addHeader(HEADER_STRING, TOKEN_PREFIX + " " + JWT);
         try {
             res.getWriter().write(user);
