@@ -32,16 +32,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable().authorizeRequests()
                 .antMatchers("/").permitAll()
                 .antMatchers(HttpMethod.POST, "/login").permitAll()
+                /**
+                 * 运行所有用户访问，不需要带JWT
+                 */
                 .antMatchers(HttpMethod.POST, "/user/loginGetUnionIdAndSave").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 // We filter the api/login requests
                 .addFilterBefore(new JWTLoginFilter("/login", authenticationManager()),
-                        UsernamePasswordAuthenticationFilter.class)
-                /**
-                 * 小程序登陆也返回JWT
-                 */
-                .addFilterBefore(new JWTLoginFilter("/user/loginGetUnionIdAndSave", authenticationManager()),
                         UsernamePasswordAuthenticationFilter.class)
                 // And filter other requests to check the presence of JWT in header
                 ///添加自定义的过滤器: JWT过滤器
