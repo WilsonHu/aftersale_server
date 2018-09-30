@@ -121,66 +121,70 @@
 
     WHERE 1=1
     <if test="isFuzzy == true">
-      <if test="customerName != null and customerName != ''">
---         AND customerName like CONCAT('%','${customerName}','%' )
-        AND u.name like CONCAT('%','${customerName}','%' )
-      </if>
-      <if test="agent != null and agent != ''">
---         AND agent_name like CONCAT('%','${agent}','%' )
-        AND a.name like CONCAT('%','${agent}','%' )
-      </if>
-      <if test="nameplate != null and nameplate != ''">
-        and m.nameplate like CONCAT('%','${nameplate}','%' )
-      </if>
-      <if test="orderNum != null and orderNum != ''">
-        and m.order_num like CONCAT('%','${orderNum}','%' )
-      </if>
-      <if test="machineType != null and machineType != ''">
-        and m.machine_type like CONCAT('%','${machineType}','%' )
-      </if>
-      <if test="machineWhereFrom != null and machineWhereFrom != ''">
-        and m.is_old_machine  like CONCAT('%','${machineWhereFrom}','%' )
-      </if>
-      <!--<if test="installChargePerson != null and installChargePerson != ''">-->
+        <if test="customerName != null and customerName != ''">
+            --         AND customerName like CONCAT('%','${customerName}','%' )
+            AND u.name like CONCAT('%','${customerName}','%' )
+        </if>
+        <if test="agent != null and agent != ''">
+            <if test = "isAgent == true">
+                AND a.name = '${agent}'
+            </if>
+            <if test="isAgent == false || isAgent == null || isAgent == ''">
+                AND a.name like CONCAT('%','${agent}','%' )
+            </if>
+        </if>
+        <if test="nameplate != null and nameplate != ''">
+            and m.nameplate like CONCAT('%','${nameplate}','%' )
+        </if>
+        <if test="orderNum != null and orderNum != ''">
+            and m.order_num like CONCAT('%','${orderNum}','%' )
+        </if>
+        <if test="machineType != null and machineType != ''">
+            and m.machine_type like CONCAT('%','${machineType}','%' )
+        </if>
+        <if test="machineWhereFrom != null and machineWhereFrom != ''">
+            and m.is_old_machine  like CONCAT('%','${machineWhereFrom}','%' )
+        </if>
+        <!--<if test="installChargePerson != null and installChargePerson != ''">-->
         <!--and userInInstallRecord.name like CONCAT('%','${installChargePerson}','%' )-->
-      <!--</if>-->
+        <!--</if>-->
     </if>
     <if test="isFuzzy == false">
-      <if test="customerName != null and customerName != ''">
---         AND u.customerName ='${customerName}'
-        AND u.name ='${customerName}'
-      </if>
-      <if test="agent != null and agent != ''">
---         AND agent_name = '${agent}'
-        AND a.name = '${agent}'
-      </if>
-      <if test="nameplate != null and nameplate != ''">
-        and m.nameplate = '${nameplate}'
-      </if>
-      <if test="orderNum != null and orderNum != ''">
-        and m.order_num = '${orderNum}'
-      </if>
-      <if test="machineType != null and machineType != ''">
-        and m.machine_type = '${machineType}'
-      </if>
-      <if test="machineWhereFrom != null and machineWhereFrom != ''">
-        and m.is_old_machine = '${machineWhereFrom}'
-      </if>
-      <!--<if test="installChargePerson != null and installChargePerson != ''">-->
+        <if test="customerName != null and customerName != ''">
+            --         AND u.customerName ='${customerName}'
+            AND u.name ='${customerName}'
+        </if>
+        <if test="agent != null and agent != ''">
+            --         AND agent_name = '${agent}'
+            AND a.name = '${agent}'
+        </if>
+        <if test="nameplate != null and nameplate != ''">
+            and m.nameplate = '${nameplate}'
+        </if>
+        <if test="orderNum != null and orderNum != ''">
+            and m.order_num = '${orderNum}'
+        </if>
+        <if test="machineType != null and machineType != ''">
+            and m.machine_type = '${machineType}'
+        </if>
+        <if test="machineWhereFrom != null and machineWhereFrom != ''">
+            and m.is_old_machine = '${machineWhereFrom}'
+        </if>
+        <!--<if test="installChargePerson != null and installChargePerson != ''">-->
         <!--and ir.install_charge_person = '${installChargePerson}'-->
-      <!--</if>-->
+        <!--</if>-->
     </if>
 
-    <if test="status != null and status != ''">
-      and m.status = #{status}
-    </if>
-    <if test="query_start_time_install!=null and query_start_time_install != '' ">
-      and DATE_FORMAT(install_actual_time,'%Y-%m-%d %T') &gt;= #{query_start_time_install}
-    </if>
-    <if test="query_finish_time_install!=null and query_finish_time_install != '' ">
-      and DATE_FORMAT(install_actual_time,'%Y-%m-%d %T') &lt;= #{query_finish_time_install}
-    </if>
-    ORDER By ir.install_actual_time DESC
+      <if test="status != null and status != ''">
+          and m.status = #{status}
+      </if>
+      <if test="query_start_time_install!=null and query_start_time_install != '' ">
+          and DATE_FORMAT(install_actual_time,'%Y-%m-%d %T') &gt;= #{query_start_time_install}
+      </if>
+      <if test="query_finish_time_install!=null and query_finish_time_install != '' ">
+          and DATE_FORMAT(install_actual_time,'%Y-%m-%d %T') &lt;= #{query_finish_time_install}
+      </if>
+      ORDER By ir.install_actual_time DESC
 
   </select>
 

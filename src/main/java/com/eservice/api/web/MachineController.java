@@ -98,7 +98,7 @@ public class MachineController {
     @PostMapping("/update")
     public Result update(@RequestBody @NotNull Machine machine) {
         List<MachineInfo> machineList = machineService.getSaledMachineInfoList(machine.getNameplate(), null,
-                null, null, null, null, null, null, null, false);
+                null, null, null, null, null,null, null, false, false);
         for (Machine info : machineList) {
             if (info.getId() != machine.getId()) {
                 return ResultGenerator.genFailResult(machine.getNameplate() + "机器已存在,不能修改！");
@@ -179,6 +179,7 @@ public class MachineController {
      * @param customerName              下面都是查询实际发生的时间/日期
      * @param query_start_time_install
      * @param query_finish_time_install
+     * @param isAgent
      * @return
      */
     @PostMapping("/getSaledMachineInfoList")
@@ -193,6 +194,7 @@ public class MachineController {
                                           String query_finish_time_install,
                                           String machineWhereFrom,
 //                                          String installChargePerson,
+                                          boolean isAgent,
                                           boolean isFuzzy) {
         PageHelper.startPage(page, size);
         List<MachineInfo> list = machineService.getSaledMachineInfoList(nameplate,
@@ -205,6 +207,7 @@ public class MachineController {
                 query_finish_time_install,
                 machineWhereFrom,
 //                installChargePerson,
+                isAgent,
                 isFuzzy);
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);

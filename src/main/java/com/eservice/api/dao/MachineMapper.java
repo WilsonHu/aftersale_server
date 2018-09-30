@@ -21,6 +21,7 @@ public interface MachineMapper extends Mapper<Machine> {
                                               @Param("query_finish_time_install") String query_finish_time_install,
                                               @Param("machineWhereFrom") String machineWhereFrom,
 //                                              @Param("installChargePerson") String installChargePerson,
+                                              @Param("isAgent") boolean isAgent,
                                               @Param("isFuzzy") boolean isFuzzy);
 
     List<MachineBaseRecordInfo> selectBaseRecordByNameplate(@Param("nameplate") String nameplate);

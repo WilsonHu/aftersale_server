@@ -95,7 +95,7 @@ public class SinsimProcessDBController {
                         "",
                         "",
                         "",
-//                        "",
+                         false,
                          isFuzzy);
                 MachineInfo machineInfo = null;
                 if (saledMachineList != null && saledMachineList.size() > 0) {
