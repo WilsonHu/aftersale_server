@@ -185,7 +185,7 @@ public class UserController {
                 String unionId = (String) jsonObject.get("unionid");
                 if(unionId != null){
                     user.setWechatUnionId(unionId);
-                    userService.save(user);
+                    userService.update(user);
                     return ResultGenerator.genSuccessResult("account:" +user.getAccount() + ",name:" + user.getName() + ",id:" + user.getId());
                 } else {
                     /**
