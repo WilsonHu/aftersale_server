@@ -53,11 +53,17 @@ public class UserController {
     @Value("${wx.grant_type}")
     private String wxGrant_type;
 
-    @Value("${wx.token}")
-    private String wxToken;
-
     @Value("${wx.requestUrl}")
     private String wxRequestUrl;
+
+    /**
+     * 公众号
+     */
+    @Value("${wx.gzhAppid}")
+    private String wxGzhAppid;
+
+    @Value("${wx.token}")
+    private String wxToken;
 
     /**
      *加密所用的秘钥 43位
@@ -260,8 +266,6 @@ public class UserController {
 
     }
 
-    /// TODO: 待完成 ...
-
     /**
      * 验证消息来自微信。
      * 若确认此次GET请求来自微信服务器，请原样返回echostr参数内容，则接入生效，成为开发者成功，否则接入失败。
@@ -284,7 +288,7 @@ public class UserController {
             /**
              * 提供接收和推送给公众平台消息的加解密接口
              */
-            WXBizMsgCrypt pc = new WXBizMsgCrypt(wxToken, wxEncodingAesKey, wxspAppid);
+            WXBizMsgCrypt pc = new WXBizMsgCrypt(wxToken, wxEncodingAesKey, wxGzhAppid);
 
             /**
              * 将公众平台回复用户的消息加密打包
