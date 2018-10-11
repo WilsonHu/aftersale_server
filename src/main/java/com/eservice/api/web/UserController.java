@@ -53,15 +53,20 @@ public class UserController {
     @Value("${wx.grant_type}")
     private String wxGrant_type;
 
+    @Value("${wx.token}")
+    private String wxToken;
+
     @Value("${wx.requestUrl}")
     private String wxRequestUrl;
 
+    /**
+     *加密所用的秘钥 43位
+     */
+    @Value("${wx.encodingAesKey}")
+    private String wxEncodingAesKey;
+
     @Resource
     private CommonService commonService;
-
-    String token = "tycljccToken";
-    // 需要加密的明文 TBD
-    String encodingAesKey = "abcdefghijklmnopqrstuvwxyz0123456789ABCDEFG";
 
     @PostMapping("/addStaff")
     public Result addStaff(@RequestBody @NotNull User user) {
@@ -256,24 +261,35 @@ public class UserController {
     }
 
     /// TODO: 待完成 ...
-    @GetMapping("/wechatMessageVerify")
-    public Result wechatMessageVerify(//@RequestParam String signature,
-                                      @RequestParam String timestamp,
-                                      @RequestParam String nonce, //随机数
-                                       String echostr) {
-        String replyMsg = " 中文<xml><ToUserName><![CDATA[oia2TjjewbmiOUlr6X-1crbLOvLw]]></ToUserName><FromUserName><![CDATA[gh_7f083739789a]]></FromUserName><CreateTime>1407743423</CreateTime><MsgType><![CDATA[video]]></MsgType><Video><MediaId><![CDATA[eYJ1MbwPRJtOvIEabaxHs7TX2D-HV71s79GUxqdUkjm6Gs2Ed1KF3ulAOA9H1xG0]]></MediaId><Title><![CDATA[testCallBackReplyVideo]]></Title><Description><![CDATA[testCallBackReplyVideo]]></Description></Video></xml>";
 
+    /**
+     * 验证消息来自微信。
+     * 若确认此次GET请求来自微信服务器，请原样返回echostr参数内容，则接入生效，成为开发者成功，否则接入失败。
+     *
+     * @param signature 	微信加密签名，signature结合了开发者填写的token参数和请求中的timestamp参数、nonce参数。
+     *                      类似： e5c6c537c98ee3524b201a629f676c66779bb4a3、4bd5ea6f6757cd601dade20e7e499683e0c49e36每次变化。
+     * @param timestamp     时间戳
+     * @param nonce         随机数
+     * @param echoStr       收到的字符串 (明文，该字符串 待检验是否来自微信) eg: 不限于XML格式，XML格式比如" 中文<xml><ToUserName><![CDATA[oia2TjjewbmiOUlr6X-1crbLOvLw]]></ToUserName><FromUserName><![CDATA[gh_7f083739789a]]></FromUserName><CreateTime>1407743423</CreateTime><MsgType><![CDATA[video]]></MsgType><Video><MediaId><![CDATA[eYJ1MbwPRJtOvIEabaxHs7TX2D-HV71s79GUxqdUkjm6Gs2Ed1KF3ulAOA9H1xG0]]></MediaId><Title><![CDATA[testCallBackReplyVideo]]></Title><Description><![CDATA[testCallBackReplyVideo]]></Description></Video></xml>";
+     * @return
+     */
+//    @PostMapping("/wechatMessageVerify")
+    @GetMapping("/wechatMessageVerify")
+    public Result wechatMessageVerify( String signature,
+                                       String timestamp,
+                                       String nonce,
+                                       String echoStr) {
+        String msg = null;
         try {
             /**
              * 提供接收和推送给公众平台消息的加解密接口
              */
-            WXBizMsgCrypt pc = new WXBizMsgCrypt(token, encodingAesKey, wxspAppid);
+            WXBizMsgCrypt pc = new WXBizMsgCrypt(wxToken, wxEncodingAesKey, wxspAppid);
 
             /**
              * 将公众平台回复用户的消息加密打包
              */
-            String mingwen = pc.encryptMsg(replyMsg, timestamp, nonce);
-
+            String mingwen = pc.encryptMsg(echoStr, timestamp, nonce);
             System.out.println("加密后: " + mingwen);
 
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -302,24 +318,28 @@ public class UserController {
             String format = "<xml><ToUserName><![CDATA[toUser]]></ToUserName><Encrypt><![CDATA[%1$s]]></Encrypt></xml>";
             String fromXML = String.format(format, encrypt);
 
-            //
-            // 公众平台发送消息给第三方，第三方处理
-            //
-
-            // 第三方收到公众号平台发送的消息
-            String result2 = pc.decryptMsg(msgSignature, timestamp, nonce, fromXML);
+            /**
+             * 第三方收到公众号平台发送的消息
+             * 检验消息的真实性，并且获取解密后的明文
+             */
+//            String result2 = pc.decryptMsg(signature, timestamp, nonce, echoStr);
+            String result2 = pc.decryptMsg(signature, timestamp, nonce, fromXML);
             System.out.println("解密后明文: " + result2);
             return ResultGenerator.genSuccessResult("解密后明文: " + result2);
 
         } catch (AesException e) {
             e.printStackTrace();
+            msg = e.toString();
         } catch (ParserConfigurationException e) {
             e.printStackTrace();
+            msg = e.toString();
         } catch (SAXException e) {
             e.printStackTrace();
+            msg = e.toString();
         } catch (IOException e) {
             e.printStackTrace();
+            msg = e.toString();
         }
-        return ResultGenerator.genFailResult("fail");
+        return ResultGenerator.genFailResult("Failed to verify, " + msg);
     }
 }
