@@ -1,5 +1,6 @@
 package com.eservice.api;
 
+import com.eservice.api.service.common.AftersaleTimer;
 import org.apache.catalina.connector.Connector;
 import org.apache.catalina.Context;
 import org.apache.tomcat.util.descriptor.web.SecurityCollection;
@@ -21,6 +22,12 @@ public class ApiApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(ApiApplication.class, args);
+
+		/**
+		 * 执行定时任务
+		 */
+		AftersaleTimer aftersaleTimer = new AftersaleTimer();
+		aftersaleTimer.start();
 	}
 
 	@Bean
