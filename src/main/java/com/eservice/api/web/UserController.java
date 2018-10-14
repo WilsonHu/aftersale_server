@@ -1,5 +1,6 @@
 package com.eservice.api.web;
 
+import com.alibaba.druid.util.StringUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.eservice.api.core.Result;
@@ -12,14 +13,18 @@ import com.eservice.api.service.impl.UserServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.qq.weixin.mp.aes.AesException;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.validation.constraints.NotNull;
 import javax.xml.parsers.*;
-import java.io.IOException;
-import java.io.StringReader;
+import java.io.*;
 import java.util.*;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -71,8 +76,14 @@ public class UserController {
     @Value("${wx.encodingAesKey}")
     private String wxEncodingAesKey;
 
+    //    https://api.weixin.qq.com/sns/oauth2/access_token?appid=APPID&secret=SECRET&code=CODE&grant_type=authorization_code
+    private String WX_OAUTH_ACCESS_TOKEN_URL = "https://api.weixin.qq.com/sns/oauth2/access_token";
+
     @Resource
     private CommonService commonService;
+
+    private Logger logger = Logger.getLogger(CommonService.class);
+
 
     @PostMapping("/addStaff")
     public Result addStaff(@RequestBody @NotNull User user) {
@@ -274,17 +285,24 @@ public class UserController {
      *                      类似： e5c6c537c98ee3524b201a629f676c66779bb4a3、4bd5ea6f6757cd601dade20e7e499683e0c49e36每次变化。
      * @param timestamp     时间戳
      * @param nonce         随机数
-     * @param echoStr       收到的字符串 (明文，该字符串 待检验是否来自微信) eg: 不限于XML格式，XML格式比如" 中文<xml><ToUserName><![CDATA[oia2TjjewbmiOUlr6X-1crbLOvLw]]></ToUserName><FromUserName><![CDATA[gh_7f083739789a]]></FromUserName><CreateTime>1407743423</CreateTime><MsgType><![CDATA[video]]></MsgType><Video><MediaId><![CDATA[eYJ1MbwPRJtOvIEabaxHs7TX2D-HV71s79GUxqdUkjm6Gs2Ed1KF3ulAOA9H1xG0]]></MediaId><Title><![CDATA[testCallBackReplyVideo]]></Title><Description><![CDATA[testCallBackReplyVideo]]></Description></Video></xml>";
+     * @param echostr       收到的字符串 (明文，该字符串 待检验是否来自微信) eg: 不限于XML格式，XML格式比如" 中文<xml><ToUserName><![CDATA[oia2TjjewbmiOUlr6X-1crbLOvLw]]></ToUserName><FromUserName><![CDATA[gh_7f083739789a]]></FromUserName><CreateTime>1407743423</CreateTime><MsgType><![CDATA[video]]></MsgType><Video><MediaId><![CDATA[eYJ1MbwPRJtOvIEabaxHs7TX2D-HV71s79GUxqdUkjm6Gs2Ed1KF3ulAOA9H1xG0]]></MediaId><Title><![CDATA[testCallBackReplyVideo]]></Title><Description><![CDATA[testCallBackReplyVideo]]></Description></Video></xml>";
      * @return
      */
-//    @PostMapping("/wechatMessageVerify")
     @GetMapping("/wechatMessageVerify")
-    public Result wechatMessageVerify( String signature,
-                                       String timestamp,
-                                       String nonce,
-                                       String echoStr) {
+//    @RequestMapping(value = "/wechatMessageVerify", method = RequestMethod.GET,produces = {"text/plain;charset=UTF-8"})
+    public void wechatMessageVerify(@RequestParam String signature,
+                                    @RequestParam String timestamp,
+                                    @RequestParam String nonce,
+                                    @RequestParam(name = "echostr", required = false) String echostr, HttpServletResponse response ) {
         String msg = null;
-        try {
+
+        System.out.println(" aaaaa echostr is : " + echostr);
+        logger.info("====wechatMessageVerify.  signature ========" + signature);
+        logger.info("====wechatMessageVerify.  timestamp ========" + timestamp);
+        logger.info("====wechatMessageVerify.  nonce ========" + nonce);
+        logger.info("====wechatMessageVerify.  echostr ========" + echostr);
+        try
+        {
             /**
              * 提供接收和推送给公众平台消息的加解密接口
              */
@@ -293,7 +311,7 @@ public class UserController {
             /**
              * 将公众平台回复用户的消息加密打包
              */
-            String mingwen = pc.encryptMsg(echoStr, timestamp, nonce);
+            String mingwen = pc.encryptMsg(echostr, timestamp, nonce);
             System.out.println("加密后: " + mingwen);
 
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -329,21 +347,41 @@ public class UserController {
 //            String result2 = pc.decryptMsg(signature, timestamp, nonce, echoStr);
             String result2 = pc.decryptMsg(signature, timestamp, nonce, fromXML);
             System.out.println("解密后明文: " + result2);
-            return ResultGenerator.genSuccessResult("解密后明文: " + result2);
+//            return ResultGenerator.genSuccessResult("aaa");
+            logger.info("====wechatMessageVerify. out write ======== " + echostr);
 
-        } catch (AesException e) {
+            /**
+             * 原样返回echostr，不能有双引号
+             */
+            BufferedOutputStream out = null;
+            try {
+                out = new BufferedOutputStream(response.getOutputStream());
+                out.write(echostr.getBytes());
+                out.flush();
+                out.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        catch (AesException e) {
             e.printStackTrace();
-            msg = e.toString();
+            logger.info("====wechatMessageVerify AesException ======== " + e.toString());
         } catch (ParserConfigurationException e) {
+            logger.info("====wechatMessageVerify. ParserConfigurationException ======== " + e.toString());
             e.printStackTrace();
-            msg = e.toString();
         } catch (SAXException e) {
             e.printStackTrace();
-            msg = e.toString();
+            logger.info("====wechatMessageVerify. SAXException ======== " + e.toString());
         } catch (IOException e) {
             e.printStackTrace();
-            msg = e.toString();
+            logger.info("====wechatMessageVerify. IOException ======== " + e.toString());
         }
-        return ResultGenerator.genFailResult("Failed to verify, " + msg);
+    }
+
+    @GetMapping("/wechatRedirect")
+    public Result  wechatRedirect(@RequestParam String code,
+                                    @RequestParam String state ) {
+        logger.info("wechatRedirect code: " + code + " state: " + state);
+        return ResultGenerator.genSuccessResult("wechatRedirect code: " + code + " state: " + state);
     }
 }
