@@ -1,42 +1,18 @@
 package com.eservice.api.web;
 
-import com.alibaba.druid.util.StringUtils;
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.eservice.api.core.Result;
 import com.eservice.api.core.ResultGenerator;
 import com.eservice.api.model.user.StaffInfo;
 import com.eservice.api.model.user.User;
 import com.eservice.api.model.user.UserInfo;
-import com.eservice.api.service.common.CommonService;
 import com.eservice.api.service.impl.UserServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.qq.weixin.mp.aes.AesException;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import javax.validation.constraints.NotNull;
-import javax.xml.parsers.*;
-import java.io.*;
 import java.util.*;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
-
-import com.qq.weixin.mp.aes.WXBizMsgCrypt;
-import org.xml.sax.SAXException;
 
 /**
 * Class Description: xxx
@@ -48,42 +24,6 @@ import org.xml.sax.SAXException;
 public class UserController {
     @Resource
     private UserServiceImpl userService;
-
-    @Value("${wx.wxspAppid}")
-    private String wxspAppid;
-
-    @Value("${wx.wxspSecret}")
-    private String wxspSecret;
-
-    @Value("${wx.grant_type}")
-    private String wxGrant_type;
-
-    @Value("${wx.requestUrl}")
-    private String wxRequestUrl;
-
-    /**
-     * 公众号
-     */
-    @Value("${wx.gzhAppid}")
-    private String wxGzhAppid;
-
-    @Value("${wx.token}")
-    private String wxToken;
-
-    /**
-     *加密所用的秘钥 43位
-     */
-    @Value("${wx.encodingAesKey}")
-    private String wxEncodingAesKey;
-
-    //    https://api.weixin.qq.com/sns/oauth2/access_token?appid=APPID&secret=SECRET&code=CODE&grant_type=authorization_code
-    private String WX_OAUTH_ACCESS_TOKEN_URL = "https://api.weixin.qq.com/sns/oauth2/access_token";
-
-    @Resource
-    private CommonService commonService;
-
-    private Logger logger = Logger.getLogger(CommonService.class);
-
 
     @PostMapping("/addStaff")
     public Result addStaff(@RequestBody @NotNull User user) {
@@ -182,206 +122,5 @@ public class UserController {
         List<StaffInfo> list = userService.getStaffByParam(agentId);
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
-    }
-
-    /**
-     * 根据用户登陆，向腾讯服务器获取unionId并保存，再返回用户信息（包括unionId）。
-     * @param account
-     * @param password
-     * @param jsCode
-     * @return
-     */
-    @PostMapping("/loginGetUnionIdAndSave")
-    public Result loginGetUnionIdAndSave(@RequestParam(defaultValue = "0") String account,
-                             @RequestParam(defaultValue = "0") String password,
-                             @RequestParam(defaultValue = "0") String jsCode) {
-
-        String message = null;
-        if(account == null || "".equals(account)) {
-            return ResultGenerator.genFailResult("账号不能为空！");
-        } else if(password == null || "".equals(password)) {
-            return ResultGenerator.genFailResult("密码不能为空！");
-        }else {
-            User user  = userService.requestLogin(account, password,null);
-            if(user == null) {
-                return ResultGenerator.genFailResult("账号/密码/unionid 不正确！");
-            }else {
-
-                Map<String, String> requestUrlParam = new HashMap<String, String>();
-                requestUrlParam.put("appid",wxspAppid);
-                requestUrlParam.put("secret",wxspSecret);
-                /**
-                 * 小程序调用wx.login返回的jsCode
-                 */
-                requestUrlParam.put("js_code", jsCode);
-                requestUrlParam.put("grant_type", wxGrant_type);
-                String respondStr = commonService.sendPost(wxRequestUrl, requestUrlParam);
-                JSONObject jsonObject = JSON.parseObject(respondStr);
-
-                if(jsonObject == null){
-                    return ResultGenerator.genFailResult("jsonObj null, " + respondStr);
-                }
-                System.out.print("respondStr: " + respondStr );
-
-                String unionId = (String) jsonObject.get("unionid");
-                if(unionId != null){
-                    user.setWechatUnionId(unionId);
-                    userService.update(user);
-                    return ResultGenerator.genSuccessResult("account:" +user.getAccount() + ",name:" + user.getName() + ",id:" + user.getId());
-                } else {
-                    /**
-                     * 没有unionId（需要用户先关注公众号）,直接返回具体信息是为了小程序方便。
-                     */
-                    message = "请先关注公众号";
-                    return ResultGenerator.genFailResult(message);
-                }
-            }
-        }
-    }
-
-    /**
-     * 根据js_code去微信的服务器请求unionID，
-     * 如果得到的unionId已经存在我们数据库里面，返回该用户信息
-     * @param jsCode
-     * @return
-     */
-    @PostMapping("/getUsersByJsCode")
-    public Result getUsersByJsCode(@RequestParam String jsCode ) {
-        String message = null;
-        Map<String, String> requestUrlParam = new HashMap<String, String>();
-        requestUrlParam.put("appid",wxspAppid);
-        requestUrlParam.put("secret",wxspSecret);
-        requestUrlParam.put("js_code", jsCode);
-        requestUrlParam.put("grant_type", wxGrant_type);
-
-        String respondStr = commonService.sendPost(wxRequestUrl, requestUrlParam);
-        JSONObject jsonObject = JSON.parseObject(respondStr);
-
-        if(jsonObject == null){
-            return ResultGenerator.genFailResult("jsonObj null, " + respondStr);
-        }
-        System.out.print("respondStr: " + respondStr );
-
-        String unionId = (String) jsonObject.get("unionid");
-        if(unionId != null){
-            User user = userService.findBy("wechat_union_id", unionId);
-            if(user != null){
-                return ResultGenerator.genSuccessResult("account:" +user.getAccount() + ",name:" + user.getName() + ",id:" + user.getId());
-            } else{
-                return ResultGenerator.genFailResult("No user found by the js_code");
-            }
-        } else {
-            message = "no unionId included in respond";
-            return ResultGenerator.genFailResult(message);
-        }
-
-    }
-
-    /**
-     * 验证消息来自微信。
-     * 若确认此次GET请求来自微信服务器，请原样返回echostr参数内容，则接入生效，成为开发者成功，否则接入失败。
-     *
-     * @param signature 	微信加密签名，signature结合了开发者填写的token参数和请求中的timestamp参数、nonce参数。
-     *                      类似： e5c6c537c98ee3524b201a629f676c66779bb4a3、4bd5ea6f6757cd601dade20e7e499683e0c49e36每次变化。
-     * @param timestamp     时间戳
-     * @param nonce         随机数
-     * @param echostr       收到的字符串 (明文，该字符串 待检验是否来自微信) eg: 不限于XML格式，XML格式比如" 中文<xml><ToUserName><![CDATA[oia2TjjewbmiOUlr6X-1crbLOvLw]]></ToUserName><FromUserName><![CDATA[gh_7f083739789a]]></FromUserName><CreateTime>1407743423</CreateTime><MsgType><![CDATA[video]]></MsgType><Video><MediaId><![CDATA[eYJ1MbwPRJtOvIEabaxHs7TX2D-HV71s79GUxqdUkjm6Gs2Ed1KF3ulAOA9H1xG0]]></MediaId><Title><![CDATA[testCallBackReplyVideo]]></Title><Description><![CDATA[testCallBackReplyVideo]]></Description></Video></xml>";
-     * @return
-     */
-    @GetMapping("/wechatMessageVerify")
-//    @RequestMapping(value = "/wechatMessageVerify", method = RequestMethod.GET,produces = {"text/plain;charset=UTF-8"})
-    public void wechatMessageVerify(@RequestParam String signature,
-                                    @RequestParam String timestamp,
-                                    @RequestParam String nonce,
-                                    @RequestParam(name = "echostr", required = false) String echostr, HttpServletResponse response ) {
-        String msg = null;
-
-        System.out.println(" aaaaa echostr is : " + echostr);
-        logger.info("====wechatMessageVerify.  signature ========" + signature);
-        logger.info("====wechatMessageVerify.  timestamp ========" + timestamp);
-        logger.info("====wechatMessageVerify.  nonce ========" + nonce);
-        logger.info("====wechatMessageVerify.  echostr ========" + echostr);
-        try
-        {
-            /**
-             * 提供接收和推送给公众平台消息的加解密接口
-             */
-            WXBizMsgCrypt pc = new WXBizMsgCrypt(wxToken, wxEncodingAesKey, wxGzhAppid);
-
-            /**
-             * 将公众平台回复用户的消息加密打包
-             */
-            String mingwen = pc.encryptMsg(echostr, timestamp, nonce);
-            System.out.println("加密后: " + mingwen);
-
-            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-
-            dbf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
-            dbf.setFeature("http://xml.org/sax/features/external-general-entities", false);
-            dbf.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
-            dbf.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
-
-            dbf.setXIncludeAware(false);
-            dbf.setExpandEntityReferences(false);
-
-            DocumentBuilder db = dbf.newDocumentBuilder();
-
-            StringReader sr = new StringReader(mingwen);
-            InputSource is = new InputSource(sr);
-            Document document = db.parse(is);
-
-            Element root = document.getDocumentElement();
-            NodeList nodelist1 = root.getElementsByTagName("Encrypt");
-            NodeList nodelist2 = root.getElementsByTagName("MsgSignature");
-
-            String encrypt = nodelist1.item(0).getTextContent();
-            String msgSignature = nodelist2.item(0).getTextContent();
-
-            String format = "<xml><ToUserName><![CDATA[toUser]]></ToUserName><Encrypt><![CDATA[%1$s]]></Encrypt></xml>";
-            String fromXML = String.format(format, encrypt);
-
-            /**
-             * 第三方收到公众号平台发送的消息
-             * 检验消息的真实性，并且获取解密后的明文
-             */
-//            String result2 = pc.decryptMsg(signature, timestamp, nonce, echoStr);
-            String result2 = pc.decryptMsg(signature, timestamp, nonce, fromXML);
-            System.out.println("解密后明文: " + result2);
-//            return ResultGenerator.genSuccessResult("aaa");
-            logger.info("====wechatMessageVerify. out write ======== " + echostr);
-
-            /**
-             * 原样返回echostr，不能有双引号
-             */
-            BufferedOutputStream out = null;
-            try {
-                out = new BufferedOutputStream(response.getOutputStream());
-                out.write(echostr.getBytes());
-                out.flush();
-                out.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        catch (AesException e) {
-            e.printStackTrace();
-            logger.info("====wechatMessageVerify AesException ======== " + e.toString());
-        } catch (ParserConfigurationException e) {
-            logger.info("====wechatMessageVerify. ParserConfigurationException ======== " + e.toString());
-            e.printStackTrace();
-        } catch (SAXException e) {
-            e.printStackTrace();
-            logger.info("====wechatMessageVerify. SAXException ======== " + e.toString());
-        } catch (IOException e) {
-            e.printStackTrace();
-            logger.info("====wechatMessageVerify. IOException ======== " + e.toString());
-        }
-    }
-
-    @GetMapping("/wechatRedirect")
-    public Result  wechatRedirect(@RequestParam String code,
-                                    @RequestParam String state ) {
-        logger.info("wechatRedirect code: " + code + " state: " + state);
-        return ResultGenerator.genSuccessResult("wechatRedirect code: " + code + " state: " + state);
     }
 }

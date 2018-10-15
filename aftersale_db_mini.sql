@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50553
 File Encoding         : 65001
 
-Date: 2018-09-27 13:25:07
+Date: 2018-10-15 14:22:09
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -714,3 +714,24 @@ INSERT INTO `user` VALUES ('11', 'kehu3_w_agent', 'kehu3_w_agent', null, '5', '2
 INSERT INTO `user` VALUES ('12', 'kehu4_w_agent', 'kehu4_w_agent', null, '5', '1', '3', 'sinsim', '1', 'kehu4_w_agent的电话www4444', '0000-00-00 00:00:00', '客户地址kehu4_w_agent4444444');
 INSERT INTO `user` VALUES ('13', 'repairPerson13', 'repairPerson13', null, '3', '0', '0', 'sinsim', '', 'repairPerson13-phone333', '0000-00-00 00:00:00', null);
 INSERT INTO `user` VALUES ('14', 'user14', 'user14', null, '3', '0', '4', 'sinsim', '1', 'user14-phone123', '0000-00-00 00:00:00', null);
+-- ----------------------------
+-- Table structure for `wechat_user_info`
+-- ----------------------------
+DROP TABLE IF EXISTS `wechat_user_info`;
+CREATE TABLE `wechat_user_info` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `open_id` varchar(255) NOT NULL,
+  `union_d` varchar(255) DEFAULT NULL COMMENT '只有在用户将公众号绑定到微信开放平台帐号后，才会出现该字段。',
+  `nickname` varchar(255) DEFAULT NULL,
+  `sex` varchar(255) DEFAULT NULL,
+  `province` varchar(255) DEFAULT NULL,
+  `city` varchar(255) DEFAULT NULL,
+  `country` varchar(255) DEFAULT NULL,
+  `headimgrul` varchar(255) DEFAULT NULL COMMENT '用户头像，最后一个数值代表正方形头像大小（有0、46、64、96、132数值可选，0代表640*640正方形头像），用户没有头像时该项为空。若用户更换头像，原有头像URL将失效。',
+  `privilege` text COMMENT '用户特权信息，json 数组，如微信沃卡用户为（chinaunicom）',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of wechat_user_info
+-- ----------------------------

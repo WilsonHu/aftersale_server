@@ -27,26 +27,17 @@ public class AftersaleTimer extends TimerTask {
     private String password_aftersale_db = "hello123!";
 
     /**
-     * 生产部数据库 待定
+     * 生产部数据库 目前不需要，TODO, 后续加上
      */
-//    @Value("${spring.datasource_sinsim_db.url}")
-//    private String process_db_url;
-//
-//    private String user_procces_db = "root";
-//
-//    private String password_procces_db = "hello123!";
 
-    //Mon Nov 11 18:47:52 CST 3918
-//    private Date startdate =  new Date(2018,10,11,18,47,52);
     private Date now = new Date();//Sun Oct 14 19:56:25 CST 2018
-    //System.currentTimeMillis());
 
     private java.util.Timer itimer = new java.util.Timer();
 
     /**
-     * 每  10min 发一次
+     * 每 60min 发一次
      */
-    private int periodMilliSecond = 60*10*1000;
+    private int periodMilliSecond = 60*60*1000;
 
     private Logger logger = Logger.getLogger(CommonService.class);
     public void start(){
