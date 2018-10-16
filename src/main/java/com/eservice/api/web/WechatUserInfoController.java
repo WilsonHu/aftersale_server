@@ -79,21 +79,14 @@ public class WechatUserInfoController {
     @Value("${wx.encodingAesKey}")
     private String wxEncodingAesKey;
 
-    private String WX_OAUTH_ACCESS_TOKEN_URL = "https://api.weixin.qq.com/sns/oauth2/access_token";
     private static final String urlGetAccessToken = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=%s&secret=%s&code=%s&grant_type=authorization_code";
-    private static final String ACCESS_TOKEN_URL = "https://api.weixin.qq.com/sns/oauth2/access_token";
-    private String urlGetUserinfo = "https://api.weixin.qq.com/sns/userinfo?access_token=%s&openid=%s";
 
+    private static final String urlGetUserinfo = "https://api.weixin.qq.com/sns/userinfo?access_token=%s&openid=%s";
 
-    @Value("${eserviceBaseUrl}")
-    private String eserviceBaseUrl;
-
-    private String scope = "snsapi_userinfo"; // 采用网页授权的方式
     @Resource
     private CommonService commonService;
 
     private Logger logger = Logger.getLogger(CommonService.class);
-
 
     @Resource
     private WechatUserInfoServiceImpl wechatUserInfoService;
@@ -240,8 +233,6 @@ public class WechatUserInfoController {
                                     @RequestParam String timestamp,
                                     @RequestParam String nonce,
                                     @RequestParam(name = "echostr", required = false) String echostr, HttpServletResponse response ) {
-        String msg = null;
-
         System.out.println(" aaaaa echostr is : " + echostr);
         logger.info("====wechatMessageVerify.  signature ========" + signature);
         logger.info("====wechatMessageVerify.  timestamp ========" + timestamp);
@@ -324,241 +315,45 @@ public class WechatUserInfoController {
         }
     }
 
-//    /**
-//     * 通过code换取网页授权access_token
-//     * 链接中带有公众号的secret参数，以及获取到的access_token安全级别都非常高，必须只保存在服务器，不允许传给客户端。
-//     * @param gzhAppid
-//     * @param gzhAppSecret
-//     * @param code
-//     * @param grantType
-//     * @param response
-//     * @return
-//     *
-//     * 后端会根据你传过去的code给前端返回对应的uid（用户id），以及openid等
-//     */
-//    @GetMapping("/wechatAuthAccessTokenByCode_getUserInfo")
-//    public String wechatAuthAccessTokenByCode(@RequestParam String gzhAppid,
-//                                    @RequestParam String gzhAppSecret,
-//                                    @RequestParam String code,
-//                                    @RequestParam String grantType, HttpServletResponse response ) {
-//
-//        logger.info("=== gzhAppid is " + gzhAppid);
-//        logger.info("=== gzhAppSecret is " + gzhAppSecret);
-//        logger.info("=== code is " + code);
-//
-//        /**
-//         * 获取code后，请求以下链接获取access_token：
-//         *  https://api.weixin.qq.com/sns/oauth2/access_token?appid=APPID&secret=SECRET&code=CODE&grant_type=authorization_code
-//         */
-//        Map<String, String> requestUrlParam = new HashMap<String, String>();
-//        requestUrlParam.put("appid",gzhAppid);
-//        requestUrlParam.put("secret",gzhAppSecret);
-//        requestUrlParam.put("code", code);
-//        requestUrlParam.put("grant_type", grantType);
-//        String respondStr = commonService.sendPost(wxRequestUrl, requestUrlParam);
-//
-//        JSONObject jsonObject = JSON.parseObject(respondStr);
-//
-//        if(jsonObject == null){
-//            return  "jsonObj is null";
-//        }
-//        System.out.print("respondStr: " + respondStr );
-//
-//        String unionId = (String) jsonObject.get("access_token");
-//        if(unionId != null){
-//            logger.info("respondStr is " + respondStr);
-//            System.out.println("respondStr is " + respondStr);
-//        } else {
-//            return  "no access_token found" ;
-//        }
-//
-//        // TODO 查看token是否有效，刷新access_token（如果需要）
-//
-//        // 拉取用户信息(需scope为 snsapi_userinfo)
-//
-//    }
-
-//
-//    @RequestMapping(value = "/authorization", method = RequestMethod.GET)
-//    public void authorizationWeixin(
-//            @RequestParam String code,
-//            HttpServletRequest request,
-//            HttpServletResponse response) throws IOException{
-//        request.setCharacterEncoding("UTF-8");
-//        response.setCharacterEncoding("UTF-8");
-//
-//        PrintWriter out = response.getWriter();
-//        LOGGER.info("RestFul of authorization parameters code:{}",code);
-//
-//        try {
-//            String rs = getOauthAccessToken(code);
-//            out.write(rs);
-//            LOGGER.info("RestFul of authorization is successful.",rs);
-//        } catch (Exception e) {
-//            LOGGER.error("RestFul of authorization is error.",e);
-//        }finally{
-//            out.close();
-//        }
-//    }
-//
-//    /**
-//     * 根据code 获取授权的token 仅限授权时使用，与全局的access_token不同
-//     * @param code
-//     * @return
-//     * @throws IOException
-//     * @throws ClientProtocolException
-//     */
-//    public String getOauthAccessToken(String code) throws ClientProtocolException, IOException{
-//
-////        String data = redisService.get("WEIXIN_SQ_ACCESS_TOKEN");
-//        String data = "WEIXIN_SQ_ACCESS_TOKEN";
-//
-//        String rs_access_token = null;
-//        String rs_openid = null;
-//        String url = WX_OAUTH_ACCESS_TOKEN_URL + "?appid=" + wxspAppid + "&secret=" + wxspSecret + "&code=" + code + "&grant_type=authorization_code";
-//        if (StringUtils.isEmpty(data)) {
-//            synchronized (this) {
-//                //已过期，需要刷新
-//                String hs = apiService.doGet(url);
-//                JSONObject json = JSONObject.parseObject(hs);
-//                String refresh_token = json.getString("refresh_token");
-//
-//                String refresh_url = "https://api.weixin.qq.com/sns/oauth2/refresh_token?appid="+WX_APPID+"&grant_type=refresh_token&refresh_token="+refresh_token;
-//                String r_hs = apiService.doGet(refresh_url);
-//                JSONObject r_json = JSONObject.parseObject(r_hs);
-//                String r_access_token = r_json.getString("access_token");
-//                String r_expires_in = r_json.getString("expires_in");
-//                rs_openid = r_json.getString("openid");
-//
-//                rs_access_token = r_access_token;
-//                redisService.set("WEIXIN_SQ_ACCESS_TOKEN", r_access_token, Integer.parseInt(r_expires_in) - 3600);
-//                LOGGER.info("Set sq access_token to redis is successful.parameters time:{},realtime",Integer.parseInt(r_expires_in), Integer.parseInt(r_expires_in) - 3600);
-//            }
-//        }else{
-//            //还没有过期
-//            String hs = apiService.doGet(url);
-//            JSONObject json = JSONObject.parseObject(hs);
-//            rs_access_token = json.getString("access_token");
-//            rs_openid = json.getString("openid");
-//            LOGGER.info("Get sq access_token from redis is successful.rs_access_token:{},rs_openid:{}",rs_access_token,rs_openid);
-//        }
-//
-//        return getOauthUserInfo(rs_access_token,rs_openid);
-//    }
-//
-//    /**
-//     * 根据授权token获取用户信息
-//     * @param access_token
-//     * @param openid
-//     * @return
-//     */
-//    public String getOauthUserInfo(String access_token,String openid){
-//        String url = "https://api.weixin.qq.com/sns/userinfo?access_token="+ access_token +"&openid="+ openid +"&lang=zh_CN";
-//        try {
-//            String hs = apiService.doGet(url);
-//
-//            //保存用户信息
-//            saveWeixinUser(hs);
-//
-//            return hs;
-//        } catch (IOException e) {
-//            LOGGER.error("RestFul of authorization is error.",e);
-//        }
-//        return null;
-//    }
-
-    /**
-     * 2、前端把这个code作为数据调用后端登录接口，后端拿到code，加上appid和secret参数
-     * 请求 https://api.weixin.qq.com/sns/oauth2/access_token?appid=APPID&secret=SECRET&code=CODE&grant_type=authorization_code 
-     * 来获取access_token, ///
-     * 同时拿到openid。
-     *
-     * 3.后端会先判断数据库里有没有该openid，
-     * 如果有的话，后端将数据（用户信息）返回到前端；
-     * 如果没有，
-     * 请求 /// https://api.weixin.qq.com/sns/oauth2/access_token?appid=APPID&secret=SECRET&code=CODE&grant_type=authorization_code 
-     * 应该是 https://api.weixin.qq.com/sns/userinfo?access_token=ACCESS_TOKEN&openid=OPENID&lang=zh_CN
-     * 获取用户信息，返回给前端并存在数据库里。
-     */
-
-    /**
-     * 引导用户进入微信授权页面,记得需要在微信开发平台修改网页授权页面域名
-     * 微信只弹出一次授权,第二次的时候就直接跳转到 redirect_uri 页面去了
-     *
-     * @return
-     */
-//    @RequestMapping("/authorization.action")
-//    public String authorization() {
-//        String URL = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=%s&redirect_uri=%s&response_type=code&scope=%s&state=STATE#wechat_redirect";
-//        String APPID = "wx24cdc78e365daee0";
-//        String REDIRECT_URI = baseUrl + "/wechat/getAccessToken.action"; // 回调地址
-//
-//        String SCOPE = "snsapi_userinfo"; // 采用网页授权的方式
-//        // 引导用户进入微信用户授权的页面的url
-//        String url = String.format(URL, APPID, REDIRECT_URI, SCOPE);
-//
-//        return "redirect:" + url;
-//    }
-
-
-    /**
-     * 引导用户进入微信授权页面,记得需要在微信开发平台修改网页授权页面域名
-     * 微信只弹出一次授权,第二次的时候就直接跳转到 redirect_uri 页面去了
-     * @return
-     */
-    @GetMapping("/wechatRedirect")
-    public String  wechatRedirect() {
-        String URL = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=%s&redirect_uri=%s&response_type=code&scope=%s&state=STATE#wechat_redirect";
-        String REDIRECT_URI = eserviceBaseUrl + "/wechat/getAccessToken"; // 回调地址
-
-        // 引导用户进入微信用户授权的页面的url
-        String url = String.format(URL, wxGzhAppid, REDIRECT_URI, scope);
-
-        logger.info("url is :" + url);
-        return "redirect:" + url;
-    }
-
     /**
      * 用户点击页面上的"确认登录"以后,回调的地址
-     *
+     * 配置的跳转地址：
+     * https://open.weixin.qq.com/connect/oauth2/authorize?
+     * appid=wx930d6e916143e08c
+     * &redirect_uri=https%3A%2F%2Feservice-tech.cn%2Fapi%2Fwechat%2Fuser%2Finfo%2FwechatRedirect
+     * &response_type=code
+     * &scope=snsapi_userinfo
+     * &state=eservice
+     * &connect_redirect=1#wechat_redirect
+     * 即微信跳转到 https://eservice-tech.cn/api/wechat/user/info/wechatRedirect
      * @param code  授权码,有了授权码以后才能获取用户的openID, 再保存到数据库
      * @return
      */
-    @RequestMapping("/getAccessToken")
-    public String getAccessToken(String code,  HttpSession httpSession) throws IOException {
+    @RequestMapping("/wechatRedirect")
+    public String wechatRedirect(@RequestParam String code) throws IOException {
 
+        logger.info("wechatRedirect get param code:" + code);
         String accessURL = String.format(urlGetAccessToken, wxGzhAppid, gzhSecret, code);
         String result = commonService.getHttpsResponse(accessURL, "GET");
         logger.info("getAccessToke in: " + result);
-        /*
-        若请求正确,返回的结果集应如下:
-        {
-            "access_token":"ACCESS_TOKEN",
-            "expires_in":7200,
-            "refresh_token":"REFRESH_TOKEN",
-            "openid":"OPENID",
-            "scope":"SCOPE"
-        } */
 
         Gson gson = new Gson();
         wxWebAccessTokenInfo tokenInfo = gson.fromJson(result, wxWebAccessTokenInfo.class);
 
         // 通过获取到的access_token和openid获取用户的信息
         WechatUserInfo wechatUserInfo = getUserinfo(tokenInfo);
+        if(wechatUserInfo != null) {
+            // 将用户的信息存进数据库
+            wechatUserInfoService.update(wechatUserInfo);
 
-
-        // 将用户的信息存进数据库
-        wechatUserInfoService.update(wechatUserInfo);/////
-
-//        /**
-//         * 这个返回方式，返回jsp文件，设置其中的userinfo
-//         */
-//        // 获取到ACCESS_TOKEN和openid以后,将它们存进session中去 /// ?
-        httpSession.setAttribute("userinfo", wechatUserInfo);
-        return "/jsp/userinfo.jsp";
-//        return "回调地址是哪？";
-
-
+            if (wechatUserInfo.getUnionD() != null) {
+                return "授权成功！";
+            } else {
+                return "授权失败，请重试！";
+            }
+        } else {
+            return "授权失败，获取用户信息为空";
+        }
     }
 
     /**
@@ -576,20 +371,38 @@ public class WechatUserInfoController {
 
         JSONObject jsonObject = JSON.parseObject(utfResult);
         if(jsonObject == null){
-//       todo
+            logger.info("jsonObject parsed is null");
+            return null;
         }
         /**
          * 把授权的用户的信息保存,目前只保存unionId和openId,nickname
          */
+        //todo  中文不支持
         String openId = (String) jsonObject.get("openid");
         String unionId = (String) jsonObject.get("unionid");
         String nickname = (String) jsonObject.get("nickname");
+        String sex = jsonObject.get("sex").toString();
+        String province = (String) jsonObject.get("province");
+        String city = (String) jsonObject.get("city");
+        String country = (String) jsonObject.get("country");
+        String headimgurl = (String) jsonObject.get("headimgurl");
+        String privilege = jsonObject.get("privilege").toString();
 
-        WechatUserInfo wechatUserInfo = null;
+        WechatUserInfo wechatUserInfo = new WechatUserInfo();
+
+        /**
+         * 主要记录openId,只要openId存在就记录
+         */
         if(openId != null){
             wechatUserInfo.setOpenId(openId);
             wechatUserInfo.setUnionD(unionId);
             wechatUserInfo.setNickname(nickname);
+            wechatUserInfo.setSex(sex);
+            wechatUserInfo.setProvince(province);
+            wechatUserInfo.setCity(city);
+            wechatUserInfo.setCountry(country);
+            wechatUserInfo.setHeadimgrul(headimgurl);
+            wechatUserInfo.setPrivilege(privilege);
             wechatUserInfoService.save(wechatUserInfo);
 
             logger.info("get wechatUserInfo is:" + wechatUserInfo.toString());
@@ -599,4 +412,6 @@ public class WechatUserInfoController {
             return null;
         }
     }
+
+    // todo token 定时更新
 }

@@ -35,9 +35,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 /**
                  * 运行所有用户访问，不需要带JWT
                  */
-                .antMatchers(HttpMethod.POST, "/wechat/loginGetUnionIdAndSave").permitAll()
-                .antMatchers(HttpMethod.GET, "/wechat/wechatMessageVerify").permitAll()
-                .antMatchers(HttpMethod.GET, "/wechat/wechatRedirect").permitAll()
+                .antMatchers(HttpMethod.POST, "/wechat/user/info/loginGetUnionIdAndSave").permitAll()
+                .antMatchers(HttpMethod.GET, "/wechat/user/info/wechatMessageVerify").permitAll()
+                .antMatchers(HttpMethod.GET, "/wechat/user/info/wechatRedirect").permitAll()
 
                 .anyRequest().authenticated()
                 .and()
