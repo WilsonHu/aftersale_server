@@ -152,7 +152,7 @@ public class WechatUserInfoController {
         }else {
             User user  = userService.requestLogin(account, password,null);
             if(user == null) {
-                return ResultGenerator.genFailResult("账号/密码/unionid 不正确！");
+                return ResultGenerator.genFailResult("账号/密码 不正确！");
             }else {
 
                 Map<String, String> requestUrlParam = new HashMap<String, String>();
@@ -177,17 +177,37 @@ public class WechatUserInfoController {
                      * 账号和微信一一绑定
                      * 比如账号A在微信W1上登陆绑定后，A就无法再在其他微信比如微信W2上登陆。
                      */
-                    if(userService.findBy("wechatUnionId",unionId) != null){
-                        return  ResultGenerator.genFailResult("该账号已经绑定了微信");
+                    if(userService.findBy("wechatUnionId",unionId) != null ){
+                        logger.info("find user: " + userService.findBy("wechatUnionId",unionId).toString() + " by " + unionId );
+                        logger.info("find user: " + userService.findBy("wechatUnionId",unionId).getAccount() + " by " + unionId );
+                        /**
+                         *  unionId已存在，则要看是否和账号匹配
+                         */
+                        if( userService.requestLogin(account, password,unionId) == null ) {
+                            return ResultGenerator.genFailResult("账号密码和unionid 不匹配！(该账号已经绑定了微信)");
+                        } else {
+                            logger.info("loginGetUnionIdAndSave(), user和unionId匹配");
+                            JSONObject userJsonObject = new JSONObject();
+                            userJsonObject.put("account",user.getAccount());
+                            userJsonObject.put("name", user.getName());
+                            userJsonObject.put("id",user.getId());
+                            return ResultGenerator.genSuccessResult(userJsonObject);
+                        }
+                    } else {
+                        /**
+                         *  该unionId不存在 ,则保存
+                         */
+                            user.setWechatUnionId(unionId);
+                            userService.update(user);
+                            logger.info("loginGetUnionIdAndSave(), user update unionId:" + unionId);
+                            JSONObject userJsonObject = new JSONObject();
+                            userJsonObject.put("account",user.getAccount());
+                            userJsonObject.put("name", user.getName());
+                            userJsonObject.put("id",user.getId());
+                            return ResultGenerator.genSuccessResult(userJsonObject);
+
                     }
 
-                    user.setWechatUnionId(unionId);
-                    userService.update(user);
-                    JSONObject userJsonObject = new JSONObject();
-                    userJsonObject.put("account",user.getAccount());
-                    userJsonObject.put("name", user.getName());
-                    userJsonObject.put("id",user.getId());
-                    return ResultGenerator.genSuccessResult(userJsonObject);
                 } else {
                     /**
                      * 没有unionId（需要用户先关注公众号）,直接返回具体信息是为了小程序方便。
@@ -374,7 +394,7 @@ public class WechatUserInfoController {
             // 将用户的信息存进数据库
             wechatUserInfoService.update(wechatUserInfo);
 
-            if (wechatUserInfo.getUnionD() != null) {
+            if (wechatUserInfo.getUnionID() != null) {
                 return "授权成功！";
             } else {
                 return "授权失败，请重试！";
@@ -432,7 +452,7 @@ public class WechatUserInfoController {
          */
         if(openId != null){
             wechatUserInfo.setOpenId(openId);
-            wechatUserInfo.setUnionD(unionId);
+            wechatUserInfo.setUnionID(unionId);
             wechatUserInfo.setNickname(nickname);
             wechatUserInfo.setSex(sex);
             wechatUserInfo.setProvince(province);
@@ -471,7 +491,7 @@ public class WechatUserInfoController {
         // 通过获取到的access_token和openid获取用户的信息
         WechatUserInfo wechatUserInfo = getUserinfo(tokenInfo);
         if(wechatUserInfo != null) {
-            if (wechatUserInfo.getUnionD() != null) {
+            if (wechatUserInfo.getUnionID() != null) {
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("touser",tokenInfo.getOpenid());
                 jsonObject.put("template_id","L1T-5nNxkXoNR_74pHig1smTnWQCEpU_j9C1OjuoxpU");
