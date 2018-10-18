@@ -3,7 +3,7 @@ package com.eservice.api.service.common;
 /**
  * 网页授权接口调用凭证
  */
-public class wxWebAccessTokenInfo {
+public class WxWebAccessTokenInfo {
 
     private String access_token;
     private String openid;

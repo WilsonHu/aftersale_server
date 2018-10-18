@@ -18,9 +18,9 @@ public class User implements UserDetails{
     private String name;
 
     /**
-     * 微信unionId，在没授权前是空的。
+     * 微信unionId，在没授权前是空的。字段名称有下划线时 findBy(fieldName,xxx)会失败。
      */
-    @Column(name = "wechat_union_id")
+    @Column(name = "wechatUnionId")
     private String wechatUnionId;
 
     @Column(name = "role_id")

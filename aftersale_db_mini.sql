@@ -444,7 +444,7 @@ DROP TABLE IF EXISTS `maintain_record`;
 CREATE TABLE `maintain_record` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID号',
   `machine_nameplate` varchar(255) NOT NULL COMMENT '机器铭牌号，以此为依据查询机型信息,客户能看到的也是这个铭牌号',
-  `maintain_lib_name` varchar(255) DEFAULT NULL COMMENT '1：一期，2：二期，3：三期保养',
+  `maintain_lib_name` varchar(255) NOT NULL COMMENT '1：一期，2：二期，3：三期保养',
   `maintain_date_plan` date DEFAULT NULL,
   `maintain_date_actual` date DEFAULT NULL COMMENT '实际保养日期',
   `maintain_charge_person` int(10) unsigned DEFAULT NULL COMMENT '保养人员',
@@ -682,10 +682,10 @@ CREATE TABLE `user` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `account` varchar(255) NOT NULL,
   `name` varchar(255) NOT NULL,
-  `wechat_union_id` varchar(255) DEFAULT NULL COMMENT '微信unionId，在没授权前是空的。',
+  `wechatUnionId` varchar(255) DEFAULT NULL COMMENT '微信unionId，在没授权前是空的。',
   `role_id` int(10) unsigned NOT NULL,
   `agent` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '代理商,如果是空表示是信胜自己的员工',
-  `customer_company` int(10) unsigned DEFAULT NULL COMMENT '客户公司',
+  `customer_company` varchar(255) DEFAULT NULL COMMENT '客户公司',
   `password` varchar(255) NOT NULL,
   `valid` varchar(255) NOT NULL COMMENT '是否在职 ， “1”:在职 “0”:离职',
   `phone` varchar(255) NOT NULL COMMENT '电话',
@@ -695,25 +695,30 @@ CREATE TABLE `user` (
   KEY `fk_u_role_id` (`role_id`),
   KEY `fk_u_agent` (`agent`),
   CONSTRAINT `fk_u_role_id` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES ('1', 'admin', 'admin', 'wechat222', '1', '0', '0', 'sinsim', '1', '13566667777', '2018-07-11 10:03:43', '客户地址admin111');
-INSERT INTO `user` VALUES ('2', 'admin_in_aftersale', 'admin_in_aftersale', null, '2', '1', '0', 'sinsim', '1', 'admin_in_aftersale13455556666', '2018-07-21 08:53:49', '客户地址admin_in_after111');
-INSERT INTO `user` VALUES ('3', 'repairPerson_zhansan', 'repairPerson_zhansan', '', '3', '1', '0', 'sinsim', '1', 'repairPerson_zhansan的电话13455556633', '0000-00-00 00:00:00', '客户地址zhangsan3333');
-INSERT INTO `user` VALUES ('4', 'repairPerson_lisi', 'repairPerson_lisi', '', '3', '2', '0', 'sinsim', '1', 'repairPerson_lisi1的电话3455556666', '0000-00-00 00:00:00', '客户地址Lisi444');
-INSERT INTO `user` VALUES ('5', 'agent444', 'agent444', null, '4', '2', '0', 'sinsim', '1', 'agent444的电话444', '0000-00-00 00:00:00', '客户地址agent444');
-INSERT INTO `user` VALUES ('6', 'kehu1', 'kehu1', null, '5', '2', '1', 'sinsim', '1', 'kehu1的的电话xxxx', '0000-00-00 00:00:00', '客户地址kehu1');
-INSERT INTO `user` VALUES ('7', 'kehu2', 'kehu2', null, '5', '1', '1', 'sinsim', '1', 'kehu2的的电话xxxx', '0000-00-00 00:00:00', '客户地址kehu2');
-INSERT INTO `user` VALUES ('8', 'kehu_Lxr1', 'kehu_Lxr1', null, '6', '1', '2', 'sinsim', '1', 'kehu_Lxr1的的电话xxxx', '0000-00-00 00:00:00', '客户地址kehu_Lxr1');
-INSERT INTO `user` VALUES ('9', 'kehu_Lxr2', 'kehu_Lxr2', null, '6', '1', '2', 'sinsim', '1', 'kehu_Lxr2的的电话xxxx', '0000-00-00 00:00:00', '客户地址kehu_Lxr2');
-INSERT INTO `user` VALUES ('10', 'repairPerson_wangwu', 'repairPerson_wangwu', null, '3', '1', '0', 'sinsim', '1', 'repairPerson_wangwu的电话yyyy', '0000-00-00 00:00:00', '客户地址wangwu5555');
-INSERT INTO `user` VALUES ('11', 'kehu3_w_agent', 'kehu3_w_agent', null, '5', '2', '3', 'sinsim', '1', 'kehu3_w_agent的电话zzz', '0000-00-00 00:00:00', '客户地址kehu3_w_agent3333');
-INSERT INTO `user` VALUES ('12', 'kehu4_w_agent', 'kehu4_w_agent', null, '5', '1', '3', 'sinsim', '1', 'kehu4_w_agent的电话www4444', '0000-00-00 00:00:00', '客户地址kehu4_w_agent4444444');
-INSERT INTO `user` VALUES ('13', 'repairPerson13', 'repairPerson13', null, '3', '0', '0', 'sinsim', '', 'repairPerson13-phone333', '0000-00-00 00:00:00', null);
-INSERT INTO `user` VALUES ('14', 'user14', 'user14', null, '3', '0', '4', 'sinsim', '1', 'user14-phone123', '0000-00-00 00:00:00', null);
+INSERT INTO `user` VALUES ('1', 'admin', 'admin', 'wechat222', '1', '0', '0', 'sinsim', '1', '13188888888', '2018-07-11 10:03:43', '诸暨市XX路XX号');
+INSERT INTO `user` VALUES ('2', 'zhangguang', 'zhangguang', null, '2', '0', '0', 'sinsim', '1', '13188888888', '2018-07-21 08:53:49', '诸暨市XX路XX2号');
+INSERT INTO `user` VALUES ('3', 'wangpu', 'wangpu', '', '3', '0', '0', 'sinsim', '1', '13188888888', '2018-07-21 08:53:49', '诸暨市XX路XX号');
+INSERT INTO `user` VALUES ('4', '王管', '王管', '', '2', '2', '0', 'sinsim', '1', '13188888888', '2018-07-21 08:53:49', '诸暨市XX路XX号');
+INSERT INTO `user` VALUES ('5', '李代', '李代', null, '4', '2', '0', 'sinsim', '1', '13188888888', '2018-07-21 08:53:49', '诸暨市XX路XX号');
+INSERT INTO `user` VALUES ('6', '李客', '李客', '', '5', '0', 'XX有限公司', 'sinsim', '1', '13188888888', '2018-07-21 08:53:49', '');
+INSERT INTO `user` VALUES ('7', '王客', '王客', null, '5', '0', 'YY公司', 'sinsim', '1', '13188888888', '2018-07-21 08:53:49', '');
+INSERT INTO `user` VALUES ('8', 'zhaopu', 'zhaopu', 'oDPlm0m_R-7oR1Ry6u1nGkII6pOU', '3', '0', '1', 'sinsim', '1', '13737373737', '2018-07-21 08:53:49', '');
+INSERT INTO `user` VALUES ('9', '李联', '李联', null, '6', '1', '杭州YY有限公司', 'sinsim', '1', '13188888888', '2018-07-21 08:53:49', '上海市XX路XX号');
+INSERT INTO `user` VALUES ('10', '马普', '马普', null, '3', '0', '0', 'sinsim', '1', '13188888888', '2018-07-21 08:53:49', '上海市XX路XX号');
+INSERT INTO `user` VALUES ('11', '胡客', '胡客', null, '5', '1', '杭州YY有限公司', 'sinsim', '1', '13188888888', '2018-07-21 08:53:49', '');
+INSERT INTO `user` VALUES ('12', '张客', '张客', null, '5', '0', '杭州YY有限公司', 'sinsim', '1', '13188888888', '2018-07-21 08:53:49', '');
+INSERT INTO `user` VALUES ('13', '韩普', '韩普', null, '3', '0', '0', 'sinsim', '1', '13188888888', '2018-07-21 08:53:49', '诸暨市XX路XX号');
+INSERT INTO `user` VALUES ('14', '张普', '张普', null, '3', '2', '4', 'sinsim', '1', '13188888888', '2018-07-21 08:53:49', '上海市XX路XX号');
+INSERT INTO `user` VALUES ('15', '刘代', '刘代', null, '4', '0', '0', 'sinsim', '1', '13155556666', '2018-09-21 19:40:31', '诸暨市XXXX路1号');
+INSERT INTO `user` VALUES ('16', '张代', '张代', null, '4', '0', '0', 'sinsim', '1', '13500003333', '2018-09-21 19:42:20', '诸暨市XX路XX号');
+INSERT INTO `user` VALUES ('17', 'liuke', 'liuke', '', '5', '0', '杭州YY有限公司', 'sinsim', '1', '13300003333', '2018-09-21 20:08:39', '');
+INSERT INTO `user` VALUES ('18', 'wuxuemin_wxid', 'wuxuemin_wxid', null, '3', '0', null, 'password', '1', '13588889999', '2018-09-23 16:25:29', null);
+
 -- ----------------------------
 -- Table structure for `wechat_user_info`
 -- ----------------------------
@@ -721,7 +726,7 @@ DROP TABLE IF EXISTS `wechat_user_info`;
 CREATE TABLE `wechat_user_info` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `open_id` varchar(255) NOT NULL,
-  `union_d` varchar(255) DEFAULT NULL COMMENT '只有在用户将公众号绑定到微信开放平台帐号后，才会出现该字段。',
+  `union_id` varchar(255) DEFAULT NULL COMMENT '只有在用户将公众号绑定到微信开放平台帐号后，才会出现该字段。',
   `nickname` varchar(255) DEFAULT NULL,
   `sex` varchar(255) DEFAULT NULL,
   `province` varchar(255) DEFAULT NULL,

@@ -7,7 +7,7 @@
     -->
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="open_id" jdbcType="VARCHAR" property="openId" />
-    <result column="union_d" jdbcType="VARCHAR" property="unionD" />
+    <result column="union_id" jdbcType="VARCHAR" property="unionID" />
     <result column="nickname" jdbcType="VARCHAR" property="nickname" />
     <result column="sex" jdbcType="VARCHAR" property="sex" />
     <result column="province" jdbcType="VARCHAR" property="province" />

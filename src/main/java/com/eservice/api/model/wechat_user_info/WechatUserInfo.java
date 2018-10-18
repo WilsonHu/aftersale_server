@@ -14,8 +14,8 @@ public class WechatUserInfo {
     /**
      * 只有在用户将公众号绑定到微信开放平台帐号后，才会出现该字段。
      */
-    @Column(name = "union_d")
-    private String unionD;
+    @Column(name = "union_id")
+    private String unionID;
 
     private String nickname;
 
@@ -68,19 +68,19 @@ public class WechatUserInfo {
     /**
      * 获取只有在用户将公众号绑定到微信开放平台帐号后，才会出现该字段。
      *
-     * @return union_d - 只有在用户将公众号绑定到微信开放平台帐号后，才会出现该字段。
+     * @return union_id - 只有在用户将公众号绑定到微信开放平台帐号后，才会出现该字段。
      */
-    public String getUnionD() {
-        return unionD;
+    public String getUnionID() {
+        return unionID;
     }
 
     /**
      * 设置只有在用户将公众号绑定到微信开放平台帐号后，才会出现该字段。
      *
-     * @param unionD 只有在用户将公众号绑定到微信开放平台帐号后，才会出现该字段。
+     * @param unionID 只有在用户将公众号绑定到微信开放平台帐号后，才会出现该字段。
      */
-    public void setUnionD(String unionD) {
-        this.unionD = unionD;
+    public void setUnionID(String unionID) {
+        this.unionID = unionID;
     }
 
     /**

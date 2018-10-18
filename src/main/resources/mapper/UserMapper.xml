@@ -8,7 +8,7 @@
 		<id column="id" jdbcType="INTEGER" property="id"/>
 		<result column="account" jdbcType="VARCHAR" property="account"/>
 		<result column="name" jdbcType="VARCHAR" property="name"/>
-		<result column="wechat_union_id" jdbcType="VARCHAR" property="wechatUnionId"/>
+		<result column="wechatUnionId" jdbcType="VARCHAR" property="wechatUnionId"/>
 		<result column="role_id" jdbcType="INTEGER" property="roleId"/>
 		<result column="agent" jdbcType="INTEGER" property="agent"/>
 		<result column="password" jdbcType="VARCHAR" property="password"/>
@@ -25,7 +25,7 @@
 		<id column="id" jdbcType="INTEGER" property="id"/>
 		<result column="account" jdbcType="VARCHAR" property="account"/>
 		<result column="name" jdbcType="VARCHAR" property="name"/>
-		<result column="wechat_union_id" jdbcType="VARCHAR" property="wechatUnionId"/>
+		<result column="wechatUnionId" jdbcType="VARCHAR" property="wechatUnionId"/>
 		<result column="role_id" jdbcType="INTEGER" property="roleId"/>
 		<result column="agent" jdbcType="INTEGER" property="agent"/>
 		<result column="password" jdbcType="VARCHAR" property="password"/>
@@ -45,7 +45,7 @@
 		<id column="id" jdbcType="INTEGER" property="id"/>
 		<result column="account" jdbcType="VARCHAR" property="account"/>
 		<result column="name" jdbcType="VARCHAR" property="name"/>
-		<result column="wechat_union_id" jdbcType="VARCHAR" property="wechatUnionId"/>
+		<result column="wechatUnionId" jdbcType="VARCHAR" property="wechatUnionId"/>
 		<result column="role_id" jdbcType="INTEGER" property="roleId"/>
 		<result column="agent" jdbcType="INTEGER" property="agent"/>
 		<result column="password" jdbcType="VARCHAR" property="password"/>
@@ -72,7 +72,7 @@
 		FROM user u
 		WHERE u.account = '${account}' AND u.password = '${password}'
 		<if test="unionid != null and unionid !='' ">
-			AND u.wechat_union_id ='${unionid}'
+			AND u.wechatUnionId ='${unionid}'
 		</if>
 
 	</select>

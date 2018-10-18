@@ -1,13 +1,13 @@
 package com.eservice.api.web;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 import com.eservice.api.core.Result;
 import com.eservice.api.core.ResultGenerator;
 import com.eservice.api.model.user.User;
 import com.eservice.api.model.wechat_user_info.WechatUserInfo;
-import com.eservice.api.service.WechatUserInfoService;
 import com.eservice.api.service.common.CommonService;
-import com.eservice.api.service.common.wxWebAccessTokenInfo;
+import com.eservice.api.service.common.WxWebAccessTokenInfo;
 import com.eservice.api.service.impl.UserServiceImpl;
 import com.eservice.api.service.impl.WechatUserInfoServiceImpl;
 import com.github.pagehelper.PageHelper;
@@ -26,14 +26,10 @@ import org.xml.sax.SAXException;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import java.io.BufferedOutputStream;
-import java.io.IOException;
-import java.io.StringReader;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -68,7 +64,7 @@ public class WechatUserInfoController {
     private String wxGzhAppid;
 
     @Value("${wx.gzhSecret}")
-    private String gzhSecret;
+    private String wxGzhSecret;
 
     @Value("${wx.token}")
     private String wxToken;
@@ -79,14 +75,27 @@ public class WechatUserInfoController {
     @Value("${wx.encodingAesKey}")
     private String wxEncodingAesKey;
 
-    private static final String urlGetAccessToken = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=%s&secret=%s&code=%s&grant_type=authorization_code";
+    /**
+     * 这个获取的token是 网页授权access_token
+     */
+    @Value("${wx.urlGetOauth2AccessToken}")
+    private String urlGetOauth2AccessToken;
 
-    private static final String urlGetUserinfo = "https://api.weixin.qq.com/sns/userinfo?access_token=%s&openid=%s";
+    /**
+     * 该rul在网页授权时 根据toekn（包含unionId,openId）获取用户信息
+     */
+    @Value("${wx.urlGetUserinfo}")
+    private String urlGetUserinfo;
 
+    /**
+     * 该url获取模板
+     */
+    @Value("${wx.urlGetAccessToken}")
+    private String urlGetAccessToken;
     @Resource
     private CommonService commonService;
 
-    private Logger logger = Logger.getLogger(CommonService.class);
+    private Logger logger = Logger.getLogger(WechatUserInfoController.class);
 
     @Resource
     private WechatUserInfoServiceImpl wechatUserInfoService;
@@ -127,7 +136,7 @@ public class WechatUserInfoController {
      * 根据用户登陆，向腾讯服务器获取unionId并保存，再返回用户信息（包括unionId）。
      * @param account
      * @param password
-     * @param jsCode
+     * @param jsCode 微信登录凭证（code）
      * @return
      */
     @PostMapping("/loginGetUnionIdAndSave")
@@ -164,9 +173,21 @@ public class WechatUserInfoController {
 
                 String unionId = (String) jsonObject.get("unionid");
                 if(unionId != null){
+                    /**
+                     * 账号和微信一一绑定
+                     * 比如账号A在微信W1上登陆绑定后，A就无法再在其他微信比如微信W2上登陆。
+                     */
+                    if(userService.findBy("wechatUnionId",unionId) != null){
+                        return  ResultGenerator.genFailResult("该账号已经绑定了微信");
+                    }
+
                     user.setWechatUnionId(unionId);
                     userService.update(user);
-                    return ResultGenerator.genSuccessResult("account:" +user.getAccount() + ",name:" + user.getName() + ",id:" + user.getId());
+                    JSONObject userJsonObject = new JSONObject();
+                    userJsonObject.put("account",user.getAccount());
+                    userJsonObject.put("name", user.getName());
+                    userJsonObject.put("id",user.getId());
+                    return ResultGenerator.genSuccessResult(userJsonObject);
                 } else {
                     /**
                      * 没有unionId（需要用户先关注公众号）,直接返回具体信息是为了小程序方便。
@@ -181,7 +202,7 @@ public class WechatUserInfoController {
     /**
      * 根据js_code去微信的服务器请求unionID，
      * 如果得到的unionId已经存在我们数据库里面，返回该用户信息
-     * @param jsCode
+     * @param jsCode 微信登录凭证（code）
      * @return
      */
     @PostMapping("/getUsersByJsCode")
@@ -201,19 +222,25 @@ public class WechatUserInfoController {
         }
         System.out.print("respondStr: " + respondStr );
 
+        logger.info("getUsersByJsCode() respondStr: " + respondStr );
         String unionId = (String) jsonObject.get("unionid");
         if(unionId != null){
-            User user = userService.findBy("wechat_union_id", unionId);
+            logger.info("try to find user by unionId: " + unionId);
+            User user = userService.findBy("wechatUnionId", unionId);
             if(user != null){
-                return ResultGenerator.genSuccessResult("account:" +user.getAccount() + ",name:" + user.getName() + ",id:" + user.getId());
+                JSONObject userJsonObject = new JSONObject();
+                userJsonObject.put("account",user.getAccount());
+                userJsonObject.put("name", user.getName());
+                userJsonObject.put("id",user.getId());
+                return ResultGenerator.genSuccessResult(userJsonObject);
             } else{
                 return ResultGenerator.genFailResult("No user found by the js_code");
             }
         } else {
             message = "no unionId included in respond";
+            logger.info(message);
             return ResultGenerator.genFailResult(message);
         }
-
     }
 
     /**
@@ -316,7 +343,7 @@ public class WechatUserInfoController {
     }
 
     /**
-     * 用户点击页面上的"确认登录"以后,回调的地址
+     * 用户授权，"确认登录"以后,回调的地址
      * 配置的跳转地址：
      * https://open.weixin.qq.com/connect/oauth2/authorize?
      * appid=wx930d6e916143e08c
@@ -325,20 +352,21 @@ public class WechatUserInfoController {
      * &scope=snsapi_userinfo
      * &state=eservice
      * &connect_redirect=1#wechat_redirect
-     * 即微信跳转到 https://eservice-tech.cn/api/wechat/user/info/wechatRedirect
+     * 即微信跳转到 https://eservice-tech.cn/api/wechat/user/info/wechatRedirect，并带上code参数（微信生成）
      * @param code  授权码,有了授权码以后才能获取用户的openID, 再保存到数据库
      * @return
      */
     @RequestMapping("/wechatRedirect")
     public String wechatRedirect(@RequestParam String code) throws IOException {
 
+        // TODO： 后期把多余的logger清掉避免泄密
         logger.info("wechatRedirect get param code:" + code);
-        String accessURL = String.format(urlGetAccessToken, wxGzhAppid, gzhSecret, code);
+        String accessURL = String.format(urlGetOauth2AccessToken, wxGzhAppid, wxGzhSecret, code);
         String result = commonService.getHttpsResponse(accessURL, "GET");
         logger.info("getAccessToke in: " + result);
 
         Gson gson = new Gson();
-        wxWebAccessTokenInfo tokenInfo = gson.fromJson(result, wxWebAccessTokenInfo.class);
+        WxWebAccessTokenInfo tokenInfo = gson.fromJson(result, WxWebAccessTokenInfo.class);
 
         // 通过获取到的access_token和openid获取用户的信息
         WechatUserInfo wechatUserInfo = getUserinfo(tokenInfo);
@@ -352,14 +380,16 @@ public class WechatUserInfoController {
                 return "授权失败，请重试！";
             }
         } else {
+
             return "授权失败，获取用户信息为空";
         }
     }
 
+
     /**
      * 通过Token中的ACCESS_TOKEN和openID获取用户信息
      */
-    private WechatUserInfo getUserinfo(wxWebAccessTokenInfo tokenInfo) throws UnsupportedEncodingException {
+    private WechatUserInfo getUserinfo(WxWebAccessTokenInfo tokenInfo) throws UnsupportedEncodingException {
 
         String realUrl = String.format(urlGetUserinfo, tokenInfo.getAccess_token(), tokenInfo.getOpenid());
         String jsonResult = commonService.getHttpsResponse(realUrl, "GET");
@@ -381,12 +411,19 @@ public class WechatUserInfoController {
         String openId = (String) jsonObject.get("openid");
         String unionId = (String) jsonObject.get("unionid");
         String nickname = (String) jsonObject.get("nickname");
-        String sex = jsonObject.get("sex").toString();
+        String sex = null;
+        if(jsonObject.get("sex") != null){
+           sex = jsonObject.get("sex").toString();
+
+        }
         String province = (String) jsonObject.get("province");
         String city = (String) jsonObject.get("city");
         String country = (String) jsonObject.get("country");
         String headimgurl = (String) jsonObject.get("headimgurl");
-        String privilege = jsonObject.get("privilege").toString();
+        String privilege = null;
+        if(jsonObject.get("privilege") != null){
+            privilege = jsonObject.get("privilege").toString();
+        }
 
         WechatUserInfo wechatUserInfo = new WechatUserInfo();
 
@@ -404,8 +441,7 @@ public class WechatUserInfoController {
             wechatUserInfo.setHeadimgrul(headimgurl);
             wechatUserInfo.setPrivilege(privilege);
             wechatUserInfoService.save(wechatUserInfo);
-
-            logger.info("get wechatUserInfo is:" + wechatUserInfo.toString());
+            logger.info("get wechatUserInfo nickname is:" + wechatUserInfo.getNickname());
             return wechatUserInfo;
         } else {
             logger.info("get openid null" );
@@ -413,5 +449,118 @@ public class WechatUserInfoController {
         }
     }
 
-    // todo token 定时更新
+    /**
+     * 发送模板消息给openId对应的用户
+     * 消息模板ID
+     * @param code
+     * @return
+     * @throws IOException
+     */
+// TODO: 发送多个模板，采用多个接口来发送，还是采用同一个个接口配，TBD
+    @RequestMapping("/sendMsgTemplate")
+    public String sendMsgTemplate(@RequestParam String code) throws IOException {
+
+        logger.info("wechatRedirect get param code:" + code);
+        String accessURL = String.format(urlGetOauth2AccessToken, wxGzhAppid, wxGzhSecret, code);
+        String result = commonService.getHttpsResponse(accessURL, "GET");
+        logger.info("getAccessToke in: " + result);
+
+        Gson gson = new Gson();
+        WxWebAccessTokenInfo tokenInfo = gson.fromJson(result, WxWebAccessTokenInfo.class);
+
+        // 通过获取到的access_token和openid获取用户的信息
+        WechatUserInfo wechatUserInfo = getUserinfo(tokenInfo);
+        if(wechatUserInfo != null) {
+            if (wechatUserInfo.getUnionD() != null) {
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("touser",tokenInfo.getOpenid());
+                jsonObject.put("template_id","L1T-5nNxkXoNR_74pHig1smTnWQCEpU_j9C1OjuoxpU");
+                jsonObject.put("url", "http://weixin.qq.com/download");
+                jsonObject.put("topcolor", "#FF0000");
+
+                JSONObject json = new JSONObject();
+                json.put("first", toJson("first line"));
+                json.put("keyword1", toJson("马达异响"));
+                json.put("event", toJson("马达异响222"));//对应的车辆信息
+                json.put("finish_time", toJson("时间AAABBB"));//产品信息
+                json.put("remark", toJson("3333LINE"));//出单状态json.put("remark", toJson(remark));
+                jsonObject.put("data", json);//模板数据
+
+                sendTemplate(jsonObject);
+                return "模板发送成功！";
+            } else {
+                return "模板发送失败！";
+            }
+        } else {
+            return "授权失败，获取用户信息为空";
+        }
+    }
+
+    /**
+     * 发送模板消息
+     * @param json
+     * @return
+     */
+    public String sendTemplate( JSONObject json){
+
+//        String requestUrl="https://api.weixin.qq.com/cgi-bin/message/wxopen/template/send?access_token=ACCESS_TOKEN";
+        String requestUrl = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=ACCESS_TOKEN";
+        String token = this.getAccessToken();
+        requestUrl=requestUrl.replace("ACCESS_TOKEN", token);
+
+        String msg = null;
+        logger.info("sendTemplate send as toJsonString: " + json.toJSONString());
+        logger.info("sendTemplate send as toString:  " + json.toString());
+        String  result = commonService.httpsRequest(requestUrl, "POST", json.toJSONString());
+        if(result!=null){
+            JSONObject jsonResult = JSON.parseObject(result);
+            int errorCode=jsonResult.getInteger("errcode");
+            String errorMessage=jsonResult.getString("errmsg");
+            if(errorCode==0){
+                msg = "模板消息发送success";
+                logger.info("模板消息发送成功: ");
+            }else{
+                logger.info("模板消息发送失败: " + errorCode + "," + errorMessage);
+                msg = "模板消息发送失败: "+ errorCode + "," + errorMessage;
+            }
+        }
+        return msg;
+    }
+
+    public  String getAccessToken(){
+
+        String url = urlGetAccessToken.replace("APPID", wxGzhAppid);
+        url = url.replace("APPSECRET", wxGzhSecret);
+        JSONObject resultJson =null;
+        String result = commonService.httpsRequest(url, "POST", null);
+        try {
+            resultJson = JSON.parseObject(result);
+            String errmsg = (String) resultJson.get("errmsg");
+            if(!"".equals(errmsg) && errmsg != null){  //如果为errmsg为ok，则代表发送成功，公众号推送信息给用户了。
+                logger.error("获取access_token失败："+errmsg);
+                return "error";
+            }
+        } catch (JSONException e) {
+            logger.error("获取access_token失败："+e.toString());
+            e.printStackTrace();
+        }
+        System.err.println((String) resultJson.get("access_token"));
+        logger.info("getAccessToken() : " + resultJson.get("access_token"));
+        return (String) resultJson.get("access_token");
+    }
+
+    /**
+     * 把value转为json
+     * @param value
+     * @return
+     */
+    public JSONObject toJson(String value){
+        JSONObject json = new JSONObject();
+        json.put("value", value);
+        json.put("color", "#173177");//消息字体颜色
+        return json;
+    }
+    // todo: token 定时更新
+
+
 }
