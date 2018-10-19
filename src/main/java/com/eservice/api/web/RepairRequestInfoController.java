@@ -67,6 +67,7 @@ public class RepairRequestInfoController {
     public Result add(@RequestParam String repairRequestInfo) {
 
         RepairRequestInfo repairRequestInfo1 = JSON.parseObject(repairRequestInfo,RepairRequestInfo.class);
+        repairRequestInfo1.setCreateTime(new Date());
 
         /**
          * 如果该铭牌号有进行中的报修（当作报修失败）则删除该报修记录，然后全新增加记录。

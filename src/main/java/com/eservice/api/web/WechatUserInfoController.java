@@ -7,6 +7,7 @@ import com.eservice.api.core.ResultGenerator;
 import com.eservice.api.model.user.User;
 import com.eservice.api.model.wechat_user_info.WechatUserInfo;
 import com.eservice.api.service.common.CommonService;
+import com.eservice.api.service.common.Constant;
 import com.eservice.api.service.common.WxWebAccessTokenInfo;
 import com.eservice.api.service.impl.UserServiceImpl;
 import com.eservice.api.service.impl.WechatUserInfoServiceImpl;
@@ -30,6 +31,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.*;
+import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -478,7 +480,9 @@ public class WechatUserInfoController {
      */
 // TODO: 发送多个模板，采用多个接口来发送，还是采用同一个个接口配，TBD
     @RequestMapping("/sendMsgTemplate")
-    public String sendMsgTemplate(@RequestParam String code) throws IOException {
+    public String sendMsgTemplate(@RequestParam String code, //TODO: 若直接提供openId则更快
+                                  @RequestParam String templateId,
+                                  String jsonMsgData ) throws IOException {
 
         logger.info("wechatRedirect get param code:" + code);
         String accessURL = String.format(urlGetOauth2AccessToken, wxGzhAppid, wxGzhSecret, code);
@@ -493,26 +497,56 @@ public class WechatUserInfoController {
         if(wechatUserInfo != null) {
             if (wechatUserInfo.getUnionID() != null) {
                 JSONObject jsonObject = new JSONObject();
-                jsonObject.put("touser",tokenInfo.getOpenid());
-                jsonObject.put("template_id","L1T-5nNxkXoNR_74pHig1smTnWQCEpU_j9C1OjuoxpU");
-                jsonObject.put("url", "http://weixin.qq.com/download");
-                jsonObject.put("topcolor", "#FF0000");
+                JSONObject jsonObjectDeatailMsg = new JSONObject();
+                switch (templateId){
+                    case Constant.WX_TEMPLATE_NO1:
+                        jsonObject.put("touser",tokenInfo.getOpenid());
+                        jsonObject.put("template_id","L1T-5nNxkXoNR_74pHig1smTnWQCEpU_j9C1OjuoxpU");
+                        jsonObject.put("url", "http://weixin.qq.com/download");
+                        jsonObject.put("topcolor", "#FF0000");
 
-                JSONObject json = new JSONObject();
-                json.put("first", toJson("first line"));
-                json.put("keyword1", toJson("马达异响"));
-                json.put("event", toJson("马达异响222"));//对应的车辆信息
-                json.put("finish_time", toJson("时间AAABBB"));//产品信息
-                json.put("remark", toJson("3333LINE"));//出单状态json.put("remark", toJson(remark));
-                jsonObject.put("data", json);//模板数据
+                        jsonObjectDeatailMsg.put("first", toJson("first line"));
+                        jsonObjectDeatailMsg.put("event", toJson("马达异响222"));
+                        jsonObjectDeatailMsg.put("finish_time", toJson("时间AAABBB"));
+                        jsonObjectDeatailMsg.put("remark", toJson("3333LINE"));
+                        jsonObject.put("data", jsonObjectDeatailMsg);
+                        break;
+                    case Constant.WX_TEMPLATE_NO2:
+                        jsonObject.put("touser",tokenInfo.getOpenid());
+                        jsonObject.put("template_id","L1T-5nNxkXoNR_74pHig1smTnWQCEpU_j9C1OjuoxpU");
+                        jsonObject.put("url", "http://weixin.qq.com/download");
+                        jsonObject.put("topcolor", "#FF0000");
 
-                sendTemplate(jsonObject);
-                return "模板发送成功！";
+                        jsonObjectDeatailMsg.put("first", toJson("first line"));
+                        jsonObjectDeatailMsg.put("event", toJson("马达异响222"));
+                        jsonObjectDeatailMsg.put("finish_time", toJson("时间AAABBB"));
+                        jsonObjectDeatailMsg.put("remark", toJson("3333LINE"));
+                        jsonObject.put("data", jsonObjectDeatailMsg);
+                        break;
+                    default:
+                        jsonObject.put("touser",tokenInfo.getOpenid());
+                        jsonObject.put("template_id","L1T-5nNxkXoNR_74pHig1smTnWQCEpU_j9C1OjuoxpU");
+                        jsonObject.put("url", "http://weixin.qq.com/download");
+                        jsonObject.put("topcolor", "#FF0000");
+
+                        jsonObjectDeatailMsg.put("first", toJson("尊敬的客户你好，"));
+                        jsonObjectDeatailMsg.put("event", toJson("马达异响"));
+                        jsonObjectDeatailMsg.put("finish_time", toJson("xxxx年月日"));
+                        jsonObjectDeatailMsg.put("remark", toJson("联系人XXX"));
+                        jsonObject.put("data", jsonObjectDeatailMsg);
+                }
+
+                if( sendTemplate(jsonObject) == true){
+                    return "模板发送成功！";
+                } else {
+                    return "模板发送失败！";
+                }
+
             } else {
-                return "模板发送失败！";
+                return "unionId 为null";
             }
         } else {
-            return "授权失败，获取用户信息为空";
+            return "获取用户信息为空";
         }
     }
 
@@ -521,14 +555,14 @@ public class WechatUserInfoController {
      * @param json
      * @return
      */
-    public String sendTemplate( JSONObject json){
+    public boolean sendTemplate( JSONObject json){
 
+        boolean flag = false;
 //        String requestUrl="https://api.weixin.qq.com/cgi-bin/message/wxopen/template/send?access_token=ACCESS_TOKEN";
         String requestUrl = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=ACCESS_TOKEN";
         String token = this.getAccessToken();
         requestUrl=requestUrl.replace("ACCESS_TOKEN", token);
 
-        String msg = null;
         logger.info("sendTemplate send as toJsonString: " + json.toJSONString());
         logger.info("sendTemplate send as toString:  " + json.toString());
         String  result = commonService.httpsRequest(requestUrl, "POST", json.toJSONString());
@@ -537,14 +571,14 @@ public class WechatUserInfoController {
             int errorCode=jsonResult.getInteger("errcode");
             String errorMessage=jsonResult.getString("errmsg");
             if(errorCode==0){
-                msg = "模板消息发送success";
-                logger.info("模板消息发送成功: ");
+                logger.info("模板消息发送success");
+                flag = true;
             }else{
                 logger.info("模板消息发送失败: " + errorCode + "," + errorMessage);
-                msg = "模板消息发送失败: "+ errorCode + "," + errorMessage;
+                flag = false;
             }
         }
-        return msg;
+        return flag;
     }
 
     public  String getAccessToken(){

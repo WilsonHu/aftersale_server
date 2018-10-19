@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50553
 File Encoding         : 65001
 
-Date: 2018-10-15 14:22:09
+Date: 2018-10-19 15:35:45
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -187,7 +187,7 @@ CREATE TABLE `install_record` (
   `install_status` varchar(255) DEFAULT '0' COMMENT '安装状态，0：已分配安装(但未接单）；1：已接受任务（不用驳回，如果有异议，电话沟通后可以重新派单）； 2：安装OK(客户未确认); 3：安装NG(如果用不到这个就不用）4：客户已确认',
   `customer_feedback` int(10) unsigned DEFAULT NULL COMMENT '客户反馈和建议',
   `install_charge_person` int(10) unsigned DEFAULT NULL COMMENT '安装的负责人',
-  `install_info` longtext COMMENT '全部安装信息，json格式\r\n[\r\n  {\r\n    "contentList": [\r\n       {\r\n        "installValue": "0",\r\n        "installContent": "电源电压A"\r\n      },\r\n      {\r\n        "installValue": "220V",\r\n        "installContent": "电源电压B"\r\n      }\r\n    ],\r\n    "installLibName": "基础库"\r\n  },\r\n  {\r\n    "contentList": [\r\n      {\r\n        "installContent": "asdfkljsdlfsdfsdklasdklasdjkl;asdjk"\r\n      }\r\n    ],\r\n    "installLibName": "平绣"\r\n  }\r\n]',
+  `install_info` longtext COMMENT '全部安装信息，json格式\r\n [\r\n  {\r\n   "install_content": "4.原点、穿线点无偏差。调整线的张力，挑线簧弹力。",\r\n   "install_lib_name": "毛巾绣机型",\r\n   "install_value": "1",\r\n   "is_base_lib": "1"\r\n  },\r\n  {\r\n   "install_content": "5.链式绣无毛线、漏线。毛巾高度一致，无倾斜，剪线正常。",\r\n   "install_lib_name": "毛巾绣机型",\r\n   "install_value": "1",\r\n   "is_base_lib": "1"\r\n  },\r\n  {\r\n   "install_content": "电源电压A",\r\n   "install_lib_name": "基础项",\r\n   "install_value": "",\r\n   "is_base_lib": "1"\r\n  },\r\n  {\r\n   "install_content": "电源电压B",\r\n   "install_lib_name": "基础项",\r\n   "install_value": "",\r\n   "is_base_lib": "1"\r\n  }\r\n]',
   `create_time` datetime DEFAULT NULL COMMENT '该记录的创建时间',
   `update_time` datetime DEFAULT NULL,
   `customer` int(10) unsigned DEFAULT NULL COMMENT '客户',
@@ -211,11 +211,14 @@ CREATE TABLE `issue_position_list` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '故障部位列表，由信胜提供',
   `name` varchar(255) NOT NULL COMMENT '故障部位名称',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of issue_position_list
 -- ----------------------------
+INSERT INTO `issue_position_list` VALUES ('1', '机头');
+INSERT INTO `issue_position_list` VALUES ('2', '针杆架');
+INSERT INTO `issue_position_list` VALUES ('3', '台板');
 
 -- ----------------------------
 -- Table structure for `knowledge_lib`
@@ -444,13 +447,13 @@ DROP TABLE IF EXISTS `maintain_record`;
 CREATE TABLE `maintain_record` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID号',
   `machine_nameplate` varchar(255) NOT NULL COMMENT '机器铭牌号，以此为依据查询机型信息,客户能看到的也是这个铭牌号',
-  `maintain_lib_name` varchar(255) NOT NULL COMMENT '1：一期，2：二期，3：三期保养',
+  `maintain_lib_name` varchar(255) DEFAULT NULL COMMENT '1：一期，2：二期，3：三期保养',
   `maintain_date_plan` date DEFAULT NULL,
   `maintain_date_actual` date DEFAULT NULL COMMENT '实际保养日期',
   `maintain_charge_person` int(10) unsigned DEFAULT NULL COMMENT '保养人员',
   `maintain_suggestion` varchar(255) DEFAULT NULL COMMENT '保养建议',
   `customer` int(10) unsigned DEFAULT NULL COMMENT '客户',
-  `maintain_info` text COMMENT '保养json 举例:\r\n\r\n[\r\n  {\r\n    "contentList": [\r\n      {\r\n        "checkValue": 0,\r\n        "content": "dsfdsfdsfdsfdsafasdfdasfasd"\r\n      }\r\n    ],\r\n    "maintainType": 1\r\n  },\r\n  {\r\n    "contentList": [\r\n      {\r\n        "checkValue": 0,\r\n        "content": "sdfsdfsdfasd"\r\n      },\r\n      {\r\n        "checkValue": 0,\r\n        "content": "无可奈何"\r\n      }\r\n    ],\r\n    "maintainType": 2\r\n  }\r\n]',
+  `maintain_info` text COMMENT '保养json 举例:\r\n \r\n[\r\n  {\r\n   "contentList": [\r\n     {\r\n       "checkValue": 0,\r\n       "content": "dsfdsfdsfdsfdsafasdfdasfasd"\r\n     }\r\n   ],\r\n   "maintainType": 1\r\n  },\r\n  {\r\n   "contentList": [\r\n     {\r\n       "checkValue": 0,\r\n       "content": "sdfsdfsdfasd"\r\n     },\r\n     {\r\n       "checkValue": 0,\r\n       "content": "无可奈何"\r\n     }\r\n   ],\r\n   "maintainType": 2\r\n  }\r\n]',
   `create_time` datetime DEFAULT NULL,
   `update_time` datetime DEFAULT NULL,
   `maintain_status` varchar(255) NOT NULL COMMENT '保养状态 0：待分配，1：已分配(但未接单）2：已接受任务，3：保养完成(客户未确认)，4：客户已确认保养结果',
@@ -561,7 +564,7 @@ CREATE TABLE `repair_customer_feedback` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `customer_mark` varchar(255) NOT NULL COMMENT '客户给的评分',
   `customer_suggestion` varchar(255) NOT NULL COMMENT '客户意见',
-  `create_time` datetime NOT NULL COMMENT '创建时间，也即用户完成评价的时间，维修最后完成时间',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间，也即用户完成评价的时间，维修最后完成时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -702,22 +705,23 @@ CREATE TABLE `user` (
 -- ----------------------------
 INSERT INTO `user` VALUES ('1', 'admin', 'admin', 'wechat222', '1', '0', '0', 'sinsim', '1', '13188888888', '2018-07-11 10:03:43', '诸暨市XX路XX号');
 INSERT INTO `user` VALUES ('2', 'zhangguang', 'zhangguang', null, '2', '0', '0', 'sinsim', '1', '13188888888', '2018-07-21 08:53:49', '诸暨市XX路XX2号');
-INSERT INTO `user` VALUES ('3', 'wangpu', 'wangpu', '', '3', '0', '0', 'sinsim', '1', '13188888888', '2018-07-21 08:53:49', '诸暨市XX路XX号');
+INSERT INTO `user` VALUES ('3', 'wangpu', 'wangpu', 'oDPlm0kxW8jYDRuZt6koPO1G4CXw', '3', '0', '0', 'sinsim', '1', '13188888888', '2018-07-21 08:53:49', '诸暨市XX路XX号');
 INSERT INTO `user` VALUES ('4', '王管', '王管', '', '2', '2', '0', 'sinsim', '1', '13188888888', '2018-07-21 08:53:49', '诸暨市XX路XX号');
 INSERT INTO `user` VALUES ('5', '李代', '李代', null, '4', '2', '0', 'sinsim', '1', '13188888888', '2018-07-21 08:53:49', '诸暨市XX路XX号');
 INSERT INTO `user` VALUES ('6', '李客', '李客', '', '5', '0', 'XX有限公司', 'sinsim', '1', '13188888888', '2018-07-21 08:53:49', '');
 INSERT INTO `user` VALUES ('7', '王客', '王客', null, '5', '0', 'YY公司', 'sinsim', '1', '13188888888', '2018-07-21 08:53:49', '');
-INSERT INTO `user` VALUES ('8', 'zhaopu', 'zhaopu', 'oDPlm0m_R-7oR1Ry6u1nGkII6pOU', '3', '0', '1', 'sinsim', '1', '13737373737', '2018-07-21 08:53:49', '');
+INSERT INTO `user` VALUES ('8', 'zhaopu', 'zhaopu', '', '3', '0', '1', 'sinsim', '1', '13737373737', '2018-07-21 08:53:49', '');
 INSERT INTO `user` VALUES ('9', '李联', '李联', null, '6', '1', '杭州YY有限公司', 'sinsim', '1', '13188888888', '2018-07-21 08:53:49', '上海市XX路XX号');
 INSERT INTO `user` VALUES ('10', '马普', '马普', null, '3', '0', '0', 'sinsim', '1', '13188888888', '2018-07-21 08:53:49', '上海市XX路XX号');
-INSERT INTO `user` VALUES ('11', '胡客', '胡客', null, '5', '1', '杭州YY有限公司', 'sinsim', '1', '13188888888', '2018-07-21 08:53:49', '');
+INSERT INTO `user` VALUES ('11', '胡客', '胡客', 'oDPlm0m_R-7oR1Ry6u1nGkII6pOU', '5', '1', '杭州YY有限公司', 'sinsim', '1', '13188888888', '2018-07-21 08:53:49', '');
 INSERT INTO `user` VALUES ('12', '张客', '张客', null, '5', '0', '杭州YY有限公司', 'sinsim', '1', '13188888888', '2018-07-21 08:53:49', '');
 INSERT INTO `user` VALUES ('13', '韩普', '韩普', null, '3', '0', '0', 'sinsim', '1', '13188888888', '2018-07-21 08:53:49', '诸暨市XX路XX号');
 INSERT INTO `user` VALUES ('14', '张普', '张普', null, '3', '2', '4', 'sinsim', '1', '13188888888', '2018-07-21 08:53:49', '上海市XX路XX号');
 INSERT INTO `user` VALUES ('15', '刘代', '刘代', null, '4', '0', '0', 'sinsim', '1', '13155556666', '2018-09-21 19:40:31', '诸暨市XXXX路1号');
 INSERT INTO `user` VALUES ('16', '张代', '张代', null, '4', '0', '0', 'sinsim', '1', '13500003333', '2018-09-21 19:42:20', '诸暨市XX路XX号');
 INSERT INTO `user` VALUES ('17', 'liuke', 'liuke', '', '5', '0', '杭州YY有限公司', 'sinsim', '1', '13300003333', '2018-09-21 20:08:39', '');
-INSERT INTO `user` VALUES ('18', 'wuxuemin_wxid', 'wuxuemin_wxid', null, '3', '0', null, 'password', '1', '13588889999', '2018-09-23 16:25:29', null);
+INSERT INTO `user` VALUES ('18', 'wuxuemin_wxid', 'wuxuemin_wxid', null, '3', '0', null, 'sinsim', '1', '13588889999', '2018-09-23 16:25:29', null);
+INSERT INTO `user` VALUES ('19', 'wupu', 'wuxm', '', '5', '0', 'XXX公司', 'sinsim', '1', '13011112222', '2018-10-18 17:25:23', 'HZ市12号大街');
 
 -- ----------------------------
 -- Table structure for `wechat_user_info`

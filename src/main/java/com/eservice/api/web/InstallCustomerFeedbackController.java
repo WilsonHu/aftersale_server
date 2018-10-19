@@ -59,8 +59,9 @@ public class InstallCustomerFeedbackController {
                 return ResultGenerator.genFailResult("获取安装记录失败");
             }
             installRecord.setUpdateTime(new Date());
-            installRecord.setInstallStatus(Constant.INSTALL_STATUS_FINISHED);
+            installRecord.setInstallStatus(Constant.INSTALL_STATUS_CONFIRMED);
             installRecord.setCustomerFeedback(installCustomerFeedback.getId());
+            installRecord.setInstallActualTime(new Date());
             installRecordService.update(installRecord);
 
             /**

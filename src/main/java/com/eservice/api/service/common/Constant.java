@@ -167,4 +167,11 @@ public class Constant {
     public static final String WX_ERRORCODE_INVALID_JS_CODE = "40029";
     public static final String WX_ERRORCODE_FREQ_LIMIT = "45011";
 
+    /**
+     * 模板消息号
+     */
+    public static final String WX_TEMPLATE_NO1 = "WX_TEMPLATE_NO1";
+    public static final String WX_TEMPLATE_NO2 = "WX_TEMPLATE_NO2";
+    public static final String WX_TEMPLATE_NO3 = "WX_TEMPLATE_NO3";
+    public static final String WX_TEMPLATE_NO4 = "WX_TEMPLATE_NO4";
 }

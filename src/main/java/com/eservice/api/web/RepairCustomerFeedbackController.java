@@ -51,6 +51,7 @@ public class RepairCustomerFeedbackController {
                       String repairRecordId) {
         try {
             RepairCustomerFeedback repairCustomerFeedback1 = JSON.parseObject(repairCustomerFeedback,RepairCustomerFeedback.class);
+            repairCustomerFeedback1.setCreateTime(new Date());
             repairCustomerFeedbackService.saveAndGetID(repairCustomerFeedback1);
 
             /**
