@@ -16,4 +16,12 @@
     <result column="headimgrul" jdbcType="VARCHAR" property="headimgrul" />
     <result column="privilege" jdbcType="LONGVARCHAR" property="privilege" />
   </resultMap>
-</mapper>
+  <select id="getWechatUserInfoByUnionId" resultMap="BaseResultMap">
+    SELECT
+        *
+    FROM
+        wechat_user_info AS wui
+    WHERE
+        wui.union_id = #{unionId}
+  </select>
+ </mapper>

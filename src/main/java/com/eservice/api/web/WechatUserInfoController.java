@@ -473,80 +473,70 @@ public class WechatUserInfoController {
 
     /**
      * 发送模板消息给openId对应的用户
-     * 消息模板ID
-     * @param code
+     *
+     * @param account       推送对象的账号
+     * @param templateId    消息模板ID
+     * @param jsonMsgData
      * @return
      * @throws IOException
      */
-// TODO: 发送多个模板，采用多个接口来发送，还是采用同一个个接口配，TBD
+    // TODO: jsonMsgData 类和解析
     @RequestMapping("/sendMsgTemplate")
-    public String sendMsgTemplate(@RequestParam String code, //TODO: 若直接提供openId则更快
+    public String sendMsgTemplate(@RequestParam String account,
                                   @RequestParam String templateId,
                                   String jsonMsgData ) throws IOException {
 
-        logger.info("wechatRedirect get param code:" + code);
-        String accessURL = String.format(urlGetOauth2AccessToken, wxGzhAppid, wxGzhSecret, code);
-        String result = commonService.getHttpsResponse(accessURL, "GET");
-        logger.info("getAccessToke in: " + result);
+        /**
+         * 根据 account 找openId
+         */
+        logger.info("wechatRedirect get param code:" + account);
+        User user = userService.findBy("account",account);
+        if(user == null){
+            return "该account不存在！";
+        }
+        String wechatUionId = user.getWechatUnionId();
+        if(wechatUionId.isEmpty() || wechatUionId == null){
+            return "该account的unionId 为空，请先关注公众号";
+        }
 
-        Gson gson = new Gson();
-        WxWebAccessTokenInfo tokenInfo = gson.fromJson(result, WxWebAccessTokenInfo.class);
+        String openId = wechatUserInfoService.getWechatUserInfoByUnionId(wechatUionId).getOpenId();
+        if(openId == null || openId.isEmpty()){
+            return "找不到openId?";
+        }
 
-        // 通过获取到的access_token和openid获取用户的信息
-        WechatUserInfo wechatUserInfo = getUserinfo(tokenInfo);
-        if(wechatUserInfo != null) {
-            if (wechatUserInfo.getUnionID() != null) {
-                JSONObject jsonObject = new JSONObject();
-                JSONObject jsonObjectDeatailMsg = new JSONObject();
-                switch (templateId){
-                    case Constant.WX_TEMPLATE_NO1:
-                        jsonObject.put("touser",tokenInfo.getOpenid());
-                        jsonObject.put("template_id","L1T-5nNxkXoNR_74pHig1smTnWQCEpU_j9C1OjuoxpU");
-                        jsonObject.put("url", "http://weixin.qq.com/download");
-                        jsonObject.put("topcolor", "#FF0000");
+        JSONObject jsonObject = new JSONObject();
+        JSONObject jsonObjectDeatailMsg = new JSONObject();
+        jsonObject.put("touser",openId);
+        jsonObject.put("template_id",templateId);
+        jsonObject.put("url", "http://weixin.qq.com/download");
+        jsonObject.put("topcolor", "#FF0000");
+        switch (templateId){
+            case Constant.WX_TEMPLATE_NO1:
+                jsonObjectDeatailMsg.put("first", toJson("first line 111"));
+                jsonObjectDeatailMsg.put("event", toJson("马达异响111"));
+                jsonObjectDeatailMsg.put("finish_time", toJson("时间111"));
+                jsonObjectDeatailMsg.put("remark", toJson(" remark 111"));
+                break;
+            case Constant.WX_TEMPLATE_NO2:
+                jsonObjectDeatailMsg.put("first", toJson("first line 222"));
+                jsonObjectDeatailMsg.put("event", toJson("马达异响222"));
+                jsonObjectDeatailMsg.put("finish_time", toJson("时间222"));
+                jsonObjectDeatailMsg.put("remark", toJson(" remark 222"));
+                break;
+            default:
+                jsonObject.put("template_id","L1T-5nNxkXoNR_74pHig1smTnWQCEpU_j9C1OjuoxpU");
 
-                        jsonObjectDeatailMsg.put("first", toJson("first line"));
-                        jsonObjectDeatailMsg.put("event", toJson("马达异响222"));
-                        jsonObjectDeatailMsg.put("finish_time", toJson("时间AAABBB"));
-                        jsonObjectDeatailMsg.put("remark", toJson("3333LINE"));
-                        jsonObject.put("data", jsonObjectDeatailMsg);
-                        break;
-                    case Constant.WX_TEMPLATE_NO2:
-                        jsonObject.put("touser",tokenInfo.getOpenid());
-                        jsonObject.put("template_id","L1T-5nNxkXoNR_74pHig1smTnWQCEpU_j9C1OjuoxpU");
-                        jsonObject.put("url", "http://weixin.qq.com/download");
-                        jsonObject.put("topcolor", "#FF0000");
+                jsonObjectDeatailMsg.put("first", toJson("尊敬的客户你好，"));
+                jsonObjectDeatailMsg.put("event", toJson("马达异响 报修已经处理中"));
+                jsonObjectDeatailMsg.put("finish_time", toJson("xxxx年月日"));
+                jsonObjectDeatailMsg.put("remark", toJson("联系人XXX"));
+        }
 
-                        jsonObjectDeatailMsg.put("first", toJson("first line"));
-                        jsonObjectDeatailMsg.put("event", toJson("马达异响222"));
-                        jsonObjectDeatailMsg.put("finish_time", toJson("时间AAABBB"));
-                        jsonObjectDeatailMsg.put("remark", toJson("3333LINE"));
-                        jsonObject.put("data", jsonObjectDeatailMsg);
-                        break;
-                    default:
-                        jsonObject.put("touser",tokenInfo.getOpenid());
-                        jsonObject.put("template_id","L1T-5nNxkXoNR_74pHig1smTnWQCEpU_j9C1OjuoxpU");
-                        jsonObject.put("url", "http://weixin.qq.com/download");
-                        jsonObject.put("topcolor", "#FF0000");
-
-                        jsonObjectDeatailMsg.put("first", toJson("尊敬的客户你好，"));
-                        jsonObjectDeatailMsg.put("event", toJson("马达异响"));
-                        jsonObjectDeatailMsg.put("finish_time", toJson("xxxx年月日"));
-                        jsonObjectDeatailMsg.put("remark", toJson("联系人XXX"));
-                        jsonObject.put("data", jsonObjectDeatailMsg);
-                }
-
-                if( sendTemplate(jsonObject) == true){
-                    return "模板发送成功！";
-                } else {
-                    return "模板发送失败！";
-                }
-
-            } else {
-                return "unionId 为null";
-            }
+        jsonObject.put("data", jsonObjectDeatailMsg);
+        if( sendTemplate(jsonObject) == true){
+            return "模板发送成功！";
         } else {
-            return "获取用户信息为空";
+            return "模板发送失败！";
         }
     }
 
@@ -616,5 +606,16 @@ public class WechatUserInfoController {
     }
     // todo: token 定时更新
 
+    /**
+     * 根据unionId查找对应微信用户
+     * 因为用 findBy(fieldName,xxxx) 查找一些字段比如有下划线的字段，会遇到 No such filed无法查找的问题，所以用这个接口替代。
+     * @param unionId
+     * @return
+     */
+    @PostMapping("/getWechatUserInfoByUnionId")
+    public Result getWechatUserInfoByUnionId(@RequestParam String unionId) {
+        WechatUserInfo wechatUserInfo = wechatUserInfoService.getWechatUserInfoByUnionId(unionId);
+        return ResultGenerator.genSuccessResult(wechatUserInfo);
+    }
 
 }

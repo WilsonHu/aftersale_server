@@ -52,7 +52,7 @@ public class WechatUserInfo {
     }
 
     /**
-     * @return open_id
+     * @return openId
      */
     public String getOpenId() {
         return openId;
