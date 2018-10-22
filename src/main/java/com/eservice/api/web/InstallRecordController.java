@@ -9,12 +9,15 @@ import com.eservice.api.model.install_lib.InstallLib;
 import com.eservice.api.model.install_members.InstallMembers;
 import com.eservice.api.model.install_record.InstallRecord;
 import com.eservice.api.model.install_record.InstallRecordInfo;
+import com.eservice.api.model.machine.Machine;
 import com.eservice.api.model.user.User;
 import com.eservice.api.service.common.CommonUtils;
+import com.eservice.api.service.common.Constant;
 import com.eservice.api.service.common.InstallInfoJsonData;
 import com.eservice.api.service.impl.InstallLibServiceImpl;
 import com.eservice.api.service.impl.InstallMembersServiceImpl;
 import com.eservice.api.service.impl.InstallRecordServiceImpl;
+import com.eservice.api.service.impl.MachineServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,6 +47,9 @@ public class InstallRecordController {
     @Resource
     private InstallLibServiceImpl installLibService;
 
+    @Resource
+    private MachineServiceImpl machineService;
+
     @PostMapping("/add")
     public Result add(@RequestBody @NotNull InstallRecord installRecord) {
         installRecord.setInstallRecordNum(CommonUtils.generateSequenceNo());
@@ -59,6 +65,7 @@ public class InstallRecordController {
 
     @PostMapping("/update")
     public Result update(@RequestBody @NotNull InstallRecord installRecord) {
+        installRecord.setInstallActualTime(new Date());
         installRecordService.update(installRecord);
         return ResultGenerator.genSuccessResult();
     }
@@ -203,6 +210,13 @@ public class InstallRecordController {
             if (members.size() > 0) {
                 installMembersService.save(members);
             }
+
+            /**
+             * 也更新机器状态
+             */
+            Machine machine = machineService.findBy("nameplate",model.getMachineNameplate());
+            machine.setStatus(Constant.MACHINE_STATUS_WAIT_FOR_INSTALL);
+            machineService.update(machine);
         } catch (Exception ex) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return ResultGenerator.genFailResult("数据保存出错！" + ex.getMessage());

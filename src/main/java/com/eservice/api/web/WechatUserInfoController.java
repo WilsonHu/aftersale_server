@@ -31,7 +31,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.*;
-import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,11 +46,17 @@ public class WechatUserInfoController {
     @Resource
     private UserServiceImpl userService;
 
-    @Value("${wx.wxspAppid}")
-    private String wxspAppid;
+    @Value("${wx.wxspAppidYuangongduan}")
+    private String wxspAppidYuangongduan;
 
-    @Value("${wx.wxspSecret}")
-    private String wxspSecret;
+    @Value("${wx.wxspSecretYuangongduan}")
+    private String wxspSecretYuangongduan;
+
+    @Value("${wx.wxspAppidKehuduan}")
+    private String wxspAppidKehuduan;
+
+    @Value("${wx.wxspSecretKehuduan}")
+    private String wxspSecretKehuduan;
 
     @Value("${wx.grant_type}")
     private String wxGrant_type;
@@ -139,12 +144,14 @@ public class WechatUserInfoController {
      * @param account
      * @param password
      * @param jsCode 微信登录凭证（code）
+     * @param roleOfCaller 0:表示员工端，1表示客户端，员工端小程序只能用员工账号登陆，客户端小程序只能用客户账号登陆
      * @return
      */
     @PostMapping("/loginGetUnionIdAndSave")
     public Result loginGetUnionIdAndSave(@RequestParam(defaultValue = "0") String account,
                                          @RequestParam(defaultValue = "0") String password,
-                                         @RequestParam(defaultValue = "0") String jsCode) {
+                                         @RequestParam(defaultValue = "0") String jsCode,
+                                         @RequestParam(defaultValue = "0") String roleOfCaller) {
 
         String message = null;
         if(account == null || "".equals(account)) {
@@ -157,9 +164,24 @@ public class WechatUserInfoController {
                 return ResultGenerator.genFailResult("账号/密码 不正确！");
             }else {
 
+                //员工账号 不能登陆 客户小程序，反之也不能。
+                if( (user.getRoleId() == Constant.ROLE_ID_EMPLOYEE) && (roleOfCaller.equals(Constant.CALLER_IS_KEHUDUAN)) ){
+                    return ResultGenerator.genFailResult("员工账号 不能登陆 客户小程序");
+                }
+                if( (user.getRoleId() == Constant.ROLE_ID_CUSTOMER || user.getRoleId() == Constant.ROLE_ID_CUSTOMER_CONTACT)
+                        && (roleOfCaller.equals( Constant.CALLER_IS_YUANGONGDUAN))){
+                    return ResultGenerator.genFailResult("客户账号 不能登陆 员工小程序");
+                }
+
                 Map<String, String> requestUrlParam = new HashMap<String, String>();
-                requestUrlParam.put("appid",wxspAppid);
-                requestUrlParam.put("secret",wxspSecret);
+
+                if(roleOfCaller.equals(Constant.CALLER_IS_YUANGONGDUAN) ){
+                    requestUrlParam.put("appid", wxspAppidYuangongduan);
+                    requestUrlParam.put("secret", wxspSecretYuangongduan);
+                } else if(roleOfCaller.equals(Constant.CALLER_IS_KEHUDUAN)){
+                    requestUrlParam.put("appid", wxspAppidKehuduan);
+                    requestUrlParam.put("secret", wxspSecretKehuduan);
+                }
                 /**
                  * 小程序调用wx.login返回的jsCode
                  */
@@ -228,11 +250,17 @@ public class WechatUserInfoController {
      * @return
      */
     @PostMapping("/getUsersByJsCode")
-    public Result getUsersByJsCode(@RequestParam String jsCode ) {
+    public Result getUsersByJsCode(@RequestParam String jsCode,
+                                   @RequestParam(defaultValue = "0") String roleOfCaller ) {
         String message = null;
         Map<String, String> requestUrlParam = new HashMap<String, String>();
-        requestUrlParam.put("appid",wxspAppid);
-        requestUrlParam.put("secret",wxspSecret);
+        if(roleOfCaller.equals(Constant.CALLER_IS_YUANGONGDUAN) ){
+            requestUrlParam.put("appid", wxspAppidYuangongduan);
+            requestUrlParam.put("secret", wxspSecretYuangongduan);
+        } else if(roleOfCaller.equals(Constant.CALLER_IS_KEHUDUAN)){
+            requestUrlParam.put("appid", wxspAppidKehuduan);
+            requestUrlParam.put("secret", wxspSecretKehuduan);
+        }
         requestUrlParam.put("js_code", jsCode);
         requestUrlParam.put("grant_type", wxGrant_type);
 

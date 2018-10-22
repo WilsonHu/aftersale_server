@@ -72,6 +72,9 @@ public class RepairCustomerFeedbackController {
              * 更新：维修结果（是否解决问题）不再由客户来认定而是由维修员判定。即客户评价了就确认问题已解决。
              */
             Machine machine = machineService.findBy("nameplate",repairRecord.getMachineNameplate());
+            /**
+             * TODO:　检查看是否有部件待寄回　
+             */
                 machine.setStatus(Constant.MACHINE_STATUS_IN_NORMAL);
                 machineService.update(machine);
         } catch (Exception ex) {

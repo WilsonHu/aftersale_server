@@ -110,6 +110,7 @@ public class RepairRequestInfoController {
             repairRecord1.setStatus(Constant.REPAIR_STATUS_IN_REQUESTING);
             repairRecord1.setRepairRequestInfo(repairRequestInfo1.getId());
             repairRecord1.setCreateTime(new Date());
+            ///TODO 老机器报修时出错。
             repairRecordService.save(repairRecord1);
 
         } catch (Exception ex) {

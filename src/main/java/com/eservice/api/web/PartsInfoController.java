@@ -3,6 +3,7 @@ package com.eservice.api.web;
 import com.alibaba.fastjson.JSON;
 import com.eservice.api.core.Result;
 import com.eservice.api.core.ResultGenerator;
+import com.eservice.api.model.machine.Machine;
 import com.eservice.api.model.parts_info.PartsAllInfo;
 import com.eservice.api.model.parts_info.PartsInfo;
 import com.eservice.api.model.parts_info.PartsInfoWithRepairRecordInfo;
@@ -90,6 +91,8 @@ public class PartsInfoController {
                     message = "failed to save file sendbackTrackingPictrue, no records saved";
                     throw new RuntimeException();
                 }
+
+                // TODO　更新相关状态
                 partsInfoService.update(partsInfo1);
             }
         } catch (Exception ex) {

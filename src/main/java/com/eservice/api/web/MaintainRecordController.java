@@ -5,13 +5,16 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.eservice.api.core.Result;
 import com.eservice.api.core.ResultGenerator;
+import com.eservice.api.model.machine.Machine;
 import com.eservice.api.model.maintain_lib.MaintainLib;
 import com.eservice.api.model.maintain_members.MaintainMembers;
 import com.eservice.api.model.maintain_record.MaintainRecord;
 import com.eservice.api.model.maintain_record.MaintainRecordInfo;
 import com.eservice.api.model.user.User;
+import com.eservice.api.service.common.Constant;
 import com.eservice.api.service.common.MaintainContentData;
 import com.eservice.api.service.common.MaintainData;
+import com.eservice.api.service.impl.MachineServiceImpl;
 import com.eservice.api.service.impl.MaintainLibServiceImpl;
 import com.eservice.api.service.impl.MaintainMembersServiceImpl;
 import com.eservice.api.service.impl.MaintainRecordServiceImpl;
@@ -42,6 +45,9 @@ public class MaintainRecordController {
     private MaintainMembersServiceImpl maintainMembersService;
     @Resource
     private MaintainLibServiceImpl maintainLibService;
+
+    @Resource
+    private MachineServiceImpl machineService;
 
     private String generateMaintainInfo(String libName) {
         String result = "";
@@ -97,6 +103,7 @@ public class MaintainRecordController {
 
     @PostMapping("/update")
     public Result update(@RequestBody @NotNull MaintainRecord maintainRecord) {
+        maintainRecord.setMaintainDateActual(new Date());
         maintainRecordService.update(maintainRecord);
         return ResultGenerator.genSuccessResult();
     }
@@ -219,6 +226,13 @@ public class MaintainRecordController {
             if (members.size() > 0) {
                 maintainMembersService.save(members);
             }
+
+            /**
+             * 也更新机器状态
+             */
+            Machine machine = machineService.findBy("nameplate",model.getMachineNameplate());
+            machine.setStatus(Constant.MACHINE_STATUS_WAIT_FOR_MAINTAIN);
+            machineService.update(machine);
         } catch (Exception ex) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return ResultGenerator.genFailResult("数据保存出错！" + ex.getMessage());

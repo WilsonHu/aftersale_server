@@ -174,4 +174,21 @@ public class Constant {
     public static final String WX_TEMPLATE_NO2 = "WX_TEMPLATE_NO2";
     public static final String WX_TEMPLATE_NO3 = "WX_TEMPLATE_NO3";
     public static final String WX_TEMPLATE_NO4 = "WX_TEMPLATE_NO4";
+
+    /**
+     * 员工端小程序只能用员工账号登陆，客户端小程序只能用客户账号登陆
+     * 3：普通员工：安装，保养，维修（包括了信胜和客户的）
+     * 5：客户
+     * 6：客户联系人
+     */
+    public static final int ROLE_ID_EMPLOYEE = 3;
+    public static final int ROLE_ID_CUSTOMER = 5;
+    public static final int ROLE_ID_CUSTOMER_CONTACT = 6;
+
+    /**
+     * 0:表示员工端，1表示客户端，
+     */
+    public static final String CALLER_IS_YUANGONGDUAN = "0";
+    public static final String CALLER_IS_KEHUDUAN = "1";
+
 }

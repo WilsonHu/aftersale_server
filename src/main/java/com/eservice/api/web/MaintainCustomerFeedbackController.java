@@ -59,7 +59,7 @@ public class MaintainCustomerFeedbackController {
                 return ResultGenerator.genFailResult("获取保养记录失败");
             }
             maintainRecord.setUpdateTime(new Date());
-            maintainRecord.setMaintainStatus(Constant.MAINTAIN_STATUS_FINISHED);
+            maintainRecord.setMaintainStatus(Constant.MAINTAIN_STATUS_CONFIRMED);
             maintainRecord.setCustomerFeedback(maintainCustomerFeedback.getId());
             maintainRecordService.update(maintainRecord);
 
