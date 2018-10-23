@@ -10,6 +10,7 @@ import com.eservice.api.model.machine.MachineInfo;
 import com.eservice.api.model.user.User;
 import com.eservice.api.service.common.CommonUtils;
 import com.eservice.api.service.common.Constant;
+import com.eservice.api.service.common.PrepareUnAssignedMachineService;
 import com.eservice.api.service.impl.InstallRecordServiceImpl;
 import com.eservice.api.service.impl.MachineServiceImpl;
 import com.eservice.api.service.impl.UserServiceImpl;
@@ -42,6 +43,8 @@ public class MachineController {
     @Resource
     private InstallRecordServiceImpl installRecordService;
 
+    @Resource
+    private PrepareUnAssignedMachineService prepareUnAssignedMachineService;
     @PostMapping("/add")
     public Result add(@RequestBody @NotNull Machine machine) {
         Machine dbMachine = machineService.findBy("nameplate", machine.getNameplate());
@@ -82,6 +85,8 @@ public class MachineController {
                     return ResultGenerator.genFailResult("数据保存出错！" + ex.getMessage());
                 }
             }
+            //Refresh list
+            prepareUnAssignedMachineService.prepareUnAssignedMachine();
         } catch (Exception ex) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return ResultGenerator.genFailResult(ex.getMessage());

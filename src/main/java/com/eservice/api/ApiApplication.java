@@ -1,14 +1,10 @@
 package com.eservice.api;
 
-import com.eservice.api.service.common.AftersaleTimer;
-import org.apache.catalina.connector.Connector;
-import org.apache.catalina.Context;
-import org.apache.tomcat.util.descriptor.web.SecurityCollection;
-import org.apache.tomcat.util.descriptor.web.SecurityConstraint;
+import com.eservice.api.service.common.PrepareUnAssignedMachineService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
-import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
  * Class Description: Application启动类
@@ -18,16 +14,12 @@ import org.springframework.context.annotation.Bean;
  */
 
 @SpringBootApplication
+@EnableScheduling
+@ComponentScan
 public class ApiApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(ApiApplication.class, args);
-
-		/**
-		 * 执行定时任务
-		 */
-		AftersaleTimer aftersaleTimer = new AftersaleTimer();
-		aftersaleTimer.start();
 	}
 
 	@Bean

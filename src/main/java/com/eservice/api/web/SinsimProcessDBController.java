@@ -6,6 +6,7 @@ import com.eservice.api.model.machine.Machine;
 import com.eservice.api.model.machine.MachineInfo;
 import com.eservice.api.model.machine.MachineInfosInProcessDb;
 import com.eservice.api.model.machine.MachineType;
+import com.eservice.api.service.common.PrepareUnAssignedMachineService;
 import com.eservice.api.service.impl.MachineServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -39,64 +42,45 @@ public class SinsimProcessDBController {
     @Qualifier("DataSourceSinsimProcessDbTemplate")
     private JdbcTemplate dataSourceSinsimProcessDbTemplate;
 
+    @Resource
+    private PrepareUnAssignedMachineService prepareUnAssignedMachineService;
+
     /**
      * 根据条件查询未绑定到客户的机器
      */
     @PostMapping("/getMachineList")
     public Result getMachineList(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size,
                                  String orderNum, String nameplate, boolean isFuzzy) {
-
-        List<Machine> boundMachineList = machineService.findAll();
-        List<String> boundMachineNameplateList = new ArrayList<>();
-        for(Machine item: boundMachineList){
-            boundMachineNameplateList.add(item.getNameplate());
-        }
-
-        /**
-         * 合成字符串 "nameplate111","nameplate222","nameplate333"...
-         */
-        String nameplateOfBoundMachineInOneString = null;
-        for(String  item: boundMachineNameplateList){
-            if(nameplateOfBoundMachineInOneString == null){
-                nameplateOfBoundMachineInOneString = "\"" + item + "\"";
-            } else {
-                nameplateOfBoundMachineInOneString = nameplateOfBoundMachineInOneString + "," + "\"" + item + "\"" ;
+        List<MachineInfosInProcessDb> list = prepareUnAssignedMachineService.getInstalledNotBoundMachineList();
+        List<MachineInfosInProcessDb>  tmpList1 = new ArrayList<>();
+        List<MachineInfosInProcessDb>  tmpList = new ArrayList<>();
+        ///根据铭牌号和订单号过滤
+        if(orderNum != null && orderNum != "") {
+            for (MachineInfosInProcessDb item : list) {
+                if(item.getOrderNum().contains(orderNum)) {
+                    tmpList1.add(item);
+                }
             }
+        } else {
+            tmpList1.addAll(list);
         }
-
-        String query = " select m.*,mo.needle_num,mo.head_num,mo.head_distance,mo.x_distance,mo.y_distance,mo.order_num, mt.name as machine_type_name,c.contract_num,c.customer_name" +
-                " from  machine m " +
-                "left join machine_order mo on mo.id=m.order_id " +
-                "left join machine_type mt on mt.id=m.machine_type " +
-                "left join contract c on c.id = mo.contract_id " +
-                "where m.status='" + com.eservice.api.service.common.Constant.MACHINE_INSTALLED + "' " +
-                "and m.nameplate NOT IN (" + nameplateOfBoundMachineInOneString + ")";
-        //需要查询原生产库中完成的机器
-        String fuzzyFormat = isFuzzy ? "%" : "";
-        String fuzzyKey = isFuzzy ? " like " : "=";
-        if (orderNum != null && orderNum.length() > 0) {
-            query += " AND mo.order_num " + fuzzyKey + " '" + fuzzyFormat + orderNum + fuzzyFormat + "'";
+        if(nameplate != null && nameplate != "") {
+            for (MachineInfosInProcessDb item : tmpList1) {
+                if(item.getNameplate().contains(nameplate)) {
+                    tmpList.add(item);
+                }
+            }
+        } else {
+            tmpList.addAll(tmpList1);
         }
-        if (nameplate != null && nameplate.length() > 0) {
-            query += " AND m.nameplate " + fuzzyKey + " '" + fuzzyFormat + nameplate + fuzzyFormat + "'";
-        }
-
-        List<MachineInfosInProcessDb> list = dataSourceSinsimProcessDbTemplate.query(query, new BeanPropertyRowMapper(MachineInfosInProcessDb.class));
-        if (!isFuzzy) {//查询需要和售后的机器做拆分比较
+        list = tmpList;
+        //查询需要和售后的机器做拆分比较
+        if (!isFuzzy) {
             for (MachineInfosInProcessDb item : list) {
                 item.setStatus((byte) 0);
                 item.setFacoryDate(null);
-                List<MachineInfo> saledMachineList = machineService.getSaledMachineInfoList(item.getNameplate(),
-                        "",
-                        "",
-                        "",
-                        "",
-                        "",
-                        "",
-                        "",
-                        "",
-                         false,
-                         isFuzzy);
+                List<MachineInfo> saledMachineList = machineService.getSaledMachineInfoList(item.getNameplate(),"","","","","",
+                        "","","",false, isFuzzy);
                 MachineInfo machineInfo = null;
                 if (saledMachineList != null && saledMachineList.size() > 0) {
                     machineInfo = saledMachineList.get(0);
