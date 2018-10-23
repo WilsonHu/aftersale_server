@@ -12,6 +12,7 @@ import com.eservice.api.service.impl.RepairRecordServiceImpl;
 import com.eservice.api.service.impl.RepairRequestInfoServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
@@ -56,15 +57,18 @@ public class RepairRequestInfoController {
     @Value("${repair_req_img}")
     private String repaiReqImgDir;
 
+    private Logger logger = Logger.getLogger(RepairRequestInfoController.class);
+
     /**
      * 因小程序端一次只能上传一个文件，所以各个文件只能分别单独上传（文件上传还要分类型，就不在add上传了，统一放update了）。
      * 报修时add生成简单的报修记录。
      * 每次新增报修时，都查一下报修的铭牌号，如果有有报修记录未完成，则删除该报修记录及对应的状态为报修中的维修记录，才新建报修记录。
      * （文件则在update里上传，如果上传文件失败，小程序端用户再次点击提交报修只调update，不调add）
+     *  isOldMachine: true表示是老机器，否则是新机器（库里存在记录）
      */
     @Transactional(rollbackFor = Exception.class)
     @PostMapping("/add")
-    public Result add(@RequestParam String repairRequestInfo) {
+    public Result add(@RequestParam String repairRequestInfo,@RequestParam String isOldMachine) {
 
         RepairRequestInfo repairRequestInfo1 = JSON.parseObject(repairRequestInfo,RepairRequestInfo.class);
         repairRequestInfo1.setCreateTime(new Date());
@@ -110,7 +114,21 @@ public class RepairRequestInfoController {
             repairRecord1.setStatus(Constant.REPAIR_STATUS_IN_REQUESTING);
             repairRecord1.setRepairRequestInfo(repairRequestInfo1.getId());
             repairRecord1.setCreateTime(new Date());
-            ///TODO 老机器报修时出错。
+
+            /**
+             * 老机器报修时 需要建立老机器信息
+             */
+            if(isOldMachine.equalsIgnoreCase("true")){
+                Machine machine = new Machine();
+                machine.setNameplate(repairRequestInfo1.getNameplate());
+                machine.setStatus(Constant.MACHINE_STATUS_WAIT_FOR_CHECK);
+                machine.setOldMachineCheck(Constant.OLD_MACHINE_CHECK_UNKNOWN);
+                machine.setIsOldMachine(Constant.MACHINE_TYPE_OLD);
+                machineService.save(machine);
+                logger.info("add old machine " + repairRequestInfo1.getNameplate());
+            } else
+                logger.info("add machine" + repairRequestInfo1.getNameplate());
+
             repairRecordService.save(repairRecord1);
 
         } catch (Exception ex) {

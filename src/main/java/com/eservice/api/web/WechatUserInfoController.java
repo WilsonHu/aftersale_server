@@ -107,6 +107,8 @@ public class WechatUserInfoController {
     @Resource
     private WechatUserInfoServiceImpl wechatUserInfoService;
 
+    private static final String msgCallerIsValid= "CallerIsValid";
+
     @PostMapping("/add")
     public Result add(WechatUserInfo wechatUserInfo) {
         wechatUserInfoService.save(wechatUserInfo);
@@ -165,23 +167,12 @@ public class WechatUserInfoController {
             }else {
 
                 //员工账号 不能登陆 客户小程序，反之也不能。
-                if( (user.getRoleId() == Constant.ROLE_ID_EMPLOYEE) && (roleOfCaller.equals(Constant.CALLER_IS_KEHUDUAN)) ){
-                    return ResultGenerator.genFailResult("员工账号 不能登陆 客户小程序");
+                String msg = checkCallerIValid(user,roleOfCaller);
+                if( msg.equals(msgCallerIsValid) == false){
+                    return ResultGenerator.genFailResult(msg);
                 }
-                if( (user.getRoleId() == Constant.ROLE_ID_CUSTOMER || user.getRoleId() == Constant.ROLE_ID_CUSTOMER_CONTACT)
-                        && (roleOfCaller.equals( Constant.CALLER_IS_YUANGONGDUAN))){
-                    return ResultGenerator.genFailResult("客户账号 不能登陆 员工小程序");
-                }
+                Map<String, String> requestUrlParam = setParamAccordCaller(roleOfCaller);
 
-                Map<String, String> requestUrlParam = new HashMap<String, String>();
-
-                if(roleOfCaller.equals(Constant.CALLER_IS_YUANGONGDUAN) ){
-                    requestUrlParam.put("appid", wxspAppidYuangongduan);
-                    requestUrlParam.put("secret", wxspSecretYuangongduan);
-                } else if(roleOfCaller.equals(Constant.CALLER_IS_KEHUDUAN)){
-                    requestUrlParam.put("appid", wxspAppidKehuduan);
-                    requestUrlParam.put("secret", wxspSecretKehuduan);
-                }
                 /**
                  * 小程序调用wx.login返回的jsCode
                  */
@@ -253,14 +244,8 @@ public class WechatUserInfoController {
     public Result getUsersByJsCode(@RequestParam String jsCode,
                                    @RequestParam(defaultValue = "0") String roleOfCaller ) {
         String message = null;
-        Map<String, String> requestUrlParam = new HashMap<String, String>();
-        if(roleOfCaller.equals(Constant.CALLER_IS_YUANGONGDUAN) ){
-            requestUrlParam.put("appid", wxspAppidYuangongduan);
-            requestUrlParam.put("secret", wxspSecretYuangongduan);
-        } else if(roleOfCaller.equals(Constant.CALLER_IS_KEHUDUAN)){
-            requestUrlParam.put("appid", wxspAppidKehuduan);
-            requestUrlParam.put("secret", wxspSecretKehuduan);
-        }
+        Map<String, String> requestUrlParam = setParamAccordCaller(roleOfCaller);
+
         requestUrlParam.put("js_code", jsCode);
         requestUrlParam.put("grant_type", wxGrant_type);
 
@@ -278,11 +263,17 @@ public class WechatUserInfoController {
             logger.info("try to find user by unionId: " + unionId);
             User user = userService.findBy("wechatUnionId", unionId);
             if(user != null){
-                JSONObject userJsonObject = new JSONObject();
-                userJsonObject.put("account",user.getAccount());
-                userJsonObject.put("name", user.getName());
-                userJsonObject.put("id",user.getId());
-                return ResultGenerator.genSuccessResult(userJsonObject);
+                // 员工账号 不能登陆 客户小程序，反之也不能。
+                String msg = checkCallerIValid(user,roleOfCaller);
+                if( msg.equals(msgCallerIsValid) ){
+                    JSONObject userJsonObject = new JSONObject();
+                    userJsonObject.put("account",user.getAccount());
+                    userJsonObject.put("name", user.getName());
+                    userJsonObject.put("id",user.getId());
+                    return ResultGenerator.genSuccessResult(userJsonObject);
+                } else {
+                    return ResultGenerator.genFailResult(msg);
+                }
             } else{
                 return ResultGenerator.genFailResult("No user found by the js_code");
             }
@@ -293,6 +284,35 @@ public class WechatUserInfoController {
         }
     }
 
+    private String checkCallerIValid(User user,String roleOfCaller) {
+        if ((user.getRoleId() == Constant.ROLE_ID_EMPLOYEE) && (roleOfCaller.equals(Constant.CALLER_IS_KEHUDUAN))) {
+            return "员工账号 不能登陆 客户小程序";
+        }
+        if ((user.getRoleId() == Constant.ROLE_ID_CUSTOMER || user.getRoleId() == Constant.ROLE_ID_CUSTOMER_CONTACT)
+                && (roleOfCaller.equals(Constant.CALLER_IS_YUANGONGDUAN))) {
+            return "客户账号 不能登陆 员工小程序";
+        }
+        return msgCallerIsValid;
+    }
+
+    /**
+     * 根据调用者（哪个小程序）来设置对应的appId等
+     * @param roleOfCaller
+     * @return
+     */
+
+    private Map<String, String> setParamAccordCaller(String roleOfCaller ){
+
+        Map<String, String> requestUrlParam = new HashMap<String, String>();
+        if(roleOfCaller.equals(Constant.CALLER_IS_YUANGONGDUAN) ){
+            requestUrlParam.put("appid", wxspAppidYuangongduan);
+            requestUrlParam.put("secret", wxspSecretYuangongduan);
+        } else if(roleOfCaller.equals(Constant.CALLER_IS_KEHUDUAN)){
+            requestUrlParam.put("appid", wxspAppidKehuduan);
+            requestUrlParam.put("secret", wxspSecretKehuduan);
+        }
+        return requestUrlParam;
+    }
     /**
      * 验证消息来自微信。
      * 若确认此次GET请求来自微信服务器，请原样返回echostr参数内容，则接入生效，成为开发者成功，否则接入失败。

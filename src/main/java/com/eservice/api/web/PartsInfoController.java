@@ -120,7 +120,7 @@ public class PartsInfoController {
     }
 
     /**
-     * 根据 repair_record_id 查询 配件信息
+     * 根据 repair_record_id 查询 配件信息(更新为：待寄回配件)
      * （RepairRecordInfo中已不包含配件信息）
      */
     @PostMapping("/getPartsInfoByRepairRecordId")

@@ -112,6 +112,12 @@
     LEFT JOIN repair_actual_info as rai ON rai.id = parts_info.repair_actual_info_id
     LEFT JOIN repair_record as rr ON rr.id = rai.repair_record_id
     WHERE  rr.id = #{repairRecordId}
+--      * 配件寄回状态，
+--      * 1: 无需回寄，其他表示需要寄回
+--      * 2：未寄回，
+--      * 3：已寄回（待售后确认）
+--      * 4：售后已确认
+    and  parts_info.parts_status = '2'
   </select>
 
   <select id="getPartsInfoList" resultMap="PartsAllInfoMap">

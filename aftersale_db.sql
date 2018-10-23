@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50547
 File Encoding         : 65001
 
-Date: 2018-10-19 15:35:45
+Date: 2018-10-23 16:46:05
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -321,18 +321,18 @@ DROP TABLE IF EXISTS `machine`;
 CREATE TABLE `machine` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `nameplate` varchar(255) NOT NULL COMMENT '技术部填入的机器编号（铭牌），来自于sinsim_db.machine. nameplate',
-  `order_num` varchar(255) NOT NULL COMMENT '对应的订单号,来自sinsim_db.machine_order.order_num',
+  `order_num` varchar(255) DEFAULT NULL COMMENT '对应的订单号,来自sinsim_db.machine_order.order_num  老机器报修时可能空',
   `contract_num` varchar(255) DEFAULT NULL COMMENT '对应的合同号，可能用不到，允许空',
   `geo_location` varchar(255) DEFAULT NULL COMMENT '机器的地理位置，经纬度，考虑在调试完成时上传，备用地图显示',
-  `address` varchar(255) NOT NULL DEFAULT '' COMMENT '机器地址，厂家门牌号',
-  `status` varchar(255) NOT NULL DEFAULT '1' COMMENT '机器状态 0：未绑定，1：已绑定，2：待安装，3：正常工作状态（已安装、已保养，已维修），4：待保养，5：待修理，6： 待审核',
+  `address` varchar(255) DEFAULT '' COMMENT '机器地址，厂家门牌号',
+  `status` varchar(255) DEFAULT '1' COMMENT '机器状态 0：未绑定，1：已绑定，2：待安装，3：正常工作状态（已安装、已保养，已维修），4：待保养，5：待修理，6： 待审核',
   `nameplate_picture` varchar(255) DEFAULT NULL COMMENT '老机器，客户拍的铭牌照片的保存地址；非老机器可以为空',
-  `machine_type` varchar(255) NOT NULL COMMENT '机型',
-  `needle_num` varchar(255) NOT NULL COMMENT '针数',
-  `x_distance` varchar(255) NOT NULL COMMENT 'x行程',
-  `y_distance` varchar(255) NOT NULL COMMENT 'y行程',
-  `head_distance` varchar(255) NOT NULL COMMENT '头距',
-  `head_num` varchar(255) NOT NULL COMMENT '头数',
+  `machine_type` varchar(255) DEFAULT NULL COMMENT '机型',
+  `needle_num` varchar(255) DEFAULT NULL COMMENT '针数',
+  `x_distance` varchar(255) DEFAULT NULL COMMENT 'x行程',
+  `y_distance` varchar(255) DEFAULT NULL COMMENT 'y行程',
+  `head_distance` varchar(255) DEFAULT NULL COMMENT '头距',
+  `head_num` varchar(255) DEFAULT NULL COMMENT '头数',
   `loadinglist` varchar(255) DEFAULT NULL COMMENT '装车单路径，共用流程管理系统的装车单，老机器允许空',
   `customer_in_contract` varchar(255) DEFAULT NULL COMMENT '合同里的客户',
   `customer` int(10) unsigned DEFAULT NULL COMMENT '机器和客户绑定，空则表示未绑定,。通常是和custmer_in_contact是一样的。',
@@ -345,7 +345,7 @@ CREATE TABLE `machine` (
   KEY `nameplate` (`nameplate`),
   KEY `fk_m_customer` (`customer`),
   CONSTRAINT `fk_m_customer` FOREIGN KEY (`customer`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of machine
@@ -373,6 +373,7 @@ INSERT INTO `machine` VALUES ('26', '1806017', 'XS-1801114', 'XS-1801114', null,
 INSERT INTO `machine` VALUES ('27', '1806001', 'XS-1801109A(改-20180801)', 'XS-1801109', null, '', '1', null, '高速双凸轮', '4', '800', '1600', '165', '88+2', null, '绍兴华文电脑刺绣有限公司', '6', '2018-09-23', '0', null);
 INSERT INTO `machine` VALUES ('28', '1806002', 'XS-1801109A(改-20180801)', 'XS-1801109', null, '', '3', null, '高速双凸轮', '4', '800', '1600', '165', '88+2', null, '绍兴华文电脑刺绣有限公司', '6', '2018-09-23', '0', null);
 INSERT INTO `machine` VALUES ('29', '1806022', 'XS-1801118B', 'XS-1801118', null, '', '1', null, '高速双凸轮', '9', '750', '1150', '330', '38', null, '绍兴夏叶绣品有限公司', '17', '2018-10-07', '0', null);
+INSERT INTO `machine` VALUES ('30', '老机器-555', null, null, null, '', '5', null, null, null, null, null, null, null, null, null, null, null, '1', '3');
 
 -- ----------------------------
 -- Table structure for `maintain_abnormal_record`
@@ -417,13 +418,13 @@ INSERT INTO `maintain_customer_feedback` VALUES ('2', '0', '差评');
 DROP TABLE IF EXISTS `maintain_lib`;
 CREATE TABLE `maintain_lib` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `maintain_lib_name` varchar(255) NOT NULL COMMENT '保养库的名字， 一期，二期，三期等',
+  `maintain_lib_name` varchar(255) DEFAULT NULL COMMENT '保养库的名字， 一期，二期，三期等',
   `maintain_type` int(10) unsigned NOT NULL COMMENT '1: 清理清洁， 2：注油润滑， 3： 检查修理',
   `maintain_content` text COMMENT '保养内容',
   PRIMARY KEY (`id`),
   KEY `fk_mi_maintain_lib` (`maintain_lib_name`) USING BTREE,
   KEY `fk_mi_maintain_type` (`maintain_type`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=57 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=84 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of maintain_lib
@@ -737,7 +738,7 @@ CREATE TABLE `repair_record` (
   CONSTRAINT `fk_rr_machine_nameplate` FOREIGN KEY (`machine_nameplate`) REFERENCES `machine` (`nameplate`),
   CONSTRAINT `fk_rr_repair_charge_person` FOREIGN KEY (`repair_charge_person`) REFERENCES `user` (`id`),
   CONSTRAINT `fk_rr_repair_request_info` FOREIGN KEY (`repair_request_info`) REFERENCES `repair_request_info` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
 
 -- ----------------------------
 -- Records of repair_record
@@ -745,6 +746,7 @@ CREATE TABLE `repair_record` (
 INSERT INTO `repair_record` VALUES ('11', null, '9', '1806024', '11', null, null, null, null, null, null, '0', '2018-10-18 11:06:41', null, null);
 INSERT INTO `repair_record` VALUES ('13', null, '17', '1807027', '13', '0', '2018-10-18', '8', null, null, null, '2', '2018-10-18 11:45:10', '2018-10-18 14:43:10', null);
 INSERT INTO `repair_record` VALUES ('14', null, '17', '1807026', '14', '0', '2018-10-19', '3', null, '2018-10-19 10:26:43', '1', '8', '2018-10-19 09:54:53', '2018-10-19 10:35:18', null);
+INSERT INTO `repair_record` VALUES ('15', null, '19', '老机器-555', '16', null, null, null, null, null, null, '1', '2018-10-23 16:45:20', null, null);
 
 -- ----------------------------
 -- Table structure for `repair_request_info`
@@ -765,7 +767,7 @@ CREATE TABLE `repair_request_info` (
   PRIMARY KEY (`id`),
   KEY `fk_rri_contacter` (`customer`),
   CONSTRAINT `fk_rri_customer` FOREIGN KEY (`customer`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of repair_request_info
@@ -773,6 +775,7 @@ CREATE TABLE `repair_request_info` (
 INSERT INTO `repair_request_info` VALUES ('11', '1806024', '', '', 'iiiiii', 'ooooooo', '', '9', null, '4', '0');
 INSERT INTO `repair_request_info` VALUES ('13', '1807027', '', '/home/sinsim/output/aftersale/repair_req_voice/1807027_FILE_TYPE_REPAIR_REQUEST_VOICE_2018-10-18-11-45-10_0.mp3', 'jjjjjjjj', 'jnknkmmmmmm', '/home/sinsim/output/aftersale/repair_req_img/1807027_FILE_TYPE_REPAIR_REQUEST_IMAGE_2018-10-18-11-45-14_1.jpg,/home/sinsim/output/aftersale/repair_req_img/1807027_FILE_TYPE_REPAIR_REQUEST_IMAGE_2018-10-18-11-45-23_2.jpg,/home/sinsim/output/aftersale/repair_req_img/1807027_FILE_TYPE_REPAIR_REQUEST_IMAGE_2018-10-18-11-46-00_3.jpg', '9', null, '4', '4');
 INSERT INTO `repair_request_info` VALUES ('14', '1807026', '', '/home/sinsim/output/aftersale/repair_req_voice/1807026_FILE_TYPE_REPAIR_REQUEST_VOICE_2018-10-19-09-54-53_0.mp3', '报修', '报修问题', '/home/sinsim/output/aftersale/repair_req_img/1807026_FILE_TYPE_REPAIR_REQUEST_IMAGE_2018-10-19-09-54-53_1.jpg,/home/sinsim/output/aftersale/repair_req_img/1807026_FILE_TYPE_REPAIR_REQUEST_IMAGE_2018-10-19-09-54-54_2.jpg,/home/sinsim/output/aftersale/repair_req_img/1807026_FILE_TYPE_REPAIR_REQUEST_IMAGE_2018-10-19-09-54-54_3.jpg', '9', null, '4', '4');
+INSERT INTO `repair_request_info` VALUES ('16', '老机器-555', '/home/sinsim/output/aftersale/repair_req_nameplate_img/老机器-555_FILE_TYPE_REPAIR_REQUEST_NAMEPLATE_IMAGE_2018-10-23-16-45-19_0.jpg', '/home/sinsim/output/aftersale/repair_req_voice/老机器-555_FILE_TYPE_REPAIR_REQUEST_VOICE_2018-10-23-16-45-20_0.mp3', '呵呵呵呵', '么么么么', '/home/sinsim/output/aftersale/repair_req_img/老机器-555_FILE_TYPE_REPAIR_REQUEST_IMAGE_2018-10-23-16-45-20_1.jpg,/home/sinsim/output/aftersale/repair_req_img/老机器-555_FILE_TYPE_REPAIR_REQUEST_IMAGE_2018-10-23-16-45-20_2.jpg,/home/sinsim/output/aftersale/repair_req_img/老机器-555_FILE_TYPE_REPAIR_REQUEST_IMAGE_2018-10-23-16-45-20_3.jpg', '19', '2018-10-23 16:45:20', '5', '5');
 
 -- ----------------------------
 -- Table structure for `role`
@@ -840,7 +843,7 @@ INSERT INTO `user` VALUES ('15', '刘代', '刘代', null, '4', '0', '0', 'sinsi
 INSERT INTO `user` VALUES ('16', '张代', '张代', null, '4', '0', '0', 'sinsim', '1', '13500003333', '2018-09-21 19:42:20', '诸暨市XX路XX号');
 INSERT INTO `user` VALUES ('17', 'liuke', 'liuke', '', '5', '0', '杭州YY有限公司', 'sinsim', '1', '13300003333', '2018-09-21 20:08:39', '');
 INSERT INTO `user` VALUES ('18', 'wuxuemin_wxid', 'wuxuemin_wxid', null, '3', '0', null, 'sinsim', '1', '13588889999', '2018-09-23 16:25:29', null);
-INSERT INTO `user` VALUES ('19', 'wupu', 'wuxm', '', '5', '0', 'XXX公司', 'sinsim', '1', '13011112222', '2018-10-18 17:25:23', 'HZ市12号大街');
+INSERT INTO `user` VALUES ('19', 'wuke', 'wuxm', 'oDPlm0kxW8jYDRuZt6koPO1G4CXw', '5', '0', 'XXX公司', 'sinsim', '1', '13011112222', '2018-10-18 17:25:23', 'HZ市12号大街');
 
 -- ----------------------------
 -- Table structure for `wechat_user_info`
@@ -863,21 +866,4 @@ CREATE TABLE `wechat_user_info` (
 -- ----------------------------
 -- Records of wechat_user_info
 -- ----------------------------
-INSERT INTO `wechat_user_info` VALUES ('1', 'obIMx1rHbcGcSwxNDZ3QyRS4ZbqI', 'oDPlm0kxW8jYDRuZt6koPO1G4CXw', '???', null, null, null, null, null, null);
-INSERT INTO `wechat_user_info` VALUES ('2', 'obIMx1rHbcGcSwxNDZ3QyRS4ZbqI', 'oDPlm0kxW8jYDRuZt6koPO1G4CXw', '???', '1', 'Zhejiang', 'Hangzhou', 'CN', 'http://thirdwx.qlogo.cn/mmopen/vi_32/FbZEaTWcYyZAScoKqnz8BnVUb6WQKIx1I85oUs5M4Q1e97dibHZ0exHfOXPqBlicCyjUfH9CTM9zyibyxqTwxaZqQ/132', '[]');
-INSERT INTO `wechat_user_info` VALUES ('3', 'obIMx1lFXD6IEM12px1p0B5Hmnrs', 'oDPlm0m_R-7oR1Ry6u1nGkII6pOU', '??????', '1', 'Zhejiang', 'Hangzhou', 'CN', 'http://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTIaIqx5G3ibMHZFR8nM5Ep97lNLTWJtUTYW4Ovib1OcgBupnuXBtiaYZpSOjNqhrhQCeQmoVnKfMox9A/132', '[]');
-INSERT INTO `wechat_user_info` VALUES ('4', 'obIMx1lFXD6IEM12px1p0B5Hmnrs', 'oDPlm0m_R-7oR1Ry6u1nGkII6pOU', '??????', '1', 'Zhejiang', 'Hangzhou', 'CN', 'http://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTIaIqx5G3ibMHZFR8nM5Ep97lNLTWJtUTYW4Ovib1OcgBupnuXBtiaYZpSOjNqhrhQCeQmoVnKfMox9A/132', '[]');
-INSERT INTO `wechat_user_info` VALUES ('5', 'obIMx1rHbcGcSwxNDZ3QyRS4ZbqI', 'oDPlm0kxW8jYDRuZt6koPO1G4CXw', '???', '1', 'Zhejiang', 'Hangzhou', 'CN', 'http://thirdwx.qlogo.cn/mmopen/vi_32/FbZEaTWcYyZAScoKqnz8BnVUb6WQKIx1I85oUs5M4Q1e97dibHZ0exHfOXPqBlicCyjUfH9CTM9zyibyxqTwxaZqQ/132', '[]');
-INSERT INTO `wechat_user_info` VALUES ('6', 'obIMx1rHbcGcSwxNDZ3QyRS4ZbqI', 'oDPlm0kxW8jYDRuZt6koPO1G4CXw', '???', '1', 'Zhejiang', 'Hangzhou', 'CN', 'http://thirdwx.qlogo.cn/mmopen/vi_32/FbZEaTWcYyZAScoKqnz8BnVUb6WQKIx1I85oUs5M4Q1e97dibHZ0exHfOXPqBlicCyjUfH9CTM9zyibyxqTwxaZqQ/132', '[]');
-INSERT INTO `wechat_user_info` VALUES ('7', 'obIMx1rHbcGcSwxNDZ3QyRS4ZbqI', 'oDPlm0kxW8jYDRuZt6koPO1G4CXw', '???', '1', 'Zhejiang', 'Hangzhou', 'CN', 'http://thirdwx.qlogo.cn/mmopen/vi_32/FbZEaTWcYyZAScoKqnz8BnVUb6WQKIx1I85oUs5M4Q1e97dibHZ0exHfOXPqBlicCyjUfH9CTM9zyibyxqTwxaZqQ/132', '[]');
-INSERT INTO `wechat_user_info` VALUES ('8', 'obIMx1rHbcGcSwxNDZ3QyRS4ZbqI', 'oDPlm0kxW8jYDRuZt6koPO1G4CXw', '???', '1', 'Zhejiang', 'Hangzhou', 'CN', 'http://thirdwx.qlogo.cn/mmopen/vi_32/FbZEaTWcYyZAScoKqnz8BnVUb6WQKIx1I85oUs5M4Q1e97dibHZ0exHfOXPqBlicCyjUfH9CTM9zyibyxqTwxaZqQ/132', '[]');
-INSERT INTO `wechat_user_info` VALUES ('9', 'obIMx1rHbcGcSwxNDZ3QyRS4ZbqI', 'oDPlm0kxW8jYDRuZt6koPO1G4CXw', '???', '1', 'Zhejiang', 'Hangzhou', 'CN', 'http://thirdwx.qlogo.cn/mmopen/vi_32/FbZEaTWcYyZAScoKqnz8BnVUb6WQKIx1I85oUs5M4Q1e97dibHZ0exHfOXPqBlicCyjUfH9CTM9zyibyxqTwxaZqQ/132', '[]');
-INSERT INTO `wechat_user_info` VALUES ('10', 'obIMx1rHbcGcSwxNDZ3QyRS4ZbqI', 'oDPlm0kxW8jYDRuZt6koPO1G4CXw', '???', '1', 'Zhejiang', 'Hangzhou', 'CN', 'http://thirdwx.qlogo.cn/mmopen/vi_32/FbZEaTWcYyZAScoKqnz8BnVUb6WQKIx1I85oUs5M4Q1e97dibHZ0exHfOXPqBlicCyjUfH9CTM9zyibyxqTwxaZqQ/132', '[]');
-INSERT INTO `wechat_user_info` VALUES ('11', 'obIMx1rHbcGcSwxNDZ3QyRS4ZbqI', 'oDPlm0kxW8jYDRuZt6koPO1G4CXw', '???', '1', 'Zhejiang', 'Hangzhou', 'CN', 'http://thirdwx.qlogo.cn/mmopen/vi_32/FbZEaTWcYyZAScoKqnz8BnVUb6WQKIx1I85oUs5M4Q1e97dibHZ0exHfOXPqBlicCyjUfH9CTM9zyibyxqTwxaZqQ/132', '[]');
-INSERT INTO `wechat_user_info` VALUES ('12', 'obIMx1rHbcGcSwxNDZ3QyRS4ZbqI', 'oDPlm0kxW8jYDRuZt6koPO1G4CXw', '???', '1', 'Zhejiang', 'Hangzhou', 'CN', 'http://thirdwx.qlogo.cn/mmopen/vi_32/FbZEaTWcYyZAScoKqnz8BnVUb6WQKIx1I85oUs5M4Q1e97dibHZ0exHfOXPqBlicCyjUfH9CTM9zyibyxqTwxaZqQ/132', '[]');
-INSERT INTO `wechat_user_info` VALUES ('13', 'obIMx1rHbcGcSwxNDZ3QyRS4ZbqI', 'oDPlm0kxW8jYDRuZt6koPO1G4CXw', '???', '1', 'Zhejiang', 'Hangzhou', 'CN', 'http://thirdwx.qlogo.cn/mmopen/vi_32/FbZEaTWcYyZAScoKqnz8BnVUb6WQKIx1I85oUs5M4Q1e97dibHZ0exHfOXPqBlicCyjUfH9CTM9zyibyxqTwxaZqQ/132', '[]');
-INSERT INTO `wechat_user_info` VALUES ('14', 'obIMx1lFXD6IEM12px1p0B5Hmnrs', 'oDPlm0m_R-7oR1Ry6u1nGkII6pOU', '??????', '1', 'Zhejiang', 'Hangzhou', 'CN', 'http://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTIaIqx5G3ibMHZFR8nM5Ep97lNLTWJtUTYW4Ovib1OcgBupnuXBtiaYZpSOjNqhrhQCeQmoVnKfMox9A/132', '[]');
-INSERT INTO `wechat_user_info` VALUES ('15', 'obIMx1rHbcGcSwxNDZ3QyRS4ZbqI', 'oDPlm0kxW8jYDRuZt6koPO1G4CXw', '???', '1', 'Zhejiang', 'Hangzhou', 'CN', 'http://thirdwx.qlogo.cn/mmopen/vi_32/FbZEaTWcYyZAScoKqnz8BnVUb6WQKIx1I85oUs5M4Q1e97dibHZ0exHfOXPqBlicCyjUfH9CTM9zyibyxqTwxaZqQ/132', '[]');
-INSERT INTO `wechat_user_info` VALUES ('16', 'obIMx1rHbcGcSwxNDZ3QyRS4ZbqI', 'oDPlm0kxW8jYDRuZt6koPO1G4CXw', '???', '1', 'Zhejiang', 'Hangzhou', 'CN', 'http://thirdwx.qlogo.cn/mmopen/vi_32/FbZEaTWcYyZAScoKqnz8BnVUb6WQKIx1I85oUs5M4Q1e97dibHZ0exHfOXPqBlicCyjUfH9CTM9zyibyxqTwxaZqQ/132', '[]');
-INSERT INTO `wechat_user_info` VALUES ('17', 'obIMx1rHbcGcSwxNDZ3QyRS4ZbqI', 'oDPlm0kxW8jYDRuZt6koPO1G4CXw', '???', '1', 'Zhejiang', 'Hangzhou', 'CN', 'http://thirdwx.qlogo.cn/mmopen/vi_32/FbZEaTWcYyZAScoKqnz8BnVUb6WQKIx1I85oUs5M4Q1e97dibHZ0exHfOXPqBlicCyjUfH9CTM9zyibyxqTwxaZqQ/132', '[]');
-INSERT INTO `wechat_user_info` VALUES ('18', 'obIMx1rHbcGcSwxNDZ3QyRS4ZbqI', 'oDPlm0kxW8jYDRuZt6koPO1G4CXw', '???', '1', 'Zhejiang', 'Hangzhou', 'CN', 'http://thirdwx.qlogo.cn/mmopen/vi_32/FbZEaTWcYyZAScoKqnz8BnVUb6WQKIx1I85oUs5M4Q1e97dibHZ0exHfOXPqBlicCyjUfH9CTM9zyibyxqTwxaZqQ/132', '[]');
+INSERT INTO `wechat_user_info` VALUES ('19', 'obIMx1rHbcGcSwxNDZ3QyRS4ZbqI', 'oDPlm0kxW8jYDRuZt6koPO1G4CXw', '???', '1', 'Zhejiang', 'Hangzhou', 'CN', 'http://thirdwx.qlogo.cn/mmopen/vi_32/FbZEaTWcYyZAScoKqnz8BnVUb6WQKIx1I85oUs5M4Q1e97dibHZ0exHfOXPqBlicCyjUfH9CTM9zyibyxqTwxaZqQ/132', '[]');

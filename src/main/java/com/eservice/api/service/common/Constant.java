@@ -115,6 +115,13 @@ public class Constant {
     public static final String MACHINE_TYPE_OLD = "1";
     public static final String MACHINE_TYPE_AFTERSALES_ADD = "2";
 
+    /**
+     * 老机器审核是否通过，空表示非老机器，0:未通过，1：通过 3: 未做判定
+     */
+    public static final String OLD_MACHINE_CHECK_NO_PASS = "0";
+    public static final String OLD_MACHINE_CHECK_PASS = "1";
+    public static final String OLD_MACHINE_CHECK_UNKNOWN= "3";
+
     /*
      保养状态
       0：待分配，
