@@ -230,7 +230,8 @@ public class MaintainRecordController {
             /**
              * 也更新机器状态
              */
-            Machine machine = machineService.findBy("nameplate",model.getMachineNameplate());
+            MaintainRecord maintainRecord1 = maintainRecordService.findById(model.getId());
+            Machine machine = machineService.findBy("nameplate",maintainRecord1.getMachineNameplate());
             machine.setStatus(Constant.MACHINE_STATUS_WAIT_FOR_MAINTAIN);
             machineService.update(machine);
         } catch (Exception ex) {

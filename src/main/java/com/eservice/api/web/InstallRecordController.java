@@ -212,9 +212,10 @@ public class InstallRecordController {
             }
 
             /**
-             * 也更新机器状态
+             * 也更新机器状态,web未传入铭牌号，需要重新获取一下
              */
-            Machine machine = machineService.findBy("nameplate",model.getMachineNameplate());
+            InstallRecord installRecord1 = installRecordService.findById(model.getId());
+            Machine machine = machineService.findBy("nameplate",installRecord1.getMachineNameplate());
             machine.setStatus(Constant.MACHINE_STATUS_WAIT_FOR_INSTALL);
             machineService.update(machine);
         } catch (Exception ex) {

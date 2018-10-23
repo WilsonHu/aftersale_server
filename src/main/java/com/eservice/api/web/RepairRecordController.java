@@ -4,11 +4,14 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.eservice.api.core.Result;
 import com.eservice.api.core.ResultGenerator;
+import com.eservice.api.model.machine.Machine;
 import com.eservice.api.model.repair_members.RepairMembers;
 import com.eservice.api.model.repair_record.RepairRecord;
 import com.eservice.api.model.repair_record.RepairRecordInfo;
 import com.eservice.api.model.user.User;
 import com.eservice.api.service.common.CommonUtils;
+import com.eservice.api.service.common.Constant;
+import com.eservice.api.service.impl.MachineServiceImpl;
 import com.eservice.api.service.impl.RepairMembersServiceImpl;
 import com.eservice.api.service.impl.RepairRecordServiceImpl;
 import com.github.pagehelper.PageHelper;
@@ -36,6 +39,9 @@ public class RepairRecordController {
 
     @Resource
     private RepairMembersServiceImpl repairMembersService;
+
+    @Resource
+    private MachineServiceImpl machineService;
 
     @PostMapping("/add")
     public Result add(@RequestBody @NotNull RepairRecord repairRecord) {
@@ -180,6 +186,13 @@ public class RepairRecordController {
             if (members.size() > 0) {
                 repairMembersService.save(members);
             }
+            /**
+             * 也更新机器状态
+             */
+            RepairRecord repairRecord1 = repairRecordService.findById(model.getId());
+            Machine machine = machineService.findBy("nameplate",repairRecord1.getMachineNameplate());
+            machine.setStatus(Constant.REPAIR_STATUS_SIGNED_TO_REPAIRER);
+            machineService.update(machine);
         } catch (Exception ex) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return ResultGenerator.genFailResult("数据保存出错！" + ex.getMessage());

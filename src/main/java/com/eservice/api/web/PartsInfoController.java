@@ -93,6 +93,7 @@ public class PartsInfoController {
                 }
 
                 // TODO　更新相关状态
+                partsInfo1.setPartsStatus(Constant.PARTS_STATUS_ALREADY_SENDBACK);
                 partsInfoService.update(partsInfo1);
             }
         } catch (Exception ex) {
