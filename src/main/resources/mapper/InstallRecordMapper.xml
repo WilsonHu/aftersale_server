@@ -84,7 +84,7 @@
     userOfCustomerInMachine.name AS machineCustomerName,    -- 机器的客户的名称
     userOfCustomerInMachine.id AS machineCustomerId,
     userOfCustomerInMachine.phone AS machineCustomerPhone,  -- 机器的客户的电话
-    agentOfCustomerInMachine.`account` AS machineAgentName,    -- 机器的客户的代理商的名称
+    agentOfCustomerInMachine.`name` AS machineAgentName,    -- 机器的客户的代理商的名称
     agentOfCustomerInMachine.phone AS machineAgentPhone,    -- 机器的客户的代理商的电话
     m.facory_date,
     m.nameplate,
@@ -122,7 +122,7 @@
     userOfCustomerInMachine.phone AS machineCustomerPhone,                -- 机器的客户的电话
     userOfCustomerInMachine.agent as machineAgentId,                      -- 机器的客户的代理商的ID号
     userOfCustomerInMachine.customer_company as machineCustomerCompanyId, -- 机器的客户的公司的ID号
-    agentOfCustomerInMachine.`account` AS machineAgentName,                  -- 机器的客户的代理商的名称
+    agentOfCustomerInMachine.`name` AS machineAgentName,                  -- 机器的客户的代理商的名称
     agentOfCustomerInMachine.phone AS machineAgentPhone,                  -- 机器的客户的代理商的电话
     m.facory_date,
     m.nameplate,
