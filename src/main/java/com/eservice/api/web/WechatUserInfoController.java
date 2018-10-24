@@ -465,7 +465,7 @@ public class WechatUserInfoController {
         String jsonResult = commonService.getHttpsResponse(realUrl, "GET");
 
         // 微信采用ISO-8859-1编码,需要对获取的结果进行编码
-        String utfResult = new String(jsonResult.getBytes("ISO-8859-1"), "UTF-8");
+        String utfResult = new String(jsonResult.getBytes("utf-8"), "ISO-8859-1");
         System.out.println("get response is:" + utfResult);
         logger.info("get response userinfo is:" + utfResult);
 
@@ -663,6 +663,17 @@ public class WechatUserInfoController {
     @PostMapping("/getWechatUserInfoByUnionId")
     public Result getWechatUserInfoByUnionId(@RequestParam String unionId) {
         WechatUserInfo wechatUserInfo = wechatUserInfoService.getWechatUserInfoByUnionId(unionId);
+        return ResultGenerator.genSuccessResult(wechatUserInfo);
+    }
+
+    /**
+     * 根据 account获取 微信账号信息
+     * @param account
+     * @return
+     */
+    @PostMapping("/getWechatUserInfoByAccount")
+    public Result getWechatUserInfoByAccount(@RequestParam String account) {
+        WechatUserInfo wechatUserInfo = wechatUserInfoService.getWechatUserInfoByAccount(account);
         return ResultGenerator.genSuccessResult(wechatUserInfo);
     }
 

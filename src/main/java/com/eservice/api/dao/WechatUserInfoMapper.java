@@ -6,5 +6,6 @@ import org.apache.ibatis.annotations.Param;
 
 public interface WechatUserInfoMapper extends Mapper<WechatUserInfo> {
 
-    WechatUserInfo  getWechatUserInfoByUnionId(@Param("unionId") String unionId);
+    WechatUserInfo getWechatUserInfoByUnionId(@Param("unionId") String unionId);
+    WechatUserInfo getWechatUserInfoByAccount(@Param("account") String account);
 }

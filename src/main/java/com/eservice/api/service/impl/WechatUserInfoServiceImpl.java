@@ -25,4 +25,7 @@ public class WechatUserInfoServiceImpl extends AbstractService<WechatUserInfo> i
         return wechatUserInfoMapper.getWechatUserInfoByUnionId(unionId);
     }
 
+    public WechatUserInfo getWechatUserInfoByAccount(String account){
+        return wechatUserInfoMapper.getWechatUserInfoByAccount(account);
+    }
 }

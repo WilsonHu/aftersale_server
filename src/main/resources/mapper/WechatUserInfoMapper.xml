@@ -24,4 +24,14 @@
     WHERE
         wui.union_id = #{unionId}
   </select>
+
+  <select id="getWechatUserInfoByAccount" resultMap="BaseResultMap">
+    SELECT
+      *
+    FROM
+      wechat_user_info AS wui
+    LEFT JOIN `user` AS u ON wui.union_id = u.wechatUnionId
+    WHERE
+      u.account = #{account}
+  </select>
  </mapper>
