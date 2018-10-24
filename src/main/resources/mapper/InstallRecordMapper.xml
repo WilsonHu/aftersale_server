@@ -81,7 +81,8 @@
    SELECT
     ir.id as installRecordId,
     ir.*,
-    userOfCustomerInMachine.name AS machineCustomerName,    -- 机器的客户的名称
+--   attention：   user的 account 有唯一性，name可能重复，应以account为依据，但是变量的名称就不纠正了，还是保持原样xxxxName
+    userOfCustomerInMachine.account AS machineCustomerName,    -- 机器的客户的名称
     userOfCustomerInMachine.id AS machineCustomerId,
     userOfCustomerInMachine.phone AS machineCustomerPhone,  -- 机器的客户的电话
     agentOfCustomerInMachine.`name` AS machineAgentName,    -- 机器的客户的代理商的名称
