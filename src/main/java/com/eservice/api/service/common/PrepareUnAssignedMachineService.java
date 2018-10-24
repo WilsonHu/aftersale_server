@@ -51,6 +51,7 @@ public class PrepareUnAssignedMachineService {
 
     private List<MachineInfosInProcessDb> installedNotBoundedMachineList = new ArrayList<>();
     /**
+     * 每次启动都会执行一次
      * 每 60min 发一次
      */
     @Scheduled(fixedRate = 1000 * 60 * 15 )
@@ -73,6 +74,11 @@ public class PrepareUnAssignedMachineService {
                 machine.setNameplate(rs2.getString("nameplate"));
                 machine.setMachineType(rs2.getInt("machine_type"));
                 machine.setOrderNum(rs2.getString("order_num"));
+                machine.setNeedleNum(rs2.getString("needle_num"));
+                machine.setHeadNum(rs2.getString("head_num"));
+                machine.setHeadDistance(rs2.getString("head_distance"));
+                machine.setxDistance(rs2.getString("x_distance"));
+                machine.setyDistance(rs2.getString("y_distance"));
                 installedMachineList.add(machine);
             }
 
