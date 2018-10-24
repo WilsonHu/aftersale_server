@@ -74,7 +74,7 @@
 
   <select id="getMaintainRecordInfoList" resultMap="MaintainRecordInfoMap">
       SELECT
-      userOfCustomerInMachine.name as machineCustomerName,
+      userOfCustomerInMachine.account as machineCustomerName,
       userOfCustomerInMachine.id as machineCustomerId,
       userOfCustomerInMachine.phone as machineCustomerPhone,
       userOfCustomerInMachine.agent as machineAgentId,
@@ -114,7 +114,7 @@
       <if test="isFuzzy == true">
           <if test="customerName != null and customerName != ''">
               --         AND customerName like CONCAT('%','${customerName}','%' )
-              AND userOfCustomerInMachine.name like CONCAT('%','${customerName}','%' )
+              AND userOfCustomerInMachine.account like CONCAT('%','${customerName}','%' )
           </if>
           <if test="agent != null and agent != ''">
               <if test = "isAgent == true">
@@ -142,7 +142,7 @@
       <if test="isFuzzy == false">
           <if test="customerName != null and customerName != ''">
               --         AND customerName = '${customerName}'
-              AND userOfCustomerInMachine.name = '${customerName}'
+              AND userOfCustomerInMachine.account = '${customerName}'
           </if>
           <if test="agent != null and agent != ''">
               --         AND agent_name = '${agent}'
@@ -158,7 +158,7 @@
               and m.machine_type = '${machineType}'
           </if>
           <if test="maintainChargePerson != null and maintainChargePerson != ''">
-              and userOfMaintainChargePerson.name = '${maintainChargePerson}'
+              and userOfMaintainChargePerson.account = '${maintainChargePerson}'
           </if>
       </if>
 
@@ -182,8 +182,8 @@
         SELECT
         mr.*,
         mr.id as maintainRecordId,
-        userOfMembersInMaintainRecord.`name` as maintainMembersPersonName,
-        userOfChargeInMaintainRecord.`name` as maintainChargePersonName,
+        userOfMembersInMaintainRecord.`account` as maintainMembersPersonName,
+        userOfChargeInMaintainRecord.`account` as maintainChargePersonName,
         m.*
         FROM
         maintain_record as mr
@@ -195,7 +195,7 @@
     -- 保养状态 0：待分配，1：已分配(但未接单）2：已接受任务，3：保养完成(客户未确认)，4：客户已确认保养结果
         (mr.maintain_status = 1 or mr.maintain_status = 2 or  mr.maintain_status = 3 )
         <if test="userName!=null and userName != '' ">
-            and (userOfMembersInMaintainRecord.name = #{userName} or  userOfChargeInMaintainRecord.name = #{userName})
+            and (userOfMembersInMaintainRecord.account = #{userName} or  userOfChargeInMaintainRecord.name = #{userName})
         </if>
     </select>
 

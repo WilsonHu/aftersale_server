@@ -123,7 +123,7 @@
     <if test="isFuzzy == true">
         <if test="customerName != null and customerName != ''">
             --         AND customerName like CONCAT('%','${customerName}','%' )
-            AND u.name like CONCAT('%','${customerName}','%' )
+            AND u.account like CONCAT('%','${customerName}','%' )
         </if>
         <if test="agent != null and agent != ''">
             <if test = "isAgent == true">
@@ -152,7 +152,7 @@
     <if test="isFuzzy == false">
         <if test="customerName != null and customerName != ''">
             --         AND u.customerName ='${customerName}'
-            AND u.name ='${customerName}'
+            AND u.account ='${customerName}'
         </if>
         <if test="agent != null and agent != ''">
             --         AND agent_name = '${agent}'
@@ -199,15 +199,15 @@
             m.needle_num,
             ir.install_actual_time,
             ir.install_charge_person,
-            userInInstallRecord. NAME AS install_charge_person_name,
+            userInInstallRecord. account AS install_charge_person_name,
             ir.install_status,
             mr.maintain_date_actual,
             mr.maintain_charge_person,
-            userInMaintainRecord.`name` AS maintain_charge_person_name,
+            userInMaintainRecord.`account` AS maintain_charge_person_name,
             mr.maintain_status,
             rr.repair_end_time,
             rr.repair_charge_person,
-            userInRepairRecord.`name` AS repair_charge_person_name,
+            userInRepairRecord.`account` AS repair_charge_person_name,
             rr.`status` AS repair_status,
             parts_info.parts_status
 --             ,
@@ -241,15 +241,15 @@
             m.needle_num,
             ir.install_actual_time,
             ir.install_charge_person,
-            userInInstallRecord. NAME AS install_charge_person_name,
+            userInInstallRecord. account AS install_charge_person_name,
             ir.install_status,
             mr.maintain_date_actual,
             mr.maintain_charge_person,
-            userInMaintainRecord.`name` AS maintain_charge_person_name,
+            userInMaintainRecord.`account` AS maintain_charge_person_name,
             mr.maintain_status,
             rr.repair_end_time,
             rr.repair_charge_person,
-            userInRepairRecord.`name` AS repair_charge_person_name,
+            userInRepairRecord.`account` AS repair_charge_person_name,
             rr.`status` AS repair_status,
             parts_info.parts_status
 --         ,
@@ -271,11 +271,11 @@
         where 1=1
         <if test="userName!=null and userName != '' ">
             and (
-            (userInInstallRecord.`name` = #{userName} and ir.install_status = 2 ) -- 2：安装OK(客户未确认);
+            (userInInstallRecord.`account` = #{userName} and ir.install_status = 2 ) -- 2：安装OK(客户未确认);
             or
-            (userInMaintainRecord.`name` = #{userName} and mr.maintain_status =3) -- 3：保养完成(客户未确认)
+            (userInMaintainRecord.`account` = #{userName} and mr.maintain_status =3) -- 3：保养完成(客户未确认)
             or
-            (userInRepairRecord.`name` = #{userName} and (rr.`status` = 3 or parts_info.parts_status =2 or parts_info.parts_status =3 ))
+            (userInRepairRecord.`account` = #{userName} and (rr.`status` = 3 or parts_info.parts_status =2 or parts_info.parts_status =3 ))
             -- 3：维修成功(客户未确认)
             -- 1: 无需回寄，其他表示需要寄回(具体 2：未寄回，3：已寄回（待确认），4：已确认)
             )
