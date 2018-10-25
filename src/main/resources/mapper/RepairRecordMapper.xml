@@ -252,6 +252,7 @@
 		<if test="userName!=null and userName != '' ">
 			and (userOfMembersInRepairRecord.account = #{userName} or userOfChargeInRepairRecord.name = #{userName})
 		</if>
+		order by rr.update_time desc, rr.create_time desc
 	</select>
 
 	<select id="selectRepairRecordByRepairRequestId" resultMap="BaseResultMap">

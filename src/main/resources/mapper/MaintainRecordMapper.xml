@@ -197,6 +197,7 @@
         <if test="userName!=null and userName != '' ">
             and (userOfMembersInMaintainRecord.account = #{userName} or  userOfChargeInMaintainRecord.name = #{userName})
         </if>
+        order by mr.update_time desc, mr.create_time desc
     </select>
 
 </mapper>

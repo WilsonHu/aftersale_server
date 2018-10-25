@@ -255,5 +255,6 @@
     <if test="userName!=null and userName != '' ">
       and (userOfMembersInInstallRecord.account = #{userName} or  userOfChargeInInstallRecord.name = #{userName})
     </if>
+    order by ir.update_time desc, ir.create_time desc
   </select>
 </mapper>
