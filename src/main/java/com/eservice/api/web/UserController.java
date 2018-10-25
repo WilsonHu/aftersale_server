@@ -43,6 +43,22 @@ public class UserController {
         return ResultGenerator.genSuccessResult();
     }
 
+    /**
+     * 更新用户密码
+     */
+    @PostMapping("/updatePassword")
+    public Result updatePassword(@RequestParam String account, @RequestParam String oldPassword,@RequestParam String newPassword) {
+
+        User user  = userService.requestLogin(account, oldPassword,null);
+        if(user == null) {
+            return ResultGenerator.genFailResult("账号/密码 不正确！");
+        }else {
+            user.setPassword(newPassword);
+            userService.update(user);
+            return ResultGenerator.genSuccessResult("密码更新成功");
+        }
+    }
+
     @PostMapping("/update")
     public Result update(@RequestBody @NotNull User user) {
 

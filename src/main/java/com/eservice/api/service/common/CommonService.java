@@ -181,13 +181,16 @@ public class CommonService {
                 con.setRequestMethod("GET"); //使用get请求
             }
             is = con.getInputStream();   //获取输入流，此时才真正建立链接
-            InputStreamReader isr = new InputStreamReader(is);
+            /**
+             * 中文支持，比如微信nickname
+             */
+            InputStreamReader isr = new InputStreamReader(is,"UTF-8");
             BufferedReader bufferReader = new BufferedReader(isr);
             String inputLine;
             while ((inputLine = bufferReader.readLine()) != null) {
                 resultData += inputLine + "\n";
             }
-            System.out.println(resultData);
+            logger.info(resultData);
 
         } catch (Exception e) {
             e.printStackTrace();

@@ -55,6 +55,9 @@ public class MachineController {
         return ResultGenerator.genSuccessResult();
     }
 
+    /**
+     * 绑定机器到客户
+     */
     @PostMapping("/addList")
     @Transactional(rollbackFor = Exception.class)
     public Result addList(String machineList) {

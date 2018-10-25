@@ -464,12 +464,7 @@ public class WechatUserInfoController {
         String realUrl = String.format(urlGetUserinfo, tokenInfo.getAccess_token(), tokenInfo.getOpenid());
         String jsonResult = commonService.getHttpsResponse(realUrl, "GET");
 
-        // 微信采用ISO-8859-1编码,需要对获取的结果进行编码
-        String utfResult = new String(jsonResult.getBytes("utf-8"), "ISO-8859-1");
-        System.out.println("get response is:" + utfResult);
-        logger.info("get response userinfo is:" + utfResult);
-
-        JSONObject jsonObject = JSON.parseObject(utfResult);
+        JSONObject jsonObject = JSON.parseObject(jsonResult);
         if(jsonObject == null){
             logger.info("jsonObject parsed is null");
             return null;
@@ -477,7 +472,6 @@ public class WechatUserInfoController {
         /**
          * 把授权的用户的信息保存,目前只保存unionId和openId,nickname
          */
-        //todo  中文不支持
         String openId = (String) jsonObject.get("openid");
         String unionId = (String) jsonObject.get("unionid");
         String nickname = (String) jsonObject.get("nickname");
