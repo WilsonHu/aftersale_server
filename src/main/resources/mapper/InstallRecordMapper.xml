@@ -238,13 +238,17 @@
     ir.install_status,
     ir.id as installRecordId,
     ir.machine_nameplate,
-    m.*
+    m.*,
+    userOfCustomerInInstallRecord.`account` as installRecordCustomerName,
+    userOfCustomerInInstallRecord.address as customerAddressInInstallRecord
+
     FROM
     install_record as ir
     LEFT JOIN install_members as im ON im.install_record_id = ir.id
     LEFT JOIN user as userOfMembersInInstallRecord ON userOfMembersInInstallRecord.id = im.user_id
     LEFT JOIN user as userOfChargeInInstallRecord ON userOfChargeInInstallRecord.id = ir.install_charge_person
     LEFT JOIN machine as m ON m.nameplate = ir.machine_nameplate
+    LEFT JOIN user as userOfCustomerInInstallRecord ON userOfCustomerInInstallRecord.id = ir.customer
 --     安装状态，
 --     0：待分配，
 --     1：已分配(但未接单）

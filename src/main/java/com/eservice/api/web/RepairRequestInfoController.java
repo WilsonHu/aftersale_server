@@ -131,6 +131,10 @@ public class RepairRequestInfoController {
                 machine.setStatus(Constant.MACHINE_STATUS_WAIT_FOR_CHECK);
                 machine.setOldMachineCheck(Constant.OLD_MACHINE_CHECK_UNKNOWN);
                 machine.setIsOldMachine(Constant.MACHINE_TYPE_OLD);
+                /**
+                 * 目前是谁报修就把机器挂着谁名下。
+                 */
+                machine.setCustomer(repairRequestInfo1.getCustomer());
                 machineService.save(machine);
                 logger.info("add old machine " + repairRequestInfo1.getNameplate());
             } else

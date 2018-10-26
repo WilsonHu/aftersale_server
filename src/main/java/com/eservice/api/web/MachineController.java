@@ -148,6 +148,14 @@ public class MachineController {
          * 只能查询自己归属的公司的机器
          */
         User customerOfMachine = userService.findById(machine.getCustomer());
+
+        /**
+         * 防止老机器可能没有设置客户
+         */
+        if(customerOfMachine == null){
+            return ResultGenerator.genFailResult("The machine has no customer");
+        }
+
         if(! customerOfMachine.getAccount().equals(userAccount)){
             return ResultGenerator.genFailResult("notYourMachine");
         }
