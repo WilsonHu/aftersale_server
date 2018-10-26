@@ -119,6 +119,13 @@ public class RepairRequestInfoController {
              * 老机器报修时 需要建立老机器信息
              */
             if(isOldMachine.equalsIgnoreCase("true")){
+                /**
+                 * 确认该铭牌号不存在
+                 */
+                if(machineService.findBy("nameplate",repairRequestInfo1.getNameplate()) != null){
+                    return ResultGenerator.genFailResult("该机器已经存在！");
+                }
+
                 Machine machine = new Machine();
                 machine.setNameplate(repairRequestInfo1.getNameplate());
                 machine.setStatus(Constant.MACHINE_STATUS_WAIT_FOR_CHECK);
