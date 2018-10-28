@@ -175,7 +175,7 @@
           and mr.id = #{maintainRecordId}
       </if>
 
-      ORDER By mr.maintain_date_actual DESC
+      ORDER By mr.update_time DESC, mr.maintain_date_actual DESC, mr.maintain_date_plan DESC,  mr.create_time DESC
   </select>
 
     <select id="selectMaintainTaskByUser" resultMap="MaintainRecordInfoMap">
