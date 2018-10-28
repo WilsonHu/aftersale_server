@@ -226,20 +226,13 @@ public class InstallRecordController {
     }
 
     @PostMapping("/updateInstallInfo")
-    public Result updateInstallInfo(String installRecord, String installLibName, String baseName) {
+    public Result updateInstallInfo(String installRecord, String installLibList) {
         InstallRecord model = JSON.parseObject(installRecord, InstallRecord.class);
-        if (model == null || installLibName == null) {
+        if (model == null || installLibList == null || installLibList.length() == 0) {
             return ResultGenerator.genFailResult("参数错误！");
         }
         try {
-            List<InstallLib> list = installLibService.selectLibList("1", installLibName);
-            if (installLibName != baseName) {
-                List<InstallLib> liblist = installLibService.selectLibList("1", baseName);
-                if (liblist != null && liblist.size() > 0) {
-                    liblist.addAll(list);
-                    list = liblist;
-                }
-            }
+            List<InstallLib> list = JSON.parseArray(installLibList, InstallLib.class);
             List<InstallInfoJsonData> installInfoList = new ArrayList<InstallInfoJsonData>();
             for (InstallLib item : list) {
                 InstallInfoJsonData info = new InstallInfoJsonData();
@@ -257,7 +250,7 @@ public class InstallRecordController {
             model.setInstallInfo(JSONArray.toJSONString(installInfoList));
             installRecordService.update(model);
         } catch (Exception e) {
-
+            return ResultGenerator.genFailResult("设置安装项失败！" + e.getMessage());
         }
         return ResultGenerator.genSuccessResult();
     }
