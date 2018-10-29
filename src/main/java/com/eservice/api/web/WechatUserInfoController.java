@@ -199,7 +199,8 @@ public class WechatUserInfoController {
                          *  unionId已存在，则要看是否和账号匹配
                          */
                         if( userService.requestLogin(account, password,unionId) == null ) {
-                            return ResultGenerator.genFailResult("账号密码和unionid 不匹配！(该账号已经绑定了微信)");
+                            // A账号已经绑定过A的微信，然后在其他微信上登陆
+                            return ResultGenerator.genFailResult("账号密码和微信不匹配！(该账号已经绑定了其他微信或者该微信已经绑定了其他账号)");
                         } else {
                             logger.info("loginGetUnionIdAndSave(), user和unionId匹配");
                             JSONObject userJsonObject = new JSONObject();
@@ -210,16 +211,26 @@ public class WechatUserInfoController {
                         }
                     } else {
                         /**
-                         *  该unionId不存在 ,则保存
+                         *  该unionId不存在数据库中，且登陆的账号没有和微信绑定过，则保存该unionId到该账号
                          */
-                            user.setWechatUnionId(unionId);
-                            userService.update(user);
-                            logger.info("loginGetUnionIdAndSave(), user update unionId:" + unionId);
-                            JSONObject userJsonObject = new JSONObject();
-                            userJsonObject.put("account",user.getAccount());
-                            userJsonObject.put("name", user.getName());
-                            userJsonObject.put("id",user.getId());
-                            return ResultGenerator.genSuccessResult(userJsonObject);
+                        User user1 = userService.findBy("account",account);
+                        if( user1 !=null ){
+                            if(user1.getWechatUnionId() !=null && user1.getWechatUnionId() != "" && (!user1.getWechatUnionId().isEmpty())){
+                                // B微信没有绑定过，用已经绑定过微信的A账号登陆
+                                logger.info("该账号已经绑定其他微信: " + user1.getAccount() + "绑定过微信 " + user1.getWechatUnionId() );
+                                return ResultGenerator.genFailResult("该账号已经绑定其他微信: " + user1.getAccount() + "绑定过微信 " + user1.getWechatUnionId() );
+                            }
+                        } else {
+                            return ResultGenerator.genFailResult("不会发生，account前面验证过");
+                        }
+                        user.setWechatUnionId(unionId);
+                        userService.update(user);
+                        logger.info("loginGetUnionIdAndSave(), user update unionId:" + unionId);
+                        JSONObject userJsonObject = new JSONObject();
+                        userJsonObject.put("account",user.getAccount());
+                        userJsonObject.put("name", user.getName());
+                        userJsonObject.put("id",user.getId());
+                        return ResultGenerator.genSuccessResult(userJsonObject);
 
                     }
 
