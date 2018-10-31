@@ -106,7 +106,7 @@
   <select id="getPartsInfoByRepairRecordId" resultMap="PartsAllInfoMap">
     SELECT
     parts_info.*,
-    userOfSendbackConfirmedPerson.`account`  AS sendbackConfirmedPersonName
+    userOfSendbackConfirmedPerson.`name`  AS sendbackConfirmedPersonName
     from parts_info
     LEFT JOIN user as userOfSendbackConfirmedPerson ON userOfSendbackConfirmedPerson.id = parts_info.sendback_confirmed_person
     LEFT JOIN repair_actual_info as rai ON rai.id = parts_info.repair_actual_info_id
@@ -123,9 +123,9 @@
   <select id="getPartsInfoList" resultMap="PartsAllInfoMap">
     SELECT
     parts_info.*,
-    userOfSendbackConfirmedPerson.`account`  AS sendbackConfirmedPersonName,
-    userOfRepairChargePerson.`account` AS repairChargePersonName,
-    userOfCustomerInRepairRecord.`account` AS customerNameInRepairRecord
+    userOfSendbackConfirmedPerson.`name`  AS sendbackConfirmedPersonName,
+    userOfRepairChargePerson.`name` AS repairChargePersonName,
+    userOfCustomerInRepairRecord.`name` AS customerNameInRepairRecord
     from parts_info
     LEFT JOIN `user` AS userOfSendbackConfirmedPerson ON userOfSendbackConfirmedPerson.id = parts_info.sendback_confirmed_person
     LEFT JOIN repair_actual_info AS rai ON rai.id = parts_info.repair_actual_info_id
@@ -143,16 +143,16 @@
         AND parts_info.parts_name like CONCAT('%','${partsName}','%' )
       </if>
       <if test="customerNameInMachine != null and customerNameInMachine != ''">
-        AND userOfMachineCustomer.`account` like CONCAT('%','${customerNameInMachine}','%' )
+        AND userOfMachineCustomer.`name` like CONCAT('%','${customerNameInMachine}','%' )
       </if>
       <if test="repairChargePersonName != null and repairChargePersonName != ''">
-        AND userOfRepairChargePerson.`account` like CONCAT('%','${repairChargePersonName}','%' )
+        AND userOfRepairChargePerson.`name` like CONCAT('%','${repairChargePersonName}','%' )
       </if>
       <if test="supplier != null and supplier != ''">
         AND parts_info.supplier like CONCAT('%','${supplier}','%' )
       </if>
       <if test="sendbackConfirmedPerson != null and sendbackConfirmedPerson != ''">
-        AND userOfSendbackConfirmedPerson.account like CONCAT('%','${sendbackConfirmedPerson}','%' )
+        AND userOfSendbackConfirmedPerson.name like CONCAT('%','${sendbackConfirmedPerson}','%' )
       </if>
       <if test="sendbackTrackingNumber != null and sendbackTrackingNumber != ''">
         AND parts_info.sendback_tracking_number like CONCAT('%','${sendbackTrackingNumber}','%' )
@@ -167,16 +167,16 @@
         AND parts_info.parts_name = #{partsName}
       </if>
       <if test="customerNameInMachine != null and customerNameInMachine != ''">
-        AND userOfMachineCustomer.`account` = #{customerNameInMachine}
+        AND userOfMachineCustomer.`name` = #{customerNameInMachine}
       </if>
       <if test="repairChargePersonName != null and repairChargePersonName != ''">
-        AND userOfRepairChargePerson.`account` = #{repairChargePersonName}
+        AND userOfRepairChargePerson.`name` = #{repairChargePersonName}
       </if>
       <if test="supplier != null and supplier != ''">
         AND parts_info.supplier = #{supplier}
       </if>
       <if test="sendbackConfirmedPerson != null and sendbackConfirmedPerson != ''">
-        AND userOfSendbackConfirmedPerson.account = #{sendbackConfirmedPerson}
+        AND userOfSendbackConfirmedPerson.name = #{sendbackConfirmedPerson}
       </if>
       <if test="sendbackTrackingNumber != null and sendbackTrackingNumber != ''">
         AND parts_info.sendback_tracking_number = #{sendbackTrackingNumber}
@@ -199,21 +199,21 @@
   <select id="getPartsInfoTaskByUserName" resultMap="PartsInfoWithRepairRecordInfoMap">
     SELECT
     m.order_num,
-    userOfCustomerInMachine.`account` as machineCustomerName,
+    userOfCustomerInMachine.`name` as machineCustomerName,
     parts_info.id as partsInfoId,
     parts_info.*,
-    userOfSendbackConfirmedPerson.account as sendbackConfirmedPersonName,
+    userOfSendbackConfirmedPerson.name as sendbackConfirmedPersonName,
     a.name as machineAgentName,
     m.facory_date,
     rai.issue_position as issuePositionList,
-    userOfRepairChargePerson.`account` as repairChargePersonName,
+    userOfRepairChargePerson.`name` as repairChargePersonName,
     userOfRepairChargePerson.`phone` as repairChargePersonPhone,
     userOfCustomerInMachine.phone as machineCustomerPhone,
     userOfCustomerInMachine.agent as machineAgentId,                      -- 机器的客户的代理商的ID号
     userOfCustomerInMachine.customer_company as machineCustomerCompanyId, -- 机器的客户的公司的ID号
     a.phone as machineAgentPhone,
     m.machine_type,m.needle_num,m.head_num,m.head_distance,m.x_distance,m.y_distance,
-    userOfCustomerInRepairRecord.`account` as repairRecordCustomerName, -- 客户方的维修联系人
+    userOfCustomerInRepairRecord.`name` as repairRecordCustomerName, -- 客户方的维修联系人
     userOfCustomerInRepairRecord.phone as customerPhoneInRepairRecord,
     userOfCustomerInRepairRecord.address as customerAddressInRepairRecord,
     rri.repair_title as repairRequestTitle,
@@ -243,7 +243,7 @@
     WHERE 1=1
     --  1: 无需回寄，其他表示需要寄回(具体 2：未寄回，3：已寄回（待确认），4：已确认)
     AND (parts_info.parts_status = '2' or parts_info.parts_status = '3')
-    AND userOfCustomerInRepairRecord.`account` = #{userName}
+    AND userOfCustomerInRepairRecord.`name` = #{userName}
   </select>
 
 </mapper>

@@ -8,6 +8,7 @@ import com.eservice.api.model.user.User;
 import com.eservice.api.model.wechat_user_info.WechatUserInfo;
 import com.eservice.api.service.common.CommonService;
 import com.eservice.api.service.common.Constant;
+import com.eservice.api.service.common.WxMessageTemplateJsonData;
 import com.eservice.api.service.common.WxWebAccessTokenInfo;
 import com.eservice.api.service.impl.UserServiceImpl;
 import com.eservice.api.service.impl.WechatUserInfoServiceImpl;
@@ -218,7 +219,7 @@ public class WechatUserInfoController {
                             if(user1.getWechatUnionId() !=null && user1.getWechatUnionId() != "" && (!user1.getWechatUnionId().isEmpty())){
                                 // B微信没有绑定过，用已经绑定过微信的A账号登陆
                                 logger.info("该账号已经绑定其他微信: " + user1.getAccount() + "绑定过微信 " + user1.getWechatUnionId() );
-                                return ResultGenerator.genFailResult("该账号已经绑定其他微信: " + user1.getAccount() + "绑定过微信 " + user1.getWechatUnionId() );
+                                return ResultGenerator.genFailResult("该账号已经绑定其他微信: " + user1.getAccount() + "绑定过其他微信 " );
                             }
                         } else {
                             return ResultGenerator.genFailResult("不会发生，account前面验证过");
@@ -529,6 +530,7 @@ public class WechatUserInfoController {
      *
      * @param account       推送对象的账号
      * @param templateId    消息模板ID
+     * @param messageId     具体消息ID
      * @param jsonMsgData
      * @return
      * @throws IOException
@@ -537,7 +539,8 @@ public class WechatUserInfoController {
     @RequestMapping("/sendMsgTemplate")
     public String sendMsgTemplate(@RequestParam String account,
                                   @RequestParam String templateId,
-                                  String jsonMsgData ) throws IOException {
+                                  @RequestParam String messageId,
+                                  @RequestParam String jsonMsgData ) throws IOException {
 
         /**
          * 根据 account 找openId
@@ -563,26 +566,121 @@ public class WechatUserInfoController {
         jsonObject.put("template_id",templateId);
         jsonObject.put("url", "http://weixin.qq.com/download");
         jsonObject.put("topcolor", "#FF0000");
-        switch (templateId){
-            case Constant.WX_TEMPLATE_NO1:
-                jsonObjectDeatailMsg.put("first", toJson("first line 111"));
-                jsonObjectDeatailMsg.put("event", toJson("马达异响111"));
-                jsonObjectDeatailMsg.put("finish_time", toJson("时间111"));
-                jsonObjectDeatailMsg.put("remark", toJson(" remark 111"));
+
+        WxMessageTemplateJsonData wxMessageTemplateJsonData = JSONObject.parseObject(jsonMsgData,WxMessageTemplateJsonData.class);
+        if(wxMessageTemplateJsonData == null){
+            return "获取json数据失败";
+        }
+        switch (messageId){
+            case Constant.WX_TEMPLATE_NO1_MACHINE_BIND_TO_CUSTOMER:
+                //            {{first.DATA}}
+                //            订单号：{{keyword1.DATA}}
+                //            产品：{{keyword2.DATA}}
+                //            {{remark.DATA}}
+                jsonObjectDeatailMsg.put("first", toJson(wxMessageTemplateJsonData.getCustomerName()));
+                jsonObjectDeatailMsg.put("keyword1", toJson(wxMessageTemplateJsonData.getMachineNameplate()));
+                jsonObjectDeatailMsg.put("keyword2", toJson(wxMessageTemplateJsonData.getMachineType()));
+                jsonObjectDeatailMsg.put("remark", toJson(wxMessageTemplateJsonData.getMessageOfMachineBind()));
                 break;
-            case Constant.WX_TEMPLATE_NO2:
-                jsonObjectDeatailMsg.put("first", toJson("first line 222"));
-                jsonObjectDeatailMsg.put("event", toJson("马达异响222"));
-                jsonObjectDeatailMsg.put("finish_time", toJson("时间222"));
-                jsonObjectDeatailMsg.put("remark", toJson(" remark 222"));
+            case Constant.WX_TEMPLATE_NO2_INSTALL_TASK_TO_EMPLOYEE:
+                //            {{first.DATA}}
+                //            客户名称：{{keyword1.DATA}}
+                //            客户电话：{{keyword2.DATA}}
+                //            客户地址：{{keyword3.DATA}}
+                //            任务内容：{{keyword4.DATA}}
+                //            预约时间：{{keyword5.DATA}}
+                //            {{remark.DATA}}
+                jsonObjectDeatailMsg.put("first", toJson(wxMessageTemplateJsonData.getInstallChargePerson()));
+                jsonObjectDeatailMsg.put("keyword1", toJson(wxMessageTemplateJsonData.getCustomerName()));
+                jsonObjectDeatailMsg.put("keyword2", toJson(wxMessageTemplateJsonData.getCustomerPhone()));
+                jsonObjectDeatailMsg.put("keyword3", toJson(wxMessageTemplateJsonData.getCustomerAddress()));
+                jsonObjectDeatailMsg.put("keyword4", toJson(wxMessageTemplateJsonData.getInstallTaskMessage()));
+                jsonObjectDeatailMsg.put("keyword5", toJson(wxMessageTemplateJsonData.getInstallPlanDate().toString()));
+                break;
+            case Constant.WX_TEMPLATE_NO3_MAINTAIN_TASK_TO_EMPLOYEE:
+                jsonObjectDeatailMsg.put("first", toJson(wxMessageTemplateJsonData.getMaintainChargePerson()));
+                jsonObjectDeatailMsg.put("keyword1", toJson(wxMessageTemplateJsonData.getCustomerName()));
+                jsonObjectDeatailMsg.put("keyword2", toJson(wxMessageTemplateJsonData.getCustomerPhone()));
+                jsonObjectDeatailMsg.put("keyword3", toJson(wxMessageTemplateJsonData.getCustomerAddress()));
+                jsonObjectDeatailMsg.put("keyword4", toJson(wxMessageTemplateJsonData.getMaintainTaskMessage()));
+                jsonObjectDeatailMsg.put("keyword5", toJson(wxMessageTemplateJsonData.getMaintainPlanDate().toString()));
+                break;
+            case Constant.WX_TEMPLATE_NO4_REPAIR_TASK_TO_EMPLOYEE:
+                jsonObjectDeatailMsg.put("first", toJson(wxMessageTemplateJsonData.getRepairChargePerson()));
+                jsonObjectDeatailMsg.put("keyword1", toJson(wxMessageTemplateJsonData.getCustomerName()));
+                jsonObjectDeatailMsg.put("keyword2", toJson(wxMessageTemplateJsonData.getCustomerPhone()));
+                jsonObjectDeatailMsg.put("keyword3", toJson(wxMessageTemplateJsonData.getCustomerAddress()));
+                jsonObjectDeatailMsg.put("keyword4", toJson(wxMessageTemplateJsonData.getRepairTaskMessage()));
+                jsonObjectDeatailMsg.put("keyword5", toJson(wxMessageTemplateJsonData.getRepairPlanDate().toString()));
+                break;
+            case Constant.WX_TEMPLATE_NO5_INSTALLER_ACCEPT_TO_CUSTOMER:
+                //            {{first.DATA}}
+                //            订单号：{{keyword1.DATA}}
+                //            工程师姓名：{{keyword2.DATA}}
+                //            工程师电话：{{keyword3.DATA}}
+                //            上门时间：{{keyword4.DATA}}
+                //            {{remark.DATA}}"
+                jsonObjectDeatailMsg.put("first", toJson(wxMessageTemplateJsonData.getCustomerName()));
+                jsonObjectDeatailMsg.put("keyword1", toJson(wxMessageTemplateJsonData.getMachineNameplate()));
+                jsonObjectDeatailMsg.put("keyword2", toJson(wxMessageTemplateJsonData.getInstallChargePerson()));
+                jsonObjectDeatailMsg.put("keyword3", toJson(wxMessageTemplateJsonData.getInstallChargePersonPhone()));
+                jsonObjectDeatailMsg.put("keyword4", toJson(wxMessageTemplateJsonData.getInstallPlanDate().toString()));
+                jsonObjectDeatailMsg.put("remark", toJson(wxMessageTemplateJsonData.getInstallTaskAcceptedMessage()));
+                break;
+            case Constant.WX_TEMPLATE_NO6_MAINTAIN_ACCEPT_TO_CUSTOMER:
+                jsonObjectDeatailMsg.put("first", toJson(wxMessageTemplateJsonData.getCustomerName()));
+                jsonObjectDeatailMsg.put("keyword1", toJson(wxMessageTemplateJsonData.getMachineNameplate()));
+                jsonObjectDeatailMsg.put("keyword2", toJson(wxMessageTemplateJsonData.getMaintainChargePerson()));
+                jsonObjectDeatailMsg.put("keyword3", toJson(wxMessageTemplateJsonData.getMaintainChargePersonPhone()));
+                jsonObjectDeatailMsg.put("keyword4", toJson(wxMessageTemplateJsonData.getMaintainPlanDate().toString()));
+                jsonObjectDeatailMsg.put("remark", toJson(wxMessageTemplateJsonData.getMaintainTaskAcceptedMessage()));
+                break;
+            case Constant.WX_TEMPLATE_NO7_REPAIR_ACCEPT_TO_CUSTOMER:
+                jsonObjectDeatailMsg.put("first", toJson(wxMessageTemplateJsonData.getCustomerName()));
+                jsonObjectDeatailMsg.put("keyword1", toJson(wxMessageTemplateJsonData.getMachineNameplate()));
+                jsonObjectDeatailMsg.put("keyword2", toJson(wxMessageTemplateJsonData.getRepairChargePerson()));
+                jsonObjectDeatailMsg.put("keyword3", toJson(wxMessageTemplateJsonData.getRepairChargePersonPhone()));
+                jsonObjectDeatailMsg.put("keyword4", toJson(wxMessageTemplateJsonData.getRepairPlanDate().toString()));
+                jsonObjectDeatailMsg.put("remark", toJson(wxMessageTemplateJsonData.getRepairTaskAcceptedMessage()));
+                break;
+
+            case Constant.WX_TEMPLATE_NO8_INSTALL_DONE_TO_CUSTOMER:
+                //            {{first.DATA}}
+                //            任务名称：{{keyword1.DATA}}
+                //            负责人：{{keyword2.DATA}}
+                //            提交时间：{{keyword3.DATA}}
+                //            {{remark.DATA}}
+                jsonObjectDeatailMsg.put("first", toJson(wxMessageTemplateJsonData.getCustomerName()));
+                jsonObjectDeatailMsg.put("keyword1", toJson(wxMessageTemplateJsonData.getInstallTaskName()));
+                jsonObjectDeatailMsg.put("keyword2", toJson(wxMessageTemplateJsonData.getInstallChargePerson()));
+                jsonObjectDeatailMsg.put("keyword3", toJson(wxMessageTemplateJsonData.getInstallActualTime().toString()));
+                jsonObjectDeatailMsg.put("remark", toJson(wxMessageTemplateJsonData.getInstallTaskDoneMessage()));
+                break;
+            case Constant.WX_TEMPLATE_NO9_MAINTAIN_DONE_TO_CUSTOMER:
+                jsonObjectDeatailMsg.put("first", toJson(wxMessageTemplateJsonData.getCustomerName()));
+                jsonObjectDeatailMsg.put("keyword1", toJson(wxMessageTemplateJsonData.getMaintainTaskName()));
+                jsonObjectDeatailMsg.put("keyword2", toJson(wxMessageTemplateJsonData.getMaintainChargePerson()));
+                jsonObjectDeatailMsg.put("keyword3", toJson(wxMessageTemplateJsonData.getMaintainActualTime().toString()));
+                jsonObjectDeatailMsg.put("remark", toJson(wxMessageTemplateJsonData.getMaintainTaskDoneMessage()));
+                break;
+            case Constant.WX_TEMPLATE_NO10_REPAIR_DONE_TO_CUSTOMER:
+                jsonObjectDeatailMsg.put("first", toJson(wxMessageTemplateJsonData.getCustomerName()));
+                jsonObjectDeatailMsg.put("keyword1", toJson(wxMessageTemplateJsonData.getRepairTaskName()));
+                jsonObjectDeatailMsg.put("keyword2", toJson(wxMessageTemplateJsonData.getRepairChargePerson()));
+                jsonObjectDeatailMsg.put("keyword3", toJson(wxMessageTemplateJsonData.getRepairActualTime().toString()));
+                jsonObjectDeatailMsg.put("remark", toJson(wxMessageTemplateJsonData.getRepairTaskDoneMessage()));
+                break;
+            case Constant.WX_TEMPLATE_NO11_REPAIR_REQUEST_ACCEPTED_TO_CUSTOMER:
+                //            {{first.DATA}}
+                //            单号：{{keyword1.DATA}}
+                //            受理通知：{{keyword2.DATA}}
+                //            {{remark.DATA}}
+                jsonObjectDeatailMsg.put("first", toJson(wxMessageTemplateJsonData.getCustomerName()));
+                jsonObjectDeatailMsg.put("keyword1", toJson(wxMessageTemplateJsonData.getMachineNameplate()));
+                jsonObjectDeatailMsg.put("keyword2", toJson(wxMessageTemplateJsonData.getRepairTaskAcceptedMessage()));
                 break;
             default:
-                jsonObject.put("template_id","L1T-5nNxkXoNR_74pHig1smTnWQCEpU_j9C1OjuoxpU");
-
-                jsonObjectDeatailMsg.put("first", toJson("尊敬的客户你好，"));
-                jsonObjectDeatailMsg.put("event", toJson("马达异响 报修已经处理中"));
-                jsonObjectDeatailMsg.put("finish_time", toJson("xxxx年月日"));
-                jsonObjectDeatailMsg.put("remark", toJson("联系人XXX"));
+                return "未定义的消息 " + messageId;
         }
 
         jsonObject.put("data", jsonObjectDeatailMsg);
@@ -635,11 +733,12 @@ public class WechatUserInfoController {
             String errmsg = (String) resultJson.get("errmsg");
             if(!"".equals(errmsg) && errmsg != null){  //如果为errmsg为ok，则代表发送成功，公众号推送信息给用户了。
                 logger.error("获取access_token失败："+errmsg);
-                return "error";
+                return "获取access_token失败";
             }
         } catch (JSONException e) {
-            logger.error("获取access_token失败："+e.toString());
+            logger.error("获取access_token失败：" + e.toString());
             e.printStackTrace();
+            return "获取access_token失败" + e.toString();
         }
         System.err.println((String) resultJson.get("access_token"));
         logger.info("getAccessToken() : " + resultJson.get("access_token"));

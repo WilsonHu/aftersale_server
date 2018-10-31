@@ -81,7 +81,7 @@ public class PrepareUnAssignedMachineService {
                 machine.setyDistance(rs2.getString("y_distance"));
                 installedMachineList.add(machine);
             }
-
+            logger.info("Scheduled Query: installedMachineList size : " + installedMachineList.size());
             while(rs1.next()) {
                 Machine machine = new Machine();
                 machine.setStatus(rs1.getString("status"));
@@ -90,6 +90,8 @@ public class PrepareUnAssignedMachineService {
                 machine.setOrderNum(rs1.getString("order_num"));
                 boundMachineList.add(machine);
             }
+
+            logger.info("Scheduled Query: boundMachineList size : " + boundMachineList.size());
             installedNotBoundedMachineList.clear();
             if(installedMachineList.size() > boundMachineList.size()) {
                 for (MachineInfosInProcessDb item: installedMachineList) {

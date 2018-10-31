@@ -81,8 +81,8 @@
    SELECT
     ir.id as installRecordId,
     ir.*,
---   attention：   user的 account 有唯一性，name可能重复，应以account为依据，但是变量的名称就不纠正了，还是保持原样xxxxName
-    userOfCustomerInMachine.account AS machineCustomerName,    -- 机器的客户的名称
+--   attention：  注意显示账号还是名字
+    userOfCustomerInMachine.name AS machineCustomerName,    -- 机器的客户的名称
     userOfCustomerInMachine.id AS machineCustomerId,
     userOfCustomerInMachine.phone AS machineCustomerPhone,  -- 机器的客户的电话
     agentOfCustomerInMachine.`name` AS machineAgentName,    -- 机器的客户的代理商的名称
@@ -96,10 +96,10 @@
     m.order_num,
     m.x_distance,
     m.y_distance,
-    userOfCustomerInInstallRecord.`account` as installRecordCustomerName, -- 调试联系人
+    userOfCustomerInInstallRecord.`name` as installRecordCustomerName, -- 调试联系人
     userOfCustomerInInstallRecord.phone as customerPhoneInInstallRecord, -- 调试联系人电话
     userOfCustomerInInstallRecord.address as customerAddressInInstallRecord,
-    userOfChargePersonInInstallRecord.`account` as installChargePersonName, -- 调试员名称
+    userOfChargePersonInInstallRecord.`name` as installChargePersonName, -- 调试员名称
     userOfChargePersonInInstallRecord.phone as installChargePersonPhone, -- 调试员电话
     icf.customer_mark as installFeedbackCustomerMark,
     icf.customer_suggestion as installFeedbackCustomerSuggestion
@@ -118,7 +118,7 @@
     SELECT
     ir.id  as installRecordId,
     ir.*,
-    userOfCustomerInMachine.account AS machineCustomerName,                  -- 机器的客户的名称
+    userOfCustomerInMachine.name AS machineCustomerName,                  -- 机器的客户的名称
     userOfCustomerInMachine.id AS machineCustomerId,
     userOfCustomerInMachine.phone AS machineCustomerPhone,                -- 机器的客户的电话
     userOfCustomerInMachine.agent as machineAgentId,                      -- 机器的客户的代理商的ID号
@@ -134,10 +134,10 @@
     m.order_num,
     m.x_distance,
     m.y_distance,
-    userOfCustomerInInstallRecord.`account` as installRecordCustomerName, -- 调试联系人
+    userOfCustomerInInstallRecord.`name` as installRecordCustomerName, -- 调试联系人
     userOfCustomerInInstallRecord.phone as customerPhoneInInstallRecord, -- 调试联系人电话
     userOfCustomerInInstallRecord.address as customerAddressInInstallRecord,
-    userOfChargePersonInInstallRecord.`account` as installChargePersonName, -- 调试员
+    userOfChargePersonInInstallRecord.`name` as installChargePersonName, -- 调试员
     userOfChargePersonInInstallRecord.phone as installChargePersonPhone,
     icf.customer_mark as installFeedbackCustomerMark,
     icf.customer_suggestion as installFeedbackCustomerSuggestion
@@ -169,13 +169,13 @@
         </if>
       </if>
       <if test="installRecordCustomerName != null and installRecordCustomerName != ''">
-        AND userOfCustomerInInstallRecord.`account`   like CONCAT('%','${installRecordCustomerName}','%' )
+        AND userOfCustomerInInstallRecord.`name`   like CONCAT('%','${installRecordCustomerName}','%' )
       </if>
       <if test="installChargePersonName != null and installChargePersonName != ''">
-        AND userOfChargePersonInInstallRecord.`account` like CONCAT('%','${installChargePersonName}','%' )
+        AND userOfChargePersonInInstallRecord.`name` like CONCAT('%','${installChargePersonName}','%' )
       </if>
       <if test="machineCustomerName != null and machineCustomerName != ''">
-        AND userOfCustomerInMachine.`account` like CONCAT('%','${machineCustomerName}','%' )
+        AND userOfCustomerInMachine.`name` like CONCAT('%','${machineCustomerName}','%' )
       </if>
     </if>
     <if test="isFuzzy== false">
@@ -192,13 +192,13 @@
         AND agentOfCustomerInMachine.`name` = '${agent}'
       </if>
       <if test="installRecordCustomerName != null and installRecordCustomerName != ''">
-        AND userOfCustomerInInstallRecord.`account` = '${installRecordCustomerName}'
+        AND userOfCustomerInInstallRecord.`name` = '${installRecordCustomerName}'
       </if>
       <if test="installChargePersonName != null and installChargePersonName != ''">
-        AND userOfChargePersonInInstallRecord.`account` = '${installChargePersonName}'
+        AND userOfChargePersonInInstallRecord.`name` = '${installChargePersonName}'
       </if>
       <if test="machineCustomerName != null and machineCustomerName != ''">
-        AND userOfCustomerInMachine.`account` = '${machineCustomerName}'
+        AND userOfCustomerInMachine.`name` = '${machineCustomerName}'
       </if>
     </if>
 
@@ -239,7 +239,7 @@
     ir.id as installRecordId,
     ir.machine_nameplate,
     m.*,
-    userOfCustomerInInstallRecord.`account` as installRecordCustomerName,
+    userOfCustomerInInstallRecord.`name` as installRecordCustomerName,
     userOfCustomerInInstallRecord.address as customerAddressInInstallRecord
 
     FROM
@@ -257,7 +257,7 @@
 --     4：已确认
     where (ir.install_status = 1 or ir.install_status = 2 or  ir.install_status = 3 )
     <if test="userName!=null and userName != '' ">
-      and (userOfMembersInInstallRecord.account = #{userName} or  userOfChargeInInstallRecord.name = #{userName})
+      and (userOfMembersInInstallRecord.name = #{userName} or  userOfChargeInInstallRecord.name = #{userName})
     </if>
     order by ir.update_time desc, ir.create_time desc
   </select>

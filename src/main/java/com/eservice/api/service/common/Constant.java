@@ -176,11 +176,29 @@ public class Constant {
 
     /**
      * 模板消息号
+     * 1: 绑定机器时 通知客户
+     * 2：安装任务派单时 通知员工
+     * 3：保养装任务派单时 通知员工
+     * 4：维修任务派单时 通知员工
+     * 5：安装任务接单时 通知客户
+     * 6：保养任务接单时 通知客户
+     * 7：维修任务接单时 通知客户
+     * 8: 安装完成后待评价时 通知客户
+     * 9: 保养完成后待评价时 通知客户
+     * 10: 维修完成后待评价时 通知客户
+     * 11：报修被受理时 通知客户
      */
-    public static final String WX_TEMPLATE_NO1 = "WX_TEMPLATE_NO1";
-    public static final String WX_TEMPLATE_NO2 = "WX_TEMPLATE_NO2";
-    public static final String WX_TEMPLATE_NO3 = "WX_TEMPLATE_NO3";
-    public static final String WX_TEMPLATE_NO4 = "WX_TEMPLATE_NO4";
+    public static final String WX_TEMPLATE_NO1_MACHINE_BIND_TO_CUSTOMER = "WX_TEMPLATE_NO1_MACHINE_BIND_TO_CUSTOMER";
+    public static final String WX_TEMPLATE_NO2_INSTALL_TASK_TO_EMPLOYEE = "WX_TEMPLATE_NO2_INSTALL_TASK_TO_EMPLOYEE";
+    public static final String WX_TEMPLATE_NO3_MAINTAIN_TASK_TO_EMPLOYEE = "WX_TEMPLATE_NO3_MAINTAIN_TASK_TO_EMPLOYEE";
+    public static final String WX_TEMPLATE_NO4_REPAIR_TASK_TO_EMPLOYEE = "WX_TEMPLATE_NO4_REPAIR_TASK_TO_EMPLOYEE";
+    public static final String WX_TEMPLATE_NO5_INSTALLER_ACCEPT_TO_CUSTOMER = "WX_TEMPLATE_NO5_INSTALLER_ACCEPT_TO_CUSTOMER";
+    public static final String WX_TEMPLATE_NO6_MAINTAIN_ACCEPT_TO_CUSTOMER = "WX_TEMPLATE_NO6_MAINTAIN_ACCEPT_TO_CUSTOMER";
+    public static final String WX_TEMPLATE_NO7_REPAIR_ACCEPT_TO_CUSTOMER = "WX_TEMPLATE_NO7_REPAIR_ACCEPT_TO_CUSTOMER";
+    public static final String WX_TEMPLATE_NO8_INSTALL_DONE_TO_CUSTOMER = "WX_TEMPLATE_NO8_INSTALL_DONE_TO_CUSTOMER";
+    public static final String WX_TEMPLATE_NO9_MAINTAIN_DONE_TO_CUSTOMER = "WX_TEMPLATE_NO9_MAINTAIN_DONE_TO_CUSTOMER";
+    public static final String WX_TEMPLATE_NO10_REPAIR_DONE_TO_CUSTOMER = "WX_TEMPLATE_NO10_REPAIR_DONE_TO_CUSTOMER";
+    public static final String WX_TEMPLATE_NO11_REPAIR_REQUEST_ACCEPTED_TO_CUSTOMER = "WX_TEMPLATE_NO11_REPAIR_REQUEST_ACCEPTED_TO_CUSTOMER";
 
     /**
      * 员工端小程序只能用员工账号登陆，客户端小程序只能用客户账号登陆

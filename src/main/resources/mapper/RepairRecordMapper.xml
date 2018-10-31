@@ -94,7 +94,7 @@
 	<select id="getRepairRecordInfoList" resultMap="RepairRecordInfoMap">
 		SELECT
 		m.order_num,
-		userOfCustomerInMachine.`account` as machineCustomerName,
+		userOfCustomerInMachine.`name` as machineCustomerName,
 		userOfCustomerInMachine.id AS machineCustomerId,
 		-- parts_info.*,
 		-- userOfSendbackConfirmedPerson.name as sendbackConfirmedPersonName,
@@ -102,14 +102,14 @@
 		m.facory_date,
 		rai.issue_position as issuePositionList,
 -- 		ipl.`name` as issuePositionName,
-		userOfRepairChargePerson.`account` as repairChargePersonName,
+		userOfRepairChargePerson.`name` as repairChargePersonName,
 		userOfRepairChargePerson.`phone` as repairChargePersonPhone,
 		userOfCustomerInMachine.phone as machineCustomerPhone,
 		userOfCustomerInMachine.agent as machineAgentId,                      -- 机器的客户的代理商的ID号
 		userOfCustomerInMachine.customer_company as machineCustomerCompanyId, -- 机器的客户的公司的ID号
 		a.phone as machineAgentPhone,
 		m.machine_type,m.needle_num,m.head_num,m.head_distance,m.x_distance,m.y_distance,
-		userOfCustomerInRepairRecord.`account` as repairRecordCustomerName, -- 客户方的维修联系人
+		userOfCustomerInRepairRecord.`name` as repairRecordCustomerName, -- 客户方的维修联系人
 		userOfCustomerInRepairRecord.phone as customerPhoneInRepairRecord,
 		userOfCustomerInRepairRecord.address as customerAddressInRepairRecord,
 		rri.repair_title as repairRequestTitle,
@@ -145,7 +145,7 @@
 				AND m.order_num like CONCAT('%','${orderNum}','%' )
 			</if>
 			<if test="repairRecordCustomerName != null and repairRecordCustomerName != ''">
-				AND userOfCustomerInRepairRecord.`account` like CONCAT('%','${repairRecordCustomerName}','%' )
+				AND userOfCustomerInRepairRecord.`name` like CONCAT('%','${repairRecordCustomerName}','%' )
 			</if>
 			<if test="agent != null and agent != ''">
 				<if test = "isAgent == true">
@@ -156,7 +156,7 @@
 				</if>
 			</if>
 			<if test="repairChargePersonName != null and repairChargePersonName != ''">
-				AND userOfRepairChargePerson.`account` like CONCAT('%','${repairChargePersonName}','%' )
+				AND userOfRepairChargePerson.`name` like CONCAT('%','${repairChargePersonName}','%' )
 			</if>
 
 		</if>
@@ -168,13 +168,13 @@
 				AND m.order_num = #{orderNum}
 			</if>
 			<if test="repairRecordCustomerName != null and repairRecordCustomerName != ''">
-				AND userOfCustomerInRepairRecord.`account` = #{repairRecordCustomerName}
+				AND userOfCustomerInRepairRecord.`name` = #{repairRecordCustomerName}
 			</if>
 			<if test="agent != null and agent != ''">
 				AND a.`name` = #{agent}
 			</if>
 			<if test="repairChargePersonName != null and repairChargePersonName != ''">
-				AND userOfRepairChargePerson.`account` = #{repairChargePersonName}
+				AND userOfRepairChargePerson.`name` = #{repairChargePersonName}
 			</if>
 		</if>
 
@@ -231,7 +231,7 @@
 		rr.`status` as repairStatus,
 		rr.machine_nameplate,
 		m.*,
-		userOfCustomerInRepairRecord.account as repairRecordCustomerName,
+		userOfCustomerInRepairRecord.name as repairRecordCustomerName,
 		userOfCustomerInRepairRecord.address as customerAddressInRepairRecord
 		FROM
 		repair_record as rr
@@ -253,7 +253,7 @@
 -- 		* 8. 客户确认（维修成功）。转派后，前面的维修记录要保留，但是客户只需要看到成功的最后那次记录。
 		where (rr.status = 2 or rr.status = 3 or rr.status = 4 or rr.status = 5 or rr.status = 6 or rr.status = 7)
 		<if test="userName!=null and userName != '' ">
-			and (userOfMembersInRepairRecord.account = #{userName} or userOfChargeInRepairRecord.name = #{userName})
+			and (userOfMembersInRepairRecord.name = #{userName} or userOfChargeInRepairRecord.name = #{userName})
 		</if>
 		order by rr.update_time desc, rr.create_time desc
 	</select>
