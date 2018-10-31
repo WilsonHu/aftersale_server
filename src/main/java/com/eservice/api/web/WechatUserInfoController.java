@@ -536,7 +536,7 @@ public class WechatUserInfoController {
      * @throws IOException
      */
     // TODO: jsonMsgData 类和解析
-    @RequestMapping("/sendMsgTemplate")
+    @PostMapping("/sendMsgTemplate")
     public String sendMsgTemplate(@RequestParam String account,
                                   @RequestParam String templateId,
                                   @RequestParam String messageId,

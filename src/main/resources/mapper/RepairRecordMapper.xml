@@ -232,7 +232,8 @@
 		rr.machine_nameplate,
 		m.*,
 		userOfCustomerInRepairRecord.name as repairRecordCustomerName,
-		userOfCustomerInRepairRecord.address as customerAddressInRepairRecord
+		userOfCustomerInRepairRecord.address as customerAddressInRepairRecord,
+		userOfCustomerInMachine.`name` as machineCustomerName
 		FROM
 		repair_record as rr
 		LEFT JOIN repair_members as rm ON rm.repair_record_id = rr.id
@@ -240,6 +241,7 @@
 		LEFT JOIN user as userOfChargeInRepairRecord ON userOfChargeInRepairRecord.id = rr.repair_charge_person
 		LEFT JOIN machine as m ON m.nameplate = rr.machine_nameplate
 		LEFT JOIN user as userOfCustomerInRepairRecord ON userOfCustomerInRepairRecord.id = rr.customer
+		LEFT JOIN user as userOfCustomerInMachine ON userOfCustomerInMachine.id = m.customer
 
 -- 维修状态
 -- 		* 0: 报修进行中（报修过程中，文件上传没完成等情况）

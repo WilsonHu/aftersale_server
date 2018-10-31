@@ -240,7 +240,9 @@
     ir.machine_nameplate,
     m.*,
     userOfCustomerInInstallRecord.`name` as installRecordCustomerName,
-    userOfCustomerInInstallRecord.address as customerAddressInInstallRecord
+      --  注意，   客户的名字，联系人的地址
+    userOfCustomerInInstallRecord.address as customerAddressInInstallRecord,
+    userOfCustomerInMachine.`name` as machineCustomerName
 
     FROM
     install_record as ir
@@ -249,6 +251,7 @@
     LEFT JOIN user as userOfChargeInInstallRecord ON userOfChargeInInstallRecord.id = ir.install_charge_person
     LEFT JOIN machine as m ON m.nameplate = ir.machine_nameplate
     LEFT JOIN user as userOfCustomerInInstallRecord ON userOfCustomerInInstallRecord.id = ir.customer
+    LEFT JOIN user as userOfCustomerInMachine ON userOfCustomerInMachine.id = m.customer
 --     安装状态，
 --     0：待分配，
 --     1：已分配(但未接单）
