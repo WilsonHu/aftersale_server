@@ -11,19 +11,25 @@ import com.eservice.api.model.user.User;
 import com.eservice.api.service.common.CommonUtils;
 import com.eservice.api.service.common.Constant;
 import com.eservice.api.service.common.PrepareUnAssignedMachineService;
+import com.eservice.api.service.common.WxMessageTemplateJsonData;
 import com.eservice.api.service.impl.InstallRecordServiceImpl;
 import com.eservice.api.service.impl.MachineServiceImpl;
 import com.eservice.api.service.impl.UserServiceImpl;
+import com.eservice.api.service.impl.WechatUserInfoServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.constraints.NotNull;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 /**
  * Class Description: xxx
@@ -44,6 +50,14 @@ public class MachineController {
     private InstallRecordServiceImpl installRecordService;
 
     @Resource
+    private WechatUserInfoServiceImpl wechatUserInfoService;
+
+    private Logger logger = Logger.getLogger(Machine.class);
+
+    @Value("${debug.flag}")
+    private String debugFlag;
+
+    @Resource
     private PrepareUnAssignedMachineService prepareUnAssignedMachineService;
     @PostMapping("/add")
     public Result add(@RequestBody @NotNull Machine machine) {
@@ -61,6 +75,8 @@ public class MachineController {
     @PostMapping("/addList")
     @Transactional(rollbackFor = Exception.class)
     public Result addList(String machineList) {
+
+        String message = null;
         try {
             List<Machine> modelList = JSONObject.parseArray(machineList, Machine.class);
             if (modelList == null || modelList.size() == 0) {
@@ -83,18 +99,50 @@ public class MachineController {
                     ir.setInstallStatus(Constant.INSTALL_STATUS_NOT_ASSIGN);//install status
                     ir.setCreateTime(new Date());
                     installRecordService.save(ir);
+
+                    if(debugFlag.equalsIgnoreCase("true")) {
+                        logger.info("=========绑定机器=======" + item.getNameplate());
+                    }
+                    /**
+                     * 机器绑定, 发送消息给客户
+                     */
+                    User customer = userService.findById(item.getCustomer());
+                    if(customer == null) {
+                        logger.info("找不到对应的客户，请检查！ customerId： " + item.getCustomer() );
+                        return ResultGenerator.genFailResult("找不到对应的客户，请检查！");
+                    }
+                    //            {{first.DATA}}
+                    //            订单号：{{keyword1.DATA}}
+                    //            产品：{{keyword2.DATA}}
+                    //            {{remark.DATA}}
+                    WxMessageTemplateJsonData wxMessageTemplateJsonData = new WxMessageTemplateJsonData();
+                    wxMessageTemplateJsonData.setCustomerName(customer.getName());
+                    wxMessageTemplateJsonData.setMachineNameplate( item.getNameplate() + "(铭牌号)" );
+                    wxMessageTemplateJsonData.setMachineType(item.getMachineType());
+                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                    formatter.setTimeZone(TimeZone.getTimeZone("GMT+8"));
+                    String dateStr = formatter.format(item.getFacoryDate());
+                    String msg = Constant.WX_MSG_1.replace("FactoryDate", dateStr);
+                    wxMessageTemplateJsonData.setMessageOfMachineBind(msg);
+                    message = wechatUserInfoService.sendMsgTemplate(customer.getAccount(),
+                            Constant.WX_TEMPLATE_1_BOOK_SUCCESS,
+                            Constant.WX_MSG_1_MACHINE_BIND_TO_CUSTOMER,
+                            JSONObject.toJSONString(wxMessageTemplateJsonData));
+
                 } catch (Exception ex) {
                     TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-                    return ResultGenerator.genFailResult("数据保存出错！" + ex.getMessage());
+                    logger.info("数据保存出错 " + message + ex.toString() );
+                    return ResultGenerator.genFailResult("数据保存出错！" + message + ex.toString());
                 }
             }
             //Refresh list
             prepareUnAssignedMachineService.prepareUnAssignedMachine();
         } catch (Exception ex) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-            return ResultGenerator.genFailResult(ex.getMessage());
+            logger.info("绑定失败 " + ex.toString() );
+            return ResultGenerator.genFailResult(ex.toString());
         }
-        return ResultGenerator.genSuccessResult();
+        return ResultGenerator.genSuccessResult(message);
     }
 
     @PostMapping("/delete")

@@ -11,19 +11,23 @@ import com.eservice.api.model.repair_record.RepairRecordInfo;
 import com.eservice.api.model.user.User;
 import com.eservice.api.service.common.CommonUtils;
 import com.eservice.api.service.common.Constant;
-import com.eservice.api.service.impl.MachineServiceImpl;
-import com.eservice.api.service.impl.RepairMembersServiceImpl;
-import com.eservice.api.service.impl.RepairRecordServiceImpl;
+import com.eservice.api.service.common.WxMessageTemplateJsonData;
+import com.eservice.api.service.impl.*;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.constraints.NotNull;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 /**
  * Class Description: xxx
@@ -43,6 +47,17 @@ public class RepairRecordController {
     @Resource
     private MachineServiceImpl machineService;
 
+    @Resource
+    private UserServiceImpl userService;
+
+    @Resource
+    private WechatUserInfoServiceImpl wechatUserInfoService;
+
+    private Logger logger = Logger.getLogger(RepairRecordController.class);
+
+    @Value("${debug.flag}")
+    private String debugFlag;
+
     @PostMapping("/add")
     public Result add(@RequestBody @NotNull RepairRecord repairRecord) {
         repairRecord.setRepairRecordNum(CommonUtils.generateSequenceNo());
@@ -58,8 +73,73 @@ public class RepairRecordController {
 
     @PostMapping("/update")
     public Result update(@RequestBody @NotNull RepairRecord repairRecord) {
+
+        /**
+         * 维修任务的接单，需要在这里update时发信息推送
+         * 维修任务的完成，在RepairAcutalInfoController.update
+         */
+        boolean repairTaskAccept = false;
+
+        RepairRecord repairRecordOld = repairRecordService.findById(repairRecord.getId());
+        if((!repairRecordOld.getStatus().equals(Constant.REPAIR_STATUS_REPAIRER_ACCEPTED)) && (repairRecord.getStatus().equals(Constant.REPAIR_STATUS_REPAIRER_ACCEPTED))) {
+            repairTaskAccept = true;
+        }
         repairRecordService.update(repairRecord);
-        return ResultGenerator.genSuccessResult();
+        repairRecord.setUpdateTime(new Date());
+
+        if(debugFlag.equalsIgnoreCase("true")) {
+            logger.info(" get old repairRecord " + repairRecordOld.getStatus());
+            logger.info("get new repairRecord " + repairRecord.getStatus());
+            logger.info("get repairTaskAccept :" + repairTaskAccept);
+        }
+        User customer = userService.findById(repairRecordOld.getCustomer());
+        if(customer == null) {
+            logger.info("找不到对应的客户，请检查！ customerId： " + repairRecordOld.getCustomer() );
+            return ResultGenerator.genFailResult("找不到对应的客户，请检查！");
+        }
+        User repairCharger = userService.findById(repairRecordOld.getRepairChargePerson());
+        if(repairCharger == null) {
+            logger.info("找不到对应的维修负责人，请检查！ getRepairChargePerson： " + repairRecordOld.getRepairChargePerson() );
+            return ResultGenerator.genFailResult("找不到对应的维修负责人，请检查！");
+        }
+        WxMessageTemplateJsonData wxMessageTemplateJsonData = new WxMessageTemplateJsonData();
+        try {
+            /**
+             * 安装负责人接单时, 发送消息给客户
+             */
+            if(repairTaskAccept) {
+                //            {{first.DATA}}
+                //            订单号：{{keyword1.DATA}}
+                //            工程师姓名：{{keyword2.DATA}}
+                //            工程师电话：{{keyword3.DATA}}
+                //            上门时间：{{keyword4.DATA}}
+                //            {{remark.DATA}}
+                wxMessageTemplateJsonData.setCustomerName(customer.getName());
+                wxMessageTemplateJsonData.setMachineNameplate(repairRecordOld.getMachineNameplate()+ "已安排维修");
+                wxMessageTemplateJsonData.setRepairChargePerson(repairCharger.getName());
+                wxMessageTemplateJsonData.setRepairChargePersonPhone(repairCharger.getPhone());
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                simpleDateFormat.setTimeZone(TimeZone.getTimeZone("GMT+8"));
+
+                logger.info("getRepairPlanDate " + repairRecordOld.getRepairPlanDate());
+                String dateStr = simpleDateFormat.format(repairRecordOld.getRepairPlanDate());
+                logger.info("dateStr " + dateStr);
+                Date date = simpleDateFormat.parse(dateStr);
+                logger.info("date " + date);
+                wxMessageTemplateJsonData.setRepairPlanDate(date);
+                wxMessageTemplateJsonData.setRepairTaskMessage("请知悉");
+                wechatUserInfoService.sendMsgTemplate(customer.getAccount(),
+                        Constant.WX_TEMPLATE_3_TASK_ACCEPTED,
+                        Constant.WX_MSG_7_REPAIR_ACCEPT_TO_CUSTOMER,
+                        JSONObject.toJSONString(wxMessageTemplateJsonData));
+
+            }
+        } catch ( Exception e) {
+            logger.info("发送消息给客户失败 " + e.toString());
+            e.printStackTrace();
+        }
+
+            return ResultGenerator.genSuccessResult();
     }
 
     @PostMapping("/detail")
@@ -166,8 +246,8 @@ public class RepairRecordController {
     public Result AssignTask(String repairRecord, String repairMembers) {
         try {
             RepairRecord model = JSON.parseObject(repairRecord, RepairRecord.class);
-            List<RepairMembers> members = JSONObject.parseArray(repairMembers, RepairMembers.class);
-            if (model == null || members == null || members.size() < 1) {
+            List<RepairMembers> membersNewAdd = JSONObject.parseArray(repairMembers, RepairMembers.class);
+            if (model == null || membersNewAdd == null || membersNewAdd.size() < 1) {
                 TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
                 return ResultGenerator.genFailResult("数据保存出错！");
             }
@@ -176,23 +256,68 @@ public class RepairRecordController {
             repairRecordService.update(model);
             List<User> list = repairMembersService.getMembersByRepairRecordId(model.getId().toString());
             for (User u : list) {
-                for (RepairMembers m : members) {
+                for (RepairMembers m : membersNewAdd) {
                     if (m.getUserId() == u.getId()) {
-                        members.remove(m);
+                        membersNewAdd.remove(m);
                         break;
                     }
                 }
             }
-            if (members.size() > 0) {
-                repairMembersService.save(members);
+            if (membersNewAdd.size() > 0) {
+                repairMembersService.save(membersNewAdd);
             }
             /**
              * 也更新机器状态
              */
             RepairRecord repairRecord1 = repairRecordService.findById(model.getId());
             Machine machine = machineService.findBy("nameplate",repairRecord1.getMachineNameplate());
-            machine.setStatus(Constant.REPAIR_STATUS_SIGNED_TO_REPAIRER);
+            machine.setStatus(Constant.MACHINE_STATUS_WAIT_FOR_REPAIR);
             machineService.update(machine);
+            /**
+             * 维修任务 发送消息给负责人和其他成员
+             */
+            User repairCharger = userService.findById(model.getRepairChargePerson());
+            if(repairCharger == null) {
+                logger.info("找不到对应的员工，请检查！ customerId： " + model.getRepairChargePerson() );
+                return ResultGenerator.genFailResult("找不到对应的员工，请检查！");
+            }
+            User customer = userService.findById(model.getCustomer());
+            if(customer == null) {
+                logger.info("找不到对应的客户，请检查！ customerId： " + model.getCustomer() );
+                return ResultGenerator.genFailResult("找不到对应的客户，请检查！");
+            }
+            //            {{first.DATA}}
+            //            任务号：{{keyword1.DATA}}
+            //            任务类型：{{keyword2.DATA}}
+            //            执行人：{{keyword3.DATA}}
+            //            分派人：{{keyword4.DATA}}
+            //            分派时间：{{keyword5.DATA}}
+            //            {{remark.DATA}}
+
+            WxMessageTemplateJsonData wxMessageTemplateJsonData = new WxMessageTemplateJsonData();
+            wxMessageTemplateJsonData.setMachineNameplate(machine.getNameplate());//任务号
+            wxMessageTemplateJsonData.setRepairTaskMessage("维修机器");//任务类型
+            wxMessageTemplateJsonData.setRepairChargePerson(repairCharger.getName() + "团队");//执行人
+
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            simpleDateFormat.setTimeZone(TimeZone.getTimeZone("GMT+8"));
+            String dateStr = simpleDateFormat.format(model.getRepairPlanDate());
+            Date date = simpleDateFormat.parse(dateStr);
+            wxMessageTemplateJsonData.setRepairPlanDate(date);//分配时间
+
+            List<User> userOfMembersNewAdd = new ArrayList<>();
+            for(RepairMembers rm :membersNewAdd){
+                User u = userService.findById(rm.getUserId());
+                userOfMembersNewAdd.add(u);
+            }
+
+            for (User u : userOfMembersNewAdd) {
+                wechatUserInfoService.sendMsgTemplate(u.getAccount(),
+                        Constant.WX_TEMPLATE_2_TASK_COMMING,
+                        Constant.WX_MSG_4_REPAIR_TASK_TO_EMPLOYEE,
+                        JSONObject.toJSONString(wxMessageTemplateJsonData));
+            }
+
         } catch (Exception ex) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return ResultGenerator.genFailResult("数据保存出错！" + ex.getMessage());
@@ -205,8 +330,8 @@ public class RepairRecordController {
     public Result AssignTaskAgain(Integer oldId, String repairRecord, String repairMembers) {
         try {
             RepairRecord model = JSON.parseObject(repairRecord, RepairRecord.class);
-            List<RepairMembers> members = JSONObject.parseArray(repairMembers, RepairMembers.class);
-            if (model == null || members == null || members.size() < 1) {
+            List<RepairMembers> membersNewAdd = JSONObject.parseArray(repairMembers, RepairMembers.class);
+            if (model == null || membersNewAdd == null || membersNewAdd.size() < 1) {
                 TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
                 return ResultGenerator.genFailResult("数据保存出错！");
             }
@@ -217,15 +342,15 @@ public class RepairRecordController {
             repairRecordService.save(model);// add a new record
             List<User> list = repairMembersService.getMembersByRepairRecordId(model.getId().toString());
             for (User u : list) {
-                for (RepairMembers m : members) {
+                for (RepairMembers m : membersNewAdd) {
                     if (m.getUserId() == u.getId()) {
-                        members.remove(m);
+                        membersNewAdd.remove(m);
                         break;
                     }
                 }
             }
-            if (members.size() > 0) {
-                repairMembersService.save(members);
+            if (membersNewAdd.size() > 0) {
+                repairMembersService.save(membersNewAdd);
             }
             //update the old record
             RepairRecord oldRecord = new RepairRecord();
@@ -233,6 +358,58 @@ public class RepairRecordController {
             oldRecord.setStatus(com.eservice.api.service.common.Constant.REPAIR_STATUS_REPAIRER_REASSIGN);
             oldRecord.setUpdateTime(new Date());
             repairRecordService.update(oldRecord);
+
+            /**
+             * 也更新机器状态
+             */
+            RepairRecord repairRecord1 = repairRecordService.findById(model.getId());
+            Machine machine = machineService.findBy("nameplate",repairRecord1.getMachineNameplate());
+            machine.setStatus(Constant.MACHINE_STATUS_WAIT_FOR_REPAIR);
+            machineService.update(machine);
+
+            /**
+             * 维修任务 发送消息给负责人和其他成员
+             */
+            User repairCharger = userService.findById(model.getRepairChargePerson());
+            if(repairCharger == null) {
+                logger.info("找不到对应的员工，请检查！ customerId： " + model.getRepairChargePerson() );
+                return ResultGenerator.genFailResult("找不到对应的员工，请检查！");
+            }
+            User customer = userService.findById(model.getCustomer());
+            if(customer == null) {
+                logger.info("找不到对应的客户，请检查！ customerId： " + model.getCustomer() );
+                return ResultGenerator.genFailResult("找不到对应的客户，请检查！");
+            }
+            //            {{first.DATA}}
+            //            任务号：{{keyword1.DATA}}
+            //            任务类型：{{keyword2.DATA}}
+            //            执行人：{{keyword3.DATA}}
+            //            分派人：{{keyword4.DATA}}
+            //            分派时间：{{keyword5.DATA}}
+            //            {{remark.DATA}}
+            WxMessageTemplateJsonData wxMessageTemplateJsonData = new WxMessageTemplateJsonData();
+            wxMessageTemplateJsonData.setMachineNameplate(machine.getNameplate());//任务号
+            wxMessageTemplateJsonData.setRepairTaskMessage("维修机器");//任务类型
+            wxMessageTemplateJsonData.setRepairChargePerson(repairCharger.getName() + "团队");//执行人
+
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            simpleDateFormat.setTimeZone(TimeZone.getTimeZone("GMT+8"));
+            String dateStr = simpleDateFormat.format(model.getRepairPlanDate());
+            Date date = simpleDateFormat.parse(dateStr);
+            wxMessageTemplateJsonData.setRepairPlanDate(date);//分配时间
+
+            List<User> userOfMembersNewAdd = new ArrayList<>();
+            for(RepairMembers rm :membersNewAdd){
+                User u = userService.findById(rm.getUserId());
+                userOfMembersNewAdd.add(u);
+            }
+
+            for (User u : userOfMembersNewAdd) {
+                wechatUserInfoService.sendMsgTemplate(u.getAccount(),
+                        Constant.WX_TEMPLATE_2_TASK_COMMING,
+                        Constant.WX_MSG_4_REPAIR_TASK_TO_EMPLOYEE,
+                        JSONObject.toJSONString(wxMessageTemplateJsonData));
+            }
 
         } catch (Exception ex) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();

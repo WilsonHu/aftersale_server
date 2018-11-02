@@ -1,5 +1,6 @@
 package com.eservice.api.web;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.eservice.api.core.Result;
 import com.eservice.api.core.ResultGenerator;
 import com.eservice.api.model.machine.Machine;
@@ -8,14 +9,14 @@ import com.eservice.api.model.parts_info.PartsInfo;
 import com.eservice.api.model.repair_actual_info.RepairActualInfo;
 import com.eservice.api.model.repair_actual_info.RepairActualInfoWithPartsInfo;
 import com.eservice.api.model.repair_record.RepairRecord;
+import com.eservice.api.model.user.User;
 import com.eservice.api.service.common.CommonService;
 import com.eservice.api.service.common.Constant;
-import com.eservice.api.service.impl.MachineServiceImpl;
-import com.eservice.api.service.impl.PartsInfoServiceImpl;
-import com.eservice.api.service.impl.RepairActualInfoServiceImpl;
-import com.eservice.api.service.impl.RepairRecordServiceImpl;
+import com.eservice.api.service.common.WxMessageTemplateJsonData;
+import com.eservice.api.service.impl.*;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
@@ -25,8 +26,10 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.Resource;
 import javax.validation.constraints.NotNull;
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 /**
 * Class Description: xxx
@@ -54,6 +57,13 @@ public class RepairActualInfoController {
     @Value("${repair_actual_info_img_dir}")
     private String repairActualInfoImgDir;
 
+    @Resource
+    private WechatUserInfoServiceImpl wechatUserInfoService;
+
+    @Resource
+    private UserServiceImpl userService;
+
+    private Logger logger = Logger.getLogger(RepairActualInfoController.class);
     /**
      * 在上传（新增）实际维修情况时，也同时上传（新增）了要寄回的配件， record状态则在update里文件传完后再更新。
      * repairActualInfo：实际维修的信息，其中图片信息可以空，在update时上传文件由后端填入。
@@ -147,37 +157,37 @@ public class RepairActualInfoController {
         
         try {
             File dir = new File(repairActualInfoImgDir);
-            if(!dir.exists()){
+            if (!dir.exists()) {
                 dir.mkdir();
             }
-            repairActualInfo1 = JSON.parseObject(repairActualInfo,RepairActualInfo.class);
-            if(Integer.parseInt(repairActualInfo1.getAlreadyUploadedFilesNumber()) >= Integer.parseInt(repairActualInfo1.getUploadFilesAmount())){
+            repairActualInfo1 = JSON.parseObject(repairActualInfo, RepairActualInfo.class);
+            if (Integer.parseInt(repairActualInfo1.getAlreadyUploadedFilesNumber()) >= Integer.parseInt(repairActualInfo1.getUploadFilesAmount())) {
                 message = "Error: 已上传文件数>= 应上传文件总数";
                 throw new RuntimeException();
             }
             String nameplate = repairRecordService.findById(repairActualInfo1.getRepairRecordId()).getMachineNameplate();
-            if (nameplate == null){
+            if (nameplate == null) {
                 message = "Error: no nameplate found by the repairActualInfo, no records saved！";
                 throw new RuntimeException();
             }
-            if( repairActualInfoService.findById(repairActualInfo1.getId()) == null){
+            if (repairActualInfoService.findById(repairActualInfo1.getId()) == null) {
                 message = "传入的实际维修信息不存在！";
                 throw new RuntimeException();
             }
 
             String fileNameWithPath;
             String resultPathRepairActualImage = null;
-            fileNameWithPath = commonService.saveFile(repairActualInfoImgDir, file, nameplate,Constant.FILE_TYPE_REPAIR_ACTUAL_INFO_IMAGE, fileNumber );
-            if(fileNameWithPath != null){
+            fileNameWithPath = commonService.saveFile(repairActualInfoImgDir, file, nameplate, Constant.FILE_TYPE_REPAIR_ACTUAL_INFO_IMAGE, fileNumber);
+            if (fileNameWithPath != null) {
                 resultPathRepairActualImage = fileNameWithPath;
                 /**
                  * 多张维修图片
                  */
                 String oldPicturesPath = repairActualInfo1.getAfterResolvePictures();
-                if(oldPicturesPath == null || oldPicturesPath.isEmpty()){
+                if (oldPicturesPath == null || oldPicturesPath.isEmpty()) {
                     repairActualInfo1.setAfterResolvePictures(resultPathRepairActualImage);
                 } else {
-                    repairActualInfo1.setAfterResolvePictures(oldPicturesPath +"," + resultPathRepairActualImage);
+                    repairActualInfo1.setAfterResolvePictures(oldPicturesPath + "," + resultPathRepairActualImage);
                 }
             } else {
                 message = "failed to save file file of repairActualInfo, no records saved";
@@ -197,9 +207,9 @@ public class RepairActualInfoController {
             /**
              * 如果文件上传全部完成，更新record/machine
              */
-            if(repairActualInfo1.getAlreadyUploadedFilesNumber().equals(repairActualInfo1.getUploadFilesAmount())){
+            if (repairActualInfo1.getAlreadyUploadedFilesNumber().equals(repairActualInfo1.getUploadFilesAmount())) {
                 RepairRecord repairRecord = null;
-                if(repairResult.equals(Constant.REPAIR_STATUS_REPAIR_NG) || repairResult.equals(Constant.REPAIR_STATUS_REPAIR_OK)){
+                if (repairResult.equals(Constant.REPAIR_STATUS_REPAIR_NG) || repairResult.equals(Constant.REPAIR_STATUS_REPAIR_OK)) {
                     repairRecord = repairRecordService.findById(repairActualInfo1.getRepairRecordId());
                     repairRecord.setStatus(repairResult);
                     repairRecord.setRepairEndTime(new Date());
@@ -213,17 +223,59 @@ public class RepairActualInfoController {
                 /**
                  * 更新machine状态为 待维修或正常工作状态
                  */
-                Machine machine = machineService.findBy("nameplate",nameplate);
-                if(machine != null) {
-                    if(repairResult.equals(Constant.REPAIR_STATUS_REPAIR_NG)) {
+                Machine machine = machineService.findBy("nameplate", nameplate);
+                if (machine != null) {
+                    if (repairResult.equals(Constant.REPAIR_STATUS_REPAIR_NG)) {
                         machine.setStatus(Constant.MACHINE_STATUS_WAIT_FOR_REPAIR);
-                    } else if(repairResult.equals(Constant.REPAIR_STATUS_REPAIR_OK)) {
+                    } else if (repairResult.equals(Constant.REPAIR_STATUS_REPAIR_OK)) {
                         machine.setStatus(Constant.MACHINE_STATUS_IN_NORMAL);
                     }
                     machineService.update(machine);
                 } else {
                     message = "can not find machine by the nameplate: " + nameplate;
                     throw new RuntimeException();
+                }
+
+                /**
+                 * 维修完成（且选择成功），发送消息给用户
+                 */
+                RepairRecord repairRecordOld = repairRecordService.findById(repairRecord.getId());
+                repairRecordService.update(repairRecord);
+                repairRecord.setUpdateTime(new Date());
+
+                User customer = userService.findById(repairRecordOld.getCustomer());
+                if (customer == null) {
+                    logger.info("找不到对应的客户，请检查！ customerId： " + repairRecordOld.getCustomer());
+                    return ResultGenerator.genFailResult("找不到对应的客户，请检查！");
+                }
+                User repairCharger = userService.findById(repairRecordOld.getRepairChargePerson());
+                if (repairCharger == null) {
+                    logger.info("找不到对应的维修负责人，请检查！ getRepairChargePerson： " + repairRecordOld.getRepairChargePerson());
+                    return ResultGenerator.genFailResult("找不到对应的维修负责人，请检查！");
+                }
+                WxMessageTemplateJsonData wxMessageTemplateJsonData = new WxMessageTemplateJsonData();
+                try {
+                        //                {{first.DATA}}
+                        //                任务名称：{{keyword1.DATA}}
+                        //                负责人：{{keyword2.DATA}}
+                        //                提交时间：{{keyword3.DATA}}
+                        //                {{remark.DATA}}
+                        wxMessageTemplateJsonData.setCustomerName(customer.getName());
+                        wxMessageTemplateJsonData.setRepairTaskName("机器维修");
+                        wxMessageTemplateJsonData.setRepairChargePerson(repairCharger.getName());
+                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                        simpleDateFormat.setTimeZone(TimeZone.getTimeZone("GMT+8"));
+                        String dateStr = simpleDateFormat.format(repairRecordOld.getRepairPlanDate());
+                        Date date = simpleDateFormat.parse(dateStr);
+                        wxMessageTemplateJsonData.setRepairActualTime(date);
+                        wxMessageTemplateJsonData.setRepairTaskDoneMessage("请知悉");
+                        wechatUserInfoService.sendMsgTemplate(customer.getAccount(),
+                                Constant.WX_TEMPLATE_4_TASK_DONE,
+                                Constant.WX_MSG_10_REPAIR_DONE_TO_CUSTOMER,
+                                JSONObject.toJSONString(wxMessageTemplateJsonData));
+                } catch (Exception e) {
+                    logger.info("发送消息给客户失败 " + e.toString());
+                    e.printStackTrace();
                 }
             }
         } catch (Exception ex) {

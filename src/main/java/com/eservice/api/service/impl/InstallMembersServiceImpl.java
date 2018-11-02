@@ -23,7 +23,7 @@ public class InstallMembersServiceImpl extends AbstractService<InstallMembers> i
     @Resource
     private InstallMembersMapper installMembersMapper;
 
-    public List<User> getMembersByInstallRecordId(String installRecordId){
+    public List<User> getMembersByInstallRecordId(Integer installRecordId){
         return installMembersMapper.getMembersByInstallRecordId(installRecordId);
     }
 }

@@ -14,21 +14,23 @@ import com.eservice.api.model.user.User;
 import com.eservice.api.service.common.CommonUtils;
 import com.eservice.api.service.common.Constant;
 import com.eservice.api.service.common.InstallInfoJsonData;
-import com.eservice.api.service.impl.InstallLibServiceImpl;
-import com.eservice.api.service.impl.InstallMembersServiceImpl;
-import com.eservice.api.service.impl.InstallRecordServiceImpl;
-import com.eservice.api.service.impl.MachineServiceImpl;
+import com.eservice.api.service.common.WxMessageTemplateJsonData;
+import com.eservice.api.service.impl.*;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.constraints.NotNull;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 /**
  * Class Description: xxx
@@ -50,6 +52,19 @@ public class InstallRecordController {
     @Resource
     private MachineServiceImpl machineService;
 
+    @Resource
+    private UserServiceImpl userService;
+
+    private Logger logger = Logger.getLogger(InstallRecordController.class);
+
+    @Value("${wx.gzhAppid}")
+    private String wxGzhAppid;
+
+    @Value("${debug.flag}")
+    private String debugFlag;
+
+    @Resource
+    private WechatUserInfoServiceImpl wechatUserInfoService;
     @PostMapping("/add")
     public Result add(@RequestBody @NotNull InstallRecord installRecord) {
         installRecord.setInstallRecordNum(CommonUtils.generateSequenceNo());
@@ -65,8 +80,94 @@ public class InstallRecordController {
 
     @PostMapping("/update")
     public Result update(@RequestBody @NotNull InstallRecord installRecord) {
+
+        boolean installTaskAccept = false;
+        boolean installTaskDone = false;
         installRecord.setInstallActualTime(new Date());
+
+        InstallRecord installRecordOld = installRecordService.findById(installRecord.getId());
+        if((!installRecordOld.getInstallStatus().equals(Constant.INSTALL_STATUS_TASK_DOING)) && (installRecord.getInstallStatus().equals(Constant.INSTALL_STATUS_TASK_DOING))) {
+            installTaskAccept = true;
+        }
+        if((!installRecordOld.getInstallStatus().equals(Constant.INSTALL_STATUS_FINISHED)) && (installRecord.getInstallStatus().equals(Constant.INSTALL_STATUS_FINISHED))){
+            installTaskDone = true;
+        }
         installRecordService.update(installRecord);
+
+        if(debugFlag.equalsIgnoreCase("true")) {
+            logger.info(" get old InstallStatus " + installRecordOld.getInstallStatus());
+            logger.info("get new InstallStatus " + installRecord.getInstallStatus());
+            logger.info("get installTaskAccept/installTaskDone :" + installTaskAccept + " / " + installTaskDone);
+        }
+        User customer = userService.findById(installRecordOld.getCustomer());
+        if(customer == null) {
+            logger.info("找不到对应的客户，请检查！ customerId： " + installRecordOld.getCustomer() );
+            return ResultGenerator.genFailResult("找不到对应的客户，请检查！");
+        }
+        User installCharger = userService.findById(installRecordOld.getInstallChargePerson());
+        if(installCharger == null) {
+            logger.info("找不到对应的安装负责人，请检查！ getInstallChargePerson： " + installRecordOld.getInstallChargePerson() );
+            return ResultGenerator.genFailResult("找不到对应的安装负责人，请检查！");
+        }
+        WxMessageTemplateJsonData wxMessageTemplateJsonData = new WxMessageTemplateJsonData();
+        try {
+            /**
+             * 安装负责人接单时, 发送消息给客户
+             */
+            if (installTaskAccept) {
+                //            {{first.DATA}}
+                //            订单号：{{keyword1.DATA}}
+                //            工程师姓名：{{keyword2.DATA}}
+                //            工程师电话：{{keyword3.DATA}}
+                //            上门时间：{{keyword4.DATA}}
+                //            {{remark.DATA}}
+                wxMessageTemplateJsonData.setCustomerName(customer.getName());
+                wxMessageTemplateJsonData.setMachineNameplate(installRecordOld.getMachineNameplate() + "已安排调试");
+                wxMessageTemplateJsonData.setInstallChargePerson(installCharger.getName());
+                wxMessageTemplateJsonData.setInstallChargePersonPhone(installCharger.getPhone());
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                simpleDateFormat.setTimeZone(TimeZone.getTimeZone("GMT+8"));
+                logger.info("getInstallPlanDate " + installRecordOld.getInstallPlanDate());
+                String dateStr = simpleDateFormat.format(installRecordOld.getInstallPlanDate());
+                logger.info("dateStr " + dateStr);
+                Date date = simpleDateFormat.parse(dateStr);
+                logger.info("date " + date);
+                wxMessageTemplateJsonData.setInstallPlanDate(date);
+                wxMessageTemplateJsonData.setInstallTaskMessage("请知悉");
+                wechatUserInfoService.sendMsgTemplate(customer.getAccount(),
+                        Constant.WX_TEMPLATE_3_TASK_ACCEPTED,
+                        Constant.WX_MSG_5_INSTALLER_ACCEPT_TO_CUSTOMER,
+                        JSONObject.toJSONString(wxMessageTemplateJsonData));
+
+            }
+            /**
+             * 安装负责人提交安装结果时, 发送消息给客户
+             */
+            if (installTaskDone) {
+                //                {{first.DATA}}
+                //                任务名称：{{keyword1.DATA}}
+                //                负责人：{{keyword2.DATA}}
+                //                提交时间：{{keyword3.DATA}}
+                //                {{remark.DATA}}
+                wxMessageTemplateJsonData.setCustomerName(customer.getName());
+                wxMessageTemplateJsonData.setInstallTaskName("机器调试");
+                wxMessageTemplateJsonData.setInstallChargePerson(installCharger.getName());
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                simpleDateFormat.setTimeZone(TimeZone.getTimeZone("GMT+8"));
+                String dateStr = simpleDateFormat.format(installRecordOld.getInstallPlanDate());
+                Date date = simpleDateFormat.parse(dateStr);
+                wxMessageTemplateJsonData.setInstallActualTime(date);
+                wxMessageTemplateJsonData.setInstallTaskDoneMessage("请知悉");
+                wechatUserInfoService.sendMsgTemplate(customer.getAccount(),
+                        Constant.WX_TEMPLATE_4_TASK_DONE,
+                        Constant.WX_MSG_8_INSTALL_DONE_TO_CUSTOMER,
+                        JSONObject.toJSONString(wxMessageTemplateJsonData));
+            }
+
+        } catch ( Exception e) {
+            logger.info("发送消息给客户失败 " + e.toString());
+            e.printStackTrace();
+        }
         return ResultGenerator.genSuccessResult();
     }
 
@@ -184,31 +285,41 @@ public class InstallRecordController {
         return ResultGenerator.genSuccessResult(pageInfo);
     }
 
+
+    /**
+     *
+     * @param installRecord
+     * @param installMembers  -- install所有成员。
+     * @return
+     */
     @Transactional(rollbackFor = Exception.class)
     @PostMapping("/AssignTask")
     public Result AssignTask(String installRecord, String installMembers) {
         try {
             InstallRecord model = JSON.parseObject(installRecord, InstallRecord.class);
-            List<InstallMembers> members = JSONObject.parseArray(installMembers, InstallMembers.class);
+            List<InstallMembers> membersNewAdd = JSONObject.parseArray(installMembers, InstallMembers.class);
 
-            if (model == null || members == null || members.size() < 1) {
+            if (model == null || membersNewAdd == null || membersNewAdd.size() < 1) {
                 TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
                 return ResultGenerator.genFailResult("数据保存出错！");
             }
             model.setUpdateTime(new Date());
             model.setInstallStatus(com.eservice.api.service.common.Constant.INSTALL_STATUS_ASSIGNED);
             installRecordService.update(model);
-            List<User> list = installMembersService.getMembersByInstallRecordId(model.getId().toString());
-            for (User u : list) {
-                for (InstallMembers m : members) {
+            /**
+             * 如果该记录已经有派过单,则不要加入已经在成员列表的成员 （installMembers也包含安装负责人）
+             */
+            List<User> membersList = installMembersService.getMembersByInstallRecordId(model.getId());
+            for (User u : membersList) {
+                for (InstallMembers m : membersNewAdd) {
                     if (m.getUserId() == u.getId()) {
-                        members.remove(m);
+                        membersNewAdd.remove(m);
                         break;
                     }
                 }
             }
-            if (members.size() > 0) {
-                installMembersService.save(members);
+            if (membersNewAdd.size() > 0) {
+                installMembersService.save(membersNewAdd);
             }
 
             /**
@@ -218,7 +329,53 @@ public class InstallRecordController {
             Machine machine = machineService.findBy("nameplate",installRecord1.getMachineNameplate());
             machine.setStatus(Constant.MACHINE_STATUS_WAIT_FOR_INSTALL);
             machineService.update(machine);
+
+            /**
+             * 安装任务 发送消息给安装负责人和其他成员
+             */
+            User installCharger = userService.findById(model.getInstallChargePerson());
+            if(installCharger == null) {
+                logger.info("找不到对应的员工，请检查！ customerId： " + model.getInstallChargePerson() );
+                return ResultGenerator.genFailResult("找不到对应的员工，请检查！");
+            }
+            User customer = userService.findById(model.getCustomer());
+            if(customer == null) {
+                logger.info("找不到对应的客户，请检查！ customerId： " + model.getCustomer() );
+                return ResultGenerator.genFailResult("找不到对应的客户，请检查！");
+            }
+            //            {{first.DATA}}
+            //            任务号：{{keyword1.DATA}}
+            //            任务类型：{{keyword2.DATA}}
+            //            执行人：{{keyword3.DATA}}
+            //            分派人：{{keyword4.DATA}}
+            //            分派时间：{{keyword5.DATA}}
+            //            {{remark.DATA}}
+
+            WxMessageTemplateJsonData wxMessageTemplateJsonData = new WxMessageTemplateJsonData();
+            wxMessageTemplateJsonData.setMachineNameplate(machine.getNameplate());//任务号
+            wxMessageTemplateJsonData.setInstallTaskMessage("调试机器");//任务类型
+            wxMessageTemplateJsonData.setInstallChargePerson(installCharger.getName() + "团队");//执行人
+
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            simpleDateFormat.setTimeZone(TimeZone.getTimeZone("GMT+8"));
+            String dateStr = simpleDateFormat.format(model.getInstallPlanDate());
+            Date date = simpleDateFormat.parse(dateStr);
+            wxMessageTemplateJsonData.setInstallPlanDate(date);//分配时间
+
+            List<User> userOfMembersNewAdd = new ArrayList<>();
+            for(InstallMembers im :membersNewAdd){
+                User u = userService.findById(im.getUserId());
+                userOfMembersNewAdd.add(u);
+            }
+
+            for (User u : userOfMembersNewAdd) {
+                wechatUserInfoService.sendMsgTemplate(u.getAccount(),
+                        Constant.WX_TEMPLATE_2_TASK_COMMING,
+                        Constant.WX_MSG_2_INSTALL_TASK_TO_EMPLOYEE,
+                        JSONObject.toJSONString(wxMessageTemplateJsonData));
+            }
         } catch (Exception ex) {
+            logger.info("数据保存出错！ " + ex.toString());
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return ResultGenerator.genFailResult("数据保存出错！" + ex.getMessage());
         }

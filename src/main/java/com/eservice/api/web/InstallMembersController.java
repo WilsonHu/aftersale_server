@@ -65,7 +65,7 @@ public class InstallMembersController {
      */
     @PostMapping("/getMembersByInstallRecordId")
     public Result getMembersByInstallRecordId(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size,
-                                               @RequestParam String installRecordId) {
+                                               @RequestParam Integer installRecordId) {
         PageHelper.startPage(page, size);
         List<User> list = installMembersService.getMembersByInstallRecordId(installRecordId);
         PageInfo pageInfo = new PageInfo(list);

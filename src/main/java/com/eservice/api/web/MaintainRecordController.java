@@ -14,21 +14,23 @@ import com.eservice.api.model.user.User;
 import com.eservice.api.service.common.Constant;
 import com.eservice.api.service.common.MaintainContentData;
 import com.eservice.api.service.common.MaintainData;
-import com.eservice.api.service.impl.MachineServiceImpl;
-import com.eservice.api.service.impl.MaintainLibServiceImpl;
-import com.eservice.api.service.impl.MaintainMembersServiceImpl;
-import com.eservice.api.service.impl.MaintainRecordServiceImpl;
+import com.eservice.api.service.common.WxMessageTemplateJsonData;
+import com.eservice.api.service.impl.*;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.constraints.NotNull;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 /**
  * Class Description: xxx
@@ -45,9 +47,16 @@ public class MaintainRecordController {
     private MaintainMembersServiceImpl maintainMembersService;
     @Resource
     private MaintainLibServiceImpl maintainLibService;
-
     @Resource
     private MachineServiceImpl machineService;
+    @Resource
+    private UserServiceImpl userService;
+    @Resource
+    private WechatUserInfoServiceImpl wechatUserInfoService;
+    private Logger logger = Logger.getLogger(MaintainRecordController.class);
+
+    @Value("${debug.flag}")
+    private String debugFlag;
 
     private String generateMaintainInfo(String libName) {
         String result = "";
@@ -103,8 +112,93 @@ public class MaintainRecordController {
 
     @PostMapping("/update")
     public Result update(@RequestBody @NotNull MaintainRecord maintainRecord) {
+
+        boolean maintainTaskAccept = false;
+        boolean maintainTaskDone = false;
+        MaintainRecord maintainRecordOld = maintainRecordService.findById(maintainRecord.getId());
+        if((!maintainRecordOld.getMaintainStatus().equals(Constant.MAINTAIN_STATUS_TASK_DOING)) && (maintainRecord.getMaintainStatus().equals(Constant.MAINTAIN_STATUS_TASK_DOING))) {
+            maintainTaskAccept = true;
+        }
+        if((!maintainRecordOld.getMaintainStatus().equals(Constant.MAINTAIN_STATUS_FINISHED)) && (maintainRecord.getMaintainStatus().equals(Constant.MAINTAIN_STATUS_FINISHED))){
+            maintainTaskDone = true;
+        }
         maintainRecord.setMaintainDateActual(new Date());
         maintainRecordService.update(maintainRecord);
+
+        if(debugFlag.equalsIgnoreCase("true")) {
+            logger.info(" get old MaintainStatus " + maintainRecordOld.getMaintainStatus());
+            logger.info("get new MaintainStatus " + maintainRecord.getMaintainStatus());
+            logger.info("get maintainTaskAccept/maintainTaskDone :" + maintainTaskAccept + " / " + maintainTaskDone);
+        }
+        User customer = userService.findById(maintainRecordOld.getCustomer());
+        if(customer == null) {
+            logger.info("找不到对应的客户，请检查！ customerId： " + maintainRecordOld.getCustomer() );
+            return ResultGenerator.genFailResult("找不到对应的客户，请检查！");
+        }
+        User maintainCharger = userService.findById(maintainRecordOld.getMaintainChargePerson());
+        if(maintainCharger == null) {
+            logger.info("找不到对应的保养负责人，请检查！  " + maintainRecordOld.getMaintainChargePerson() );
+            return ResultGenerator.genFailResult("找不到对应的保养负责人，请检查！");
+        }
+        WxMessageTemplateJsonData wxMessageTemplateJsonData = new WxMessageTemplateJsonData();
+        try {
+            /**
+             * 保养负责人接单时, 发送消息给客户
+             */
+            if(maintainTaskAccept) {
+                //            {{first.DATA}}
+                //            订单号：{{keyword1.DATA}}
+                //            工程师姓名：{{keyword2.DATA}}
+                //            工程师电话：{{keyword3.DATA}}
+                //            上门时间：{{keyword4.DATA}}
+                //            {{remark.DATA}}
+                wxMessageTemplateJsonData.setCustomerName(customer.getName());
+                wxMessageTemplateJsonData.setMachineNameplate(maintainRecordOld.getMachineNameplate() + "已安排保养");
+                wxMessageTemplateJsonData.setMaintainChargePerson(maintainCharger.getName());
+                wxMessageTemplateJsonData.setMaintainChargePersonPhone(maintainCharger.getPhone());
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                simpleDateFormat.setTimeZone(TimeZone.getTimeZone("GMT+8"));
+                logger.info("getMaintainDatePlan " + maintainRecordOld.getMaintainDatePlan());
+                String dateStr = simpleDateFormat.format(maintainRecordOld.getMaintainDatePlan());
+                logger.info("dateStr " + dateStr);
+                Date date = simpleDateFormat.parse(dateStr);
+                logger.info(" date  " + date);
+                wxMessageTemplateJsonData.setMaintainPlanDate(date);
+                wxMessageTemplateJsonData.setMaintainTaskMessage("请知悉");
+                wechatUserInfoService.sendMsgTemplate(customer.getAccount(),
+                        Constant.WX_TEMPLATE_3_TASK_ACCEPTED,
+                        Constant.WX_MSG_6_MAINTAIN_ACCEPT_TO_CUSTOMER,
+                        JSONObject.toJSONString(wxMessageTemplateJsonData));
+
+            }
+            /**
+             * 保养负责人提交结果时, 发送消息给客户
+             */
+            if(maintainTaskDone) {
+                //                {{first.DATA}}
+                //                任务名称：{{keyword1.DATA}}
+                //                负责人：{{keyword2.DATA}}
+                //                提交时间：{{keyword3.DATA}}
+                //                {{remark.DATA}}
+                wxMessageTemplateJsonData.setCustomerName(customer.getName());
+                wxMessageTemplateJsonData.setMaintainTaskName("机器保养");
+                wxMessageTemplateJsonData.setMaintainChargePerson(maintainCharger.getName());
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                simpleDateFormat.setTimeZone(TimeZone.getTimeZone("GMT+8"));
+                String dateStr = simpleDateFormat.format(maintainRecordOld.getMaintainDatePlan());
+                Date date = simpleDateFormat.parse(dateStr);
+                wxMessageTemplateJsonData.setMaintainActualTime(date);
+                wxMessageTemplateJsonData.setMaintainTaskDoneMessage("请知悉");
+                wechatUserInfoService.sendMsgTemplate(customer.getAccount(),
+                        Constant.WX_TEMPLATE_4_TASK_DONE,
+                        Constant.WX_MSG_9_MAINTAIN_DONE_TO_CUSTOMER,
+                        JSONObject.toJSONString(wxMessageTemplateJsonData));
+            }
+
+        } catch ( Exception e) {
+            logger.info("发送消息给客户失败 " + e.toString());
+            e.printStackTrace();
+        }
         return ResultGenerator.genSuccessResult();
     }
 
@@ -205,9 +299,9 @@ public class MaintainRecordController {
     public Result AssignTask(String maintainRecord, String maintainMembers) {
         try {
             MaintainRecord model = JSON.parseObject(maintainRecord, MaintainRecord.class);
-            List<MaintainMembers> members = JSONObject.parseArray(maintainMembers, MaintainMembers.class);
+            List<MaintainMembers> membersNewAdd = JSONObject.parseArray(maintainMembers, MaintainMembers.class);
 
-            if (model == null || members == null || members.size() < 1) {
+            if (model == null || membersNewAdd == null || membersNewAdd.size() < 1) {
                 TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
                 return ResultGenerator.genFailResult("数据保存出错！");
             }
@@ -216,15 +310,15 @@ public class MaintainRecordController {
             maintainRecordService.update(model);
             List<User> list = maintainMembersService.getMembersByMaintainRecordId(model.getId().toString());
             for (User u : list) {
-                for (MaintainMembers m : members) {
+                for (MaintainMembers m : membersNewAdd) {
                     if (m.getUserId() == u.getId()) {
-                        members.remove(m);
+                        membersNewAdd.remove(m);
                         break;
                     }
                 }
             }
-            if (members.size() > 0) {
-                maintainMembersService.save(members);
+            if (membersNewAdd.size() > 0) {
+                maintainMembersService.save(membersNewAdd);
             }
 
             /**
@@ -234,6 +328,49 @@ public class MaintainRecordController {
             Machine machine = machineService.findBy("nameplate",maintainRecord1.getMachineNameplate());
             machine.setStatus(Constant.MACHINE_STATUS_WAIT_FOR_MAINTAIN);
             machineService.update(machine);
+
+            /**
+             * 保养任务 发送消息给安装负责人和其他成员
+             */
+            User maintainCharger = userService.findById(model.getMaintainChargePerson());
+            if(maintainCharger == null) {
+                logger.info("找不到对应的员工，请检查！ customerId： " + model.getMaintainChargePerson() );
+                return ResultGenerator.genFailResult("找不到对应的员工，请检查！");
+            }
+            User customer = userService.findById(model.getCustomer());
+            if(customer == null) {
+                logger.info("找不到对应的客户，请检查！ customerId： " + model.getCustomer() );
+                return ResultGenerator.genFailResult("找不到对应的客户，请检查！");
+            }
+            //            {{first.DATA}}
+            //            任务号：{{keyword1.DATA}}
+            //            任务类型：{{keyword2.DATA}}
+            //            执行人：{{keyword3.DATA}}
+            //            分派人：{{keyword4.DATA}}
+            //            分派时间：{{keyword5.DATA}}
+            //            {{remark.DATA}}
+            WxMessageTemplateJsonData wxMessageTemplateJsonData = new WxMessageTemplateJsonData();
+            wxMessageTemplateJsonData.setMachineNameplate(machine.getNameplate());//任务号
+            wxMessageTemplateJsonData.setMaintainTaskMessage("保养机器");//任务类型
+            wxMessageTemplateJsonData.setMaintainChargePerson(maintainCharger.getName() + "团队");//执行人
+
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            simpleDateFormat.setTimeZone(TimeZone.getTimeZone("GMT+8"));
+            String dateStr = simpleDateFormat.format(model.getMaintainDatePlan());
+            Date date = simpleDateFormat.parse(dateStr);
+            wxMessageTemplateJsonData.setMaintainPlanDate(date);//分配时间
+            List<User> userOfMembersNewAdd = new ArrayList<>();
+            for(MaintainMembers mm :membersNewAdd){
+                User u = userService.findById(mm.getUserId());
+                userOfMembersNewAdd.add(u);
+            }
+
+            for (User u : userOfMembersNewAdd) {
+                wechatUserInfoService.sendMsgTemplate(u.getAccount(),
+                        Constant.WX_TEMPLATE_2_TASK_COMMING,
+                        Constant.WX_MSG_3_MAINTAIN_TASK_TO_EMPLOYEE,
+                        JSONObject.toJSONString(wxMessageTemplateJsonData));
+            }
         } catch (Exception ex) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return ResultGenerator.genFailResult("数据保存出错！" + ex.getMessage());

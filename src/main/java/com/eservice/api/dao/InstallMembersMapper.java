@@ -9,5 +9,5 @@ import java.util.List;
 
 public interface InstallMembersMapper extends Mapper<InstallMembers> {
 
-    List<User> getMembersByInstallRecordId(@Param("installRecordId")String installRecordId);
+    List<User> getMembersByInstallRecordId(@Param("installRecordId")Integer installRecordId);
 }

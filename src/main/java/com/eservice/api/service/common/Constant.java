@@ -175,7 +175,7 @@ public class Constant {
     public static final String WX_ERRORCODE_FREQ_LIMIT = "45011";
 
     /**
-     * 模板消息号
+     * 消息号
      * 1: 绑定机器时 通知客户
      * 2：安装任务派单时 通知员工
      * 3：保养装任务派单时 通知员工
@@ -186,19 +186,32 @@ public class Constant {
      * 8: 安装完成后待评价时 通知客户
      * 9: 保养完成后待评价时 通知客户
      * 10: 维修完成后待评价时 通知客户
-     * 11：报修被受理时 通知客户
      */
-    public static final String WX_TEMPLATE_NO1_MACHINE_BIND_TO_CUSTOMER = "WX_TEMPLATE_NO1_MACHINE_BIND_TO_CUSTOMER";
-    public static final String WX_TEMPLATE_NO2_INSTALL_TASK_TO_EMPLOYEE = "WX_TEMPLATE_NO2_INSTALL_TASK_TO_EMPLOYEE";
-    public static final String WX_TEMPLATE_NO3_MAINTAIN_TASK_TO_EMPLOYEE = "WX_TEMPLATE_NO3_MAINTAIN_TASK_TO_EMPLOYEE";
-    public static final String WX_TEMPLATE_NO4_REPAIR_TASK_TO_EMPLOYEE = "WX_TEMPLATE_NO4_REPAIR_TASK_TO_EMPLOYEE";
-    public static final String WX_TEMPLATE_NO5_INSTALLER_ACCEPT_TO_CUSTOMER = "WX_TEMPLATE_NO5_INSTALLER_ACCEPT_TO_CUSTOMER";
-    public static final String WX_TEMPLATE_NO6_MAINTAIN_ACCEPT_TO_CUSTOMER = "WX_TEMPLATE_NO6_MAINTAIN_ACCEPT_TO_CUSTOMER";
-    public static final String WX_TEMPLATE_NO7_REPAIR_ACCEPT_TO_CUSTOMER = "WX_TEMPLATE_NO7_REPAIR_ACCEPT_TO_CUSTOMER";
-    public static final String WX_TEMPLATE_NO8_INSTALL_DONE_TO_CUSTOMER = "WX_TEMPLATE_NO8_INSTALL_DONE_TO_CUSTOMER";
-    public static final String WX_TEMPLATE_NO9_MAINTAIN_DONE_TO_CUSTOMER = "WX_TEMPLATE_NO9_MAINTAIN_DONE_TO_CUSTOMER";
-    public static final String WX_TEMPLATE_NO10_REPAIR_DONE_TO_CUSTOMER = "WX_TEMPLATE_NO10_REPAIR_DONE_TO_CUSTOMER";
-    public static final String WX_TEMPLATE_NO11_REPAIR_REQUEST_ACCEPTED_TO_CUSTOMER = "WX_TEMPLATE_NO11_REPAIR_REQUEST_ACCEPTED_TO_CUSTOMER";
+    public static final String WX_MSG_1_MACHINE_BIND_TO_CUSTOMER = "WX_TEMPLATE_NO1_MACHINE_BIND_TO_CUSTOMER";
+    public static final String WX_MSG_2_INSTALL_TASK_TO_EMPLOYEE = "WX_TEMPLATE_NO2_INSTALL_TASK_TO_EMPLOYEE";
+    public static final String WX_MSG_3_MAINTAIN_TASK_TO_EMPLOYEE = "WX_TEMPLATE_NO3_MAINTAIN_TASK_TO_EMPLOYEE";
+    public static final String WX_MSG_4_REPAIR_TASK_TO_EMPLOYEE = "WX_TEMPLATE_NO4_REPAIR_TASK_TO_EMPLOYEE";
+    public static final String WX_MSG_5_INSTALLER_ACCEPT_TO_CUSTOMER = "WX_TEMPLATE_NO5_INSTALLER_ACCEPT_TO_CUSTOMER";
+    public static final String WX_MSG_6_MAINTAIN_ACCEPT_TO_CUSTOMER = "WX_TEMPLATE_NO6_MAINTAIN_ACCEPT_TO_CUSTOMER";
+    public static final String WX_MSG_7_REPAIR_ACCEPT_TO_CUSTOMER = "WX_TEMPLATE_NO7_REPAIR_ACCEPT_TO_CUSTOMER";
+    public static final String WX_MSG_8_INSTALL_DONE_TO_CUSTOMER = "WX_TEMPLATE_NO8_INSTALL_DONE_TO_CUSTOMER";
+    public static final String WX_MSG_9_MAINTAIN_DONE_TO_CUSTOMER = "WX_TEMPLATE_NO9_MAINTAIN_DONE_TO_CUSTOMER";
+    public static final String WX_MSG_10_REPAIR_DONE_TO_CUSTOMER = "WX_TEMPLATE_NO10_REPAIR_DONE_TO_CUSTOMER";
+
+    /**
+     * 模板号
+     * 1：预定成功通知
+     * 2：任务分派提醒
+     * 3：订单受理成功通知
+     * 4：任务已完成通知
+     */
+    public static final String WX_TEMPLATE_1_BOOK_SUCCESS = "fbg_nVLRWSmcq1Tp5G2-L9WaWrc-ggP-rIsC2Dir42s";
+    public static final String WX_TEMPLATE_2_TASK_COMMING = "Zybl6os4A5T9FtToXSAGoN2DN57j8X-oHhexhfo8XU4";
+    public static final String WX_TEMPLATE_3_TASK_ACCEPTED = "zhOeyr_BSquYLVhrmeLpHSibZdXpKrSP9ycUK6daEt8";
+    public static final String WX_TEMPLATE_4_TASK_DONE = "shuxRtXLw_Jqhz6SIKeFg9A1CJ6eBspQFdYS5kUkUAQ";
+
+    public static final String WX_MSG_SEND_SUCCESS = "模板发送成功！";
+    public static final String WX_MSG_1 = "你订购的机器已经就绪，预定出厂日期 FactoryDate";
 
     /**
      * 员工端小程序只能用员工账号登陆，客户端小程序只能用客户账号登陆
