@@ -23,11 +23,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.constraints.NotNull;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.TimeZone;
 
 /**
  * Class Description: xxx
@@ -118,15 +116,7 @@ public class RepairRecordController {
                 wxMessageTemplateJsonData.setMachineNameplate(repairRecordOld.getMachineNameplate()+ "已安排维修");
                 wxMessageTemplateJsonData.setRepairChargePerson(repairCharger.getName());
                 wxMessageTemplateJsonData.setRepairChargePersonPhone(repairCharger.getPhone());
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                simpleDateFormat.setTimeZone(TimeZone.getTimeZone("GMT+8"));
-
-                logger.info("getRepairPlanDate " + repairRecordOld.getRepairPlanDate());
-                String dateStr = simpleDateFormat.format(repairRecordOld.getRepairPlanDate());
-                logger.info("dateStr " + dateStr);
-                Date date = simpleDateFormat.parse(dateStr);
-                logger.info("date " + date);
-                wxMessageTemplateJsonData.setRepairPlanDate(date);
+                wxMessageTemplateJsonData.setRepairPlanDate(repairRecordOld.getRepairPlanDate());
                 wxMessageTemplateJsonData.setRepairTaskMessage("请知悉");
                 wechatUserInfoService.sendMsgTemplate(customer.getAccount(),
                         Constant.WX_TEMPLATE_3_TASK_ACCEPTED,
@@ -293,18 +283,11 @@ public class RepairRecordController {
             //            分派人：{{keyword4.DATA}}
             //            分派时间：{{keyword5.DATA}}
             //            {{remark.DATA}}
-
             WxMessageTemplateJsonData wxMessageTemplateJsonData = new WxMessageTemplateJsonData();
             wxMessageTemplateJsonData.setMachineNameplate(machine.getNameplate());//任务号
             wxMessageTemplateJsonData.setRepairTaskMessage("维修机器");//任务类型
             wxMessageTemplateJsonData.setRepairChargePerson(repairCharger.getName() + "团队");//执行人
-
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            simpleDateFormat.setTimeZone(TimeZone.getTimeZone("GMT+8"));
-            String dateStr = simpleDateFormat.format(model.getRepairPlanDate());
-            Date date = simpleDateFormat.parse(dateStr);
-            wxMessageTemplateJsonData.setRepairPlanDate(date);//分配时间
-
+            wxMessageTemplateJsonData.setRepairPlanDate(model.getRepairPlanDate());//分配时间
             List<User> userOfMembersNewAdd = new ArrayList<>();
             for(RepairMembers rm :membersNewAdd){
                 User u = userService.findById(rm.getUserId());
@@ -391,19 +374,12 @@ public class RepairRecordController {
             wxMessageTemplateJsonData.setMachineNameplate(machine.getNameplate());//任务号
             wxMessageTemplateJsonData.setRepairTaskMessage("维修机器");//任务类型
             wxMessageTemplateJsonData.setRepairChargePerson(repairCharger.getName() + "团队");//执行人
-
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            simpleDateFormat.setTimeZone(TimeZone.getTimeZone("GMT+8"));
-            String dateStr = simpleDateFormat.format(model.getRepairPlanDate());
-            Date date = simpleDateFormat.parse(dateStr);
-            wxMessageTemplateJsonData.setRepairPlanDate(date);//分配时间
-
+            wxMessageTemplateJsonData.setRepairPlanDate(model.getRepairPlanDate());//分配时间
             List<User> userOfMembersNewAdd = new ArrayList<>();
             for(RepairMembers rm :membersNewAdd){
                 User u = userService.findById(rm.getUserId());
                 userOfMembersNewAdd.add(u);
             }
-
             for (User u : userOfMembersNewAdd) {
                 wechatUserInfoService.sendMsgTemplate(u.getAccount(),
                         Constant.WX_TEMPLATE_2_TASK_COMMING,

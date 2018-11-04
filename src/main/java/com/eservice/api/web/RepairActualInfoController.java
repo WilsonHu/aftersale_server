@@ -26,10 +26,8 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.Resource;
 import javax.validation.constraints.NotNull;
 import java.io.File;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.TimeZone;
 
 /**
 * Class Description: xxx
@@ -263,11 +261,7 @@ public class RepairActualInfoController {
                         wxMessageTemplateJsonData.setCustomerName(customer.getName());
                         wxMessageTemplateJsonData.setRepairTaskName("机器维修");
                         wxMessageTemplateJsonData.setRepairChargePerson(repairCharger.getName());
-                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                        simpleDateFormat.setTimeZone(TimeZone.getTimeZone("GMT+8"));
-                        String dateStr = simpleDateFormat.format(repairRecordOld.getRepairPlanDate());
-                        Date date = simpleDateFormat.parse(dateStr);
-                        wxMessageTemplateJsonData.setRepairActualTime(date);
+                        wxMessageTemplateJsonData.setRepairActualTime(repairRecordOld.getRepairPlanDate());
                         wxMessageTemplateJsonData.setRepairTaskDoneMessage("请知悉");
                         wechatUserInfoService.sendMsgTemplate(customer.getAccount(),
                                 Constant.WX_TEMPLATE_4_TASK_DONE,

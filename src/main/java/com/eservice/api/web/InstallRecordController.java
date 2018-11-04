@@ -26,11 +26,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.constraints.NotNull;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.TimeZone;
 
 /**
  * Class Description: xxx
@@ -45,9 +43,6 @@ public class InstallRecordController {
     private InstallRecordServiceImpl installRecordService;
     @Resource
     private InstallMembersServiceImpl installMembersService;
-
-    @Resource
-    private InstallLibServiceImpl installLibService;
 
     @Resource
     private MachineServiceImpl machineService;
@@ -125,14 +120,7 @@ public class InstallRecordController {
                 wxMessageTemplateJsonData.setMachineNameplate(installRecordOld.getMachineNameplate() + "已安排调试");
                 wxMessageTemplateJsonData.setInstallChargePerson(installCharger.getName());
                 wxMessageTemplateJsonData.setInstallChargePersonPhone(installCharger.getPhone());
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                simpleDateFormat.setTimeZone(TimeZone.getTimeZone("GMT+8"));
-                logger.info("getInstallPlanDate " + installRecordOld.getInstallPlanDate());
-                String dateStr = simpleDateFormat.format(installRecordOld.getInstallPlanDate());
-                logger.info("dateStr " + dateStr);
-                Date date = simpleDateFormat.parse(dateStr);
-                logger.info("date " + date);
-                wxMessageTemplateJsonData.setInstallPlanDate(date);
+                wxMessageTemplateJsonData.setInstallPlanDate(installRecordOld.getInstallPlanDate());
                 wxMessageTemplateJsonData.setInstallTaskMessage("请知悉");
                 wechatUserInfoService.sendMsgTemplate(customer.getAccount(),
                         Constant.WX_TEMPLATE_3_TASK_ACCEPTED,
@@ -152,11 +140,7 @@ public class InstallRecordController {
                 wxMessageTemplateJsonData.setCustomerName(customer.getName());
                 wxMessageTemplateJsonData.setInstallTaskName("机器调试");
                 wxMessageTemplateJsonData.setInstallChargePerson(installCharger.getName());
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                simpleDateFormat.setTimeZone(TimeZone.getTimeZone("GMT+8"));
-                String dateStr = simpleDateFormat.format(installRecordOld.getInstallPlanDate());
-                Date date = simpleDateFormat.parse(dateStr);
-                wxMessageTemplateJsonData.setInstallActualTime(date);
+                wxMessageTemplateJsonData.setInstallActualTime(installRecordOld.getInstallPlanDate());
                 wxMessageTemplateJsonData.setInstallTaskDoneMessage("请知悉");
                 wechatUserInfoService.sendMsgTemplate(customer.getAccount(),
                         Constant.WX_TEMPLATE_4_TASK_DONE,
@@ -350,24 +334,16 @@ public class InstallRecordController {
             //            分派人：{{keyword4.DATA}}
             //            分派时间：{{keyword5.DATA}}
             //            {{remark.DATA}}
-
             WxMessageTemplateJsonData wxMessageTemplateJsonData = new WxMessageTemplateJsonData();
             wxMessageTemplateJsonData.setMachineNameplate(machine.getNameplate());//任务号
             wxMessageTemplateJsonData.setInstallTaskMessage("调试机器");//任务类型
             wxMessageTemplateJsonData.setInstallChargePerson(installCharger.getName() + "团队");//执行人
-
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            simpleDateFormat.setTimeZone(TimeZone.getTimeZone("GMT+8"));
-            String dateStr = simpleDateFormat.format(model.getInstallPlanDate());
-            Date date = simpleDateFormat.parse(dateStr);
-            wxMessageTemplateJsonData.setInstallPlanDate(date);//分配时间
-
+            wxMessageTemplateJsonData.setInstallPlanDate(model.getInstallPlanDate());//分配时间
             List<User> userOfMembersNewAdd = new ArrayList<>();
             for(InstallMembers im :membersNewAdd){
                 User u = userService.findById(im.getUserId());
                 userOfMembersNewAdd.add(u);
             }
-
             for (User u : userOfMembersNewAdd) {
                 wechatUserInfoService.sendMsgTemplate(u.getAccount(),
                         Constant.WX_TEMPLATE_2_TASK_COMMING,

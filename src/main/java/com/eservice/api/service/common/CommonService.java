@@ -1,6 +1,7 @@
 package com.eservice.api.service.common;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,6 +26,8 @@ import java.util.*;
 public class CommonService {
     Logger logger = Logger.getLogger(CommonService.class);
 
+    @Value("${debug.flag}")
+    private String debugFlag;
 
     /**
      * @param path      保存文件的总路径
@@ -34,7 +37,6 @@ public class CommonService {
      * @param number    表示第几个文件
      * @return 文件路径
      * eg: mph333_REPAIR_REQUEST_IMAGE_2018-07-13-16-17-50_1.png
-     * TODO:保存的文件，名称多了一个空格待查
      */
     public String saveFile(String path,
                            MultipartFile file,
@@ -47,14 +49,17 @@ public class CommonService {
 
                 String fileName = file.getOriginalFilename();
                 targetFileName = path + formatFileName(fileName.replaceAll("/", "-"), nameplate.replaceAll("/", "-"), fileType, number);
-                logger.info("====CommonService.saveFile(): targetFileName  ========" + targetFileName);
+                if(debugFlag.equalsIgnoreCase("true")) {
+                    logger.info("====CommonService.saveFile(): targetFileName  ========" + targetFileName);
+                }
                 BufferedOutputStream out = new BufferedOutputStream(
                         new FileOutputStream(new File(targetFileName)));
-                logger.info("====CommonService.saveFile(): try to write  ========");
                 out.write(file.getBytes());
                 out.flush();
                 out.close();
-                logger.info("====CommonService.saveFile(): success ========" + targetFileName);
+                if(debugFlag.equalsIgnoreCase("true")) {
+                    logger.info("====CommonService.saveFile(): success ========" + targetFileName);
+                }
             }
         } catch (IOException e) {
             logger.info("====CommonService.saveFile(): fail ========" + e.toString());

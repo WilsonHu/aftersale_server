@@ -26,11 +26,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.constraints.NotNull;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.TimeZone;
 
 /**
  * Class Description: xxx
@@ -156,14 +154,7 @@ public class MaintainRecordController {
                 wxMessageTemplateJsonData.setMachineNameplate(maintainRecordOld.getMachineNameplate() + "已安排保养");
                 wxMessageTemplateJsonData.setMaintainChargePerson(maintainCharger.getName());
                 wxMessageTemplateJsonData.setMaintainChargePersonPhone(maintainCharger.getPhone());
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                simpleDateFormat.setTimeZone(TimeZone.getTimeZone("GMT+8"));
-                logger.info("getMaintainDatePlan " + maintainRecordOld.getMaintainDatePlan());
-                String dateStr = simpleDateFormat.format(maintainRecordOld.getMaintainDatePlan());
-                logger.info("dateStr " + dateStr);
-                Date date = simpleDateFormat.parse(dateStr);
-                logger.info(" date  " + date);
-                wxMessageTemplateJsonData.setMaintainPlanDate(date);
+                wxMessageTemplateJsonData.setMaintainPlanDate(maintainRecordOld.getMaintainDatePlan());
                 wxMessageTemplateJsonData.setMaintainTaskMessage("请知悉");
                 wechatUserInfoService.sendMsgTemplate(customer.getAccount(),
                         Constant.WX_TEMPLATE_3_TASK_ACCEPTED,
@@ -183,11 +174,7 @@ public class MaintainRecordController {
                 wxMessageTemplateJsonData.setCustomerName(customer.getName());
                 wxMessageTemplateJsonData.setMaintainTaskName("机器保养");
                 wxMessageTemplateJsonData.setMaintainChargePerson(maintainCharger.getName());
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                simpleDateFormat.setTimeZone(TimeZone.getTimeZone("GMT+8"));
-                String dateStr = simpleDateFormat.format(maintainRecordOld.getMaintainDatePlan());
-                Date date = simpleDateFormat.parse(dateStr);
-                wxMessageTemplateJsonData.setMaintainActualTime(date);
+                wxMessageTemplateJsonData.setMaintainActualTime(maintainRecordOld.getMaintainDatePlan());
                 wxMessageTemplateJsonData.setMaintainTaskDoneMessage("请知悉");
                 wechatUserInfoService.sendMsgTemplate(customer.getAccount(),
                         Constant.WX_TEMPLATE_4_TASK_DONE,
@@ -353,12 +340,7 @@ public class MaintainRecordController {
             wxMessageTemplateJsonData.setMachineNameplate(machine.getNameplate());//任务号
             wxMessageTemplateJsonData.setMaintainTaskMessage("保养机器");//任务类型
             wxMessageTemplateJsonData.setMaintainChargePerson(maintainCharger.getName() + "团队");//执行人
-
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            simpleDateFormat.setTimeZone(TimeZone.getTimeZone("GMT+8"));
-            String dateStr = simpleDateFormat.format(model.getMaintainDatePlan());
-            Date date = simpleDateFormat.parse(dateStr);
-            wxMessageTemplateJsonData.setMaintainPlanDate(date);//分配时间
+            wxMessageTemplateJsonData.setMaintainPlanDate(model.getMaintainDatePlan());//分配时间
             List<User> userOfMembersNewAdd = new ArrayList<>();
             for(MaintainMembers mm :membersNewAdd){
                 User u = userService.findById(mm.getUserId());

@@ -18,6 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.annotation.Resource;
+import java.text.SimpleDateFormat;
+import java.util.TimeZone;
 
 /**
 * Class Description: xxx
@@ -133,6 +135,8 @@ public class WechatUserInfoServiceImpl extends AbstractService<WechatUserInfo> i
         if(wxMessageTemplateJsonData == null){
             return "推送发送失败，获取json数据失败";
         }
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        simpleDateFormat.setTimeZone(TimeZone.getTimeZone("GMT+8"));
         switch (messageId){
             case Constant.WX_MSG_1_MACHINE_BIND_TO_CUSTOMER:
                 //            {{first.DATA}}
@@ -155,22 +159,22 @@ public class WechatUserInfoServiceImpl extends AbstractService<WechatUserInfo> i
                 jsonObjectDeatailMsg.put("keyword1", toJson(wxMessageTemplateJsonData.getMachineNameplate()));
                 jsonObjectDeatailMsg.put("keyword2", toJson(wxMessageTemplateJsonData.getInstallTaskMessage()));
                 jsonObjectDeatailMsg.put("keyword3", toJson(wxMessageTemplateJsonData.getInstallChargePerson()));
-                jsonObjectDeatailMsg.put("keyword4", toJson( "信胜"));
-                jsonObjectDeatailMsg.put("keyword5", toJson(wxMessageTemplateJsonData.getInstallPlanDate().toString()));
+                jsonObjectDeatailMsg.put("keyword4", toJson("信胜"));
+                jsonObjectDeatailMsg.put("keyword5", toJson(simpleDateFormat.format(wxMessageTemplateJsonData.getInstallPlanDate())));
                 break;
             case Constant.WX_MSG_3_MAINTAIN_TASK_TO_EMPLOYEE:
                 jsonObjectDeatailMsg.put("keyword1", toJson(wxMessageTemplateJsonData.getMachineNameplate()));
                 jsonObjectDeatailMsg.put("keyword2", toJson(wxMessageTemplateJsonData.getMaintainTaskMessage()));
                 jsonObjectDeatailMsg.put("keyword3", toJson(wxMessageTemplateJsonData.getMaintainChargePerson()));
-                jsonObjectDeatailMsg.put("keyword4", toJson( "信胜"));
-                jsonObjectDeatailMsg.put("keyword5", toJson(wxMessageTemplateJsonData.getMaintainPlanDate().toString()));
+                jsonObjectDeatailMsg.put("keyword4", toJson("信胜"));
+                jsonObjectDeatailMsg.put("keyword5", toJson(simpleDateFormat.format(wxMessageTemplateJsonData.getMaintainPlanDate())));
                 break;
             case Constant.WX_MSG_4_REPAIR_TASK_TO_EMPLOYEE:
                 jsonObjectDeatailMsg.put("keyword1", toJson(wxMessageTemplateJsonData.getMachineNameplate()));
                 jsonObjectDeatailMsg.put("keyword2", toJson(wxMessageTemplateJsonData.getRepairTaskMessage()));
                 jsonObjectDeatailMsg.put("keyword3", toJson(wxMessageTemplateJsonData.getRepairChargePerson()));
-                jsonObjectDeatailMsg.put("keyword4", toJson( "信胜"));;
-                jsonObjectDeatailMsg.put("keyword5", toJson(wxMessageTemplateJsonData.getRepairPlanDate().toString()));
+                jsonObjectDeatailMsg.put("keyword4", toJson("信胜"));;
+                jsonObjectDeatailMsg.put("keyword5", toJson(simpleDateFormat.format(wxMessageTemplateJsonData.getRepairPlanDate())));
                 break;
             case Constant.WX_MSG_5_INSTALLER_ACCEPT_TO_CUSTOMER:
                 //            {{first.DATA}}
@@ -183,7 +187,7 @@ public class WechatUserInfoServiceImpl extends AbstractService<WechatUserInfo> i
                 jsonObjectDeatailMsg.put("keyword1", toJson(wxMessageTemplateJsonData.getMachineNameplate()));
                 jsonObjectDeatailMsg.put("keyword2", toJson(wxMessageTemplateJsonData.getInstallChargePerson()));
                 jsonObjectDeatailMsg.put("keyword3", toJson(wxMessageTemplateJsonData.getInstallChargePersonPhone()));
-                jsonObjectDeatailMsg.put("keyword4", toJson(wxMessageTemplateJsonData.getInstallPlanDate().toString()));
+                jsonObjectDeatailMsg.put("keyword4", toJson(simpleDateFormat.format(wxMessageTemplateJsonData.getInstallPlanDate())));
                 jsonObjectDeatailMsg.put("remark", toJson(wxMessageTemplateJsonData.getInstallTaskAcceptedMessage()));
                 break;
             case Constant.WX_MSG_6_MAINTAIN_ACCEPT_TO_CUSTOMER:
@@ -191,7 +195,7 @@ public class WechatUserInfoServiceImpl extends AbstractService<WechatUserInfo> i
                 jsonObjectDeatailMsg.put("keyword1", toJson(wxMessageTemplateJsonData.getMachineNameplate()));
                 jsonObjectDeatailMsg.put("keyword2", toJson(wxMessageTemplateJsonData.getMaintainChargePerson()));
                 jsonObjectDeatailMsg.put("keyword3", toJson(wxMessageTemplateJsonData.getMaintainChargePersonPhone()));
-                jsonObjectDeatailMsg.put("keyword4", toJson(wxMessageTemplateJsonData.getMaintainPlanDate().toString()));
+                jsonObjectDeatailMsg.put("keyword4", toJson(simpleDateFormat.format(wxMessageTemplateJsonData.getMaintainPlanDate())));
                 jsonObjectDeatailMsg.put("remark", toJson(wxMessageTemplateJsonData.getMaintainTaskAcceptedMessage()));
                 break;
             case Constant.WX_MSG_7_REPAIR_ACCEPT_TO_CUSTOMER:
@@ -199,7 +203,7 @@ public class WechatUserInfoServiceImpl extends AbstractService<WechatUserInfo> i
                 jsonObjectDeatailMsg.put("keyword1", toJson(wxMessageTemplateJsonData.getMachineNameplate()));
                 jsonObjectDeatailMsg.put("keyword2", toJson(wxMessageTemplateJsonData.getRepairChargePerson()));
                 jsonObjectDeatailMsg.put("keyword3", toJson(wxMessageTemplateJsonData.getRepairChargePersonPhone()));
-                jsonObjectDeatailMsg.put("keyword4", toJson(wxMessageTemplateJsonData.getRepairPlanDate().toString()));
+                jsonObjectDeatailMsg.put("keyword4", toJson(simpleDateFormat.format(wxMessageTemplateJsonData.getRepairPlanDate())));
                 jsonObjectDeatailMsg.put("remark", toJson(wxMessageTemplateJsonData.getRepairTaskAcceptedMessage()));
                 break;
 
@@ -212,21 +216,21 @@ public class WechatUserInfoServiceImpl extends AbstractService<WechatUserInfo> i
                 jsonObjectDeatailMsg.put("first", toJson(wxMessageTemplateJsonData.getCustomerName()));
                 jsonObjectDeatailMsg.put("keyword1", toJson(wxMessageTemplateJsonData.getInstallTaskName()));
                 jsonObjectDeatailMsg.put("keyword2", toJson(wxMessageTemplateJsonData.getInstallChargePerson()));
-                jsonObjectDeatailMsg.put("keyword3", toJson(wxMessageTemplateJsonData.getInstallActualTime().toString()));
+                jsonObjectDeatailMsg.put("keyword3", toJson(simpleDateFormat.format(wxMessageTemplateJsonData.getInstallActualTime())));
                 jsonObjectDeatailMsg.put("remark", toJson(wxMessageTemplateJsonData.getInstallTaskDoneMessage()));
                 break;
             case Constant.WX_MSG_9_MAINTAIN_DONE_TO_CUSTOMER:
                 jsonObjectDeatailMsg.put("first", toJson(wxMessageTemplateJsonData.getCustomerName()));
                 jsonObjectDeatailMsg.put("keyword1", toJson(wxMessageTemplateJsonData.getMaintainTaskName()));
                 jsonObjectDeatailMsg.put("keyword2", toJson(wxMessageTemplateJsonData.getMaintainChargePerson()));
-                jsonObjectDeatailMsg.put("keyword3", toJson(wxMessageTemplateJsonData.getMaintainActualTime().toString()));
+                jsonObjectDeatailMsg.put("keyword3", toJson(simpleDateFormat.format(wxMessageTemplateJsonData.getMaintainActualTime())));
                 jsonObjectDeatailMsg.put("remark", toJson(wxMessageTemplateJsonData.getMaintainTaskDoneMessage()));
                 break;
             case Constant.WX_MSG_10_REPAIR_DONE_TO_CUSTOMER:
                 jsonObjectDeatailMsg.put("first", toJson(wxMessageTemplateJsonData.getCustomerName()));
                 jsonObjectDeatailMsg.put("keyword1", toJson(wxMessageTemplateJsonData.getRepairTaskName()));
                 jsonObjectDeatailMsg.put("keyword2", toJson(wxMessageTemplateJsonData.getRepairChargePerson()));
-                jsonObjectDeatailMsg.put("keyword3", toJson(wxMessageTemplateJsonData.getRepairActualTime().toString()));
+                jsonObjectDeatailMsg.put("keyword3", toJson(simpleDateFormat.format(wxMessageTemplateJsonData.getRepairActualTime())));
                 jsonObjectDeatailMsg.put("remark", toJson(wxMessageTemplateJsonData.getRepairTaskDoneMessage()));
                 break;
             default:
