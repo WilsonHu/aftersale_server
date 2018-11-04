@@ -110,6 +110,11 @@ public class WechatUserInfoController {
 
     private static final String msgCallerIsValid= "CallerIsValid";
 
+    @Value("${debug.flag}")
+    private String debugFlag;
+
+    private String globalMsg = null;
+
     @PostMapping("/add")
     public Result add(WechatUserInfo wechatUserInfo) {
         wechatUserInfoService.save(wechatUserInfo);
@@ -342,11 +347,13 @@ public class WechatUserInfoController {
                                     @RequestParam String timestamp,
                                     @RequestParam String nonce,
                                     @RequestParam(name = "echostr", required = false) String echostr, HttpServletResponse response ) {
-        System.out.println(" aaaaa echostr is : " + echostr);
-        logger.info("====wechatMessageVerify.  signature ========" + signature);
-        logger.info("====wechatMessageVerify.  timestamp ========" + timestamp);
-        logger.info("====wechatMessageVerify.  nonce ========" + nonce);
-        logger.info("====wechatMessageVerify.  echostr ========" + echostr);
+
+        if(debugFlag.equalsIgnoreCase("true")) {
+            logger.info("====wechatMessageVerify.  signature ========" + signature);
+            logger.info("====wechatMessageVerify.  timestamp ========" + timestamp);
+            logger.info("====wechatMessageVerify.  nonce ========" + nonce);
+            logger.info("====wechatMessageVerify.  echostr ========" + echostr);
+        }
         try
         {
             /**
@@ -441,11 +448,13 @@ public class WechatUserInfoController {
     @RequestMapping("/wechatRedirect")
     public String wechatRedirect(@RequestParam String code) throws IOException {
 
-        // TODO： 后期把多余的logger清掉避免泄密
-        logger.info("wechatRedirect get param code:" + code);
         String accessURL = String.format(urlGetOauth2AccessToken, wxGzhAppid, wxGzhSecret, code);
         String result = commonService.getHttpsResponse(accessURL, "GET");
-        logger.info("getAccessToke in: " + result);
+
+        if(debugFlag.equalsIgnoreCase("true")) {
+            logger.info("wechatRedirect get param code:" + code);
+            logger.info("getAccessToke in: " + result);
+        }
 
         Gson gson = new Gson();
         WxWebAccessTokenInfo tokenInfo = gson.fromJson(result, WxWebAccessTokenInfo.class);
@@ -462,8 +471,11 @@ public class WechatUserInfoController {
                 return "授权失败，请重试！";
             }
         } else {
-
-            return "授权失败，获取用户信息为空";
+            if(globalMsg == null){
+                return "授权失败，获取用户信息为空";
+            } else {
+                return "该用户已经授过权";
+            }
         }
     }
 
@@ -507,6 +519,11 @@ public class WechatUserInfoController {
          * 主要记录openId,只要openId存在就记录
          */
         if(openId != null){
+            if(wechatUserInfoService.getWechatUserInfoByUnionId(unionId) != null){
+                globalMsg = "该用户已经授过权" + nickname;
+                logger.info( globalMsg);
+                return null;
+            }
             wechatUserInfo.setOpenId(openId);
             wechatUserInfo.setUnionID(unionId);
             wechatUserInfo.setNickname(nickname);
