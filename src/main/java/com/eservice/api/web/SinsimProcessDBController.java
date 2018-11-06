@@ -51,7 +51,7 @@ public class SinsimProcessDBController {
     @PostMapping("/getMachineList")
     public Result getMachineList(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size,
                                  String orderNum, String nameplate, boolean isFuzzy) {
-        List<MachineInfosInProcessDb> list = prepareUnAssignedMachineService.getInstalledNotBoundMachineList();
+        List<MachineInfosInProcessDb> list = prepareUnAssignedMachineService.prepareUnAssignedMachine();
         List<MachineInfosInProcessDb>  tmpList1 = new ArrayList<>();
         List<MachineInfosInProcessDb>  tmpList = new ArrayList<>();
         ///根据铭牌号和订单号过滤

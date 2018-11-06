@@ -55,7 +55,7 @@ public class PrepareUnAssignedMachineService {
      * 每 60min 发一次
      */
     @Scheduled(fixedRate = 1000 * 60 * 15 )
-    public void prepareUnAssignedMachine() {
+    public List<MachineInfosInProcessDb> prepareUnAssignedMachine() {
         try {
             aftersaleMysqlConn = DriverManager.getConnection(aftersale_db_url,user_aftersale_db,password_aftersale_db);
             sinsimMysqlConn = DriverManager.getConnection(sinsim_db_url,user_sinsim_db,password_sinsim_db);
@@ -113,9 +113,6 @@ public class PrepareUnAssignedMachineService {
             e.printStackTrace();
             logger.info("Query data exception: " + e.toString());
         }
-    }
-
-    public List<MachineInfosInProcessDb> getInstalledNotBoundMachineList() {
         return installedNotBoundedMachineList;
     }
 }

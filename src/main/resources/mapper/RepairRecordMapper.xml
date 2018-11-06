@@ -253,7 +253,7 @@
 -- 		* 6：已转派，
 -- 		* 7：已完成(客户未确认)，
 -- 		* 8. 客户确认（维修成功）。转派后，前面的维修记录要保留，但是客户只需要看到成功的最后那次记录。
-		where (rr.status = 2 or rr.status = 3 or rr.status = 4 or rr.status = 5 or rr.status = 6 or rr.status = 7)
+		where (rr.status = 2 or rr.status = 3 or rr.status = 4 or rr.status = 7)
 		<if test="userName!=null and userName != '' ">
 			and (userOfMembersInRepairRecord.name = #{userName} or userOfChargeInRepairRecord.name = #{userName})
 		</if>

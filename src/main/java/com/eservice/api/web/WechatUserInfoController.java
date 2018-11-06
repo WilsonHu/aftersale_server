@@ -195,6 +195,14 @@ public class WechatUserInfoController {
                 String unionId = (String) jsonObject.get("unionid");
                 if(unionId != null){
                     /**
+                     * 需要已授权才允许登陆
+                     */
+                    if(wechatUserInfoService.getWechatUserInfoByUnionId(unionId) == null){
+                        message = "该账号未授权，请先到公众号授权（用于接受公众号消息）";
+                        logger.info(message);
+                        return ResultGenerator.genFailResult(message);
+                    }
+                    /**
                      * 账号和微信一一绑定
                      * 比如账号A在微信W1上登陆绑定后，A就无法再在其他微信比如微信W2上登陆。
                      */
