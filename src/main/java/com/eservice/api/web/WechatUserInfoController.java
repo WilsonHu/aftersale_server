@@ -35,6 +35,8 @@ import java.io.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
 * Class Description: xxx
@@ -507,6 +509,7 @@ public class WechatUserInfoController {
         String openId = (String) jsonObject.get("openid");
         String unionId = (String) jsonObject.get("unionid");
         String nickname = (String) jsonObject.get("nickname");
+        String nickNameWithoutEmoji = filterEmoji(nickname);
         String sex = null;
         if(jsonObject.get("sex") != null){
            sex = jsonObject.get("sex").toString();
@@ -534,7 +537,7 @@ public class WechatUserInfoController {
             }
             wechatUserInfo.setOpenId(openId);
             wechatUserInfo.setUnionID(unionId);
-            wechatUserInfo.setNickname(nickname);
+            wechatUserInfo.setNickname(nickNameWithoutEmoji);
             wechatUserInfo.setSex(sex);
             wechatUserInfo.setProvince(province);
             wechatUserInfo.setCity(city);
@@ -576,4 +579,24 @@ public class WechatUserInfoController {
         return ResultGenerator.genSuccessResult(wechatUserInfo);
     }
 
+    /**
+     * 把emoji处理为星号
+     * @param nick_name
+     * @return
+     */
+    private static String filterEmoji(String nick_name) {
+        //nick_name 所获取的用户昵称
+        if (nick_name == null) {
+            return nick_name;
+        }
+        Pattern emoji = Pattern.compile("[\ud83c\udc00-\ud83c\udfff]|[\ud83d\udc00-\ud83d\udfff]|[\u2600-\u27ff]",
+                Pattern.UNICODE_CASE | Pattern.CASE_INSENSITIVE);
+        Matcher emojiMatcher = emoji.matcher(nick_name);
+        if (emojiMatcher.find()) {
+            //将所获取的表情转换为*
+            nick_name = emojiMatcher.replaceAll("*");
+            return nick_name;
+        }
+        return nick_name;
+    }
 }
