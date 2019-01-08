@@ -1,6 +1,5 @@
 package com.eservice.api.web;
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 import com.eservice.api.core.Result;
 import com.eservice.api.core.ResultGenerator;
@@ -8,7 +7,6 @@ import com.eservice.api.model.user.User;
 import com.eservice.api.model.wechat_user_info.WechatUserInfo;
 import com.eservice.api.service.common.CommonService;
 import com.eservice.api.service.common.Constant;
-import com.eservice.api.service.common.WxMessageTemplateJsonData;
 import com.eservice.api.service.common.WxWebAccessTokenInfo;
 import com.eservice.api.service.impl.UserServiceImpl;
 import com.eservice.api.service.impl.WechatUserInfoServiceImpl;
@@ -341,7 +339,7 @@ public class WechatUserInfoController {
         return requestUrlParam;
     }
     /**
-     * 验证消息来自微信。
+     * 验证消息来自微信。对比签名：发送来的消息的签名和本地生成的签名。
      * 若确认此次GET请求来自微信服务器，请原样返回echostr参数内容，则接入生效，成为开发者成功，否则接入失败。
      *
      * @param signature 	微信加密签名，signature结合了开发者填写的token参数和请求中的timestamp参数、nonce参数。
@@ -364,19 +362,17 @@ public class WechatUserInfoController {
             logger.info("====wechatMessageVerify.  nonce ========" + nonce);
             logger.info("====wechatMessageVerify.  echostr ========" + echostr);
         }
+
         try
         {
             /**
              * 提供接收和推送给公众平台消息的加解密接口
              */
             WXBizMsgCrypt pc = new WXBizMsgCrypt(wxToken, wxEncodingAesKey, wxGzhAppid);
-
             /**
              * 将公众平台回复用户的消息加密打包
              */
             String mingwen = pc.encryptMsg(echostr, timestamp, nonce);
-            System.out.println("加密后: " + mingwen);
-
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 
             dbf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
@@ -386,13 +382,11 @@ public class WechatUserInfoController {
 
             dbf.setXIncludeAware(false);
             dbf.setExpandEntityReferences(false);
-
             DocumentBuilder db = dbf.newDocumentBuilder();
 
             StringReader sr = new StringReader(mingwen);
             InputSource is = new InputSource(sr);
             Document document = db.parse(is);
-
             Element root = document.getDocumentElement();
             NodeList nodelist1 = root.getElementsByTagName("Encrypt");
             NodeList nodelist2 = root.getElementsByTagName("MsgSignature");
@@ -402,14 +396,13 @@ public class WechatUserInfoController {
 
             String format = "<xml><ToUserName><![CDATA[toUser]]></ToUserName><Encrypt><![CDATA[%1$s]]></Encrypt></xml>";
             String fromXML = String.format(format, encrypt);
-
             /**
              * 第三方收到公众号平台发送的消息
              * 检验消息的真实性，并且获取解密后的明文
+             * 如果签名不相同，则抛出异常
              */
 //            String result2 = pc.decryptMsg(signature, timestamp, nonce, echoStr);
-            String result2 = pc.decryptMsg(signature, timestamp, nonce, fromXML);
-            System.out.println("解密后明文: " + result2);
+            String result2 = pc.decryptMsg(msgSignature, timestamp, nonce, fromXML);
 //            return ResultGenerator.genSuccessResult("aaa");
             logger.info("====wechatMessageVerify. out write ======== " + echostr);
 
