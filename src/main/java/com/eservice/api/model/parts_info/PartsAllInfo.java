@@ -38,4 +38,17 @@ public class PartsAllInfo extends PartsInfo {
     public void setCustomerNameInRepairRecord(String customerNameInRepairRecord){
         this.customerNameInRepairRecord = customerNameInRepairRecord;
     }
+
+    /**
+     * 机器编号
+     */
+    private String machineNameplate;
+
+    public void setMachineNameplate(String machineNameplate) {
+        this.machineNameplate = machineNameplate;
+    }
+
+    public String getMachineNameplate() {
+        return machineNameplate;
+    }
 }

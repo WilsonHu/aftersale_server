@@ -35,6 +35,7 @@
     <result column="sendbackConfirmedPersonName" jdbcType="VARCHAR" property="sendbackConfirmedPersonName" />
     <result column="repairChargePersonName" jdbcType="VARCHAR" property="repairChargePersonName" />
     <result column="customerNameInRepairRecord" jdbcType="VARCHAR" property="customerNameInRepairRecord" />
+    <result column="machineNameplate" jdbcType="VARCHAR" property="machineNameplate" />
   </resultMap>
 
 
@@ -122,6 +123,7 @@
 
   <select id="getPartsInfoList" resultMap="PartsAllInfoMap">
     SELECT
+    m.nameplate as machineNameplate,
     parts_info.*,
     userOfSendbackConfirmedPerson.`name`  AS sendbackConfirmedPersonName,
     userOfRepairChargePerson.`name` AS repairChargePersonName,
