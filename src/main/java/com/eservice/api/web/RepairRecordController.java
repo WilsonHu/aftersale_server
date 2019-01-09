@@ -56,6 +56,12 @@ public class RepairRecordController {
     @Value("${debug.flag}")
     private String debugFlag;
 
+    @Value("${WX_TEMPLATE_3_TASK_ACCEPTED}")
+    private String WX_TEMPLATE_3_TASK_ACCEPTED;
+
+    @Value("${WX_TEMPLATE_2_TASK_COMMING}")
+    private String WX_TEMPLATE_2_TASK_COMMING;
+
     @PostMapping("/add")
     public Result add(@RequestBody @NotNull RepairRecord repairRecord) {
         repairRecord.setRepairRecordNum(CommonUtils.generateSequenceNo());
@@ -119,7 +125,7 @@ public class RepairRecordController {
                 wxMessageTemplateJsonData.setRepairPlanDate(repairRecordOld.getRepairPlanDate());
                 wxMessageTemplateJsonData.setRepairTaskMessage("请知悉");
                 wechatUserInfoService.sendMsgTemplate(customer.getAccount(),
-                        Constant.WX_TEMPLATE_3_TASK_ACCEPTED,
+                        WX_TEMPLATE_3_TASK_ACCEPTED,
                         Constant.WX_MSG_7_REPAIR_ACCEPT_TO_CUSTOMER,
                         JSONObject.toJSONString(wxMessageTemplateJsonData));
 
@@ -296,7 +302,7 @@ public class RepairRecordController {
 
             for (User u : userOfMembersNewAdd) {
                 wechatUserInfoService.sendMsgTemplate(u.getAccount(),
-                        Constant.WX_TEMPLATE_2_TASK_COMMING,
+                        WX_TEMPLATE_2_TASK_COMMING,
                         Constant.WX_MSG_4_REPAIR_TASK_TO_EMPLOYEE,
                         JSONObject.toJSONString(wxMessageTemplateJsonData));
             }
@@ -382,7 +388,7 @@ public class RepairRecordController {
             }
             for (User u : userOfMembersNewAdd) {
                 wechatUserInfoService.sendMsgTemplate(u.getAccount(),
-                        Constant.WX_TEMPLATE_2_TASK_COMMING,
+                        WX_TEMPLATE_2_TASK_COMMING,
                         Constant.WX_MSG_4_REPAIR_TASK_TO_EMPLOYEE,
                         JSONObject.toJSONString(wxMessageTemplateJsonData));
             }

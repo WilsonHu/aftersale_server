@@ -28,7 +28,7 @@ public class UserController {
     @PostMapping("/addStaff")
     public Result addStaff(@RequestBody @NotNull User user) {
         if(userService.selectByAccount(user.getAccount()) != null) {
-            return ResultGenerator.genFailResult("用户名已存在！");
+            return ResultGenerator.genFailResult("账号已存在！");
         }
         user.setPassword("password");
         user.setValid("1");

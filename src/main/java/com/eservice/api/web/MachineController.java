@@ -56,6 +56,9 @@ public class MachineController {
 
     @Value("${debug.flag}")
     private String debugFlag;
+    
+    @Value("${WX_TEMPLATE_1_BOOK_SUCCESS}")
+    private String WX_TEMPLATE_1_BOOK_SUCCESS;
 
     @Resource
     private PrepareUnAssignedMachineService prepareUnAssignedMachineService;
@@ -125,7 +128,7 @@ public class MachineController {
                     String msg = Constant.WX_MSG_1.replace("FactoryDate", dateStr);
                     wxMessageTemplateJsonData.setMessageOfMachineBind(msg);
                     message = wechatUserInfoService.sendMsgTemplate(customer.getAccount(),
-                            Constant.WX_TEMPLATE_1_BOOK_SUCCESS,
+                            WX_TEMPLATE_1_BOOK_SUCCESS,
                             Constant.WX_MSG_1_MACHINE_BIND_TO_CUSTOMER,
                             JSONObject.toJSONString(wxMessageTemplateJsonData));
 

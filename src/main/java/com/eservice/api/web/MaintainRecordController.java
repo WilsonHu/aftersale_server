@@ -56,6 +56,15 @@ public class MaintainRecordController {
     @Value("${debug.flag}")
     private String debugFlag;
 
+    @Value("${WX_TEMPLATE_3_TASK_ACCEPTED}")
+    private String WX_TEMPLATE_3_TASK_ACCEPTED;
+
+    @Value("${WX_TEMPLATE_4_TASK_DONE}")
+    private String WX_TEMPLATE_4_TASK_DONE;
+
+    @Value("${WX_TEMPLATE_2_TASK_COMMING}")
+    private String WX_TEMPLATE_2_TASK_COMMING;
+
     private String generateMaintainInfo(String libName) {
         String result = "";
         List<MaintainData> maintainDataList = new ArrayList<MaintainData>();
@@ -157,7 +166,7 @@ public class MaintainRecordController {
                 wxMessageTemplateJsonData.setMaintainPlanDate(maintainRecordOld.getMaintainDatePlan());
                 wxMessageTemplateJsonData.setMaintainTaskMessage("请知悉");
                 wechatUserInfoService.sendMsgTemplate(customer.getAccount(),
-                        Constant.WX_TEMPLATE_3_TASK_ACCEPTED,
+                        WX_TEMPLATE_3_TASK_ACCEPTED,
                         Constant.WX_MSG_6_MAINTAIN_ACCEPT_TO_CUSTOMER,
                         JSONObject.toJSONString(wxMessageTemplateJsonData));
 
@@ -177,7 +186,7 @@ public class MaintainRecordController {
                 wxMessageTemplateJsonData.setMaintainActualTime(maintainRecordOld.getMaintainDatePlan());
                 wxMessageTemplateJsonData.setMaintainTaskDoneMessage("请知悉");
                 wechatUserInfoService.sendMsgTemplate(customer.getAccount(),
-                        Constant.WX_TEMPLATE_4_TASK_DONE,
+                        WX_TEMPLATE_4_TASK_DONE,
                         Constant.WX_MSG_9_MAINTAIN_DONE_TO_CUSTOMER,
                         JSONObject.toJSONString(wxMessageTemplateJsonData));
             }
@@ -349,7 +358,7 @@ public class MaintainRecordController {
 
             for (User u : userOfMembersNewAdd) {
                 wechatUserInfoService.sendMsgTemplate(u.getAccount(),
-                        Constant.WX_TEMPLATE_2_TASK_COMMING,
+                        WX_TEMPLATE_2_TASK_COMMING,
                         Constant.WX_MSG_3_MAINTAIN_TASK_TO_EMPLOYEE,
                         JSONObject.toJSONString(wxMessageTemplateJsonData));
             }

@@ -198,18 +198,6 @@ public class Constant {
     public static final String WX_MSG_9_MAINTAIN_DONE_TO_CUSTOMER = "WX_TEMPLATE_NO9_MAINTAIN_DONE_TO_CUSTOMER";
     public static final String WX_MSG_10_REPAIR_DONE_TO_CUSTOMER = "WX_TEMPLATE_NO10_REPAIR_DONE_TO_CUSTOMER";
 
-    /**
-     * 模板号
-     * 1：预定成功通知
-     * 2：任务分派提醒
-     * 3：订单受理成功通知
-     * 4：任务已完成通知
-     */
-    public static final String WX_TEMPLATE_1_BOOK_SUCCESS = "fbg_nVLRWSmcq1Tp5G2-L9WaWrc-ggP-rIsC2Dir42s";
-    public static final String WX_TEMPLATE_2_TASK_COMMING = "Zybl6os4A5T9FtToXSAGoN2DN57j8X-oHhexhfo8XU4";
-    public static final String WX_TEMPLATE_3_TASK_ACCEPTED = "zhOeyr_BSquYLVhrmeLpHSibZdXpKrSP9ycUK6daEt8";
-    public static final String WX_TEMPLATE_4_TASK_DONE = "shuxRtXLw_Jqhz6SIKeFg9A1CJ6eBspQFdYS5kUkUAQ";
-
     public static final String WX_MSG_SEND_SUCCESS = "模板发送成功！";
     public static final String WX_MSG_1 = "你订购的机器已经就绪，预定出厂日期 FactoryDate";
 

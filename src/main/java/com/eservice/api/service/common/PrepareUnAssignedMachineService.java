@@ -60,7 +60,7 @@ public class PrepareUnAssignedMachineService {
             aftersaleMysqlConn = DriverManager.getConnection(aftersale_db_url,user_aftersale_db,password_aftersale_db);
             sinsimMysqlConn = DriverManager.getConnection(sinsim_db_url,user_sinsim_db,password_sinsim_db);
             ResultSet rs1 = aftersaleMysqlConn.prepareStatement("SELECT * FROM machine").executeQuery();
-            ResultSet rs2 = sinsimMysqlConn.prepareStatement(" select m.*,mo.needle_num,mo.head_num,mo.head_distance,mo.x_distance,mo.y_distance,mo.order_num, mt.name as machine_type_name,c.contract_num,c.customer_name" +
+            ResultSet rs2 = sinsimMysqlConn.prepareStatement(" select m.*,mo.contract_ship_date,mo.needle_num,mo.head_num,mo.head_distance,mo.x_distance,mo.y_distance,mo.order_num, mt.name as machine_type_name,c.contract_num,c.customer_name" +
                     " from  machine m " +
                     "left join machine_order mo on mo.id=m.order_id " +
                     "left join machine_type mt on mt.id=m.machine_type " +
@@ -79,6 +79,8 @@ public class PrepareUnAssignedMachineService {
                 machine.setHeadDistance(rs2.getString("head_distance"));
                 machine.setxDistance(rs2.getString("x_distance"));
                 machine.setyDistance(rs2.getString("y_distance"));
+                machine.setShipTime(rs2.getDate("contract_ship_date"));
+
                 installedMachineList.add(machine);
             }
             logger.info("Scheduled Query: installedMachineList size : " + installedMachineList.size());

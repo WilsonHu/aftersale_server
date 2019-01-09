@@ -55,6 +55,9 @@ public class RepairActualInfoController {
     @Value("${repair_actual_info_img_dir}")
     private String repairActualInfoImgDir;
 
+    @Value("${WX_TEMPLATE_4_TASK_DONE}")
+    private String WX_TEMPLATE_4_TASK_DONE;
+
     @Resource
     private WechatUserInfoServiceImpl wechatUserInfoService;
 
@@ -264,7 +267,7 @@ public class RepairActualInfoController {
                         wxMessageTemplateJsonData.setRepairActualTime(repairRecordOld.getRepairPlanDate());
                         wxMessageTemplateJsonData.setRepairTaskDoneMessage("请知悉");
                         wechatUserInfoService.sendMsgTemplate(customer.getAccount(),
-                                Constant.WX_TEMPLATE_4_TASK_DONE,
+                                WX_TEMPLATE_4_TASK_DONE,
                                 Constant.WX_MSG_10_REPAIR_DONE_TO_CUSTOMER,
                                 JSONObject.toJSONString(wxMessageTemplateJsonData));
                 } catch (Exception e) {

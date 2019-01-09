@@ -127,7 +127,8 @@ public class WechatUserInfoServiceImpl extends AbstractService<WechatUserInfo> i
         } else if (user.getRoleId() == Constant.ROLE_ID_EMPLOYEE){
             jsonMiniProgram.put("appid", wxspAppidYuangongduan);
         }
-        jsonMiniProgram.put("pagepath","pages/authorize");
+        //jsonMiniProgram.put("pagepath","pages/authorize");
+        jsonMiniProgram.put("path","pages/authorize");
         jsonObject.put("miniprogram",jsonMiniProgram);
         jsonObject.put("topcolor", "#FF0000");
 

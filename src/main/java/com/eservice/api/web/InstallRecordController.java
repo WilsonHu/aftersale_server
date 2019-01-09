@@ -58,6 +58,15 @@ public class InstallRecordController {
     @Value("${debug.flag}")
     private String debugFlag;
 
+    @Value("${WX_TEMPLATE_3_TASK_ACCEPTED}")
+    private String WX_TEMPLATE_3_TASK_ACCEPTED;
+
+    @Value("${WX_TEMPLATE_4_TASK_DONE}")
+    private String WX_TEMPLATE_4_TASK_DONE;
+
+    @Value("${WX_TEMPLATE_2_TASK_COMMING}")
+    private String WX_TEMPLATE_2_TASK_COMMING;
+
     @Resource
     private WechatUserInfoServiceImpl wechatUserInfoService;
     @PostMapping("/add")
@@ -123,7 +132,7 @@ public class InstallRecordController {
                 wxMessageTemplateJsonData.setInstallPlanDate(installRecordOld.getInstallPlanDate());
                 wxMessageTemplateJsonData.setInstallTaskMessage("请知悉");
                 wechatUserInfoService.sendMsgTemplate(customer.getAccount(),
-                        Constant.WX_TEMPLATE_3_TASK_ACCEPTED,
+                        WX_TEMPLATE_3_TASK_ACCEPTED,
                         Constant.WX_MSG_5_INSTALLER_ACCEPT_TO_CUSTOMER,
                         JSONObject.toJSONString(wxMessageTemplateJsonData));
 
@@ -143,7 +152,7 @@ public class InstallRecordController {
                 wxMessageTemplateJsonData.setInstallActualTime(installRecordOld.getInstallPlanDate());
                 wxMessageTemplateJsonData.setInstallTaskDoneMessage("请知悉");
                 wechatUserInfoService.sendMsgTemplate(customer.getAccount(),
-                        Constant.WX_TEMPLATE_4_TASK_DONE,
+                        WX_TEMPLATE_4_TASK_DONE,
                         Constant.WX_MSG_8_INSTALL_DONE_TO_CUSTOMER,
                         JSONObject.toJSONString(wxMessageTemplateJsonData));
             }
@@ -346,7 +355,7 @@ public class InstallRecordController {
             }
             for (User u : userOfMembersNewAdd) {
                 wechatUserInfoService.sendMsgTemplate(u.getAccount(),
-                        Constant.WX_TEMPLATE_2_TASK_COMMING,
+                        WX_TEMPLATE_2_TASK_COMMING,
                         Constant.WX_MSG_2_INSTALL_TASK_TO_EMPLOYEE,
                         JSONObject.toJSONString(wxMessageTemplateJsonData));
             }
