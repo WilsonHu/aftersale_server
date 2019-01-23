@@ -60,7 +60,7 @@ public class PrepareUnAssignedMachineService {
             aftersaleMysqlConn = DriverManager.getConnection(aftersale_db_url,user_aftersale_db,password_aftersale_db);
             sinsimMysqlConn = DriverManager.getConnection(sinsim_db_url,user_sinsim_db,password_sinsim_db);
             ResultSet rs1 = aftersaleMysqlConn.prepareStatement("SELECT * FROM machine").executeQuery();
-            ResultSet rs2 = sinsimMysqlConn.prepareStatement(" select m.*,mo.contract_ship_date,mo.needle_num,mo.head_num,mo.head_distance,mo.x_distance,mo.y_distance,mo.order_num, mt.name as machine_type_name,c.contract_num,c.customer_name" +
+            ResultSet rs2 = sinsimMysqlConn.prepareStatement(" select m.*,mo.contract_ship_date,mt.`name` as machine_type_name," +                    "mo.needle_num,mo.head_num,mo.head_distance,mo.x_distance,mo.y_distance,mo.order_num, mt.name as machine_type_name,c.contract_num,c.customer_name" +
                     " from  machine m " +
                     "left join machine_order mo on mo.id=m.order_id " +
                     "left join machine_type mt on mt.id=m.machine_type " +
@@ -73,6 +73,7 @@ public class PrepareUnAssignedMachineService {
                 machine.setOrderId(rs2.getInt("order_id"));
                 machine.setNameplate(rs2.getString("nameplate"));
                 machine.setMachineType(rs2.getInt("machine_type"));
+                machine.setMachineTypeName(rs2.getString("machine_type_name"));
                 machine.setOrderNum(rs2.getString("order_num"));
                 machine.setNeedleNum(rs2.getString("needle_num"));
                 machine.setHeadNum(rs2.getString("head_num"));

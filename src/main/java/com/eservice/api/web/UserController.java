@@ -61,10 +61,13 @@ public class UserController {
 
     @PostMapping("/update")
     public Result update(@RequestBody @NotNull User user) {
-
+        if(userService.selectByAccount(user.getAccount()) != null) {
+            return ResultGenerator.genFailResult("账号已存在！");
+        }
         if(user.getAgent() == null) {
             user.setAgent(0);
         }
+
         userService.update(user);
         return ResultGenerator.genSuccessResult();
     }
