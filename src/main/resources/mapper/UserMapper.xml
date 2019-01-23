@@ -94,6 +94,7 @@
 		<if test="customerCompany != null and customerCompany != ''">
 			and u.customer_company = #{customerCompany}
 		</if>
+			and u.valid = '1'
 	</select>
 
 	<select id="selectUsers" resultMap="BaseResultMap">
@@ -186,5 +187,6 @@
 		<if test="agentId != null and agentId != ''">
 			AND u.agent = #{agentId}
 		</if>
+		and u.valid = '1'
 	</select>
 </mapper>

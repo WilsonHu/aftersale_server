@@ -8,6 +8,7 @@ import com.eservice.api.model.user.UserInfo;
 import com.eservice.api.service.impl.UserServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.apache.log4j.Logger;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -24,6 +25,7 @@ import java.util.*;
 public class UserController {
     @Resource
     private UserServiceImpl userService;
+    private Logger logger = Logger.getLogger(UserController.class);
 
     @PostMapping("/addStaff")
     public Result addStaff(@RequestBody @NotNull User user) {
@@ -108,6 +110,7 @@ public class UserController {
         }else {
             User user  = userService.requestLogin(account, password,unionid);
             if(user == null) {
+                logger.info("账号/密码/unionid 不正确！ " + account + "/" +password + "/" + unionid);
                 return ResultGenerator.genFailResult("账号/密码/unionid 不正确！");
             }else {
                 return ResultGenerator.genSuccessResult(user);
