@@ -30,7 +30,7 @@ public class UserController {
         if(userService.selectByAccount(user.getAccount()) != null) {
             return ResultGenerator.genFailResult("账号已存在！");
         }
-        user.setPassword("password");
+        user.setPassword("sinsim");
         user.setValid("1");
         user.setCreateTime(new Date());
         userService.save(user);
@@ -61,9 +61,9 @@ public class UserController {
 
     @PostMapping("/update")
     public Result update(@RequestBody @NotNull User user) {
-        if(userService.selectByAccount(user.getAccount()) != null) {
-            return ResultGenerator.genFailResult("账号已存在！");
-        }
+//        if(userService.selectByAccount(user.getAccount()) != null) {
+//            return ResultGenerator.genFailResult("账号已存在！");
+//        } 需要前端把账号设为不可改。
         if(user.getAgent() == null) {
             user.setAgent(0);
         }
