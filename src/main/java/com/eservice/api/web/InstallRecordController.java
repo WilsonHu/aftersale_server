@@ -267,7 +267,8 @@ public class InstallRecordController {
 
     /**
      * 根据用户(无论是负责人还是安装成员)返回他的安装待处理机器,如果用户为空则返回所有待处理的安装相关的机器。
-     * TODO: 确认是否重复数据问题 ---应该是假数据本身问题，待后面真实数据再确认一次。
+     *
+     * 2019-01-23： 其实是根据account来查询，不是name来查询。接口名称先不改，调用者也可以不改。
      */
     @PostMapping("/selectInstallTaskByUser")
     public Result selectInstallTaskByUser(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size,

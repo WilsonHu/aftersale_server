@@ -227,6 +227,8 @@ public class RepairRecordController {
      * 根据用户(无论是负责人还是维修成员)返回他的维修待处理 任务
      * 确实返回“重复”数据， 是因为没有用到repairMember，算上repairMember是不重复的。
      * 维修成员也必须看到维修任务，由前端对“重复”数据进行去重。
+     *
+     *  2019-01-23： 其实是根据account来查询，不是name来查询。接口名称先不改，调用者也可以不改。
      */
     @PostMapping("/selectRepairTaskByUser")
     public Result selectRepairTaskByUser(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size,

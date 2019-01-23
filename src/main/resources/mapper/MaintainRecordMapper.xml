@@ -200,7 +200,7 @@
     -- 保养状态 0：待分配，1：已分配(但未接单）2：已接受任务，3：保养完成(客户未确认)，4：客户已确认保养结果
         (mr.maintain_status = 1 or mr.maintain_status = 2 or  mr.maintain_status = 3 )
         <if test="userName!=null and userName != '' ">
-            and (userOfMembersInMaintainRecord.name = #{userName} or  userOfChargeInMaintainRecord.name = #{userName})
+            and (userOfMembersInMaintainRecord.account = #{userName} or userOfChargeInMaintainRecord.account = #{userName})
         </if>
         order by mr.update_time desc, mr.create_time desc
     </select>

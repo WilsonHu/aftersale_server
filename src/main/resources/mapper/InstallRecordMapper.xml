@@ -260,7 +260,7 @@
 --     4：已确认
     where (ir.install_status = 1 or ir.install_status = 2 or  ir.install_status = 3 )
     <if test="userName!=null and userName != '' ">
-      and (userOfMembersInInstallRecord.name = #{userName} or  userOfChargeInInstallRecord.name = #{userName})
+      and (userOfMembersInInstallRecord.account = #{userName} or  userOfChargeInInstallRecord.account = #{userName})
     </if>
     order by ir.update_time desc, ir.create_time desc
   </select>

@@ -179,6 +179,7 @@ public class PartsInfoController {
     /**
      * 根据用户名查询该用户负责的维修的待寄回任务（包括已寄回还等待信胜确认）的配件及相关维修信息
      * userName：客户方的维修联系人名字
+     *  2019-01-23： 其实是根据account来查询，不是name来查询。接口名称先不改，调用者也可以不改。
      */
     @PostMapping("/getPartsInfoTaskByUserName")
     public Result getPartsInfoTaskByUserName(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size,

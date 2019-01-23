@@ -245,7 +245,7 @@
     WHERE 1=1
     --  1: 无需回寄，其他表示需要寄回(具体 2：未寄回，3：已寄回（待确认），4：已确认)
     AND (parts_info.parts_status = '2' or parts_info.parts_status = '3')
-    AND userOfCustomerInRepairRecord.`name` = #{userName}
+    AND userOfCustomerInRepairRecord.`account` = #{userName}
   </select>
 
 </mapper>

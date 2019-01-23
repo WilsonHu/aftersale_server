@@ -255,7 +255,7 @@
 -- 		* 8. 客户确认（维修成功）。转派后，前面的维修记录要保留，但是客户只需要看到成功的最后那次记录。
 		where (rr.status = 2 or rr.status = 3 or rr.status = 4 or rr.status = 7)
 		<if test="userName!=null and userName != '' ">
-			and (userOfMembersInRepairRecord.name = #{userName} or userOfChargeInRepairRecord.name = #{userName})
+			and (userOfMembersInRepairRecord.account = #{userName} or userOfChargeInRepairRecord.account = #{userName})
 		</if>
 		order by rr.update_time desc, rr.create_time desc
 	</select>
