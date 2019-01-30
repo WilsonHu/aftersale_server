@@ -184,7 +184,7 @@
       <if test="query_finish_time_install!=null and query_finish_time_install != '' ">
           and DATE_FORMAT(install_actual_time,'%Y-%m-%d %T') &lt;= #{query_finish_time_install}
       </if>
-      ORDER By ir.install_actual_time DESC
+      ORDER By ir.install_actual_time, m.facory_date DESC
 
   </select>
 
