@@ -6,6 +6,7 @@ import com.eservice.api.model.machine.Machine;
 import com.eservice.api.model.machine.MachineInfo;
 import com.eservice.api.model.machine.MachineInfosInProcessDb;
 import com.eservice.api.model.machine.MachineType;
+import com.eservice.api.model.user.CustomerInContract;
 import com.eservice.api.service.common.PrepareUnAssignedMachineService;
 import com.eservice.api.service.impl.MachineServiceImpl;
 import com.github.pagehelper.PageHelper;
@@ -107,6 +108,18 @@ public class SinsimProcessDBController {
         PageHelper.startPage(page, size);
         String query = "select * from machine_type";
         List<MachineType> list = dataSourceSinsimProcessDbTemplate.query(query, new BeanPropertyRowMapper(MachineType.class));
+        PageInfo pageInfo = new PageInfo(list);
+        return ResultGenerator.genSuccessResult(pageInfo);
+    }
+
+    /**
+     * 返回生产部合同里的客户名单，已去重
+     */
+    @PostMapping("/getCustomerNameList")
+    public Result getCustomerNameList(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size) {
+        PageHelper.startPage(page, size);
+        String query = "SELECT DISTINCT * FROM contract ORDER BY customer_name";
+        List<CustomerInContract> list = dataSourceSinsimProcessDbTemplate.query(query, new BeanPropertyRowMapper(CustomerInContract.class));
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
     }
