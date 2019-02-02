@@ -159,8 +159,9 @@ public class MachineController {
         List<MachineInfo> machineList = machineService.getSaledMachineInfoList(machine.getNameplate(), null,
                 null, null, null, null, null,null, null, false, false);
         for (Machine info : machineList) {
-            if (info.getId() != machine.getId()) {
-                return ResultGenerator.genFailResult(machine.getNameplate() + "机器已存在,不能修改！");
+            if (! info.getId().equals( machine.getId())) {
+                logger.info(machine.getNameplate() + "铭牌号已存在,不能修改！");
+                return ResultGenerator.genFailResult(machine.getNameplate() + "铭牌号已存在,不能修改！");
             }
         }
         machineService.update(machine);
