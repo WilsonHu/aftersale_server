@@ -150,6 +150,11 @@ public class MachineController {
 
     @PostMapping("/delete")
     public Result delete(@RequestParam Integer id) {
+        List<InstallRecord> list = installRecordService.selectByNameplate(machineService.findById(id).getNameplate());
+        for (int i = 0; i < list.size(); i++) {
+            installRecordService.deleteById(list.get(i).getId());
+            logger.info(list.get(i).getId() + " install record is deleted");
+        }
         machineService.deleteById(id);
         return ResultGenerator.genSuccessResult();
     }
