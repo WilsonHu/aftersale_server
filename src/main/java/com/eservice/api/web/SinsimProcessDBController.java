@@ -118,7 +118,7 @@ public class SinsimProcessDBController {
     @PostMapping("/getCustomerNameList")
     public Result getCustomerNameList(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size) {
         PageHelper.startPage(page, size);
-        String query = "SELECT DISTINCT * FROM contract ORDER BY customer_name";
+        String query = "SELECT DISTINCT customer_name FROM contract ORDER BY customer_name";
         List<CustomerInContract> list = dataSourceSinsimProcessDbTemplate.query(query, new BeanPropertyRowMapper(CustomerInContract.class));
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
