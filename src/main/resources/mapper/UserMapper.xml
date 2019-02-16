@@ -188,5 +188,6 @@
 			AND u.agent = #{agentId}
 		</if>
 		and u.valid = '1'
+		ORDER BY CONVERT( u.`name` USING gbk ) COLLATE gbk_chinese_ci ASC
 	</select>
 </mapper>
