@@ -222,7 +222,7 @@
 		<if test="queryFinishRepairEndTime!=null and queryFinishRepairEndTime != '' ">
 			and DATE_FORMAT( rr.repair_end_time,'%Y-%m-%d %T') &lt;= #{queryFinishRepairEndTime}
 		</if>
-		ORDER BY update_time DESC, create_time DESC, rr.repair_plan_date DESC, rr.repair_start_time DESC, rr.repair_end_time DESC
+		ORDER BY rr.create_time DESC, rr.update_time DESC, rr.repair_plan_date DESC, rr.repair_start_time DESC, rr.repair_end_time DESC
 	</select>
 
 	<select id="selectRepairTaskByUser" resultMap="RepairRecordInfoMap">

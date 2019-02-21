@@ -230,7 +230,7 @@
       AND ir.id = '${installRecordId}'
     </if>
 
-    ORDER By ir.create_time DESC
+    ORDER By ir.create_time DESC, ir.update_time DESC, ir.install_actual_time DESC, ir.install_plan_date DESC, m.facory_date DESC
   </select>
 
   <select id="selectInstallTaskByUser" resultMap="com.eservice.api.dao.InstallRecordMapper.InstallRecordInfoMap">
