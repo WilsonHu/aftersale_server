@@ -162,6 +162,7 @@ public class WechatUserInfoController {
                                          @RequestParam(defaultValue = "0") String roleOfCaller) {
 
         String message = null;
+        logger.info("loginGetUnionIdAndSave " + account +": " + password + ": " + roleOfCaller);
         if(account == null || "".equals(account)) {
             return ResultGenerator.genFailResult("账号不能为空！");
         } else if(password == null || "".equals(password)) {
