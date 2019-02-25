@@ -62,6 +62,12 @@ public class WechatUserInfoServiceImpl extends AbstractService<WechatUserInfo> i
     @Value("${wx.wxspAppidYuangongduan}")
     private String wxspAppidYuangongduan;
 
+    @Value("${specialAccount1ToReceiveRepairRequest}")
+    private String specialAccount1ToReceiveRepairRequest;
+
+    @Value("${specialAccount2ToReceiveRepairRequest}")
+    private String specialAccount2ToReceiveRepairRequest;
+
     /**
      * 该url获取模板
      */
@@ -129,7 +135,12 @@ public class WechatUserInfoServiceImpl extends AbstractService<WechatUserInfo> i
         }
         //jsonMiniProgram.put("pagepath","pages/authorize");
         jsonMiniProgram.put("path","pages/authorize");
-        jsonObject.put("miniprogram",jsonMiniProgram);
+        //role=2（管理员）和特别某2个账号，有报修信息时通知一下，但是不要跳转
+        if(user.getRoleId() != 2
+                && !user.getAccount().equals(specialAccount1ToReceiveRepairRequest)
+                && !user.getAccount().equals(specialAccount2ToReceiveRepairRequest)) {
+            jsonObject.put("miniprogram", jsonMiniProgram);
+        }
         jsonObject.put("topcolor", "#FF0000");
 
         WxMessageTemplateJsonData wxMessageTemplateJsonData = JSONObject.parseObject(jsonMsgData,WxMessageTemplateJsonData.class);

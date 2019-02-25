@@ -7,6 +7,7 @@ import com.eservice.api.model.machine.Machine;
 import com.eservice.api.model.repair_record.RepairRecord;
 import com.eservice.api.model.repair_request_info.RepairRequestInfo;
 import com.eservice.api.model.user.User;
+import com.eservice.api.model.user.UserInfo;
 import com.eservice.api.service.common.CommonService;
 import com.eservice.api.service.common.Constant;
 import com.eservice.api.service.common.WxMessageTemplateJsonData;
@@ -61,6 +62,12 @@ public class RepairRequestInfoController {
 
     @Value("${WX_TEMPLATE_5_REPAIR_TASK}")
     private String WX_TEMPLATE_5_REPAIR_TASK;
+
+    @Value("${specialAccount1ToReceiveRepairRequest}")
+    private String specialAccount1ToReceiveRepairRequest;
+
+    @Value("${specialAccount2ToReceiveRepairRequest}")
+    private String specialAccount2ToReceiveRepairRequest;
 
     @Resource
     private WechatUserInfoServiceImpl wechatUserInfoService;
@@ -156,8 +163,6 @@ public class RepairRequestInfoController {
             /**
              * 收到报修时, 发送消息给管理员等
              */
-
-            User msgReceiver = userService.selectByAccount("wxm");
             User customerReuested = userService.findById(repairRequestInfo1.getCustomer());
             Machine machine = machineService.findBy("nameplate", repairRequestInfo1.getNameplate());
             WxMessageTemplateJsonData wxMessageTemplateJsonData = new WxMessageTemplateJsonData();
@@ -176,11 +181,25 @@ public class RepairRequestInfoController {
                 wxMessageTemplateJsonData.setMachineType(machine.getMachineType());
             }
             wxMessageTemplateJsonData.setRepairRequestBornMessage(repairRequestInfo1.getRepairTitle());
-            wechatUserInfoService.sendMsgTemplate(msgReceiver.getAccount(),
+
+            List<UserInfo> userList = userService.getUsersByType("2",null,null);
+            for (UserInfo u:userList) {
+                wechatUserInfoService.sendMsgTemplate(u.getAccount(),
+                        WX_TEMPLATE_5_REPAIR_TASK,
+                        Constant.WX_MSG_11_REPAIR_REQUEST_TO_ADMIN,
+                        JSONObject.toJSONString(wxMessageTemplateJsonData));
+            }
+            User msgReceiver1 = userService.selectByAccount(specialAccount1ToReceiveRepairRequest);
+            User msgReceiver2 = userService.selectByAccount(specialAccount2ToReceiveRepairRequest);
+            wechatUserInfoService.sendMsgTemplate(msgReceiver1.getAccount(),
                     WX_TEMPLATE_5_REPAIR_TASK,
                     Constant.WX_MSG_11_REPAIR_REQUEST_TO_ADMIN,
                     JSONObject.toJSONString(wxMessageTemplateJsonData));
 
+            wechatUserInfoService.sendMsgTemplate(msgReceiver2.getAccount(),
+                    WX_TEMPLATE_5_REPAIR_TASK,
+                    Constant.WX_MSG_11_REPAIR_REQUEST_TO_ADMIN,
+                    JSONObject.toJSONString(wxMessageTemplateJsonData));
         } catch (Exception ex) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return ResultGenerator.genFailResult("添加报修信息出错！" + ex.getMessage());
