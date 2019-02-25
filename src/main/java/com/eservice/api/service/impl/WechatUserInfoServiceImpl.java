@@ -234,6 +234,13 @@ public class WechatUserInfoServiceImpl extends AbstractService<WechatUserInfo> i
                 jsonObjectDeatailMsg.put("keyword3", toJson(simpleDateFormat.format(wxMessageTemplateJsonData.getRepairActualTime())));
                 jsonObjectDeatailMsg.put("remark", toJson(wxMessageTemplateJsonData.getRepairTaskDoneMessage()));
                 break;
+            case Constant.WX_MSG_11_REPAIR_REQUEST_TO_ADMIN:
+                jsonObjectDeatailMsg.put("first", toJson(wxMessageTemplateJsonData.getRepairRequestGot()));
+                jsonObjectDeatailMsg.put("keyword1", toJson(wxMessageTemplateJsonData.getMachineNameplate()));
+                jsonObjectDeatailMsg.put("keyword2", toJson(wxMessageTemplateJsonData.getCustomerName()));
+                jsonObjectDeatailMsg.put("keyword3", toJson(wxMessageTemplateJsonData.getMachineType()));
+                jsonObjectDeatailMsg.put("remark", toJson(wxMessageTemplateJsonData.getRepairRequestBornMessage()));
+                break;
             default:
                 return "推送发送失败，未定义的消息 " + messageId;
         }

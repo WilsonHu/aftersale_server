@@ -80,16 +80,25 @@ public class WxMessageTemplateJsonData {
     private Date repairActualTime;
 
     /**
-     * 11 报修被受理时发的消息
+     * 11 收到报修时 通知管理员发的消息
      */
-    private String repairRequestAcceptMessage;
+    private String repairRequestGot;
+    private String repairRequestBornMessage;
 
-    public String getRepairRequestAcceptMessage() {
-        return repairRequestAcceptMessage;
+    public String getRepairRequestGot() {
+        return repairRequestGot;
     }
 
-    public void setRepairRequestAcceptMessage(String repairRequestAcceptMessage) {
-        this.repairRequestAcceptMessage = repairRequestAcceptMessage;
+    public void setRepairRequestGot(String repairRequestGot) {
+        this.repairRequestGot = repairRequestGot;
+    }
+
+    public String getRepairRequestBornMessage() {
+        return repairRequestBornMessage;
+    }
+
+    public void setRepairRequestBornMessage(String repairRequestBornMessage) {
+        this.repairRequestBornMessage = repairRequestBornMessage;
     }
 
     public Date getRepairActualTime() {

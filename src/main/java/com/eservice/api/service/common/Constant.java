@@ -186,6 +186,7 @@ public class Constant {
      * 8: 安装完成后待评价时 通知客户
      * 9: 保养完成后待评价时 通知客户
      * 10: 维修完成后待评价时 通知客户
+     * 11：收到报修时 通知管理员
      */
     public static final String WX_MSG_1_MACHINE_BIND_TO_CUSTOMER = "WX_TEMPLATE_NO1_MACHINE_BIND_TO_CUSTOMER";
     public static final String WX_MSG_2_INSTALL_TASK_TO_EMPLOYEE = "WX_TEMPLATE_NO2_INSTALL_TASK_TO_EMPLOYEE";
@@ -197,6 +198,7 @@ public class Constant {
     public static final String WX_MSG_8_INSTALL_DONE_TO_CUSTOMER = "WX_TEMPLATE_NO8_INSTALL_DONE_TO_CUSTOMER";
     public static final String WX_MSG_9_MAINTAIN_DONE_TO_CUSTOMER = "WX_TEMPLATE_NO9_MAINTAIN_DONE_TO_CUSTOMER";
     public static final String WX_MSG_10_REPAIR_DONE_TO_CUSTOMER = "WX_TEMPLATE_NO10_REPAIR_DONE_TO_CUSTOMER";
+    public static final String WX_MSG_11_REPAIR_REQUEST_TO_ADMIN = "WX_TEMPLATE_NO11_REPAIR_REQUEST_TO_ADMIN";
 
     public static final String WX_MSG_SEND_SUCCESS = "模板发送成功！";
     public static final String WX_MSG_1 = "你订购的机器已经就绪，预定出厂日期 FactoryDate";

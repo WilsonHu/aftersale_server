@@ -1,15 +1,16 @@
 package com.eservice.api.web;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.eservice.api.core.Result;
 import com.eservice.api.core.ResultGenerator;
 import com.eservice.api.model.machine.Machine;
 import com.eservice.api.model.repair_record.RepairRecord;
 import com.eservice.api.model.repair_request_info.RepairRequestInfo;
+import com.eservice.api.model.user.User;
 import com.eservice.api.service.common.CommonService;
 import com.eservice.api.service.common.Constant;
-import com.eservice.api.service.impl.MachineServiceImpl;
-import com.eservice.api.service.impl.RepairRecordServiceImpl;
-import com.eservice.api.service.impl.RepairRequestInfoServiceImpl;
+import com.eservice.api.service.common.WxMessageTemplateJsonData;
+import com.eservice.api.service.impl.*;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.log4j.Logger;
@@ -27,6 +28,7 @@ import javax.validation.constraints.NotNull;
 import java.io.File;
 import java.util.Date;
 import java.util.List;
+
 
 /**
 * Class Description: xxx
@@ -57,6 +59,15 @@ public class RepairRequestInfoController {
     @Value("${repair_req_img}")
     private String repaiReqImgDir;
 
+    @Value("${WX_TEMPLATE_5_REPAIR_TASK}")
+    private String WX_TEMPLATE_5_REPAIR_TASK;
+
+    @Resource
+    private WechatUserInfoServiceImpl wechatUserInfoService;
+
+    @Resource
+    private UserServiceImpl userService;
+
     private Logger logger = Logger.getLogger(RepairRequestInfoController.class);
 
     /**
@@ -70,25 +81,25 @@ public class RepairRequestInfoController {
     @PostMapping("/add")
     public Result add(@RequestParam String repairRequestInfo,@RequestParam String isOldMachine) {
 
-        RepairRequestInfo repairRequestInfo1 = JSON.parseObject(repairRequestInfo,RepairRequestInfo.class);
+        RepairRequestInfo repairRequestInfo1 = JSON.parseObject(repairRequestInfo, RepairRequestInfo.class);
         repairRequestInfo1.setCreateTime(new Date());
 
         /**
          * 如果该铭牌号有进行中的报修（当作报修失败）则删除该报修记录，然后全新增加记录。
          */
         List<RepairRequestInfo> list = repairRequestInfoService.getRecordsInRequesting(repairRequestInfo1.getNameplate());
-        if( list != null ){
+        if (list != null) {
             for (RepairRequestInfo item : list) {
 
                 /**
                  * 先删除该报修对应的repair_record（处于REPAIR_STATUS_IN_REQUESTING状态）
                  */
                 List<RepairRecord> repairRecordList = repairRecordService.selectRepairRecordByRepairRequestId(item.getId().toString());
-                for(RepairRecord itemOfRepairRecord: repairRecordList){
-                    if(itemOfRepairRecord.getStatus().equals( Constant.REPAIR_STATUS_IN_REQUESTING) ){
+                for (RepairRecord itemOfRepairRecord : repairRecordList) {
+                    if (itemOfRepairRecord.getStatus().equals(Constant.REPAIR_STATUS_IN_REQUESTING)) {
                         repairRecordService.deleteById(itemOfRepairRecord.getId());
                         System.out.println("repairRecord " + itemOfRepairRecord.getId() + " was deleted!");
-                    }else {
+                    } else {
                         System.out.println("repairRecord " + itemOfRepairRecord.getId() + " status is not in requesting!");
                     }
                 }
@@ -118,11 +129,11 @@ public class RepairRequestInfoController {
             /**
              * 老机器报修时 需要建立老机器信息
              */
-            if(isOldMachine.equalsIgnoreCase("true")){
+            if (isOldMachine.equalsIgnoreCase("true")) {
                 /**
                  * 确认该铭牌号不存在
                  */
-                if(machineService.findBy("nameplate",repairRequestInfo1.getNameplate()) != null){
+                if (machineService.findBy("nameplate", repairRequestInfo1.getNameplate()) != null) {
                     return ResultGenerator.genFailResult("该机器已经存在！");
                 }
 
@@ -141,6 +152,34 @@ public class RepairRequestInfoController {
                 logger.info("add machine" + repairRequestInfo1.getNameplate());
 
             repairRecordService.save(repairRecord1);
+
+            /**
+             * 收到报修时, 发送消息给管理员等
+             */
+
+            User msgReceiver = userService.selectByAccount("wxm");
+            User customerReuested = userService.findById(repairRequestInfo1.getCustomer());
+            Machine machine = machineService.findBy("nameplate", repairRequestInfo1.getNameplate());
+            WxMessageTemplateJsonData wxMessageTemplateJsonData = new WxMessageTemplateJsonData();
+            JSONObject jsonObjectDeatailMsg = new JSONObject();
+//            {{first.DATA}}
+//            服务单号：{{keyword1.DATA}}
+//            客户信息：{{keyword2.DATA}}
+//            机器信息：{{keyword3.DATA}}
+//            {{remark.DATA}}
+            wxMessageTemplateJsonData.setRepairRequestGot("收到报修");
+            wxMessageTemplateJsonData.setMachineNameplate("机器编号" + repairRequestInfo1.getNameplate());
+            if(customerReuested !=null) {
+                wxMessageTemplateJsonData.setCustomerName(customerReuested.getName());
+            }
+            if(machine != null) {
+                wxMessageTemplateJsonData.setMachineType(machine.getMachineType());
+            }
+            wxMessageTemplateJsonData.setRepairRequestBornMessage(repairRequestInfo1.getRepairTitle());
+            wechatUserInfoService.sendMsgTemplate(msgReceiver.getAccount(),
+                    WX_TEMPLATE_5_REPAIR_TASK,
+                    Constant.WX_MSG_11_REPAIR_REQUEST_TO_ADMIN,
+                    JSONObject.toJSONString(wxMessageTemplateJsonData));
 
         } catch (Exception ex) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
