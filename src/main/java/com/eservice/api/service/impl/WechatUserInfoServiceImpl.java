@@ -127,18 +127,19 @@ public class WechatUserInfoServiceImpl extends AbstractService<WechatUserInfo> i
         jsonObject.put("touser",openId);
         jsonObject.put("template_id",templateId);
         // 小程序跳转
-        JSONObject jsonMiniProgram = new JSONObject();
-        if(user.getRoleId() == Constant.ROLE_ID_CUSTOMER) {
-            jsonMiniProgram.put("appid", wxspAppidKehuduan);
-        } else if (user.getRoleId() == Constant.ROLE_ID_EMPLOYEE){
-            jsonMiniProgram.put("appid", wxspAppidYuangongduan);
-        }
-        //jsonMiniProgram.put("pagepath","pages/authorize");
-        jsonMiniProgram.put("path","pages/authorize");
         //role=2（管理员）和特别某2个账号，有报修信息时通知一下，但是不要跳转
         if(user.getRoleId() != 2
+                && user.getValid().equals("1")
                 && !user.getAccount().equals(specialAccount1ToReceiveRepairRequest)
                 && !user.getAccount().equals(specialAccount2ToReceiveRepairRequest)) {
+            JSONObject jsonMiniProgram = new JSONObject();
+            if (user.getRoleId() == Constant.ROLE_ID_CUSTOMER) {
+                jsonMiniProgram.put("appid", wxspAppidKehuduan);
+            } else if (user.getRoleId() == Constant.ROLE_ID_EMPLOYEE) {
+                jsonMiniProgram.put("appid", wxspAppidYuangongduan);
+            }
+            //jsonMiniProgram.put("pagepath","pages/authorize");
+            jsonMiniProgram.put("path", "pages/authorize");
             jsonObject.put("miniprogram", jsonMiniProgram);
         }
         jsonObject.put("topcolor", "#FF0000");
