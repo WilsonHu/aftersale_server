@@ -244,18 +244,21 @@ public class RepairActualInfoController {
                 repairRecordService.update(repairRecord);
                 repairRecord.setUpdateTime(new Date());
 
-                User customer = userService.findById(repairRecordOld.getCustomer());
-                if (customer == null) {
-                    logger.info("找不到对应的客户，请检查！ customerId： " + repairRecordOld.getCustomer());
-                    return ResultGenerator.genFailResult("找不到对应的客户，请检查！");
-                }
-                User repairCharger = userService.findById(repairRecordOld.getRepairChargePerson());
-                if (repairCharger == null) {
-                    logger.info("找不到对应的维修负责人，请检查！ getRepairChargePerson： " + repairRecordOld.getRepairChargePerson());
-                    return ResultGenerator.genFailResult("找不到对应的维修负责人，请检查！");
-                }
-                WxMessageTemplateJsonData wxMessageTemplateJsonData = new WxMessageTemplateJsonData();
-                try {
+                //只有维修成功时才通知客户
+                if (repairResult.equals(Constant.REPAIR_STATUS_REPAIR_OK)) {
+
+                    User customer = userService.findById(repairRecordOld.getCustomer());
+                    if (customer == null) {
+                        logger.info("找不到对应的客户，请检查！ customerId： " + repairRecordOld.getCustomer());
+                        return ResultGenerator.genFailResult("找不到对应的客户，请检查！");
+                    }
+                    User repairCharger = userService.findById(repairRecordOld.getRepairChargePerson());
+                    if (repairCharger == null) {
+                        logger.info("找不到对应的维修负责人，请检查！ getRepairChargePerson： " + repairRecordOld.getRepairChargePerson());
+                        return ResultGenerator.genFailResult("找不到对应的维修负责人，请检查！");
+                    }
+                    WxMessageTemplateJsonData wxMessageTemplateJsonData = new WxMessageTemplateJsonData();
+                    try {
                         //                {{first.DATA}}
                         //                任务名称：{{keyword1.DATA}}
                         //                负责人：{{keyword2.DATA}}
@@ -270,9 +273,12 @@ public class RepairActualInfoController {
                                 WX_TEMPLATE_4_TASK_DONE,
                                 Constant.WX_MSG_10_REPAIR_DONE_TO_CUSTOMER,
                                 JSONObject.toJSONString(wxMessageTemplateJsonData));
-                } catch (Exception e) {
-                    logger.info("发送消息给客户失败 " + e.toString());
-                    e.printStackTrace();
+                    } catch (Exception e) {
+                        logger.info("发送消息给客户失败 " + e.toString());
+                        e.printStackTrace();
+                    }
+                } else {
+                    logger.info("维修NG，不发送推送消息给客户");
                 }
             }
         } catch (Exception ex) {
