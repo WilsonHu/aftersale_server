@@ -304,6 +304,12 @@ public class WechatUserInfoServiceImpl extends AbstractService<WechatUserInfo> i
         JSONObject resultJson =null;
         String result = commonService.httpsRequest(url, "POST", null);
         try {
+            if(result == null){
+                logger.info("httpsRequest 请求 " + url + "，返回 为null");
+                return "httpsRequest 请求 " + url + "，返回 为null";
+            } else {
+                logger.info("httpsRequest 请求 " + url + "，返回 为 " + result );
+            }
             resultJson = JSON.parseObject(result);
             String errmsg = (String) resultJson.get("errmsg");
             if(!"".equals(errmsg) && errmsg != null){  //如果为errmsg为ok，则代表发送成功，公众号推送信息给用户了。

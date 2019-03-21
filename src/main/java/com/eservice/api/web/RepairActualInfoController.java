@@ -3,12 +3,14 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.eservice.api.core.Result;
 import com.eservice.api.core.ResultGenerator;
+import com.eservice.api.model.experience_lib.ExperienceLib;
 import com.eservice.api.model.machine.Machine;
 import com.eservice.api.model.parts_info.PartsAllInfo;
 import com.eservice.api.model.parts_info.PartsInfo;
 import com.eservice.api.model.repair_actual_info.RepairActualInfo;
 import com.eservice.api.model.repair_actual_info.RepairActualInfoWithPartsInfo;
 import com.eservice.api.model.repair_record.RepairRecord;
+import com.eservice.api.model.repair_request_info.RepairRequestInfo;
 import com.eservice.api.model.user.User;
 import com.eservice.api.service.common.CommonService;
 import com.eservice.api.service.common.Constant;
@@ -63,6 +65,12 @@ public class RepairActualInfoController {
 
     @Resource
     private UserServiceImpl userService;
+
+    @Resource
+    private ExperienceLibServiceImpl experienceLibService;
+
+    @Resource
+    private RepairRequestInfoServiceImpl repairRequestInfoService;
 
     private Logger logger = Logger.getLogger(RepairActualInfoController.class);
     /**
@@ -125,6 +133,7 @@ public class RepairActualInfoController {
                 partsInfo1.setRepairActualInfoId(repairActualInfo1.getId());
                 partsInfoService.save(partsInfo1);
             }
+
         } catch (Exception ex) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return ResultGenerator.genFailResult("添加实际维修信息出错！" + message + ex.getMessage());
@@ -280,9 +289,31 @@ public class RepairActualInfoController {
                 } else {
                     logger.info("维修NG，不发送推送消息给客户");
                 }
+
+                /**
+                 * 增加到经验库
+                 */
+                logger.info("增加到经验库：repairActualInfo1" + repairActualInfo1.getId());
+                ExperienceLib experienceLib = new ExperienceLib();
+                experienceLib.setRepairActualInfoId(repairActualInfo1.getId());
+                experienceLib.setIssueDescription(repairActualInfo1.getIssueDescription());
+                if(repairRecord != null) {
+                    RepairRequestInfo repairRequestInfo = repairRequestInfoService.findById(repairRecord.getRepairRequestInfo());
+                    experienceLib.setBeforeResolvePictures(repairRequestInfo.getPictures());
+                }
+                experienceLib.setRepairMethod(repairActualInfo1.getRepairMethod());
+                experienceLib.setAfterResolvePictures(repairActualInfo1.getAfterResolvePictures());
+                User repairCharger = userService.findById(repairRecord.getRepairChargePerson());
+                if(repairCharger != null) {
+                    experienceLib.setAuthor(repairCharger.getAccount());
+                }
+                experienceLib.setCreateTime(new Date());
+                experienceLibService.save(experienceLib);
+                logger.info("增加到经验库：done");
             }
         } catch (Exception ex) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            logger.info("update Exception：" + ex.toString());
             return ResultGenerator.genFailResult(ex.getMessage() +"," + message);
         }
         return ResultGenerator.genSuccessResult(repairActualInfo1);
