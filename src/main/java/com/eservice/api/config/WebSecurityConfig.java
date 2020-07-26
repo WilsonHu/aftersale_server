@@ -39,7 +39,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/wechat/user/info/wechatMessageVerify").permitAll()
                 .antMatchers(HttpMethod.GET, "/wechat/user/info/wechatRedirect").permitAll()
                 .antMatchers("/wechat/authorize/wechatRedirect").permitAll()
-
+                .antMatchers(HttpMethod.POST,"/repair/actual/info/add").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 // We filter the api/login requests

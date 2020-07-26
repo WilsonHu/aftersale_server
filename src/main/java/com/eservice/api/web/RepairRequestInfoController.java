@@ -90,6 +90,13 @@ public class RepairRequestInfoController {
 
         RepairRequestInfo repairRequestInfo1 = JSON.parseObject(repairRequestInfo, RepairRequestInfo.class);
         repairRequestInfo1.setCreateTime(new Date());
+        if(repairRequestInfo1.getNameplate() == null || repairRequestInfo1.getNameplate().equals("")){
+            return ResultGenerator.genFailResult("铭牌不能为空");
+        }
+
+        if(repairRequestInfo1.getCustomer() == null || repairRequestInfo1.getCustomer().equals("")){
+            return ResultGenerator.genFailResult("客户不能为空");
+        }
 
         /**
          * 如果该铭牌号有进行中的报修（当作报修失败）则删除该报修记录，然后全新增加记录。
@@ -155,9 +162,20 @@ public class RepairRequestInfoController {
                 machine.setCustomer(repairRequestInfo1.getCustomer());
                 machineService.save(machine);
                 logger.info("add old machine " + repairRequestInfo1.getNameplate());
-            } else
+            } else {
                 logger.info("add machine" + repairRequestInfo1.getNameplate());
+                List<Machine> machineList = machineService.selectMachineByNameplate(repairRequestInfo1.getNameplate());
+                if(machineList == null){
+                    return ResultGenerator.genFailResult("根据该铭牌号找不到机器");
+                } else {
+                    // 一个铭牌号应该只有一个机器
+                    Machine machine = machineList.get(0);
+                    machine.setStatus(Constant.MACHINE_STATUS_WAIT_FOR_REPAIR);
+                    machineService.update(machine);
+                }
 
+
+            }
             repairRecordService.save(repairRecord1);
 
             /**
