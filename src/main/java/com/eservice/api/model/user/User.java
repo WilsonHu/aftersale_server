@@ -20,7 +20,7 @@ public class User implements UserDetails{
     /**
      * 微信unionId，在没授权前是空的。字段名称有下划线时 findBy(fieldName,xxx)会失败。
      */
-    @Column(name = "wechatUnionId")
+    @Column(name = "wechat_union_id")
     private String wechatUnionId;
 
     @Column(name = "role_id")

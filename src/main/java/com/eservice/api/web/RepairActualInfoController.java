@@ -258,12 +258,12 @@ public class RepairActualInfoController {
 
                     User customer = userService.findById(repairRecordOld.getCustomer());
                     if (customer == null) {
-                        logger.info("找不到对应的客户，请检查！ customerId： " + repairRecordOld.getCustomer());
+                        System.out.println("找不到对应的客户，请检查！ customerId： " + repairRecordOld.getCustomer());
                         return ResultGenerator.genFailResult("找不到对应的客户，请检查！");
                     }
                     User repairCharger = userService.findById(repairRecordOld.getRepairChargePerson());
                     if (repairCharger == null) {
-                        logger.info("找不到对应的维修负责人，请检查！ getRepairChargePerson： " + repairRecordOld.getRepairChargePerson());
+                        System.out.println("找不到对应的维修负责人，请检查！ getRepairChargePerson： " + repairRecordOld.getRepairChargePerson());
                         return ResultGenerator.genFailResult("找不到对应的维修负责人，请检查！");
                     }
                     WxMessageTemplateJsonData wxMessageTemplateJsonData = new WxMessageTemplateJsonData();
@@ -283,17 +283,17 @@ public class RepairActualInfoController {
                                 Constant.WX_MSG_10_REPAIR_DONE_TO_CUSTOMER,
                                 JSONObject.toJSONString(wxMessageTemplateJsonData));
                     } catch (Exception e) {
-                        logger.info("发送消息给客户失败 " + e.toString());
+                        System.out.println("发送消息给客户失败 " + e.toString());
                         e.printStackTrace();
                     }
                 } else {
-                    logger.info("维修NG，不发送推送消息给客户");
+                    System.out.println("维修NG，不发送推送消息给客户");
                 }
 
                 /**
                  * 增加到经验库
                  */
-                logger.info("增加到经验库：repairActualInfo1" + repairActualInfo1.getId());
+                System.out.println("增加到经验库：repairActualInfo1" + repairActualInfo1.getId());
                 ExperienceLib experienceLib = new ExperienceLib();
                 experienceLib.setRepairActualInfoId(repairActualInfo1.getId());
                 experienceLib.setIssueDescription(repairActualInfo1.getIssueDescription());
@@ -309,11 +309,11 @@ public class RepairActualInfoController {
                 }
                 experienceLib.setCreateTime(new Date());
                 experienceLibService.save(experienceLib);
-                logger.info("增加到经验库：done");
+                System.out.println("增加到经验库：done");
             }
         } catch (Exception ex) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-            logger.info("update Exception：" + ex.toString());
+            System.out.println("update Exception：" + ex.toString());
             return ResultGenerator.genFailResult(ex.getMessage() +"," + message);
         }
         return ResultGenerator.genSuccessResult(repairActualInfo1);

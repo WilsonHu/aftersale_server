@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--配置一天一个日志文件，info信息存在一个文件中，error信息存在一个文件中-->
+<configuration>
+    <!--日志文件输出路径-->
+    <property name="LOG_HOME" value="C:/Users/wxm/Desktop/XsAftersale"/>
+    <!--<property name="LOG_HOME" value="/home/sinsim/log-data"/>-->
+    <!--注意: 如果是放到docker里了,这些地址都应该是docker里的 !!! -->
+    <!--<property name="LOG_HOME" value="/home/sinsim/log"/>-->
+    <!--<property name="LOG_HOME" value="/opt/sinsim/log"/>-->
+
+    <!--配置控制台打印信息-->
+    <appender name="ConsoleLog" class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>
+                %d - %msg%n
+            </pattern>
+        </layout>
+    </appender>
+    <!--配置info文件-->
+    <appender name="InfoLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <!--过来命中就过滤掉-->
+            <onMatch>DENY</onMatch>
+            <!--没有命中就接受-->
+            <onMismatch>ACCEPT</onMismatch>
+        </filter>
+        <encoder>
+            <charset>UTF-8</charset>
+            <pattern>
+                %d - %msg%n
+            </pattern>
+        </encoder>
+        <!--滚动策略-->  <!--按天来回滚 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!--路径-->
+            <fileNamePattern>${LOG_HOME}/info.%d{yyyy-MM-dd}.%i.log.zip</fileNamePattern>
+            <!--保存的时间（天数）-->
+            <maxHistory>365</maxHistory>
+            <!--日志文件的总大小-->
+            <totalSizeCap>1GB</totalSizeCap>
+            <!-- 按时间回滚的同时，按文件大小来回滚 -->
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>100MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+    </appender>
+    <!--配置error文件-->
+    <appender name="ErrorLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>ERROR</level>
+        </filter>
+        <encoder>
+            <charset>UTF-8</charset>
+            <pattern>
+                %d - %msg%n
+            </pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_HOME}/error.%d.log</fileNamePattern>
+            <maxHistory>365</maxHistory>
+            <totalSizeCap>1GB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+    <!--加载配置项-->
+    <root level="INFO">
+        <appender-ref ref="ConsoleLog"/>
+        <appender-ref ref="InfoLog"/>
+        <appender-ref ref="ErrorLog"/>
+    </root>
+
+    <!-- 开发测试环境下的日志配置 和test1配置文件有关-->
+    <!--spring。active.profile的对应值关联-->
+    <!--<springProfile name="test1">-->
+        <!--<root level="INFO">-->
+            <!--&lt;!&ndash;CON这个是控制台输出，就是test1配置文件后，控制台有输出&ndash;&gt;-->
+            <!--<appender-ref ref="CONSOLE" />-->
+            <!--<appender-ref ref="SYSTEM_FILE" />-->
+            <!--<appender-ref ref="MY_INFO_FILE" />-->
+        <!--</root>-->
+    <!--</springProfile>-->
+
+    <!--&lt;!&ndash; 生产环境下的日志配置 关联到prod即正式的配置文件 &ndash;&gt;-->
+    <!--<springProfile name="prod">-->
+        <!--<root level="INFO">-->
+            <!--<appender-ref ref="SYSTEM_FILE" />-->
+            <!--<appender-ref ref="MY_INFO_FILE" />-->
+        <!--</root>-->
+    <!--</springProfile>-->
+</configuration>

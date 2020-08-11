@@ -238,6 +238,8 @@ public class RepairRequestInfoController {
      * @param fileType:上传的文件类型（铭牌号图片，报修语音，报修图片）
      * @param file:上传的单个文件
      * @param fileNumber:在上传3张报修图片时，用于区分是第几个图片，其他文件可以默认0。
+     *
+     * 2020-0726更新：采用一键报修之后，不需要上传各种文件了。
      */
     @Transactional(rollbackFor = Exception.class)
     @PostMapping("/update")
