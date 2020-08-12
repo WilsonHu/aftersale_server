@@ -33,13 +33,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/").permitAll()
                 .antMatchers(HttpMethod.POST, "/login").permitAll()
                 /**
-                 * 运行所有用户访问，不需要带JWT
+                 * 允许所有用户访问，不需要带JWT
                  */
                 .antMatchers(HttpMethod.POST, "/wechat/user/info/loginGetUnionIdAndSave").permitAll()
                 .antMatchers(HttpMethod.GET, "/wechat/user/info/wechatMessageVerify").permitAll()
                 .antMatchers(HttpMethod.GET, "/wechat/user/info/wechatRedirect").permitAll()
                 .antMatchers("/wechat/authorize/wechatRedirect").permitAll()
                 .antMatchers(HttpMethod.POST,"/repair/actual/info/add").permitAll()
+                .antMatchers(HttpMethod.POST,"/for/sinimproccess/timeToCheckProcess").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 // We filter the api/login requests
