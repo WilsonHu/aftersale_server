@@ -1,35 +1,30 @@
 package com.eservice.api.web;
 
+import com.alibaba.fastjson.JSONObject;
 import com.eservice.api.core.Result;
 import com.eservice.api.core.ResultGenerator;
-import com.eservice.api.model.machine.Machine;
 import com.eservice.api.model.machine.MachineInfosInProcessDb;
 import com.eservice.api.model.sinsim_process.contact_form.ContactFormDetail;
-import com.eservice.api.model.user.StaffInfo;
-import com.eservice.api.model.user.User;
-import com.eservice.api.model.user.UserInfo;
-import com.eservice.api.service.common.PrepareUnAssignedMachineService;
+import com.eservice.api.service.common.Constant;
+import com.eservice.api.service.common.WxMessageTemplateJsonData;
 import com.eservice.api.service.impl.UserServiceImpl;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
+import com.eservice.api.service.impl.WechatUserInfoServiceImpl;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import javax.validation.constraints.NotNull;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
 * Class Description: 给生产部用，生产部调用这边的接口。
-* @author Wilson Hu
+ * 比如，轮到下一步签核时，由售后系统来发送微信消息推送
+ * 避免了在生产部也搞一套微信的东西。
 * @date 2020/08/11.
 */
 
@@ -40,15 +35,13 @@ public class forSinimProccess {
     private UserServiceImpl userService;
     private Logger logger = Logger.getLogger(forSinimProccess.class);
 
-    /**
-     * 给生产部用，轮到下一步签核时，让售后系统去查生产部的数据，然后由售后系统来发送微信消息推送
-     * 避免了在生产部也搞一套微信的东西。
-     * @return
-     */
+    @Resource
+    private WechatUserInfoServiceImpl wechatUserInfoService;
+
+    @Value("${WX_TEMPLATE_4_TASK_DONE}")
+    private String WX_TEMPLATE_4_TASK_DONE;
 
     private Connection sinsimMysqlConn;
-
-    private String JDBC_DRIVER = "com.mysql.jdbc.Driver";
 
     /**
      * 售后数据库
@@ -78,16 +71,10 @@ public class forSinimProccess {
 
     /**
      *  让生产部每次轮到下一个签核时 调用该接口，来通知售后去查生产部的数据
-     *  SELECT
-     *
-     FROM
-     contact_form cf
-     LEFT JOIN contact_sign cs ON cs.contact_form_id = cf.id
-     WHERE
-     1 = 1
-     AND cf.`status` = '联系单审核中'
+     *  避免在生产部也要要搞微信公众号一套
+     *  --> 还是让生产部系统直接把要通知的人和订单/联系单号发给售后系统
      */
-    @PostMapping("/timeToCheckProcess")
+    @PostMapping("/timeToCheckProcess") //暂未用
     public Result timeToCheckProcess() {
         try {
 
@@ -124,9 +111,51 @@ public class forSinimProccess {
             e.printStackTrace();
             logger.info("Query data exception: " + e.toString());
         }
+
         return ResultGenerator.genSuccessResult();
     }
 
-
+    /**
+     * 生产部签核轮到时，发消息给售后系统
+     * @param account 轮到谁签核
+     * @param machineOrderNum 
+     * @param lxdNum
+     * @return
+     */
+    @PostMapping("/sendRemind")
+    public Result sendRemind(@RequestParam String account,
+                             @RequestParam(defaultValue = "") String machineOrderNum,
+                             @RequestParam(defaultValue = "") String lxdNum) {
+        logger.info("From sinsim_process: " + account + ",orderNum: " + machineOrderNum + ", lxdNum: " + lxdNum);
+        WxMessageTemplateJsonData wxMessageTemplateJsonData = new WxMessageTemplateJsonData();
+        try {
+            //                {{first.DATA}}
+            //                任务名称：{{keyword1.DATA}}
+            //                负责人：{{keyword2.DATA}}
+            //                提交时间：{{keyword3.DATA}}
+            //                {{remark.DATA}}
+            if(machineOrderNum.isEmpty() || machineOrderNum.equals("")) {
+                wxMessageTemplateJsonData.setRepairTaskName("联系单签核");
+                wxMessageTemplateJsonData.setSignPerson(account);
+                wxMessageTemplateJsonData.setLxdNumber(lxdNum);
+            } else {
+                wxMessageTemplateJsonData.setRepairTaskName("订单签核");
+                wxMessageTemplateJsonData.setSignPerson(account);
+                wxMessageTemplateJsonData.setMachineOrderNumber(machineOrderNum);
+            }
+            wxMessageTemplateJsonData.setRepairTaskDoneMessage("请知悉");
+            String result = wechatUserInfoService.sendMsgTemplate(account,
+                    WX_TEMPLATE_4_TASK_DONE,
+                    Constant.WX_MSG_10_REPAIR_DONE_TO_CUSTOMER,
+                    JSONObject.toJSONString(wxMessageTemplateJsonData));
+            logger.info("发送消息给签核人结果：" + result);
+            System.out.println("发送消息给签核人结果 " + result);
+        } catch (Exception e) {
+            System.out.println("发送消息给签核人失败 " + e.toString());
+            e.printStackTrace();
+            return ResultGenerator.genFailResult(e.toString());
+        }
+        return ResultGenerator.genSuccessResult();
+    }
 
 }

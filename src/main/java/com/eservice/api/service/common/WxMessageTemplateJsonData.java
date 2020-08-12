@@ -85,6 +85,37 @@ public class WxMessageTemplateJsonData {
     private String repairRequestGot;
     private String repairRequestBornMessage;
 
+    /**
+     * 12 轮到订单/联系单签核了 通知对应人员发的消息
+     */
+    private String signPerson; //轮到谁签核
+    private String machineOrderNumber; //订单号
+    private String lxdNumber; //联系单号
+
+    public String getSignPerson() {
+        return signPerson;
+    }
+
+    public void setSignPerson(String signPerson) {
+        this.signPerson = signPerson;
+    }
+
+    public String getMachineOrderNumber() {
+        return machineOrderNumber;
+    }
+
+    public void setMachineOrderNumber(String machineOrderNumber) {
+        this.machineOrderNumber = machineOrderNumber;
+    }
+
+    public String getLxdNumber() {
+        return lxdNumber;
+    }
+
+    public void setLxdNumber(String lxdNumber) {
+        this.lxdNumber = lxdNumber;
+    }
+
     public String getRepairRequestGot() {
         return repairRequestGot;
     }
