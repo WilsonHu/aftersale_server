@@ -96,31 +96,36 @@ public class WechatUserInfoServiceImpl extends AbstractService<WechatUserInfo> i
                                   @RequestParam String messageId,
                                   @RequestParam String jsonMsgData ) {
 
+        String msg;
         /**
          * 根据 account 找openId
          */
         logger.info("sendMsgTemplate get param code:" + account);
         User user = userService.findBy("account",account);
         if(user == null){
-            logger.info("推送发送失败，该account不存在！");
-            return "推送发送失败，该account不存在！";
+            msg = "推送发送失败，该account不存在！" + account;
+            logger.info(msg);
+            return msg;
         }
         String wechatUionId = user.getWechatUnionId();
 
         if(wechatUionId == null || "".equals(account) ){
-            logger.info("推送发送失败，请先关注公众号");
-            return "推送发送失败，请先关注公众号";
+            msg = "推送发送失败，请先关注公众号";
+            logger.info(msg);
+            return msg;
         }
         logger.info("sendMsgTemplate wechatUionId is " + wechatUionId);
         WechatUserInfo wechatUserInfo = wechatUserInfoService.getWechatUserInfoByUnionId(wechatUionId);
         if( wechatUserInfo == null){
-            logger.info("获取用户为空，推送发送失败");
-            return "获取用户为空，推送发送失败";
+            msg = "获取用户为空，推送发送失败";
+            logger.info(msg);
+            return msg;
         }
         String openId = wechatUserInfo.getOpenId();
         if(openId == null || openId.isEmpty()){
-            logger.info("推送发送失败，找不到openId?");
-            return "推送发送失败，找不到openId?";
+            msg = "推送发送失败，找不到openId?";
+            logger.info(msg);
+            return msg;
         }
         JSONObject jsonObject = new JSONObject();
         JSONObject jsonObjectDeatailMsg = new JSONObject();

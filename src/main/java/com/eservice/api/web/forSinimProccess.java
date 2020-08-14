@@ -9,6 +9,8 @@ import com.eservice.api.service.common.Constant;
 import com.eservice.api.service.common.WxMessageTemplateJsonData;
 import com.eservice.api.service.impl.UserServiceImpl;
 import com.eservice.api.service.impl.WechatUserInfoServiceImpl;
+import org.apache.commons.codec.DecoderException;
+import org.apache.commons.codec.net.URLCodec;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
@@ -118,7 +120,7 @@ public class forSinimProccess {
     /**
      * 生产部签核轮到时，发消息给售后系统
      * @param account 轮到谁签核
-     * @param machineOrderNum 
+     * @param machineOrderNum
      * @param lxdNum
      * @return
      */
@@ -126,7 +128,18 @@ public class forSinimProccess {
     public Result sendRemind(@RequestParam String account,
                              @RequestParam(defaultValue = "") String machineOrderNum,
                              @RequestParam(defaultValue = "") String lxdNum) {
-        logger.info("From sinsim_process: " + account + ",orderNum: " + machineOrderNum + ", lxdNum: " + lxdNum);
+        String result;
+        String decodedAccount = null;
+        String decodedMachineOrderNum = null;
+        String decodedLxdNum = null;
+        try {
+            decodedAccount = new URLCodec().decode(account);
+            decodedMachineOrderNum = new URLCodec().decode(machineOrderNum);
+            decodedLxdNum = new URLCodec().decode(lxdNum);
+        } catch (DecoderException e) {
+            e.printStackTrace();
+        }
+        logger.info("From sinsim_process: " + decodedAccount + ",orderNum: " + decodedMachineOrderNum + ", decodedLxdNum: " + decodedLxdNum);
         WxMessageTemplateJsonData wxMessageTemplateJsonData = new WxMessageTemplateJsonData();
         try {
             //                {{first.DATA}}
@@ -134,17 +147,17 @@ public class forSinimProccess {
             //                负责人：{{keyword2.DATA}}
             //                提交时间：{{keyword3.DATA}}
             //                {{remark.DATA}}
-            if(machineOrderNum.isEmpty() || machineOrderNum.equals("")) {
+            if(decodedMachineOrderNum.isEmpty() || decodedMachineOrderNum.equals("")) {
                 wxMessageTemplateJsonData.setRepairTaskName("联系单签核");
-                wxMessageTemplateJsonData.setSignPerson(account);
-                wxMessageTemplateJsonData.setLxdNumber(lxdNum);
+                wxMessageTemplateJsonData.setSignPerson(decodedAccount);
+                wxMessageTemplateJsonData.setLxdNumber(decodedLxdNum);
             } else {
                 wxMessageTemplateJsonData.setRepairTaskName("订单签核");
-                wxMessageTemplateJsonData.setSignPerson(account);
-                wxMessageTemplateJsonData.setMachineOrderNumber(machineOrderNum);
+                wxMessageTemplateJsonData.setSignPerson(decodedAccount);
+                wxMessageTemplateJsonData.setMachineOrderNumber(decodedMachineOrderNum);
             }
             wxMessageTemplateJsonData.setRepairTaskDoneMessage("请知悉");
-            String result = wechatUserInfoService.sendMsgTemplate(account,
+            result = wechatUserInfoService.sendMsgTemplate(decodedAccount,
                     WX_TEMPLATE_4_TASK_DONE,
                     Constant.WX_MSG_10_REPAIR_DONE_TO_CUSTOMER,
                     JSONObject.toJSONString(wxMessageTemplateJsonData));
@@ -155,7 +168,7 @@ public class forSinimProccess {
             e.printStackTrace();
             return ResultGenerator.genFailResult(e.toString());
         }
-        return ResultGenerator.genSuccessResult();
+        return ResultGenerator.genSuccessResult(result);
     }
 
 }

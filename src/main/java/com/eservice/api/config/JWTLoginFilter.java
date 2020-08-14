@@ -36,6 +36,8 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
         //只支持header中通过key-value的方式进行传值
         String account  = req.getParameter("account");
         String password  = req.getParameter("password");
+
+        System.out.println("来登录了，account:" + account + ", password:" + password);
         if(account != null && password != null) {
             return getAuthenticationManager().authenticate(new UsernamePasswordAuthenticationToken(account, password, Collections.emptyList()));
         } else {
