@@ -90,7 +90,14 @@ public class UserController {
 
     @PostMapping("/selectUsers")
     public Result selectUsers(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size,
-                              Integer currentUserAgent, String account, String name, Integer roleId, Boolean isAgent, Integer agent, String valid, Integer userType) {
+                              Integer currentUserAgent,
+                              String account,
+                              String name,
+                              Integer roleId,
+                              Boolean isAgent,
+                              Integer agent,
+                              String valid,
+                              Integer userType) {
         PageHelper.startPage(page, size);
         List<User> list = userService.selectUsers(currentUserAgent,account, name, roleId, isAgent, agent, valid, userType);
         PageInfo pageInfo = new PageInfo(list);

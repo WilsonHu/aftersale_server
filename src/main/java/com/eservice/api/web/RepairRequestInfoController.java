@@ -134,9 +134,10 @@ public class RepairRequestInfoController {
             repairRecord1.setCustomer(repairRequestInfo1.getCustomer());
             repairRecord1.setMachineNameplate(repairRequestInfo1.getNameplate());
             /**
-             * 状态为报修进行中
+             * 状态为报修进行中 --> 改为 一键报修之后，不需要上传文件等，所以状态 改为 未派单
              */
             repairRecord1.setStatus(Constant.REPAIR_STATUS_IN_REQUESTING);
+            repairRecord1.setStatus(Constant.REPAIR_STATUS_UNSIGNED_TO_REPAIRER);
             repairRecord1.setRepairRequestInfo(repairRequestInfo1.getId());
             repairRecord1.setCreateTime(new Date());
 
@@ -209,15 +210,23 @@ public class RepairRequestInfoController {
             }
             User msgReceiver1 = userService.selectByAccount(specialAccount1ToReceiveRepairRequest);
             User msgReceiver2 = userService.selectByAccount(specialAccount2ToReceiveRepairRequest);
-            wechatUserInfoService.sendMsgTemplate(msgReceiver1.getAccount(),
-                    WX_TEMPLATE_5_REPAIR_TASK,
-                    Constant.WX_MSG_11_REPAIR_REQUEST_TO_ADMIN,
-                    JSONObject.toJSONString(wxMessageTemplateJsonData));
+            if(msgReceiver1 != null) {
+                wechatUserInfoService.sendMsgTemplate(msgReceiver1.getAccount(),
+                        WX_TEMPLATE_5_REPAIR_TASK,
+                        Constant.WX_MSG_11_REPAIR_REQUEST_TO_ADMIN,
+                        JSONObject.toJSONString(wxMessageTemplateJsonData));
+            } else {
+                logger.warn("发送报修消息时，找不到用户：" + specialAccount1ToReceiveRepairRequest);
+            }
 
-            wechatUserInfoService.sendMsgTemplate(msgReceiver2.getAccount(),
-                    WX_TEMPLATE_5_REPAIR_TASK,
-                    Constant.WX_MSG_11_REPAIR_REQUEST_TO_ADMIN,
-                    JSONObject.toJSONString(wxMessageTemplateJsonData));
+            if(msgReceiver2 != null) {
+                wechatUserInfoService.sendMsgTemplate(msgReceiver2.getAccount(),
+                        WX_TEMPLATE_5_REPAIR_TASK,
+                        Constant.WX_MSG_11_REPAIR_REQUEST_TO_ADMIN,
+                        JSONObject.toJSONString(wxMessageTemplateJsonData));
+            } else {
+                logger.warn("发送报修消息时，找不到用户：" + specialAccount2ToReceiveRepairRequest);
+            }
         } catch (Exception ex) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return ResultGenerator.genFailResult("添加报修信息出错！" + ex.getMessage());

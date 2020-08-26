@@ -7,12 +7,11 @@ import com.eservice.api.model.user.User;
 import com.eservice.api.model.wechat_user_info.WechatUserInfo;
 import com.eservice.api.service.common.CommonService;
 import com.eservice.api.service.common.Constant;
-import com.eservice.api.service.common.WxWebAccessTokenInfo;
+import com.eservice.api.service.common.WxMessageTemplateJsonData;
 import com.eservice.api.service.impl.UserServiceImpl;
 import com.eservice.api.service.impl.WechatUserInfoServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.google.gson.Gson;
 import com.qq.weixin.mp.aes.AesException;
 import com.qq.weixin.mp.aes.WXBizMsgCrypt;
 import org.apache.log4j.Logger;
@@ -30,11 +29,8 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.*;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
 * Class Description: xxx
@@ -113,7 +109,8 @@ public class WechatUserInfoController {
     @Value("${debug.flag}")
     private String debugFlag;
 
-    private String globalMsg = null;
+    @Value("${WX_TEMPLATE_1_BOOK_SUCCESS}")
+    private String WX_TEMPLATE_1_BOOK_SUCCESS;
 
     @PostMapping("/add")
     public Result add(WechatUserInfo wechatUserInfo) {
@@ -172,7 +169,8 @@ public class WechatUserInfoController {
             if(user == null) {
                 return ResultGenerator.genFailResult("账号/密码 不正确！");
             }else {
-
+                //这个return 是为了方便本地调试
+//                return ResultGenerator.genSuccessResult("aaa");
                 //员工账号 不能登陆 客户小程序，反之也不能。
                 String msg = checkCallerIValid(user,roleOfCaller);
                 if( msg.equals(msgCallerIsValid) == false){
@@ -191,9 +189,9 @@ public class WechatUserInfoController {
                 if(jsonObject == null){
                     return ResultGenerator.genFailResult("jsonObj null, " + respondStr);
                 }
-                System.out.print("respondStr: " + respondStr );
-
+                logger.info("respondStr: " + respondStr );
                 String unionId = (String) jsonObject.get("unionid");
+                String openId = (String) jsonObject.get("openid");
                 if(unionId != null){
                     /**
                      * 需要已授权才允许登陆
@@ -249,6 +247,13 @@ public class WechatUserInfoController {
 
                     }
 
+                } else if(openId != null){
+                    //腾讯直接返回了openId， 说明已经关注且绑定
+                    JSONObject userJsonObject = new JSONObject();
+                    userJsonObject.put("account",user.getAccount());
+                    userJsonObject.put("name", user.getName());
+                    userJsonObject.put("id",user.getId());
+                    return ResultGenerator.genSuccessResult(userJsonObject);
                 } else {
                     /**
                      * 没有unionId（需要用户先关注公众号）,直接返回具体信息是为了小程序方便。
@@ -459,5 +464,31 @@ public class WechatUserInfoController {
         WechatUserInfo wechatUserInfo = wechatUserInfoService.getWechatUserInfoByAccount(account);
         return ResultGenerator.genSuccessResult(wechatUserInfo);
     }
-    
+
+    /**
+     * 测试发送公众号消息
+     * @param account
+     * @return
+     */
+
+    @PostMapping("/testMsg")
+    public Result testMsg(@RequestParam String account) {
+//        WechatUserInfo wechatUserInfo = wechatUserInfoService.getWechatUserInfoByAccount(account);
+
+        WxMessageTemplateJsonData wxMessageTemplateJsonData = new WxMessageTemplateJsonData();
+        wxMessageTemplateJsonData.setCustomerName("xxxx");
+        wxMessageTemplateJsonData.setMachineNameplate( "aaabbb" + "(铭牌号)" );
+        wxMessageTemplateJsonData.setMachineType("yyyy");
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        formatter.setTimeZone(TimeZone.getTimeZone("GMT+8"));
+        String dateStr = formatter.format(new Date());
+        String msg = Constant.WX_MSG_1.replace("FactoryDate", dateStr);
+
+        wxMessageTemplateJsonData.setMessageOfMachineBind(msg);
+        String message = wechatUserInfoService.sendMsgTemplate(account,
+                WX_TEMPLATE_1_BOOK_SUCCESS,
+                Constant.WX_MSG_1_MACHINE_BIND_TO_CUSTOMER,
+                JSONObject.toJSONString(wxMessageTemplateJsonData));
+        return ResultGenerator.genSuccessResult(message);
+    }
 }

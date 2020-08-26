@@ -110,14 +110,14 @@ public class WechatUserInfoServiceImpl extends AbstractService<WechatUserInfo> i
         String wechatUionId = user.getWechatUnionId();
 
         if(wechatUionId == null || "".equals(account) ){
-            msg = "推送发送失败，请先关注公众号";
+            msg = "推送发送失败，请" + account + "先关注公众号";
             logger.info(msg);
             return msg;
         }
         logger.info("sendMsgTemplate wechatUionId is " + wechatUionId);
         WechatUserInfo wechatUserInfo = wechatUserInfoService.getWechatUserInfoByUnionId(wechatUionId);
         if( wechatUserInfo == null){
-            msg = "获取用户为空，推送发送失败";
+            msg = "根据 wechatUionId 获取用户为空，推送发送失败（）";
             logger.info(msg);
             return msg;
         }
