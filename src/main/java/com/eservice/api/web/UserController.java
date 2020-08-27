@@ -53,6 +53,8 @@ public class UserController {
 
         User user  = userService.requestLogin(account, oldPassword,null);
         if(user == null) {
+
+            logger.error("账号(" + account + ") 密码(" + oldPassword + ")不正确！" );
             return ResultGenerator.genFailResult("账号/密码 不正确！");
         }else {
             user.setPassword(newPassword);

@@ -276,7 +276,10 @@ public class RepairActualInfoController {
                         wxMessageTemplateJsonData.setCustomerName(customer.getName());
                         wxMessageTemplateJsonData.setRepairTaskName("机器维修");
                         wxMessageTemplateJsonData.setRepairChargePerson(repairCharger.getName());
-                        wxMessageTemplateJsonData.setRepairActualTime(repairRecordOld.getRepairPlanDate());
+                        //手机端 派单，不填上门日期
+                        if(repairRecordOld.getRepairPlanDate() !=null) {
+                            wxMessageTemplateJsonData.setRepairActualTime(repairRecordOld.getRepairPlanDate());
+                        }
                         wxMessageTemplateJsonData.setRepairTaskDoneMessage("请知悉");
                         wechatUserInfoService.sendMsgTemplate(customer.getAccount(),
                                 WX_TEMPLATE_4_TASK_DONE,

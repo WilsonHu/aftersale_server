@@ -30,7 +30,7 @@
       *
     FROM
       wechat_user_info AS wui
-    LEFT JOIN `user` AS u ON wui.union_id = u.wechatUnionId
+    LEFT JOIN `user` AS u ON wui.union_id = u.wechat_union_id
     WHERE
       u.account = #{account}
   </select>

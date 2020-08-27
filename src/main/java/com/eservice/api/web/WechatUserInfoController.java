@@ -167,6 +167,7 @@ public class WechatUserInfoController {
         }else {
             User user  = userService.requestLogin(account, password,null);
             if(user == null) {
+                logger.error("账号(" + account + ") 密码(" + password + ")不正确！" );
                 return ResultGenerator.genFailResult("账号/密码 不正确！");
             }else {
                 //这个return 是为了方便本地调试
