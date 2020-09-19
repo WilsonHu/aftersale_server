@@ -173,6 +173,13 @@ public class MachineController {
         return ResultGenerator.genSuccessResult();
     }
 
+    //给 小程序 维修员在现场，更新老机器的信息，和 machine/update区别开了
+    @PostMapping("/updateInfo")
+    public Result updateInfo(@RequestBody @NotNull Machine machine) {
+        machineService.update(machine);
+        return ResultGenerator.genSuccessResult();
+    }
+
     @PostMapping("/detail")
     public Result detail(@RequestParam @NotNull Integer id) {
         Machine machine = machineService.findById(id);

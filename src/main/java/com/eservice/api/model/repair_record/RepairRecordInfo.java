@@ -413,4 +413,28 @@ public class RepairRecordInfo extends RepairRecord {
     public String getRepairFeedbackRepairResult() {
         return repairFeedbackRepairResult;
     }
+
+    //老机器的铭牌号照片
+    private String repairRequestNameplatePicture;
+
+    public String getRepairRequestNameplatePicture() {
+        return repairRequestNameplatePicture;
+    }
+
+    public void setRepairRequestNameplatePicture(String repairRequestNameplatePicture) {
+        this.repairRequestNameplatePicture = repairRequestNameplatePicture;
+    }
+
+    /**
+     * 还需要返回 machine的ID，因为要让维修员更新老机器的信息时用到。
+     */
+    private Integer machineId;
+
+    public Integer getMachineId() {
+        return machineId;
+    }
+
+    public void setMachineId(Integer machineId) {
+        this.machineId = machineId;
+    }
 }

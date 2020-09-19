@@ -84,6 +84,10 @@
 		<result column="machineAgentId" jdbcType="VARCHAR" property="machineAgentId"/>
 		<result column="machineCustomerCompanyId" jdbcType="VARCHAR" property="machineCustomerCompanyId"/>
 		<result column="repairActualInfoId" jdbcType="VARCHAR" property="repairActualInfoId"/>
+		
+		<result column="repairRequestNameplatePicture" jdbcType="VARCHAR" property="repairRequestNameplatePicture"/>
+		<result column="machineId" jdbcType="INTEGER" property="machineId"/>
+
 	</resultMap>
 	<select id="selectByNameplate" resultMap="BaseResultMap">
     SELECT *
@@ -109,6 +113,7 @@
 		userOfCustomerInMachine.customer_company as machineCustomerCompanyId, -- 机器的客户的公司的ID号
 		a.phone as machineAgentPhone,
 		m.machine_type,m.needle_num,m.head_num,m.head_distance,m.x_distance,m.y_distance,
+		m.id as machineId,
 		userOfCustomerInRepairRecord.`name` as repairRecordCustomerName, -- 客户方的维修联系人
 		userOfCustomerInRepairRecord.phone as customerPhoneInRepairRecord,
 		userOfCustomerInRepairRecord.address as customerAddressInRepairRecord,
@@ -116,6 +121,8 @@
 		rri.content as repairRequestContent,
 		rri.voice as repairRequestVoice,
 		rri.pictures as repairRequestPictures,
+		rri.nameplate_picture as repairRequestNameplatePicture,
+
 		rai.id as repairActualInfoId,
 		rai.issue_description as repairActualIssueDescription,
 		rai.repair_method as repairActualMethod,
@@ -231,6 +238,7 @@
 		rr.`status` as repairStatus,
 		rr.machine_nameplate,
 		m.*,
+		m.id as machineId,
 		userOfCustomerInRepairRecord.name as repairRecordCustomerName,
 		userOfCustomerInRepairRecord.address as customerAddressInRepairRecord,
 		userOfCustomerInMachine.`name` as machineCustomerName
