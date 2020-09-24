@@ -185,7 +185,7 @@ public class RepairRecordController {
     public Result getRepairRecordInfoList(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size,
                                           String nameplate,
                                           String orderNum,
-                                          String repairStatus,
+                                          String repairStatus, // 允许多个, 用逗号隔开
 //                                           String partsStatus,
                                           String repairRecordCustomerName,
                                           String agent,

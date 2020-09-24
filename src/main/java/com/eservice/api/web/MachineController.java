@@ -176,6 +176,9 @@ public class MachineController {
     //给 小程序 维修员在现场，更新老机器的信息，和 machine/update区别开了
     @PostMapping("/updateInfo")
     public Result updateInfo(@RequestBody @NotNull Machine machine) {
+        if(machine.getId() == null || machine.getId() ==0){
+            return ResultGenerator.genFailResult("machine不能为null/0");
+        }
         machineService.update(machine);
         return ResultGenerator.genSuccessResult();
     }

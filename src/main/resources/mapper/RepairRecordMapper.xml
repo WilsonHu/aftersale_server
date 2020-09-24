@@ -200,8 +200,11 @@
 			)
 		</if>
 
+		<!--<if test="repairStatus != null and repairStatus != ''">-->
+			<!--AND rr.status = #{repairStatus}-->
+		<!--</if>-->
 		<if test="repairStatus != null and repairStatus != ''">
-			AND rr.status = #{repairStatus}
+			and  rr.status IN (${repairStatus})
 		</if>
 		<!--<if test="partsStatus != null and partsStatus != ''">-->
 		<!--AND parts_info.parts_status = #{partsStatus}-->
@@ -229,6 +232,8 @@
 		<if test="queryFinishRepairEndTime!=null and queryFinishRepairEndTime != '' ">
 			and DATE_FORMAT( rr.repair_end_time,'%Y-%m-%d %T') &lt;= #{queryFinishRepairEndTime}
 		</if>
+
+		GROUP BY machineId
 		ORDER BY rr.create_time DESC, rr.update_time DESC, rr.repair_plan_date DESC, rr.repair_start_time DESC, rr.repair_end_time DESC
 	</select>
 
