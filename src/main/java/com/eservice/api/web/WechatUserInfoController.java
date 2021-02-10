@@ -22,6 +22,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+import tk.mybatis.mapper.entity.Condition;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
@@ -284,29 +285,37 @@ public class WechatUserInfoController {
         String respondStr = commonService.sendPost(wxRequestUrl, requestUrlParam);
         JSONObject jsonObject = JSON.parseObject(respondStr);
 
-        if(jsonObject == null){
+        if (jsonObject == null) {
             return ResultGenerator.genFailResult("jsonObj null, " + respondStr);
         }
-        System.out.print("respondStr: " + respondStr );
+        System.out.print("respondStr: " + respondStr);
 
-        logger.info("getUsersByJsCode() respondStr: " + respondStr );
+        logger.info("getUsersByJsCode() respondStr: " + respondStr);
         String unionId = (String) jsonObject.get("unionid");
-        if(unionId != null){
+        if (unionId != null) {
             logger.info("try to find user by unionId: " + unionId);
-            User user = userService.findBy("wechatUnionId", unionId);
-            if(user != null){
+            /**
+             * 实际真实数据 wechatUnionId是唯一的，
+             * 为了调试方便，各个账号都设了相同的wechatUnionId，免去要多个微信账号来调试。取第一个User来推送消息。
+             */
+//            User user = userService.findBy("wechatUnionId", unionId);
+            Condition condition = new Condition(User.class);
+            condition.createCriteria().andCondition("wechatUnionId = ", unionId);
+            List<User> userList = userService.findByCondition(condition);
+            if (userList != null) {
+                User user = userList.get(0); // 只取第一个User来推送消息。
                 // 员工账号 不能登陆 客户小程序，反之也不能。
-                String msg = checkCallerIValid(user,roleOfCaller);
-                if( msg.equals(msgCallerIsValid) ){
+                String msg = checkCallerIValid(user, roleOfCaller);
+                if (msg.equals(msgCallerIsValid)) {
                     JSONObject userJsonObject = new JSONObject();
-                    userJsonObject.put("account",user.getAccount());
+                    userJsonObject.put("account", user.getAccount());
                     userJsonObject.put("name", user.getName());
-                    userJsonObject.put("id",user.getId());
+                    userJsonObject.put("id", user.getId());
                     return ResultGenerator.genSuccessResult(userJsonObject);
                 } else {
                     return ResultGenerator.genFailResult(msg);
                 }
-            } else{
+            } else {
                 return ResultGenerator.genFailResult("No user found by the js_code");
             }
         } else {

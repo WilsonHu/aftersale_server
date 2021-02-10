@@ -192,7 +192,10 @@ public class WechatUserInfoServiceImpl extends AbstractService<WechatUserInfo> i
                 jsonObjectDeatailMsg.put("keyword2", toJson(wxMessageTemplateJsonData.getRepairTaskMessage()));
                 jsonObjectDeatailMsg.put("keyword3", toJson(wxMessageTemplateJsonData.getRepairChargePerson()));
                 jsonObjectDeatailMsg.put("keyword4", toJson("信胜"));;
-                jsonObjectDeatailMsg.put("keyword5", toJson(simpleDateFormat.format(wxMessageTemplateJsonData.getRepairPlanDate())));
+                //手机端 派单，不填上门日期
+                if(wxMessageTemplateJsonData.getRepairPlanDate() !=null) {
+                    jsonObjectDeatailMsg.put("keyword5", toJson(simpleDateFormat.format(wxMessageTemplateJsonData.getRepairPlanDate())));
+                }
                 break;
             case Constant.WX_MSG_5_INSTALLER_ACCEPT_TO_CUSTOMER:
                 //            {{first.DATA}}
@@ -221,7 +224,11 @@ public class WechatUserInfoServiceImpl extends AbstractService<WechatUserInfo> i
                 jsonObjectDeatailMsg.put("keyword1", toJson(wxMessageTemplateJsonData.getMachineNameplate()));
                 jsonObjectDeatailMsg.put("keyword2", toJson(wxMessageTemplateJsonData.getRepairChargePerson()));
                 jsonObjectDeatailMsg.put("keyword3", toJson(wxMessageTemplateJsonData.getRepairChargePersonPhone()));
-                jsonObjectDeatailMsg.put("keyword4", toJson(simpleDateFormat.format(wxMessageTemplateJsonData.getRepairPlanDate())));
+
+                //手机端 派单，不填上门日期
+                if(wxMessageTemplateJsonData.getRepairPlanDate() !=null) {
+                    jsonObjectDeatailMsg.put("keyword4", toJson(simpleDateFormat.format(wxMessageTemplateJsonData.getRepairPlanDate())));
+                }
                 jsonObjectDeatailMsg.put("remark", toJson(wxMessageTemplateJsonData.getRepairTaskAcceptedMessage()));
                 break;
 
@@ -258,6 +265,24 @@ public class WechatUserInfoServiceImpl extends AbstractService<WechatUserInfo> i
                 jsonObjectDeatailMsg.put("keyword3", toJson(wxMessageTemplateJsonData.getMachineType()));
                 jsonObjectDeatailMsg.put("remark", toJson(wxMessageTemplateJsonData.getRepairRequestBornMessage()));
                 break;
+
+                // 联系单 推送消息
+            case Constant.WX_MSG_12_LXD_PUSH_MSG:
+                jsonObjectDeatailMsg.put("first", toJson(wxMessageTemplateJsonData.getSignPerson()));
+                jsonObjectDeatailMsg.put("keyword1", toJson(wxMessageTemplateJsonData.getRepairTaskName()));
+                jsonObjectDeatailMsg.put("keyword2", toJson(wxMessageTemplateJsonData.getLxdNumber()));
+//                jsonObjectDeatailMsg.put("keyword3", toJson(simpleDateFormat.format(wxMessageTemplateJsonData.getRepairTaskDoneMessage())));
+                jsonObjectDeatailMsg.put("remark", toJson(wxMessageTemplateJsonData.getRepairTaskDoneMessage()));
+                break;
+            // 订单 推送消息
+            case Constant.WX_MSG_13_MACHINE_ORDER_PUSH_MSG:
+                jsonObjectDeatailMsg.put("first", toJson(wxMessageTemplateJsonData.getSignPerson()));
+                jsonObjectDeatailMsg.put("keyword1", toJson(wxMessageTemplateJsonData.getRepairTaskName()));
+                jsonObjectDeatailMsg.put("keyword2", toJson(wxMessageTemplateJsonData.getMachineOrderNumber()));
+//                jsonObjectDeatailMsg.put("keyword3", toJson(simpleDateFormat.format(wxMessageTemplateJsonData.getRepairTaskDoneMessage())));
+                jsonObjectDeatailMsg.put("remark", toJson(wxMessageTemplateJsonData.getRepairTaskDoneMessage()));
+                break;
+
             default:
                 return "推送发送失败，未定义的消息 " + messageId;
         }
@@ -277,6 +302,7 @@ public class WechatUserInfoServiceImpl extends AbstractService<WechatUserInfo> i
     public boolean sendTemplate( JSONObject json){
 
         boolean flag = false;
+        logger.info("模板消息发送 最后一步了，要实际服务器才可以调用微信接口");
 //        String requestUrl="https://api.weixin.qq.com/cgi-bin/message/wxopen/template/send?access_token=ACCESS_TOKEN";
         String requestUrl = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=ACCESS_TOKEN";
         String token = this.getAccessToken();

@@ -200,6 +200,9 @@ public class Constant {
     public static final String WX_MSG_10_REPAIR_DONE_TO_CUSTOMER = "WX_TEMPLATE_NO10_REPAIR_DONE_TO_CUSTOMER";
     public static final String WX_MSG_11_REPAIR_REQUEST_TO_ADMIN = "WX_TEMPLATE_NO11_REPAIR_REQUEST_TO_ADMIN";
 
+    public static final String WX_MSG_12_LXD_PUSH_MSG = "WX_MSG_12_LXD_PUSH_MSG";
+    public static final String WX_MSG_13_MACHINE_ORDER_PUSH_MSG = "WX_MSG_13_MACHINE_ORDER_PUSH_MSG";
+
     public static final String WX_MSG_SEND_SUCCESS = "模板发送成功！";
     public static final String WX_MSG_1 = "你订购的机器已经就绪，预定出厂日期 FactoryDate";
 

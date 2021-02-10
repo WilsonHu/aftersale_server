@@ -113,15 +113,16 @@ public class RepairRequestInfoController {
                     if (itemOfRepairRecord.getStatus().equals(Constant.REPAIR_STATUS_IN_REQUESTING)) {
                         repairRecordService.deleteById(itemOfRepairRecord.getId());
                         System.out.println("repairRecord " + itemOfRepairRecord.getId() + " was deleted!");
+
+                        /**
+                         * 再删除报修记录
+                         */
+                        repairRequestInfoService.deleteById(item.getId());
                     } else {
-                        System.out.println("repairRecord " + itemOfRepairRecord.getId() + " status is not in requesting!");
+                        System.out.println("repairRecord " + itemOfRepairRecord.getId() + " status is not in requesting! 第2、3、4次报修");
                     }
                 }
 
-                /**
-                 * 再删除报修记录
-                 */
-                repairRequestInfoService.deleteById(item.getId());
             }
         }
         try {

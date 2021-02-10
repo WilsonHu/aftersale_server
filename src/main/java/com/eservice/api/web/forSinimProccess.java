@@ -42,6 +42,9 @@ public class forSinimProccess {
 
     @Value("${WX_TEMPLATE_4_TASK_DONE}")
     private String WX_TEMPLATE_4_TASK_DONE;
+	
+    @Value("${WX_TEMPLATE_6_SIGN_TASK}")
+    private String WX_TEMPLATE_6_SIGN_TASK;
 
     private Connection sinsimMysqlConn;
 
@@ -122,16 +125,21 @@ public class forSinimProccess {
      * @param account 轮到谁签核
      * @param machineOrderNum
      * @param lxdNum
-     * @return
+     * @param msgInfo
+     *
+     * eg. curl -X POST localhost/api/for/sinimproccess/sendRemind?account=neimao&&machineOrderNumX=mo111&&msgInfo=msg222
      */
+// todo  待推送功能ok后，删除一部分log
     @PostMapping("/sendRemind")
     public Result sendRemind(@RequestParam String account,
                              @RequestParam(defaultValue = "") String machineOrderNum,
-                             @RequestParam(defaultValue = "") String lxdNum) {
+                             @RequestParam(defaultValue = "") String lxdNum,
+                             @RequestParam(defaultValue = "") String msgInfo) {
         String result;
         String decodedAccount = null;
         String decodedMachineOrderNum = null;
         String decodedLxdNum = null;
+        logger.info("From sinsim_process: " + account + ",orderNum: " + machineOrderNum + ", lxdNum: " + lxdNum);
         try {
             decodedAccount = new URLCodec().decode(account);
             decodedMachineOrderNum = new URLCodec().decode(machineOrderNum);
@@ -139,7 +147,7 @@ public class forSinimProccess {
         } catch (DecoderException e) {
             e.printStackTrace();
         }
-        logger.info("From sinsim_process: " + decodedAccount + ",orderNum: " + decodedMachineOrderNum + ", decodedLxdNum: " + decodedLxdNum);
+        logger.info("From sinsim_process: " + decodedAccount + ",decodedMachineOrderNum: " + decodedMachineOrderNum + ", decodedLxdNum: " + decodedLxdNum);
         WxMessageTemplateJsonData wxMessageTemplateJsonData = new WxMessageTemplateJsonData();
         try {
             //                {{first.DATA}}
@@ -148,20 +156,23 @@ public class forSinimProccess {
             //                提交时间：{{keyword3.DATA}}
             //                {{remark.DATA}}
             if(decodedMachineOrderNum.isEmpty() || decodedMachineOrderNum.equals("")) {
-                wxMessageTemplateJsonData.setRepairTaskName("联系单签核");
+                wxMessageTemplateJsonData.setSignType("联系单签核");
                 wxMessageTemplateJsonData.setSignPerson(decodedAccount);
                 wxMessageTemplateJsonData.setLxdNumber(decodedLxdNum);
+                wxMessageTemplateJsonData.setMsgInfo(msgInfo);
             } else {
-                wxMessageTemplateJsonData.setRepairTaskName("订单签核");
+                wxMessageTemplateJsonData.setSignType("订单签核");
                 wxMessageTemplateJsonData.setSignPerson(decodedAccount);
                 wxMessageTemplateJsonData.setMachineOrderNumber(decodedMachineOrderNum);
+                wxMessageTemplateJsonData.setMsgInfo(msgInfo);
             }
-            wxMessageTemplateJsonData.setRepairTaskDoneMessage("请知悉");
+            logger.info("going to send sendMsgTemplate" );
             result = wechatUserInfoService.sendMsgTemplate(decodedAccount,
-                    WX_TEMPLATE_4_TASK_DONE,
-                    Constant.WX_MSG_10_REPAIR_DONE_TO_CUSTOMER,
+                    WX_TEMPLATE_6_SIGN_TASK,
+                    Constant.WX_MSG_12_LXD_PUSH_MSG,
                     JSONObject.toJSONString(wxMessageTemplateJsonData));
             logger.info("发送消息给签核人结果：" + result);
+            logger.info("sendMsgTemplate result：" + result);
             System.out.println("发送消息给签核人结果 " + result);
         } catch (Exception e) {
             System.out.println("发送消息给签核人失败 " + e.toString());

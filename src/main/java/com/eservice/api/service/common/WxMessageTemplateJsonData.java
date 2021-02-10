@@ -88,9 +88,27 @@ public class WxMessageTemplateJsonData {
     /**
      * 12 轮到订单/联系单签核了 通知对应人员发的消息
      */
+    private String signType; //联系单 or 订单
     private String signPerson; //轮到谁签核
     private String machineOrderNumber; //订单号
     private String lxdNumber; //联系单号
+    private String msgInfo; //比如 轮到签核、签核已完成、签核被拒绝
+
+    public String getMsgInfo() {
+        return msgInfo;
+    }
+
+    public void setMsgInfo(String msgInfo) {
+        this.msgInfo = msgInfo;
+    }
+
+    public String getSignType() {
+        return signType;
+    }
+
+    public void setSignType(String signType) {
+        this.signType = signType;
+    }
 
     public String getSignPerson() {
         return signPerson;
