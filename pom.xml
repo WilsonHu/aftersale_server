@@ -64,10 +64,18 @@
 			<version>22.0</version>
 		</dependency>
 		<!--MySQL JDBC驱动-->
+		<!--<dependency>-->
+			<!--<groupId>mysql</groupId>-->
+			<!--<artifactId>mysql-connector-java</artifactId>-->
+			<!--<scope>runtime</scope>-->
+		<!--</dependency>-->
+		<!--MySQL JDBC驱动, 8版本，比如当前2020-0223 阿里云服务器的mysql docker就是8-->
+		<!-- 注意切换到sinsim服务器时是否要改回5.7-->
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
-			<scope>runtime</scope>
+			<version>8.0.23</version>
+			<!--<scope>runtime</scope>-->
 		</dependency>
 		<!--MyBatis 及 插件依赖-->
 		<dependency>
