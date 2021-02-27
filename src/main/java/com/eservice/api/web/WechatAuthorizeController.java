@@ -133,7 +133,6 @@ public class WechatAuthorizeController {
         JSONObject jsonObject = JSON.parseObject(jsonResult);
         if(jsonObject == null){
             logger.info("jsonObject parsed is null");
-            logger.info("jsonObject parsed is null");
             return null;
         }
         /**
