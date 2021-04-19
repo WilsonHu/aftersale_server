@@ -20,8 +20,11 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 /**
 * Class Description: 给生产部用，生产部调用这边的接口。
@@ -36,6 +39,8 @@ public class forSinimProccess {
     @Resource
     private UserServiceImpl userService;
     private Logger logger = Logger.getLogger(forSinimProccess.class);
+
+    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     @Resource
     private WechatUserInfoServiceImpl wechatUserInfoService;
@@ -134,12 +139,23 @@ public class forSinimProccess {
     public Result sendRemind(@RequestParam String account,
                              @RequestParam(defaultValue = "") String machineOrderNum,
                              @RequestParam(defaultValue = "") String lxdNum,
-                             @RequestParam(defaultValue = "") String msgInfo) {
+                             @RequestParam(defaultValue = "lxdTitle") String lxdTitle, //未用
+                             @RequestParam(defaultValue = "no-StrCreateDate") String StrCreateDate,
+                             @RequestParam(defaultValue = "no-department") String department,
+                             @RequestParam(defaultValue = "no-applicantPerson") String applicantPerson,
+                             @RequestParam(defaultValue = "no-msgInfo") String msgInfo) {
         String result;
         String decodedAccount = null;
         String decodedMachineOrderNum = null;
         String decodedLxdNum = null;
-        logger.info("From sinsim_process: " + account + ",orderNum: " + machineOrderNum + ", lxdNum: " + lxdNum);
+        logger.info("From sinsim_process: " + account
+                + ",orderNum: " + machineOrderNum
+                + ", lxdNum: " + lxdNum
+                + ", lxdTitle: " + lxdTitle
+                + ", createDate: " + StrCreateDate
+                + ", department: " + department
+                + ", applicantPerson: " + applicantPerson
+                + ", msgInfo: " + msgInfo);
         try {
             decodedAccount = new URLCodec().decode(account);
             decodedMachineOrderNum = new URLCodec().decode(machineOrderNum);
@@ -147,7 +163,9 @@ public class forSinimProccess {
         } catch (DecoderException e) {
             e.printStackTrace();
         }
-        logger.info("From sinsim_process: " + decodedAccount + ",decodedMachineOrderNum: " + decodedMachineOrderNum + ", decodedLxdNum: " + decodedLxdNum);
+        logger.info("From sinsim_process: " + decodedAccount +
+                ",decodedMachineOrderNum: " + decodedMachineOrderNum
+                + ", decodedLxdNum: " + decodedLxdNum);
         WxMessageTemplateJsonData wxMessageTemplateJsonData = new WxMessageTemplateJsonData();
         try {
             //                {{first.DATA}}
@@ -155,15 +173,32 @@ public class forSinimProccess {
             //                负责人：{{keyword2.DATA}}
             //                提交时间：{{keyword3.DATA}}
             //                {{remark.DATA}}
+
+//            {{first.DATA}}
+//            流程名称：{{keyword1.DATA}}
+//            流程编号：{{keyword2.DATA}}
+//            申请时间：{{keyword3.DATA}}
+//            申请人：{{keyword4.DATA}}
+//            申请人部门：{{keyword5.DATA}}
+//            {{remark.DATA}}
+//            Unparseable date: \"Mon Apr 19 17:14:53 CST 2021\"
+            Date createDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(StrCreateDate);
             if(decodedMachineOrderNum.isEmpty() || decodedMachineOrderNum.equals("")) {
                 wxMessageTemplateJsonData.setSignType("联系单签核");
                 wxMessageTemplateJsonData.setSignPerson(decodedAccount);
                 wxMessageTemplateJsonData.setLxdNumber(decodedLxdNum);
+                wxMessageTemplateJsonData.setLxdTitle(lxdTitle);
+                wxMessageTemplateJsonData.setCreateDate(createDate);
+                wxMessageTemplateJsonData.setDepartment(department);
+                wxMessageTemplateJsonData.setApplicantPerson(applicantPerson);
                 wxMessageTemplateJsonData.setMsgInfo(msgInfo);
             } else {
                 wxMessageTemplateJsonData.setSignType("订单签核");
                 wxMessageTemplateJsonData.setSignPerson(decodedAccount);
                 wxMessageTemplateJsonData.setMachineOrderNumber(decodedMachineOrderNum);
+                wxMessageTemplateJsonData.setCreateDate((createDate));
+                wxMessageTemplateJsonData.setDepartment(department);
+                wxMessageTemplateJsonData.setApplicantPerson(applicantPerson);
                 wxMessageTemplateJsonData.setMsgInfo(msgInfo);
             }
             logger.info("going to send sendMsgTemplate" );

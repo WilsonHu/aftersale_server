@@ -207,9 +207,14 @@ public class WechatUserInfoController {
                      * 账号和微信一一绑定
                      * 比如账号A在微信W1上登陆绑定后，A就无法再在其他微信比如微信W2上登陆。
                      */
-                    if(userService.findBy("wechatUnionId",unionId) != null ){
-                        logger.info("find user: " + userService.findBy("wechatUnionId",unionId).toString() + " by " + unionId );
-                        logger.info("find user: " + userService.findBy("wechatUnionId",unionId).getAccount() + " by " + unionId );
+                    Condition condition = new Condition(User.class);
+                    condition.createCriteria().andCondition("wechat_union_id = ", unionId);
+                    List<User> userList = userService.findByCondition(condition);
+                    if (userList != null) {
+//                        User user = userList.get(0); // 只取第一个User来推送消息。
+//                    if(userService.findBy("wechatUnionId",unionId) != null ){
+                        logger.info("find user: " + userService.findBy("wechat_union_id",unionId).toString() + " by " + unionId );
+                        logger.info("find user: " + userService.findBy("wechat_union_id",unionId).getAccount() + " by " + unionId );
                         /**
                          *  unionId已存在，则要看是否和账号匹配
                          */
@@ -300,7 +305,7 @@ public class WechatUserInfoController {
              */
 //            User user = userService.findBy("wechatUnionId", unionId);
             Condition condition = new Condition(User.class);
-            condition.createCriteria().andCondition("wechatUnionId = ", unionId);
+            condition.createCriteria().andCondition("wechat_union_id = ", unionId);
             List<User> userList = userService.findByCondition(condition);
             if (userList != null) {
                 User user = userList.get(0); // 只取第一个User来推送消息。

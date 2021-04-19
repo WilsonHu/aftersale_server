@@ -90,9 +90,45 @@ public class WxMessageTemplateJsonData {
      */
     private String signType; //联系单 or 订单
     private String signPerson; //轮到谁签核
+    private String applicantPerson; //发起人
+    private Date createDate; //发起时间
     private String machineOrderNumber; //订单号
     private String lxdNumber; //联系单号
+    private String lxdTitle; //联系单号主题
+    private String department;
     private String msgInfo; //比如 轮到签核、签核已完成、签核被拒绝
+
+    public String getApplicantPerson() {
+        return applicantPerson;
+    }
+
+    public void setApplicantPerson(String applicantPerson) {
+        this.applicantPerson = applicantPerson;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
+    }
+
+    public String getLxdTitle() {
+        return lxdTitle;
+    }
+
+    public void setLxdTitle(String lxdTitle) {
+        this.lxdTitle = lxdTitle;
+    }
 
     public String getMsgInfo() {
         return msgInfo;

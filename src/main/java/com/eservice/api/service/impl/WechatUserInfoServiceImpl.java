@@ -100,7 +100,8 @@ public class WechatUserInfoServiceImpl extends AbstractService<WechatUserInfo> i
         /**
          * 根据 account 找openId
          */
-        logger.info("sendMsgTemplate get param code:" + account);
+        logger.info("sendMsgTemplate account:" + account);
+        logger.info("jsonMsgData:" + jsonMsgData);
         User user = userService.findBy("account",account);
         if(user == null){
             msg = "推送发送失败，该account不存在！" + account;
@@ -155,6 +156,8 @@ public class WechatUserInfoServiceImpl extends AbstractService<WechatUserInfo> i
         }
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         simpleDateFormat.setTimeZone(TimeZone.getTimeZone("GMT+8"));
+
+        logger.info("组建jsonObjectDeatailMsg，messageId：" + messageId);
         switch (messageId){
             case Constant.WX_MSG_1_MACHINE_BIND_TO_CUSTOMER:
                 //            {{first.DATA}}
@@ -268,19 +271,30 @@ public class WechatUserInfoServiceImpl extends AbstractService<WechatUserInfo> i
 
                 // 联系单 推送消息
             case Constant.WX_MSG_12_LXD_PUSH_MSG:
+                /**
+                 * 流程名称
+                 * 流程编号
+                 * 申请时间
+                 * 申请人
+                 * 申请部门
+                 */
                 jsonObjectDeatailMsg.put("first", toJson(wxMessageTemplateJsonData.getSignPerson()));
-                jsonObjectDeatailMsg.put("keyword1", toJson(wxMessageTemplateJsonData.getRepairTaskName()));
+                jsonObjectDeatailMsg.put("keyword1", toJson(wxMessageTemplateJsonData.getSignType()));
                 jsonObjectDeatailMsg.put("keyword2", toJson(wxMessageTemplateJsonData.getLxdNumber()));
-//                jsonObjectDeatailMsg.put("keyword3", toJson(simpleDateFormat.format(wxMessageTemplateJsonData.getRepairTaskDoneMessage())));
-                jsonObjectDeatailMsg.put("remark", toJson(wxMessageTemplateJsonData.getRepairTaskDoneMessage()));
+                jsonObjectDeatailMsg.put("keyword3", toJson(simpleDateFormat.format (wxMessageTemplateJsonData.getCreateDate())));
+                jsonObjectDeatailMsg.put("keyword4", toJson( (wxMessageTemplateJsonData.getApplicantPerson())));
+                jsonObjectDeatailMsg.put("keyword5", toJson( (wxMessageTemplateJsonData.getDepartment())));
+                jsonObjectDeatailMsg.put("remark", toJson(wxMessageTemplateJsonData.getMsgInfo()));
                 break;
             // 订单 推送消息
             case Constant.WX_MSG_13_MACHINE_ORDER_PUSH_MSG:
                 jsonObjectDeatailMsg.put("first", toJson(wxMessageTemplateJsonData.getSignPerson()));
-                jsonObjectDeatailMsg.put("keyword1", toJson(wxMessageTemplateJsonData.getRepairTaskName()));
+                jsonObjectDeatailMsg.put("keyword1", toJson(wxMessageTemplateJsonData.getSignType()));
                 jsonObjectDeatailMsg.put("keyword2", toJson(wxMessageTemplateJsonData.getMachineOrderNumber()));
-//                jsonObjectDeatailMsg.put("keyword3", toJson(simpleDateFormat.format(wxMessageTemplateJsonData.getRepairTaskDoneMessage())));
-                jsonObjectDeatailMsg.put("remark", toJson(wxMessageTemplateJsonData.getRepairTaskDoneMessage()));
+                jsonObjectDeatailMsg.put("keyword3", toJson(simpleDateFormat.format (wxMessageTemplateJsonData.getCreateDate())));
+                jsonObjectDeatailMsg.put("keyword4", toJson( (wxMessageTemplateJsonData.getApplicantPerson())));
+                jsonObjectDeatailMsg.put("keyword5", toJson( (wxMessageTemplateJsonData.getDepartment())));
+                jsonObjectDeatailMsg.put("remark", toJson(wxMessageTemplateJsonData.getMsgInfo()));
                 break;
 
             default:
@@ -288,8 +302,10 @@ public class WechatUserInfoServiceImpl extends AbstractService<WechatUserInfo> i
         }
         jsonObject.put("data", jsonObjectDeatailMsg);
         if( sendTemplate(jsonObject) == true){
+            logger.info(Constant.WX_MSG_SEND_SUCCESS);
             return Constant.WX_MSG_SEND_SUCCESS; //"模板发送成功！";
         } else {
+            logger.info("推送发送失败");
             return "推送发送失败！";
         }
     }
