@@ -151,7 +151,6 @@ public class WechatUserInfoController {
      * @param password
      * @param jsCode 微信登录凭证（code）
      * @param roleOfCaller 0:表示员工端，1表示客户端，员工端小程序只能用员工账号登陆，客户端小程序只能用客户账号登陆
-     * @return
      */
     @PostMapping("/loginGetUnionIdAndSave")
     public Result loginGetUnionIdAndSave(@RequestParam(defaultValue = "0") String account,
@@ -198,10 +197,15 @@ public class WechatUserInfoController {
                     /**
                      * 需要已授权才允许登陆
                      */
-                    if(wechatUserInfoService.getWechatUserInfoByUnionId(unionId) == null){
+                    WechatUserInfo wechatUserInfo = null;
+                    wechatUserInfo = wechatUserInfoService.getWechatUserInfoByUnionId(unionId);
+                    if( wechatUserInfo== null){
                         message = "该账号未授权，请先到公众号授权（用于接受公众号消息）";
                         logger.info(message);
                         return ResultGenerator.genFailResult(message);
+                    } else {
+                        logger.info("已授权, 因为根据该unionId找到了WechatUserInfo用户, nickname为:" + wechatUserInfo.getNickname()
+                        + ", openId为：" + wechatUserInfo.getOpenId());
                     }
                     /**
                      * 账号和微信一一绑定
@@ -209,12 +213,14 @@ public class WechatUserInfoController {
                      */
                     Condition condition = new Condition(User.class);
                     condition.createCriteria().andCondition("wechat_union_id = ", unionId);
-                    List<User> userList = userService.findByCondition(condition);
-                    if (userList != null) {
-//                        User user = userList.get(0); // 只取第一个User来推送消息。
-//                    if(userService.findBy("wechatUnionId",unionId) != null ){
-                        logger.info("find user: " + userService.findBy("wechat_union_id",unionId).toString() + " by " + unionId );
-                        logger.info("find user: " + userService.findBy("wechat_union_id",unionId).getAccount() + " by " + unionId );
+                    logger.info("根据unionId " + unionId + " 来查找用户");
+                    List<User> userList = null;
+                    userList= userService.findByCondition(condition);
+                    if (userList != null && userList.size() != 0) {
+                        logger.info("找到的用户个数(真实情况下应该是最多1个)：" + userList.size());
+                        for(int u=0; u<userList.size(); u++){
+                            logger.info(u + "用户:" + userList.get(u).getAccount());
+                        }
                         /**
                          *  unionId已存在，则要看是否和账号匹配
                          */
@@ -231,7 +237,7 @@ public class WechatUserInfoController {
                         }
                     } else {
                         /**
-                         *  该unionId不存在数据库中，且登陆的账号没有和微信绑定过，则保存该unionId到该账号
+                         *  该unionId不存在于user表中，且登陆的账号没有和微信绑定过，则保存该unionId到该账号
                          */
                         User user1 = userService.findBy("account",account);
                         if( user1 !=null ){
@@ -255,7 +261,7 @@ public class WechatUserInfoController {
                     }
 
                 } else if(openId != null){
-                    //腾讯直接返回了openId， 说明已经关注且绑定
+                    logger.info("腾讯直接返回了openId， 说明已经关注且绑定");
                     JSONObject userJsonObject = new JSONObject();
                     userJsonObject.put("account",user.getAccount());
                     userJsonObject.put("name", user.getName());
