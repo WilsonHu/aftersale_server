@@ -78,6 +78,10 @@ public class WechatUserInfoServiceImpl extends AbstractService<WechatUserInfo> i
         return wechatUserInfoMapper.getWechatUserInfoByUnionId(unionId);
     }
 
+    public WechatUserInfo getWechatUserInfoByOpenId(String openId) {
+        return wechatUserInfoMapper.getWechatUserInfoByOpenId(openId);
+    }
+
     public WechatUserInfo getWechatUserInfoByAccount(String account){
         return wechatUserInfoMapper.getWechatUserInfoByAccount(account);
     }
@@ -326,7 +330,6 @@ public class WechatUserInfoServiceImpl extends AbstractService<WechatUserInfo> i
 
         if(debugFlag.equalsIgnoreCase("true")){
             logger.info("sendTemplate send as toJsonString: " + json.toJSONString());
-            logger.info("sendTemplate send as toString:  " + json.toString());
         }
         String  result = commonService.httpsRequest(requestUrl, "POST", json.toJSONString());
         if(result!=null){

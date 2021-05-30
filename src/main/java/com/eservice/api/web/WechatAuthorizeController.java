@@ -166,6 +166,9 @@ public class WechatAuthorizeController {
                 globalMsg = "该用户已经授过权" + nickname;
                 logger.info( globalMsg);
                 logger.info( globalMsg);
+                logger.info("get wechatUserInfo nickname is:" + wechatUserInfo.getNickname());
+                logger.info("get wechatUserInfo openId is:" + openId);
+                logger.info("get wechatUserInfo unionId is:" + unionId);
                 return null;
             }
             wechatUserInfo.setOpenId(openId);
@@ -179,6 +182,8 @@ public class WechatAuthorizeController {
             wechatUserInfo.setPrivilege(privilege);
             wechatUserInfoService.save(wechatUserInfo);
             logger.info("get wechatUserInfo nickname is:" + wechatUserInfo.getNickname());
+            logger.info("get wechatUserInfo openId is:" + wechatUserInfo.getOpenId());
+            logger.info("get wechatUserInfo unionId is:" + wechatUserInfo.getUnionID());
             return wechatUserInfo;
         } else {
             logger.info("get openid null" );

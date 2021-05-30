@@ -26,6 +26,16 @@
 -- 实际真实数据 wechatUnionId是唯一的，这里是为了调试方便才有多个unionId相同。
         limit 1
   </select>
+  <select id="getWechatUserInfoByOpenId" resultMap="BaseResultMap">
+    SELECT
+    *
+    FROM
+    wechat_user_info AS wui
+    WHERE
+    wui.open_id = #{openId}
+    -- 实际真实数据 openId 是唯一的
+    limit 1
+  </select>
 
   <select id="getWechatUserInfoByAccount" resultMap="BaseResultMap">
     SELECT

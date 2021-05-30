@@ -183,6 +183,7 @@ public class forSinimProccess {
 //            {{remark.DATA}}
 //            Unparseable date: \"Mon Apr 19 17:14:53 CST 2021\"
             Date createDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(StrCreateDate);
+            String messageId = null;
             if(decodedMachineOrderNum.isEmpty() || decodedMachineOrderNum.equals("")) {
                 wxMessageTemplateJsonData.setSignType("联系单签核");
                 wxMessageTemplateJsonData.setSignPerson(decodedAccount);
@@ -192,6 +193,7 @@ public class forSinimProccess {
                 wxMessageTemplateJsonData.setDepartment(department);
                 wxMessageTemplateJsonData.setApplicantPerson(applicantPerson);
                 wxMessageTemplateJsonData.setMsgInfo(msgInfo);
+                messageId = Constant.WX_MSG_12_LXD_PUSH_MSG;
             } else {
                 wxMessageTemplateJsonData.setSignType("订单签核");
                 wxMessageTemplateJsonData.setSignPerson(decodedAccount);
@@ -200,15 +202,14 @@ public class forSinimProccess {
                 wxMessageTemplateJsonData.setDepartment(department);
                 wxMessageTemplateJsonData.setApplicantPerson(applicantPerson);
                 wxMessageTemplateJsonData.setMsgInfo(msgInfo);
+                messageId = Constant.WX_MSG_13_MACHINE_ORDER_PUSH_MSG;
             }
             logger.info("going to send sendMsgTemplate" );
             result = wechatUserInfoService.sendMsgTemplate(decodedAccount,
                     WX_TEMPLATE_6_SIGN_TASK,
-                    Constant.WX_MSG_12_LXD_PUSH_MSG,
+                    messageId,
                     JSONObject.toJSONString(wxMessageTemplateJsonData));
             logger.info("发送消息给签核人结果：" + result);
-            logger.info("sendMsgTemplate result：" + result);
-            System.out.println("发送消息给签核人结果 " + result);
         } catch (Exception e) {
             System.out.println("发送消息给签核人失败 " + e.toString());
             e.printStackTrace();
