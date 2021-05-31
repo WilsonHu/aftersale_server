@@ -249,7 +249,7 @@ public class WechatUserInfoController {
                         } else {
                             return ResultGenerator.genFailResult("不会发生，account前面验证过");
                         }
-                        user.setWechatUnionId(unionId);
+                        user.setWechatUnionId(unionId); ///关联
                         userService.update(user);
                         logger.info("loginGetUnionIdAndSave(), user update unionId:" + unionId);
                         JSONObject userJsonObject = new JSONObject();

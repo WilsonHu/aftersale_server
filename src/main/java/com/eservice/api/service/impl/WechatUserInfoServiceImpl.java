@@ -107,12 +107,22 @@ public class WechatUserInfoServiceImpl extends AbstractService<WechatUserInfo> i
         logger.info("sendMsgTemplate account:" + account);
         logger.info("jsonMsgData:" + jsonMsgData);
         User user = userService.findBy("account",account);
+        String wechatUionId = null;
         if(user == null){
-            msg = "推送发送失败，该account不存在！" + account;
-            logger.info(msg);
-            return msg;
+            /**
+             * 售后系统经常用手机号作为account，name才和生产系统的账户匹配
+             */
+            User user2 = userService.findBy("name",account);
+            if(user2 == null) {
+                msg = "推送发送失败，该account/name不存在！" + account;
+                logger.info(msg);
+                return msg;
+            } else {
+                wechatUionId = user2.getWechatUnionId();
+            }
+        } else {
+            wechatUionId = user.getWechatUnionId();
         }
-        String wechatUionId = user.getWechatUnionId();
 
         if(wechatUionId == null || "".equals(account) ){
             msg = "推送发送失败，请" + account + "先关注公众号";
