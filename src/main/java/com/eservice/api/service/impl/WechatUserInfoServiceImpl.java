@@ -118,11 +118,12 @@ public class WechatUserInfoServiceImpl extends AbstractService<WechatUserInfo> i
                 logger.info(msg);
                 return msg;
             } else {
-                wechatUionId = user2.getWechatUnionId();
+                ///用name找到的user2赋值给user，后面还要用。
+                user = user2;
             }
-        } else {
-            wechatUionId = user.getWechatUnionId();
         }
+        wechatUionId = user.getWechatUnionId();
+
 
         if(wechatUionId == null || "".equals(account) ){
             msg = "推送发送失败，请" + account + "先关注公众号";
@@ -166,6 +167,7 @@ public class WechatUserInfoServiceImpl extends AbstractService<WechatUserInfo> i
 
         WxMessageTemplateJsonData wxMessageTemplateJsonData = JSONObject.parseObject(jsonMsgData,WxMessageTemplateJsonData.class);
         if(wxMessageTemplateJsonData == null){
+            logger.error("推送发送失败，获取json数据失败");
             return "推送发送失败，获取json数据失败";
         }
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
